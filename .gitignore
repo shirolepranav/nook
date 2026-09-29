@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved.bak
+
+# Claude Code: share skills/settings, keep personal overrides local
+.claude/settings.local.json
+.claude/*.local.*
+
+# Secrets
+*.p8
+*.p12
+*.mobileprovision
