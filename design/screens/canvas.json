@@ -2501,24 +2501,6 @@
       "title": "App icon",
       "radius": 24
     },
-    "Main-accessory.dc.html": {
-      "x": 5097,
-      "y": 4484,
-      "w": 375,
-      "h": 667,
-      "title": "H-01 Home · Capture B (accessory)",
-      "radius": 40,
-      "is_interactive": true
-    },
-    "Main-empty-accessory.dc.html": {
-      "x": 5552,
-      "y": 4484,
-      "w": 375,
-      "h": 667,
-      "title": "H-01 Home · Empty · Capture B",
-      "radius": 40,
-      "is_interactive": true
-    },
     "C02RoomScan-classic.dc.html": {
       "x": 4642,
       "y": 26984,
@@ -3076,8 +3058,6 @@
     "Illustrations.dc.html",
     "Illustrations-dark.dc.html",
     "AppIcon.dc.html",
-    "Main-accessory.dc.html",
-    "Main-empty-accessory.dc.html",
     "C02RoomScan-classic.dc.html",
     "C02RoomScan-classic-shooting.dc.html",
     "Prototype.dc.html"

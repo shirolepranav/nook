@@ -11,7 +11,7 @@ Status values: **Accepted**, **Proposed** (a PR is open and needs a lead's appro
 ### Merge of earlier drafts (2026-09-28)
 Earlier drafts of the screens, roadmap and design system were written without access to the PRD. They were called "Home Inventory & Warranty Vault" and assumed iOS 26, 5 tabs, no AI and an iPad target. We kept their craft (tokens, states, platform constraints, QA structure) and made the scope match the PRD. The entries below record every conflict.
 
-**D1 · 2026-09-28 · Accepted** — The minimum OS is **iOS 27.0**, built with the **iOS 27.1 SDK / Xcode 27.1**. *Why:* the PRD needs Foundation Models image input and full-screen iPhone Duo support. *Affects:* project settings, and all availability checks (no `#available(iOS 26…)` branches).
+**D1 · 2026-09-28 · Superseded by D23 (build SDK only)** — The minimum OS is **iOS 27.0**, built with the **iOS 27.1 SDK / Xcode 27.1**. *Why:* the PRD needs Foundation Models image input and full-screen iPhone Duo support. *Affects:* project settings, and all availability checks (no `#available(iOS 26…)` branches).
 
 **D2 · 2026-09-28 · Accepted** — **Navigation:**
 - Tabs are **Home · Find · Reports · Settings**.
@@ -105,7 +105,7 @@ The drafts' looser budgets (1.5 s launch, 150 ms search) are dropped.
 
 *Affects:* CLAUDE.md, PRD §4 and §10 (design-tool wording only), 02, 03, 04, 05, the PR template, the `phase-work` and `data-model-change` skills.
 
-**D23 · 2026-10-03 · Proposed** — **SDK for v1.0.** The minimum OS stays **iOS 27.0**. v1.0 builds with the **current release of Xcode 27**. The **iOS 27.1 SDK / Xcode 27.1** is needed only for v1.1 (P14, iPhone Duo). Supersedes D1's build-SDK clause once a lead approves, and needs a matching edit to PRD §8. *Why:* Foundation Models image input is in the iOS 27 SDK. Only `ReservedRegion` and the full-screen Duo layout need 27.1. D1, the PRD and the roadmap's "Correction to PRD §8" currently disagree. *Affects:* PRD §8, 04 header, CLAUDE.md "Unverified APIs", CI Xcode version.
+**D23 · 2026-10-03 · Accepted (2026-10-04, product owner)** — **SDK for v1.0.** The minimum OS stays **iOS 27.0**. v1.0 builds with the **current release of Xcode 27**. The **iOS 27.1 SDK / Xcode 27.1** is needed only for v1.1 (P14, iPhone Duo). Supersedes D1's build-SDK clause. PRD §8 is updated to match. *Why:* Foundation Models image input is in the iOS 27 SDK. Only `ReservedRegion` and the full-screen Duo layout need 27.1. D1, the PRD and the roadmap's "Correction to PRD §8" currently disagree. *Affects:* PRD §8, 04 header, CLAUDE.md "Unverified APIs", CI Xcode version.
 
 **D24 · 2026-10-03 · Accepted** — **Token contrast fixes (P0).** `design/tools/check_tokens.py` now checks every allowed text/background pair in `03` §2. To make them all pass:
 - Light accents get slightly darker so they work as text on every surface: Terracotta `#B4502C` → `#AC4C2A`, Sage `#4F7A57` → `#4A7251`.
@@ -124,3 +124,29 @@ The drafts' looser budgets (1.5 s launch, 150 ms search) are dropped.
 The source is `design/tools/illustrations.py`; run it to re-export. In P1 they become asset-catalog images: the base is an image set with Any and Dark appearances, and the accent is a template image drawn over it with `.foregroundStyle(.tint)`. Accent shapes never carry details in another color, because those would sit under the accent layer and vanish.
 
 *Why:* `03` §7 asks for the accent as the highlight color, and there are 6 accents. Drawing 6 × 2 versions of each illustration would be 96 files to keep in sync. *Affects:* 03 §7, NookUI (P1), the empty and error states.
+
+**D26 · 2026-10-04 · Accepted** — **Capture is a floating button (placement A).** It's a 56 pt Liquid Glass button at the bottom trailing corner, above the tab bar, with a soft accent glow on Home until the first item is saved. Placement B, an accessory bar above the tabs, is dropped. Resolves D2's open question. *Why:* chosen by the product owner after comparing both on the canvas. A takes almost no content space, while B covered about 60 pt on iPhone SE. A matches PRD §3 ("floating Liquid Glass button"). Apple meant the bottom accessory for ongoing content like Now Playing, not for an action. *Affects:* 01 §1.2, 03 §8.1, the P1 shell (P1 still verifies the SwiftUI mechanism, D2).
+
+**D27 · 2026-10-04 · Accepted** — **P0 user testing is an expert review; real users test in TestFlight.** There's no time for the 5 hallway sessions the roadmap asks for in P0. P0 QA is instead:
+- an automated link and reachability check of the prototype
+- a cognitive walkthrough of every user story, with tap counts and time estimates
+- an accessibility review of the boards
+
+Real-user testing moves to the existing P13 TestFlight beta (30 testers, 10 without Apple Intelligence), plus a 5-person first-run check as soon as the P2–P3 builds can document a room. The hallway script in `design/research/p0-review.md` is reused for that. *Why:* the product owner has no time for sessions now, and a design-phase expert review catches most layout and copy problems. *Risk accepted:* nobody has watched a first-time user or a VoiceOver user yet. Both are tracked as open risks for Gate 2. *Affects:* roadmap P0 QA and Gate 1.
+
+**D28 · 2026-10-04 · Accepted** — **The `[Inferred]` items from 01 §16 are closed** as designed on the canvas:
+- Capture is a floating action, not a tab (D26).
+- There's an app-level "Use Apple Intelligence" toggle, shown only when Ready or Downloading (S-11).
+- **Lock timing:** Right away (default), 1 min or 5 min.
+- **Hide values** is off by default.
+- **Saved searches:** swipe to Rename or Delete.
+- **Share-sheet import** uses an "Open in Nook" document type for images and PDFs, so no Share Extension is needed for v1.
+- **Deleting a room that has items** asks "Move Items to Another Room" or "Move Items to Recently Deleted".
+- **Free limit during a room scan:** cards beyond 25 items stay in review until the user unlocks Pro or removes some (01 §15). The paywall opens on Save.
+- **Find on regular width:** results sit beside the answer card.
+- **Widgets** honor Hide values.
+- **Snooze** is 1 week for warranties and 1 day for loans.
+- **The notification permission** is asked when the first reminder is saved (D15).
+- **The report cover** shows the home name, insurer, policy number and date.
+
+New since `01` was written: the room editor lists the room's spots with "Add spot" (F1's 30-second target), and scan review has "Accept All" (F3's 2-minute target). *Affects:* 01, the canvas.

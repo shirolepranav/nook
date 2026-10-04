@@ -177,7 +177,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Toolbar:** Add item here, Move container [Inferred], Edit.
 
 ### H-04 Room editor
-- Name, SF Symbol picker, soft color picker (room palette), optional cover photo, Delete room.
+- Name, SF Symbol picker, soft color picker (room palette), the room's spots with "Add spot" (D28, for F1's 30-second target), optional cover photo, Delete room.
 - **Delete with items** asks where they should go: choose another room or move them to Recently Deleted. [Inferred]
 - Acceptance: create a room with 3 spots in under 30 seconds (PRD §5 F1).
 
@@ -252,7 +252,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - The photo shows each detected item with a **soft outline drawn one after another, each with a light haptic tap**, so detection feels alive.
 - Cards stream in below (first card in under 2 s, PRD §9). Each card: crop, suggested name, category, condition, and controls **Accept / Edit / Remove**.
 - Tapping an outline highlights its card and vice versa.
-- **"Save all"** saves accepted cards to the current room and spot, then a success haptic and a summary toast: "6 items saved to Garage".
+- **"Accept All"** in the header accepts every card at once (D28). **"Save all"** saves accepted cards to the current room and spot, then a success haptic and a summary toast: "6 items saved to Garage".
 - **Fallbacks:** if the model is busy, a guardrail triggers, or 20 seconds pass, that photo silently switches to C-04 with the photo loaded (PRD §8 step 5).
 - Acceptance: 8 clear items → at least 6 correct suggestions (PRD §5 F3).
 
@@ -433,7 +433,7 @@ v1.1 rules: nothing sits on the hinge (`ReservedRegion`, iOS 27.1 SDK); content 
 
 ---
 
-## 16. Items marked [Inferred] to confirm
-Capture as a floating action rather than a tab; app-level Apple Intelligence toggle; lock timing; Hide values default; saved-search management; share-sheet import mechanism; room-delete behavior; free-limit behavior during room scan; Find layout on regular width; widget behavior with Hide values; snooze on notifications; notification permission timing; report cover details.
+## 16. Items marked [Inferred]
+All closed in P0 by **D26** (Capture placement) and **D28** (everything else). The `[Inferred]` tags above are kept as history; the canvas in `design/screens/` shows the settled design.
 
 > The PRD's two embedded diagrams ("Roadmap · 4 phases, 4 gates" and "App architecture · 6 layers") appear only as placeholders in the attached file, so they weren't available for this review.

@@ -6,7 +6,7 @@ The approved visual direction for Nook. They're pulled from the Claude Design ca
 Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks for `dark`, `accent`, `ax5`, `device` (`se`/`pro`/`max`) and `state`. The **variant boards** (`<Component>-<variant>.dc.html`) import the component with those tweaks set, so every variant stays in sync with its component. All colors, type and spacing come from the CSS token block at the top of each file (`docs/03_Design_System.md`).
 
 ### Prototype
-Open the canvas, find **Prototype · start here** (top left), and press **Play**. Every screen board is interactive. The tab bar, Capture button, cards, back buttons, sheets and main actions all link to the right board. The start board lists each user story (US1–US6) with an Apple Intelligence path and a manual one, plus the Capture placement A/B test. The hallway-test kit is in `research/p0-hallway.md`.
+Open the canvas, find **Prototype · start here** (top left), and press **Play**. Every screen board is interactive. The tab bar, Capture button, cards, back buttons, sheets and main actions all link to the right board. The start board lists each user story (US1–US6) with an Apple Intelligence path and a manual one, plus the remaining screens (launch, lock, arrange, regular width). The P0 review is in `research/p0-review.md`, and the QA report and Gate 1 checklist are in `research/p0-qa-report.md`.
 
 ### Coverage (P0)
 | ID | Component | Light | Dark | States | Sizes | AX5 |
@@ -14,7 +14,7 @@ Open the canvas, find **Prototype · start here** (top left), and press **Play**
 | L-01 Launch | `L01Launch` | ✓ | ✓ | — | SE | — (no text) |
 | O-01 Welcome | `O01Welcome` | ✓ | ✓ | — | SE | ✓ |
 | O-02 Pick your rooms | `O02Rooms` | ✓ | ✓ | — | SE | ✓ |
-| H-01 Home + shell | `Main` | ✓ | ✓ | populated, empty, loading, error (all light + dark); Capture placement B (`capture=accessory`) | SE, 6.3 in, 6.9 in | ✓ |
+| H-01 Home + shell | `Main` | ✓ | ✓ | populated, empty, loading, error (all light + dark) | SE, 6.3 in, 6.9 in | ✓ |
 | H-01/H-02 regular width | `HomeRegular` | ✓ | ✓ | populated | 6.9 in landscape (956×440) | — |
 | H-02 Room | `Room` | ✓ | ✓ | populated, empty (light + dark) | SE, 6.3 in, 6.9 in | ✓ |
 | H-03 Spot / container | `H03Spot` | ✓ | ✓ | spot, container (light + dark) | SE | ✓ |
