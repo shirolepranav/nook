@@ -37,8 +37,14 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | I-06 Lend sheet | `I06Lend` | ✓ | ✓ | — | SE | ✓ |
 | I-07 Receipt viewer | `I07Receipt` | ✓ | ✓ | — | SE | ✓ |
 | I-08 Multi-select | `I08Select` | ✓ | ✓ | 3 selected | SE | ✓ |
+| F-01 Find (+ F-06 saved searches) | `F01Find` | ✓ | ✓ | before typing, saved search swiped | SE, 6.3 in, 6.9 in | ✓ |
+| F-02 Results | `F01Find` | ✓ | ✓ | results (typo + private item), no results | SE | via F-01 |
+| F-03 Answer card | `F01Find` | ✓ | ✓ | location, lent, packed, room contents, quantity | SE, 6.3 in, 6.9 in | ✓ |
+| F-01/F-03 regular width | `FindRegular` | ✓ | ✓ | results beside the answer | 6.9 in landscape | — |
+| F-04 Move confirmation | `F01Find` | ✓ | ✓ | — | SE | ✓ |
+| F-05 Filters | `F05Filters` | ✓ | ✓ | — | SE | ✓ |
 
-**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `Find` (F-01/F-03), `Paywall` (P-01).
+**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `Paywall` (P-01).
 
 Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
 
