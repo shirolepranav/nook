@@ -49,6 +49,19 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | R-04 Warranties | `R04Warranties` | ✓ | ✓ | free with 3 reminders, empty | SE | ✓ |
 | R-05 Lent out | `R05Lent` | ✓ | ✓ | default (overdue + swipe), empty | SE | ✓ |
 | P-01 Paywall | `P01Paywall` | ✓ | ✓ | default, loading price, purchasing, Ask to Buy, failed, success | SE, 6.3 in, 6.9 in | ✓ |
+| S-01 Settings | `S01Settings` | ✓ | ✓ | free, Pro | SE | ✓ |
+| S-02 Nook Pro | `S02Pro` | ✓ | ✓ | free, Pro | SE | ✓ |
+| S-03 iCloud Sync | `S03Sync` | ✓ | ✓ | free (Pro needed), on, signed out, storage full | SE | ✓ |
+| S-04 Backup & Restore | `S04Backup` | ✓ | ✓ | default, restore (Merge or Replace) | SE | ✓ |
+| S-05 Face ID Lock | `S05Lock` | ✓ | ✓ | — | SE | ✓ |
+| S-06 Appearance | `S06Appearance` | ✓ | ✓ | — | SE | ✓ |
+| S-07 Notifications | `S07Notifications` | ✓ | ✓ | on, denied | SE | ✓ |
+| S-08 Recently Deleted | `S08Deleted` | ✓ | ✓ | 3 items, empty | SE | ✓ |
+| S-09 Privacy | `S09Privacy` | ✓ | ✓ | — | SE | ✓ |
+| S-10 Tags | `S10Tags` | ✓ | ✓ | — | SE | ✓ |
+| S-11 Apple Intelligence | `S11AI` | ✓ | ✓ | ready, downloading, not available, turned off | SE | ✓ |
+| S-12 Help & About | `S12Help` | ✓ | ✓ | — | SE | ✓ |
+| L-02 App lock | `L02Lock` | ✓ | ✓ | Face ID, Touch ID, not recognized | SE | ✓ |
 
 Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
 
