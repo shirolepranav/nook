@@ -287,7 +287,7 @@ Services never call the AI directly. They ask the router, which returns the same
 | Layer | Choice | Why |
 |---|---|---|
 | Language and UI | Swift 6, SwiftUI, Observation | Best support for Liquid Glass, iPhone Duo layouts and Dynamic Type |
-| Minimum OS | iOS 27.0; build with the iOS 27.1 SDK | Needed for Foundation Models image input and full-screen iPhone Duo support |
+| Minimum OS | iOS 27.0; v1.0 builds with the current release of Xcode 27, and v1.1 (iPhone Duo) with the iOS 27.1 SDK (D23) | Foundation Models image input is in the iOS 27 SDK; full-screen iPhone Duo support needs 27.1 |
 | Storage | SwiftData in an App Group container | Shared with widgets and App Intents; simple migrations |
 | Photos | HEIC files on disk, 400-px thumbnails cached | Keeps the database small and scrolling fast |
 | AI | Foundation Models (on-device model), `@Generable` structured output, tool calling, OCR and barcode tools | Free, private, offline |

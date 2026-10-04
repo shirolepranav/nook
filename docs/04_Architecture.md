@@ -3,7 +3,7 @@
 How the app is built, and the constraints that exist **no matter which screen you're working on**. Product scope is in [00_PRD.md](00_PRD.md) §8. This doc turns that into rules and contracts.
 
 - **Stack:** Swift 6 (strict concurrency) · SwiftUI + Observation · SwiftData in an App Group · Foundation Models · Vision / VisionKit · Core Spotlight · UserNotifications · WidgetKit · App Intents · StoreKit 2 · CloudKit (Pro).
-- **Platform:** iOS 27.0 minimum (D1). v1.0 builds with the current release of Xcode 27; the iOS 27.1 SDK is needed only for P14 (D23, proposed).
+- **Platform:** iOS 27.0 minimum (D1). v1.0 builds with the current release of Xcode 27; the iOS 27.1 SDK is needed only for P14 (D23).
 - **Dependencies:** zero third-party runtime dependencies. Build-time lint and format tools are allowed.
 
 ---

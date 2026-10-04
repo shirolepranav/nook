@@ -11,7 +11,7 @@
 - **Stack (PRD §8):** Swift 6, SwiftUI, Observation; iOS 27.0 minimum; SwiftData in an App Group; Foundation Models; Vision and VisionKit; Core Spotlight; CloudKit private database (Pro); StoreKit 2; WidgetKit; App Intents. No third-party dependencies.
 - **Packages (PRD §8):** NookKit (models and storage), NookAI (router and both engines), NookUI (design system).
 
-> **Correction to PRD §8:** the PRD says to build with the iOS 27.1 SDK. Only the iPhone Duo work needs it. Foundation Models image input is part of the iOS 27 SDK, so v1.0 builds with the released Xcode 27. Build the v1.0 release with whichever Xcode is the current release when you submit. This conflicts with D1, which outranks this doc; D23 (proposed) resolves it.
+> **Correction to PRD §8:** the PRD says to build with the iOS 27.1 SDK. Only the iPhone Duo work needs it. Foundation Models image input is part of the iOS 27 SDK, so v1.0 builds with the released Xcode 27. Build the v1.0 release with whichever Xcode is the current release when you submit. Settled by D23 (accepted 2026-10-04); PRD §8 now matches.
 
 | Stage | Phases | Gate |
 |---|---|---|
@@ -58,7 +58,7 @@ Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs e
 ## Stage 1 — Design
 
 ### P0 · Design foundations & prototype
-**Status:** In QA (2026-10-04): all deliverables done; waiting on the Gate 1 sign-off
+**Status:** Done (2026-10-04, PRs #1–#12). Gate 1 signed off by the product owner on 2026-10-04.
 **Goal:** settle the look, feel and flows before code, because design is the main way Nook wins (PRD §3).
 **Scope**
 - Design system tokens (see `03_Design_System.md`): warm neutrals, 6 accents, room palette, type, 8-pt spacing, concentric corners, motion and haptics.

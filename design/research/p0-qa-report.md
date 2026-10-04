@@ -28,7 +28,7 @@ Built as designed (labels, 44-pt targets, AX5 boards, contrast). VoiceOver and V
 | R-2 | P1 | Item card VoiceOver label must be name + room + value (03 §11). Test in P1 NookUI |
 | R-3 | P2 | "Save N Items" vs suggestions not yet accepted. Watch in the first builds |
 | R-4 | — | No first-time-user or VoiceOver-user session yet (D27). Run with the first builds and TestFlight |
-| R-5 | — | D23 (v1.0 SDK) is still **Proposed** and needs a lead's approval |
+| R-5 | — | ~~D23 needs approval~~ Accepted 2026-10-04: v1.0 builds with Xcode 27 |
 
 ---
 
@@ -39,5 +39,5 @@ Gates are decided by people. This is the list for the product owner to approve.
 - [x] Prototype tested: expert review plus automated link check (D27, substitute for hallway tests)
 - [x] Open design questions closed: Capture placement (D26), every `[Inferred]` item (D28)
 - [x] Assets exported: `design/illustrations/` (light, dark, accent layers), `design/icon/` (layers + app icon set)
-- [ ] **Decide D23** (Xcode 27 vs the 27.1 SDK for v1.0)
-- [ ] **Sign off Gate 1.** When signed off, set P0's Status to `Done (<date>)` and start P1
+- [x] **D23 decided:** v1.0 builds with the current release of Xcode 27; the iOS 27.1 SDK is for v1.1 only
+- [x] **Gate 1 signed off** by the product owner, 2026-10-04. P0 is Done; P1 can start.
