@@ -3,7 +3,7 @@
 How the app is built, and the constraints that exist **no matter which screen you're working on**. Product scope is in [00_PRD.md](00_PRD.md) §8. This doc turns that into rules and contracts.
 
 - **Stack:** Swift 6 (strict concurrency) · SwiftUI + Observation · SwiftData in an App Group · Foundation Models · Vision / VisionKit · Core Spotlight · UserNotifications · WidgetKit · App Intents · StoreKit 2 · CloudKit (Pro).
-- **Platform:** Xcode 27.1, iOS 27.0 minimum (D1).
+- **Platform:** iOS 27.0 minimum (D1). v1.0 builds with the current release of Xcode 27; the iOS 27.1 SDK is needed only for P14 (D23, proposed).
 - **Dependencies:** zero third-party runtime dependencies. Build-time lint and format tools are allowed.
 
 ---
@@ -180,7 +180,7 @@ final class Item {
 ```
 
 - **Schema versioning:** `NookSchemaV1: VersionedSchema` plus `NookMigrationPlan`. Every model change uses the `data-model-change` skill and adds a new schema version and a migration test.
-- **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P10).
+- **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
 - **Soft delete:** `deletedAt` is set on delete, and queries filter out deleted rows. Rows older than 30 days are purged on launch.
 - **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload.
 - **Container depth:** `Spot.parent.parent` must be nil (containers nest one level, D3). The service layer enforces this.
@@ -192,7 +192,7 @@ final class Item {
 
 - **Photos:** HEIC files in `AppGroup/Photos/<uuid>.heic`, with 400-px thumbnails in `AppGroup/Thumbs/`. Loading downsamples (ImageIO) into an in-memory `NSCache`.
 - **Receipts:** stored in `AppGroup/Receipts/<uuid>.(heic|pdf)`.
-- **iCloud sync (Pro)** syncs files as `CKAsset`s through a small sync companion [design in P10]. Alternatively, files move to external storage attributes if CloudKit sync of `@Attribute(.externalStorage)` proves reliable. The choice is made in P10 and logged in decisions.md.
+- **iCloud sync (Pro)** syncs files as `CKAsset`s through a small sync companion [design in P11]. Alternatively, files move to external storage attributes if CloudKit sync of `@Attribute(.externalStorage)` proves reliable. The choice is made in P11 and logged in decisions.md.
 - **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9).
 - **Backup (`.nookbackup`, D12):** a zip containing `manifest.json` (with `schemaVersion`, `appVersion` and `createdAt`), `data.json` (all entities keyed by UUID) and `files/`. Restore offers **Replace** or **Merge**, where Merge upserts by UUID.
 - **No network calls** except StoreKit and CloudKit. The CI grep fails on `URLSession` usage outside an allowlist.
@@ -279,11 +279,11 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 - **Accessibility is part of "done":** labels, custom actions, and Dynamic Type through AX5.
 - **Tests:** Swift Testing (`@Test`) for units, XCUITest for flows (see [05](05_Testing_and_QA.md)).
 - **Comments** explain *why*. Link to PRD or decision IDs where a rule comes from, for example `// D13: 64-request cap`.
-- **Unverified APIs:** any API marked `[Verify in SDK]` must be confirmed in Xcode 27.1 before it's used. Record the result in decisions.md (D11).
+- **Unverified APIs:** any API marked `[Verify in SDK]` must be confirmed in the SDK you build with (D23) before it's used. Record the result in decisions.md (D11).
 
 ---
 
-## 12. Performance budgets (PRD §9; enforced in P11, watched every phase)
+## 12. Performance budgets (PRD §9; enforced in P13, watched every phase)
 
 | Moment | Budget | How to measure |
 |---|---|---|

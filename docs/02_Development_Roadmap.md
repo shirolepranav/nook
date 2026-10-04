@@ -11,7 +11,7 @@
 - **Stack (PRD §8):** Swift 6, SwiftUI, Observation; iOS 27.0 minimum; SwiftData in an App Group; Foundation Models; Vision and VisionKit; Core Spotlight; CloudKit private database (Pro); StoreKit 2; WidgetKit; App Intents. No third-party dependencies.
 - **Packages (PRD §8):** NookKit (models and storage), NookAI (router and both engines), NookUI (design system).
 
-> **Correction to PRD §8:** the PRD says to build with the iOS 27.1 SDK. Only the iPhone Duo work needs it. Foundation Models image input is part of the iOS 27 SDK, so v1.0 builds with the released Xcode 27. Build the v1.0 release with whichever Xcode is the current release when you submit.
+> **Correction to PRD §8:** the PRD says to build with the iOS 27.1 SDK. Only the iPhone Duo work needs it. Foundation Models image input is part of the iOS 27 SDK, so v1.0 builds with the released Xcode 27. Build the v1.0 release with whichever Xcode is the current release when you submit. This conflicts with D1, which outranks this doc; D23 (proposed) resolves it.
 
 | Stage | Phases | Gate |
 |---|---|---|
@@ -58,16 +58,17 @@ Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs e
 ## Stage 1 — Design
 
 ### P0 · Design foundations & prototype
+**Status:** In progress
 **Goal:** settle the look, feel and flows before code, because design is the main way Nook wins (PRD §3).
 **Scope**
 - Design system tokens (see `03_Design_System.md`): warm neutrals, 6 accents, room palette, type, 8-pt spacing, concentric corners, motion and haptics.
-- Figma frames for every v1.0 screen in `01_Pages_UI_Interactions.md` at 4.7" SE, 6.3", 6.9", 6.9" landscape (regular width), and the largest accessibility text size. Duo frames wait for v1.1.
-- Clickable prototype of the top 6 user stories (PRD §2), including the AI and Classic versions of room scan.
+- Frames on the Claude Design canvas (re-synced into `design/`) for every v1.0 screen in `01_Pages_UI_Interactions.md` at 4.7" SE, 6.3", 6.9", 6.9" landscape (regular width), and the largest accessibility text size. Duo frames wait for v1.1.
+- Clickable prototype of the top 6 user stories (PRD §2), built from the linked HTML mockups, including the AI and Classic versions of room scan.
 - Empty, loading and error illustrations (PRD §3).
 - App icon in Icon Composer: light, dark, clear and tinted (PRD §3).
 - Decide the Capture button placement (floating action vs tab).
 
-**Deliverables:** Figma library and screens, prototype link, icon files, written decisions log.
+**Deliverables:** Claude Design canvas and `design/screens/`, prototype link, `design/icon/`, written decisions log.
 **Acceptance:** every screen has all states designed; every flow has a Classic path; text contrast passes 4.5:1.
 **QA:** 5 hallway tests of the prototype, including one person using VoiceOver if possible. Target: a new user "documents" a room in the prototype in under 3 minutes.
 **Regression:** no code yet. Instead, run a design consistency review: every frame uses tokens only, with no one-off colors or sizes.
@@ -80,42 +81,49 @@ Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs e
 Everything in this stage works with no AI, so Gate 2 can prove the app is complete on older iPhones.
 
 ### P1 · Project setup & app shell
+**Status:** Not started
 **Scope:** Xcode project with the app target, widget extension and the three local packages; CI running unit and UI tests; NookUI with tokens and core components (buttons, photo card, room card, chips, fields, empty state, toast, skeleton); tab shell (Home, Find, Reports, Settings) with the floating Capture button; adaptive shell (tab bar on compact width, sidebar on regular width); appearance settings with the 6-accent picker (S-06); launch screen (L-01).
 **Acceptance:** builds with no warnings; cold launch to Home under 400 ms on iPhone 15 (PRD §9); no hard-coded colors or sizes outside NookUI; tab bar becomes a sidebar on Pro Max landscape.
 **QA:** components gallery checked in light, dark, Increase Contrast, Reduce Transparency, and the strongest and weakest Liquid Glass settings.
 **Regression:** new — snapshot tests for each component in light and dark, default and largest text. Smoke — S1.
 
 ### P2 · Rooms, spots & containers
+**Status:** Not started
 **Scope:** NookKit SwiftData models from PRD §8 (Room, Spot, Item, Photo, Receipt, LocationEvent, Loan) created **sync-ready from the start** (every property optional or defaulted, relationships optional with inverses, no unique constraints), so CloudKit in P11 needs no migration; Home with room cards (H-01); Room (H-02), Spot and container (H-03), editors (H-04, H-05), arrange rooms (H-07); onboarding (O-01, O-02).
 **PRD acceptance:** create a room with 3 spots in under 30 seconds (F1).
 **QA:** nesting limit (containers one level deep), deleting rooms with content, 50+ rooms, long names, VoiceOver room reordering.
 **Regression:** new — model unit tests (nesting, ordering, deletes); onboarding and room UI tests. Smoke — S1–S2.
 
 ### P3 · Items, photos & Recently Deleted
+**Status:** Not started
 **Scope:** item editor (I-02) with every F2 field and the 500 common items autocomplete; item detail (I-01) with zoom transition; photo viewer (I-03); photos stored as HEIC on disk with cached 400-px thumbnails (PRD §8); receipts as image or PDF (I-07); Private flag stored (lock behavior comes in P12); Hide values; Recently Deleted for 30 days (S-08); multi-select (I-08).
 **PRD acceptance:** a photo-and-name item saves in 2 taps (F2); a 1,000-item grid scrolls at 120 fps on ProMotion with no dropped frames (PRD §9).
 **QA:** 10 photos per item, huge PDFs, camera denied, low storage, emoji and right-to-left names, killing the app mid-edit.
 **Regression:** new — item CRUD unit tests, thumbnail cache tests, editor UI tests, grid scrolling performance test. Smoke — S1–S3.
 
 ### P4 · Move & location history
+**Status:** Not started
 **Scope:** Move picker (I-04) with the last 5 locations; multi-item move; LocationEvent recording with source; location history (I-05); last confirmed date; "Found it here instead".
 **PRD acceptance:** moving one item takes 2 taps (F6).
 **QA:** moving containers with items inside, moving into a container, undo after move, history after deleting a spot.
 **Regression:** new — LocationEvent unit tests (from, to, source); move UI tests. Smoke — S1–S4.
 
 ### P5 · Find, Classic search
+**Status:** Not started
 **Scope:** Find tab (F-01) using the system search role; instant results (F-02) with typo tolerance and the synonym list ("fob" → "key"); answer cards (F-03) for location, lent, packed, room contents and quantity; filters (F-05) including last seen date; saved searches (F-06); receipt text included in search.
 **PRD acceptance:** results under 100 ms for 5,000 items (F5).
 **QA:** misspellings, partial words, serial numbers, accents and diacritics, no results, Private items appearing as hidden.
 **Regression:** new — search ranking unit tests (PRD §9); performance test with 5,000 seeded items. Smoke — S1–S5.
 
 ### P6 · Classic capture
+**Status:** Not started
 **Scope:** Capture menu (C-01); room scan camera (C-02) with coach overlay; manual tagging (C-04) with tap or draw boxes and name suggestions; quick add (C-05); receipt scan (C-06) with Vision text recognition and tap-to-drop; barcode scanner (C-07); serial sticker reader (C-08) listing recognized lines; just-in-time camera permission; receipt import from Files and the share sheet.
 **PRD acceptance:** manual path saves 8 items in under 2 minutes (F3).
 **QA:** low light, blurry photos, crumpled and faded receipts, several currencies and date formats, camera denied, interruptions (a phone call during capture).
 **Regression:** new — receipt number and date detection tests on a fixture set; manual tagging UI test. Smoke — S1–S6.
 
 ### P7 · Warranties, reminders & lending
+**Status:** Not started
 **Scope:** warranty end date computed from purchase date plus length (F4); reminders 30 and 7 days before; a rolling scheduler that keeps the soonest reminders within iOS's 64 pending notification limit and reschedules on launch and after changes; notification permission asked when the first reminder is set; Warranties list (R-04); lending (I-06) with contact picker, return date and reminder; Lent out list (R-05).
 **PRD acceptance:** the reminder fires on schedule on a device with no network (F4); lent items show a badge and appear in the Lent out filter (F7).
 **QA:** time zones and daylight saving changes, leap days, warranty already expired, notifications denied, tapping a notification from a cold start.
@@ -128,6 +136,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 ## Stage 3 — AI, exports & Pro
 
 ### P8 · Capability router & AI room scan
+**Status:** Not started
 **Scope**
 - NookAI router (`currentEngine()` checks `SystemLanguageModel.default.availability`, PRD §8).
 - **Vision check (added):** before choosing the AI path for photos, also confirm the on-device model supports image input. Developer reports suggest some Apple Intelligence models lack it; those iPhones use the Classic photo path while keeping AI for text questions.
@@ -139,18 +148,21 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — router fallback unit tests including the vision check (PRD §9); AI quality tests with Apple's Evaluations framework on 100 labeled household photos (PRD §9). Smoke — S1–S8.
 
 ### P9 · AI receipts, serials, values & "Where is…?"
+**Status:** Not started
 **Scope:** AI receipt extraction (store, date, price, warranty length); AI serial labeling; replacement value range labeled as an estimate; natural-language questions turned into structured searches with tool calling (PRD §6); move-by-sentence with the confirmation card (F-04); Spotlight semantic matching ("car fob" → "Spare car key").
 **Acceptance:** answers come only from saved data; nothing moves without the confirmation tap (PRD §6); every AI field is editable and marked as suggested.
 **QA:** ambiguous questions ("Where's the key?" with 4 keys), items with the same name in two rooms, misheard voice input, very long receipts.
 **Regression:** new — question-to-search parsing tests; evaluation set for answers; confirmation-required UI test. Smoke — S1–S9.
 
 ### P10 · Reports, exports, backup & QR labels
+**Status:** Not started
 **Scope:** insurance report builder and preview (R-02) rendered with SwiftUI `ImageRenderer` (PRD §8), grouped by room with photos, values, serials, receipt appendix and totals, optional AI room summaries; watermarked free preview; CSV export (R-03); .nookbackup create and restore (S-04); QR box labels (H-06) and deep links from the system Camera app (F8).
 **PRD acceptance:** a 500-item PDF generates on-device in under 20 seconds (F9); QR opens the correct container from the Camera app (F8).
 **QA:** cancelling mid-report, low memory, printing, restoring onto a device with existing data, CSV opening in Numbers and Excel.
 **Regression:** new — PDF and CSV golden-file comparisons; backup round-trip test (export, wipe, restore, compare). Smoke — S1–S10.
 
 ### P11 · Nook Pro & iCloud sync
+**Status:** Not started
 **Scope:** StoreKit 2 non-consumable with the native `ProductView`; entitlement checked with `Transaction.currentEntitlements` and cached offline (PRD §7); paywall (P-01) at the 26th item, Export and the 4th reminder; Restore Purchases; Family Sharing; introductory pricing; iCloud sync with the CloudKit private database for Pro users (S-03).
 **Acceptance:** the paywall never appears on launch; free users can always view, search and delete everything; two devices sync items, photos and moves.
 **QA:** Ask to Buy, interrupted purchases, purchasing offline, signing out of iCloud mid-sync, iCloud storage full, edits on two offline devices.
@@ -163,12 +175,14 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 ## Stage 4 — Platform, polish & v1.0 release
 
 ### P12 · Privacy lock, Private items & system surfaces
+**Status:** Not started
 **Scope:** Face ID / Touch ID app lock (L-02, S-05) with an app-switcher cover; Private items always need biometrics and are excluded from Spotlight, Siri suggestions and widgets (PRD §9); file protection `completeUntilFirstUserAuthentication` (PRD §9); widgets (warranties, total value, quick find) reading the App Group store; Control Center control and Action button option for room scan; Lock Screen control; App Intents (`FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`) as AppEntity types; Spotlight indexing; plain-language privacy page (S-09).
 **PRD acceptance:** widgets render correctly in every size on supported iPhones (F10; Duo inner screen checked in v1.1).
 **QA:** biometrics not enrolled, lockout, widgets after a restart before first unlock, tinted and clear Home Screen styles.
 **Regression:** new — App Intents Testing framework (PRD §9); widget snapshots; Private-exclusion tests. Smoke — S1–S12.
 
 ### P13 · Polish, accessibility, performance & v1.0 release
+**Status:** Not started
 **Scope:** motion and haptics polish; full accessibility audit (VoiceOver, Voice Control, largest text, Reduce Motion, Reduce Transparency, Increase Contrast, every Liquid Glass setting) and an honest App Store Accessibility Nutrition Label (PRD §3); regular-width layout review on Pro Max landscape, since Duo owners will see these layouts on the inner screen; Instruments passes against every PRD §9 budget; download size under 30 MB; "Data Not Collected" privacy label; TestFlight beta with at least 30 testers, 10 of them on iPhones without Apple Intelligence (PRD §9); App Store keywords and screenshots; final app name check (PRD §10 open questions).
 **Acceptance:** zero known crash or data-loss bugs; crash-free sessions at 99.8% or higher in beta (PRD §1); all PRD §9 performance budgets met.
 **QA:** exploratory sessions per tab; one full "no AI" release pass (PRD §9).
@@ -181,6 +195,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 ## v1.1 — iPhone Duo support
 
 ### P14 · iPhone Duo layouts
+**Status:** Not started
 **Prerequisite:** Xcode 27.1 (released version), which includes the iOS 27.1 SDK and the iPhone Duo simulator.
 **What changes for Duo owners:** v1.0 (built with the iOS 27 SDK) uses most of the inner screen but leaves space at the edges. Rebuilding with the iOS 27.1 SDK lets the app reach the edges; this phase adds the Duo-specific poses on top.
 **Scope:** rebuild with the iOS 27.1 SDK; items tagged **[v1.1 Duo]** in `01_Pages_UI_Interactions.md`: half-folded layouts for capture and item detail with `ReservedRegion` around the hinge, keeping context when opening or closing, the Duo outer-screen Home with the Quick find bar, vertical bars on the outer screen; asymmetric safe areas; Split View at every width; removing any `UIScreen.main` use (PRD §4, §8); Duo design frames (outer, inner open, half-folded).

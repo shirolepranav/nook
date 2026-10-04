@@ -26,7 +26,7 @@ Pro users sync the SwiftData store to CloudKit (D8), and the widgets and App Int
 - Add a stage to `NookMigrationPlan`:
   - `.lightweight` for additive or optional changes.
   - `.custom` when data must be transformed (for example, splitting a field). Keep custom migrations idempotent.
-- Before P10 ships (and before any TestFlight), the team may collapse versions. Only do that with the lead's approval, noted in `decisions.md`.
+- Before P11 ships (and before any TestFlight), the team may collapse versions. Only do that with the lead's approval, noted in `decisions.md`.
 
 ## 4. Keep invariants in services
 - Location fields change only through `LocationService.move(items:to:source:)`. It updates room and spot, appends a `LocationEvent`, sets `lastConfirmedAt`, reindexes Spotlight and reloads widgets.

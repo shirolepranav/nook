@@ -38,7 +38,7 @@ Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everythi
 - **Private items** never appear in Spotlight, Siri, widgets or logs. Never log user content (use `privacy: .private`).
 - **Free-tier limits** (25 items, 3 reminders, export and sync gated) are enforced in `EntitlementStore`, never in views. Never lock away data the user already entered.
 - **Reminders** go through the rolling scheduler, which respects the system's cap of 64 pending notifications (D13).
-- **Unverified APIs.** Anything tagged `[Verify in SDK]` (and any iOS 27 API you're unsure of) must be confirmed against the Xcode 27.1 SDK before you use it. Record the finding in `decisions.md`. Your training data may predate iOS 27.
+- **Unverified APIs.** Anything tagged `[Verify in SDK]` (and any iOS 27 API you're unsure of) must be confirmed against the SDK you build with (see D23) before you use it. Record the finding in `decisions.md`. Your training data may predate iOS 27.
 
 ## Working in phases
 - Work **only inside the current phase's scope** (`docs/02_Development_Roadmap.md`). Scope that belongs to a later phase goes into an issue, not the code. Use the `phase-work` skill.
@@ -46,7 +46,7 @@ Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everythi
 - Every PR follows the checklist in `.github/pull_request_template.md`.
 - When behavior changes, update the relevant doc in the same PR. When you make a new product or technical choice, add a `D#` entry.
 - A phase closes with its QA report and the cumulative smoke suite (`qa-regression` skill). Update the phase's **Status** line in the roadmap.
-- **Gates** (G1–G4) are team go/no-go reviews. Never start work from the next milestone before its gate passes.
+- **Gates** (G1–G5) are team go/no-go reviews. Never start work from the next milestone before its gate passes.
 
 ## Project layout
 ```
@@ -59,10 +59,10 @@ Fixtures/        receipts, test shelf, eval photos, seeds, golden files
 docs/            PRD, screens, roadmap, design system, architecture, QA, decisions
 design/          approved screen mockups (Claude Design export): visual source of truth
 ```
-(The Xcode project is created in P0. Until then this layout is the target.)
+(The Xcode project is created in P1. Until then this layout is the target.)
 
 ## Commands
-> TBD in P0. Fill these in when the Xcode project and CI exist.
+> TBD in P1. Fill these in when the Xcode project and CI exist.
 ```bash
 # Build:      xcodebuild -scheme Nook -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)' build
 # Unit tests: swift test --package-path Packages/NookKit   (and NookAI, NookUI)

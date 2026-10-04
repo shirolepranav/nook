@@ -1,6 +1,6 @@
 ---
 name: phase-work
-description: Start, continue, or plan work on a Nook roadmap phase (P0–P11) or a task inside one. Use when the user says "start P3", "work on the next phase", "pick up <task>", "what's left in this phase", or asks to implement any feature from the roadmap. Keeps work in scope, split into small PRs, and tied to acceptance criteria.
+description: Start, continue, or plan work on a Nook roadmap phase (P0–P14) or a task inside one. Use when the user says "start P3", "work on the next phase", "pick up <task>", "what's left in this phase", or asks to implement any feature from the roadmap. Keeps work in scope, split into small PRs, and tied to acceptance criteria.
 ---
 
 # Phase work
