@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Face ID Lock</title>
+<title>H-01 Home · Empty · Capture B</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -89,44 +89,14 @@ h1,h2,h3,p{margin:0}
 .tab.on{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--accent)}
 </style>
 </helmet>
-<div class="{{cls}}" style="position: relative; width: {{w}}px; height: {{h}}px; overflow: hidden; background: var(--canvas); color: var(--text); font-family: var(--sans); font-size: var(--fs-body); line-height: var(--lh-body)">
-<div style="display: flex; flex-direction: column; gap: 24px; padding: {{navTop}}px 16px 160px">
-<div style="display: flex; align-items: center; justify-content: space-between"><a href="S01Settings.dc.html" class="glass glass-btn" aria-label="Back to Settings"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg></a></div><h1 class="t-display">Face ID Lock</h1>
-<section style="display: flex; flex-direction: column; gap: 8px"><div class="rows"><div class="row"><span style="display: flex; flex-direction: column; flex: 1; min-width: 0"><span class="t-body">Lock Nook with Face ID</span></span><span class="toggle" role="switch" aria-checked="true" aria-label="Lock Nook with Face ID"><span></span></span></div></div></section><div style="display: flex; flex-direction: column; gap: 8px"><h2 class="label" style="padding: 0 16px">Lock after</h2><div class="seg" role="radiogroup" aria-label="Lock after"><button class="on" role="radio" aria-checked="true">Right away</button><button role="radio" aria-checked="false">1 min</button><button role="radio" aria-checked="false">5 min</button></div></div><p class="t-foot" style="display: flex; gap: 8px; padding: 0 16px"><svg class="i" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span>Private items always need Face ID to open, even with the lock off. The app switcher hides Nook while it’s locked.</span></p>
-</div>
-<nav aria-label="Tabs" class="glass" style="position: absolute; left: 16px; right: 16px; top: {{tabTop}}px; height: 62px; padding: 4px; border-radius: 31px; display: flex">
-<a href="Main.dc.html" class="tab"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8M10 20v-5.5h4V20"/></svg>Home</a>
-<a href="F01Find.dc.html" class="tab"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>Find</a>
-<a href="R01Reports.dc.html" class="tab"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20ZM14 3.5V8h4M9.5 12.5h5M9.5 16h5"/></svg>Reports</a>
-<a href="S01Settings.dc.html" class="tab on" aria-current="page"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.2"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3v2.8M12 18.2V21M3 12h2.8M18.2 12H21M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg>Settings</a>
-</nav>
+<div style="width: 375px; height: 667px; overflow: hidden">
+<dc-import name="Main" state="empty" capture="accessory" hint-size="375px,667px"></dc-import>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"accent":{"editor":"enum","options":["terracotta","sage","ocean","plum","slate","rose"],"default":"terracotta"},"ax5":{"editor":"boolean","default":false},"device":{"editor":"enum","options":["se","pro","max"],"default":"se"},"tall":{"editor":null},"$preview":{"width":375,"height":667}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
 renderVals() {
-// Device frames from 03 §12 (iPhone 18 point sizes still to verify, D11). Safe areas: top, bottom.
-const devices = { se: [375, 667, 20, 0], pro: [402, 874, 62, 34], max: [440, 956, 62, 34] };
-const p = this.props;
-const d = devices[p.device] || devices.se;
-const st = p.state || 'default';
-const vals = {
-cls: ['nk', p.dark ? 'dark' : '', p.ax5 ? 'ax5' : '', 'acc-' + (p.accent || 'terracotta')].filter(Boolean).join(' '),
-w: d[0],
-h: Number(p.tall || d[1]),
-padTop: d[2] + 16,
-navTop: d[2] + 4,
-sheetTop: d[2] + 12,
-padBottom: d[3] + 16,
-// Tab bar floats 8 pt above the bottom safe area; Capture sits 16 pt above the tab bar (03 §8.1).
-tabTop: d[1] - d[3] - 8 - 62,
-capTop: d[1] - d[3] - 8 - 62 - 16 - 56
-};
-["default"].forEach((s) => { vals['is_' + s] = st === s; });
-vals.coachTop = Math.round(vals.h * 0.42);
-vals.trayTop = vals.navTop + 260;
-vals.toastTop = vals.tabTop - 72;
-return vals;
+return {};
 }
 }
 </script>
