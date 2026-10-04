@@ -8,11 +8,11 @@ description: Build or modify a Nook SwiftUI screen or NookUI component to spec �
 A Nook screen is "done" only when it matches the spec in every state, size and accessibility setting. Design comes first in this product (PRD principle 1).
 
 ## 1. Gather the spec
-- Find the screen's section in `docs/01_Screens_and_Interactions.md`: **Purpose, Elements, Interactions, States, Adaptive, A11y, Traces**.
+- Find the screen's section in `docs/01_Pages_UI_Interactions.md`: **Purpose, Elements, Interactions, States, Adaptive, A11y, Traces**.
 - Read the `03_Design_System.md` sections for every component you'll use, plus §9 Motion, §10 Haptics and §11 Accessibility.
 - Check `docs/decisions.md` for anything affecting this screen (D2 navigation, D5 colors, D6 spacing…).
 - Check the global conventions in `01 §0`: states, destructive actions, AI-as-suggestion, free limits, Private items, Hide values.
-- If a Figma frame exists (linked in the README after P1), it wins on visual detail. The docs win on behavior.
+- Open the matching mockup in `design/screens/` (index in `design/README.md`). It wins on visual detail. The docs win on behavior. Map every value to a NookUI token; never copy literals.
 
 ## 2. Reuse before you build
 - Look in `Packages/NookUI/Sources/NookUI/Components` and use the existing `NookCard`, `PhotoCard`, rows, chips, pills, `PriceText`, breadcrumb, states and toast.

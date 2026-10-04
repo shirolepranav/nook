@@ -12,10 +12,10 @@ Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everythi
 ## Read before you work
 | If you're… | Read |
 |---|---|
-| Doing anything | This file, then the current phase in `docs/02_Roadmap.md` |
+| Doing anything | This file, then the current phase in `docs/02_Development_Roadmap.md` |
 | Checking scope or requirements (F1–F11, US1–US6) | `docs/00_PRD.md` — **the source of truth** |
 | Resolving a conflict or an open choice | `docs/decisions.md` (D1…) |
-| Building UI | `docs/01_Screens_and_Interactions.md` + `docs/03_Design_System.md` |
+| Building UI | `docs/01_Pages_UI_Interactions.md` + `docs/03_Design_System.md` + the mockups in `design/` (see `design/README.md`) |
 | Writing services, data or AI code | `docs/04_Architecture.md` |
 | Testing or closing a phase | `docs/05_Testing_and_QA.md` |
 
@@ -41,7 +41,7 @@ Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everythi
 - **Unverified APIs.** Anything tagged `[Verify in SDK]` (and any iOS 27 API you're unsure of) must be confirmed against the Xcode 27.1 SDK before you use it. Record the finding in `decisions.md`. Your training data may predate iOS 27.
 
 ## Working in phases
-- Work **only inside the current phase's scope** (`docs/02_Roadmap.md`). Scope that belongs to a later phase goes into an issue, not the code. Use the `phase-work` skill.
+- Work **only inside the current phase's scope** (`docs/02_Development_Roadmap.md`). Scope that belongs to a later phase goes into an issue, not the code. Use the `phase-work` skill.
 - Branch as `p<N>/<short-task>`, open a PR into `main`, and keep PRs small (about 400 lines of diff or less, excluding fixtures and snapshots).
 - Every PR follows the checklist in `.github/pull_request_template.md`.
 - When behavior changes, update the relevant doc in the same PR. When you make a new product or technical choice, add a `D#` entry.
@@ -57,6 +57,7 @@ Packages/NookAI  CapabilityRouter, AIEngine, ClassicEngine, shared result types,
 Packages/NookUI  design tokens, components, gallery
 Fixtures/        receipts, test shelf, eval photos, seeds, golden files
 docs/            PRD, screens, roadmap, design system, architecture, QA, decisions
+design/          approved screen mockups (Claude Design export): visual source of truth
 ```
 (The Xcode project is created in P0. Until then this layout is the target.)
 

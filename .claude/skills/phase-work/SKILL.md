@@ -5,11 +5,11 @@ description: Start, continue, or plan work on a Nook roadmap phase (P0–P11) or
 
 # Phase work
 
-Nook is built in phases (`docs/02_Roadmap.md`), and each one is closed by acceptance, QA and regression checks. This skill keeps an agent inside the current phase's scope and working the way the team does.
+Nook is built in phases (`docs/02_Development_Roadmap.md`), and each one is closed by acceptance, QA and regression checks. This skill keeps an agent inside the current phase's scope and working the way the team does.
 
 ## 1. Orient (always do this first)
 1. Read `CLAUDE.md` if it isn't already in context.
-2. Open `docs/02_Roadmap.md` and find the phase. Read its **Status**, **Scope**, **Lanes**, **Acceptance**, **QA** and **Regression**, plus the milestone's **Gate**.
+2. Open `docs/02_Development_Roadmap.md` and find the phase. Read its **Status**, **Scope**, **Lanes**, **Acceptance**, **QA** and **Regression**, plus the milestone's **Gate**.
 3. Check that the previous milestone's gate has passed. If the phase belongs to a milestone whose gate hasn't passed (for example, starting P7 before G2), **stop and tell the user.**
 4. Check the current state:
    - `git log --oneline -20` and `git branch -a`
@@ -47,7 +47,7 @@ If you notice something that belongs to a later phase or another lane, **don't b
 ## 6. Close the phase
 Once all tasks are merged:
 1. Run the `qa-regression` skill. It produces the phase QA report and the smoke-suite table.
-2. Update the phase's **Status** line in `docs/02_Roadmap.md` to `Done (<date>, PR #…)`.
+2. Update the phase's **Status** line in `docs/02_Development_Roadmap.md` to `Done (<date>, PR #…)`.
 3. If this was the milestone's last phase, prepare the gate checklist for the team review. Gates are decided by people, not agents.
 
 ## Status values

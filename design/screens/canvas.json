@@ -1,0 +1,91 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Find.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Find · Answer card",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "HomeDark.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Home · Dark",
+      "w": 390,
+      "x": 0,
+      "y": 964
+    },
+    "ItemDetail.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Item detail",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Home",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Paywall.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Paywall",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "Room.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Room · Kitchen",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "ScanReview.dc.html": {
+      "h": 844,
+      "radius": 40,
+      "title": "Scan review",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-03T04:35:49Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "heading": {
+      "kind": "title1",
+      "maxW": 2740,
+      "text": "Nook · Everyday core screens",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Room.dc.html",
+    "ItemDetail.dc.html",
+    "Find.dc.html",
+    "ScanReview.dc.html",
+    "Paywall.dc.html",
+    "HomeDark.dc.html"
+  ],
+  "pages": [],
+  "title": "Nook — App screens"
+}

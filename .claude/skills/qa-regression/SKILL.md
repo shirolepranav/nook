@@ -6,7 +6,7 @@ description: Run QA for a Nook PR or close out a phase — phase QA cases, the c
 # QA & regression
 
 A phase isn't Done until its **Acceptance**, **QA** and **Regression** sections pass, **and** the cumulative smoke suite has been run and logged. Sources:
-- `docs/02_Roadmap.md`: the phase sections and the smoke-suite table
+- `docs/02_Development_Roadmap.md`: the phase sections and the smoke-suite table
 - `docs/05_Testing_and_QA.md`: methods, device matrix, a11y checklist, No-AI pass, severity, report template
 
 ## 1. Scope the run
@@ -44,5 +44,5 @@ Paste the template from `docs/05_Testing_and_QA.md` §9 into the PR, filled in:
 - Open bugs with severity.
 
 ## 6. Close out (phase close only, when the report is green)
-- Update the phase **Status** in `docs/02_Roadmap.md` to `Done (<date>)`.
+- Update the phase **Status** in `docs/02_Development_Roadmap.md` to `Done (<date>)`.
 - If it's the last phase of a milestone, list the gate criteria and their evidence for the team's go/no-go. **People decide gates, not agents.**
