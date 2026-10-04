@@ -1,314 +1,367 @@
-# Nook Design System — "Warm Linen"
+# Nook Design System — "Warm Home"
 
-**Direction:** calm, tactile and personal, like a well-organized home rather than a spreadsheet (PRD §3).
-**Target:** iOS 27 (Liquid Glass era, with no opt-out). Implemented in the **NookUI** package.
+**Source:** *Home Inventory & Warranty Vault — PRD + Technical Spec* (Sep 27, 2026), mainly PRD §3 (Design and UX principles) and §4 (Device and screen support).
+**Direction:** warm and tactile, soft materials, friendly. In the PRD's words, every screen should feel like a first-party Apple app, only warmer: calm, tactile and personal, "a well-organized home, not a spreadsheet".
+**Modes:** full light and dark mode, plus tinted app icon support (PRD §3).
 
-- **Rule for code:** no color, font, spacing, radius, shadow, animation or haptic literal appears outside NookUI. Use the tokens below. CI greps for `Color(red:`, `Color(#`, `.font(.system(size:` and `.padding(<number>)` in the app target.
-- **Precedence:** [00_PRD.md](00_PRD.md) > [decisions.md](decisions.md) > this doc.
-- **Contrast:** every contrast figure below was calculated with WCAG 2.x relative luminance. Re-verify in Accessibility Inspector on device in P1.
+> Color values below are starting points chosen to meet the PRD's 4.5:1 text contrast. Verify every pair with Xcode's Accessibility Inspector before shipping.
 
 ---
 
 ## 1. Principles
-1. **Photos are the interface.** Items are large photo cards, and a room looks like a well-lit shelf. Text rows are the fallback: in list mode, and at accessibility sizes.
-2. **Paper for content, glass for controls.** Cards, lists, forms and photos are opaque warm "paper". Liquid Glass is reserved for the functional layer: the tab bar/sidebar, toolbars, sheets at partial detents, the floating Capture button, and transient controls. **Never put glass on content, and never stack glass on glass.** Apple's HIG and WWDC25 "Meet Liquid Glass" say that glass belongs to the navigation layer floating above content.
-3. **One obvious action per screen.** One primary button, at most. Capture is always one tap away.
-4. **Kind to mistakes.** Undo toasts, drafts, and Recently Deleted. AI output is visibly a *suggestion*: a subtle "Suggested" tint until the user edits or accepts it.
-5. **Quiet by default.** No badges, streaks or nagging. Color signals status only when it matters.
-6. **Tactile feedback.** Meaningful moments get a soft spring, a light haptic and a satisfying "settle".
-7. **Legible everywhere:**
-   - Any Liquid Glass slider position (Settings → Appearance → Liquid Glass)
-   - Reduce Transparency and Increase Contrast
-   - Bold Text
-   - Dynamic Type up to AX5
-8. **Native first.** Use system components with tokens applied, so the app inherits platform improvements for free.
+These follow the PRD's design pillars (§3), with one rule added for the warm-and-tactile direction.
+
+1. **Photos are the interface.** Items are large photo cards, not rows of text. A room looks like a well-lit shelf.
+2. **One obvious action per screen.** Capture is always one tap away on the floating Liquid Glass button.
+3. **Native, not generic.** System components with the iOS 27 Liquid Glass look for tab bar, toolbars and sheets. Custom styling is limited to cards, colors and illustrations. There's no opt-out from Liquid Glass in iOS 27, so we design with it.
+4. **Kind to mistakes.** AI results are suggestions; everything is editable and undoable; deletes last 30 days in Recently Deleted.
+5. **Quiet by default.** No badges, streaks or nagging. Notifications only for warranties and loans the user asked about.
+6. **Paper for content, glass for controls.** *(Added for this direction.)* Cards, photos and forms sit on opaque, warm "paper" surfaces. Liquid Glass is only for the system chrome and the Capture button. This keeps content readable at every Liquid Glass transparency setting and with Reduce Transparency on.
 
 ---
 
 ## 2. Color
 
-Colors live in Asset Catalog color sets with Any, Dark and High Contrast variants, exposed through `NookColor`. The minimums are 4.5:1 for body text, and 3:1 for large text and essential icons. The dark theme is not an inversion of the light theme: surfaces get *lighter* as they rise, accents lift in lightness, and there is never pure black or pure white.
+### 2.1 Neutrals and surfaces
+Warm neutral backgrounds (PRD §3). Dark mode uses warm espresso tones, never pure black, and warm off-white text, never pure white.
 
-### 2.1 Neutrals & surfaces
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `canvas` | #FAF6F0 (linen) | #1C1814 (espresso) | App background |
-| `surface` | #FFFDF9 | #26211C | Cards, rows |
-| `surfaceRaised` | #FFFFFF | #2F2923 | Toasts, popovers, dragged cards |
-| `surfaceSunken` | #F2EBE1 | #15120F | Input wells, photo placeholders |
-| `hairline` | #E6DDD1 | #3A332C | Dividers, card borders, 1-pt photo edge in dark |
-| `textPrimary` | #2B2420 (15.0:1 on surface) | #F4EDE4 (13.7:1) | Titles, body |
-| `textSecondary` | #6B5F57 (6.1:1) | #BFB3A7 (7.8:1) | Metadata |
-| `textTertiary` | #8C8079 (3.8:1) | #8F847A (4.4:1) | **Placeholders only, never essential info** |
+| `canvas` | `#F7F3EE` | `#1B1714` | App background |
+| `surface` | `#FFFDFA` | `#25201C` | Cards, rows, sheets' custom content |
+| `surfaceRaised` | `#FFFFFF` | `#2E2823` | Toasts, answer cards, popovers |
+| `surfaceSunken` | `#EFE8DF` | `#141110` | Text-field wells, photo placeholders |
+| `hairline` | `#E4DACE` | `#3A322B` | Card borders, dividers |
+| `textPrimary` | `#2A2420` | `#F3ECE3` | Titles and body |
+| `textSecondary` | `#6A5E55` | `#BEB2A6` | Breadcrumbs, metadata |
+| `textTertiary` | `#8A7E75` | `#8E8379` | Placeholders only, never essential information |
 
-### 2.2 Accent: 6 the user can pick (D5)
-The accent tints selection, primary buttons, links and native glass controls, via `.tint()` at the root. It is stored in `@AppStorage("accent")`, and the default is **Terracotta**.
+### 2.2 Accent colors (user picks 1 of 6, PRD §3)
+The chosen accent tints buttons, selection, links, the Capture button and system controls. Each has its own color for text drawn on top of it (`onAccent`).
 
-| Accent | `accent` Light | `accent` Dark | `accentText` Light¹ | `accentSoft` Light | `accentSoft` Dark |
-|---|---|---|---|---|---|
-| **Terracotta** (default) | #B5522E | #E98A64 | #9E4424 | #F8ECE5 | #453228 |
-| Sage | #4F7A57 | #8FBF97 | #436A4A | #EDF0E9 | #373A30 |
-| Ocean | #2F6F7A | #7CC3CC | = accent | #EAEFEC | #343B38 |
-| Plum | #7A4E86 | #C49AD0 | = accent | #F2ECEE | #3F3439 |
-| Slate | #4A5A78 | #A3B3D1 | = accent | #EDEDEC | #3A3839 |
-| Rose | #A4476A | #E796B4 | = accent | #F6EBEB | #453434 |
+| Accent | Light | Dark | `onAccent` light / dark | Feel |
+|---|---|---|---|---|
+| **Terracotta** (default) | `#B4502C` | `#EA8B64` | white / `#1B1714` | Warm clay |
+| Sage | `#4F7A57` | `#94BC9B` | white / `#1B1714` | Calm garden |
+| Ocean | `#2F6A8F` | `#8CBFE0` | white / `#1B1714` | Quiet blue |
+| Plum | `#8A4A78` | `#D9A0C8` | white / `#1B1714` | Soft berry |
+| Honey | `#9A6210` | `#E8B04F` | white / `#1B1714` | Golden wood |
+| Graphite | `#4A4F57` | `#B9BEC6` | white / `#1B1714` | Neutral, minimal |
 
-- `onAccent` is #FFFFFF in light and #1C1814 in dark. Every light accent passes ≥ 4.9:1 with white text, and every dark accent passes ≥ 6.9:1 with espresso text.
-- ¹ Use `accentText` for **accent-colored text on `accentSoft`** (secondary buttons, selected chips). Terracotta and Sage at full strength reach only about 4.3:1 on their soft tint. `accentText` lifts them to ≥ 5.3:1.
-- An alternate app icon is offered per accent (optional, P11).
+Rules:
+- In dark mode accents get lighter, and text on accent fills becomes dark.
+- Semantic colors (below) never change with the accent, so "expired" always looks the same.
 
-### 2.3 Semantic
+### 2.3 Room colors (PRD §3)
+Every room gets a soft color and an SF Symbol, used on cards, widgets and the map of the home. The **fill** is a soft tint for card backgrounds; the **ink** is a stronger shade for the symbol on that fill.
+
+| Room color | Fill light | Fill dark | Ink light | Ink dark |
+|---|---|---|---|---|
+| Clay | `#F1DDD3` | `#4A3329` | `#9A4527` | `#F0B59A` |
+| Sage | `#DCE7DA` | `#2F3D31` | `#3F6B48` | `#A9CBAE` |
+| Sky | `#D8E6F0` | `#2B3A46` | `#2E6488` | `#A6CBE6` |
+| Lavender | `#E5DDEE` | `#3A3245` | `#66508A` | `#C8B6E2` |
+| Butter | `#F4E9C9` | `#463C22` | `#7E5F12` | `#E9CF86` |
+| Rose | `#F2DADF` | `#47303A` | `#9A3F57` | `#EDB0C0` |
+| Stone | `#E6E1DA` | `#3B3631` | `#5E554C` | `#CFC6BC` |
+| Mint | `#D6ECE5` | `#2A4039` | `#2F7360` | `#A3D6C6` |
+
+### 2.4 Semantic colors
+Status is never shown by color alone: always icon plus text ("Ends in 12 days").
+
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `honey` | #945C0E (5.4:1) | #E3A948 | Warranty ending ≤ 30 days, loan overdue, "Check this" |
-| `success` (moss) | #3F7D4E | #7CBF8A | Warranty active, saved, "It's here ✓" |
-| `danger` (brick) | #B3261E | #F2857A | Ending ≤ 7 days, destructive |
-| `info` (blue-slate) | #3D6B8C | #8DB7D6 | Tips, sync info |
-| `suggested` | `accentSoft` at 60% | `accentSoft` at 60% | Background of AI-filled fields not yet confirmed |
+| `success` | `#3D7A4C` | `#7FC08C` | Saved, warranty active |
+| `warning` | `#A4610E` | `#E7AE52` | Warranty ending within 30 days, loan due soon |
+| `danger` | `#B3261E` | `#F28B80` | Expired, overdue, delete |
+| `info` | `#3A6889` | `#8FB8D6` | Tips, sync status |
+| `suggested` | accent at 12% opacity | accent at 18% opacity | Background of AI-filled fields until accepted |
 
-**Rule:** status is never shown by color alone. Always use icon + text + color ("⚠︎ Ends in 12 days").
-
-### 2.4 Room colors (8 soft tints, D5)
-Room colors are used for room card headers, the chips in the Spots row, widget accents and the sidebar dots. **On a room tint, use `textPrimary` for text** (≥ 8.9:1). `textSecondary` only reaches 4.3–4.9:1 there, so it is limited to text 18 pt and larger.
-
-| Room color | Light | Dark |
-|---|---|---|
-| Clay | #EBD3C5 | #4A3328 |
-| Sage | #D5E1D1 | #33403A |
-| Sky | #D0DFEA | #2E3B45 |
-| Butter | #F1E4BF | #4A3F26 |
-| Lilac | #E0D5E7 | #3D3444 |
-| Rose | #F0D4DA | #4A3339 |
-| Stone | #E2DCD2 | #403A34 |
-| Mint | #CFE6DE | #2B413B |
-
-Onboarding assigns room colors in order. The user can change a room's color in the room editor.
+### 2.5 Implementing colors
+Each token is a Color Set in the asset catalog with Any, Dark, and High Contrast variants.
 
 ```swift
-// NookUI/Sources/NookUI/Tokens/NookColor.swift
 import SwiftUI
 
-/// Every color in the app. Each case maps to an Asset Catalog color set
-/// with Light, Dark and High Contrast variants.
-public enum NookColor {
-    public static let canvas        = Color("canvas", bundle: .module)
-    public static let surface       = Color("surface", bundle: .module)
-    public static let surfaceRaised = Color("surfaceRaised", bundle: .module)
-    public static let surfaceSunken = Color("surfaceSunken", bundle: .module)
-    public static let hairline      = Color("hairline", bundle: .module)
-    public static let textPrimary   = Color("textPrimary", bundle: .module)
-    public static let textSecondary = Color("textSecondary", bundle: .module)
-    public static let honey         = Color("honey", bundle: .module)
-    public static let success       = Color("success", bundle: .module)
-    public static let danger        = Color("danger", bundle: .module)
-    public static let info          = Color("info", bundle: .module)
+// MARK: - Neutral color tokens
+// Each name matches a Color Set in Assets.xcassets.
+// The Color Set holds Light, Dark and High Contrast versions,
+// so SwiftUI picks the right one automatically.
+enum NookColor {
+    static let canvas        = Color("canvas")         // app background
+    static let surface       = Color("surface")        // cards and rows
+    static let surfaceRaised = Color("surfaceRaised")  // toasts, answer cards
+    static let surfaceSunken = Color("surfaceSunken")  // text-field wells
+    static let hairline      = Color("hairline")       // thin borders
+    static let textPrimary   = Color("textPrimary")    // main text
+    static let textSecondary = Color("textSecondary")  // supporting text
+    static let success       = Color("success")
+    static let warning       = Color("warning")
+    static let danger        = Color("danger")
 }
 
-/// The 6 accents the user can pick. Stored by rawValue in @AppStorage("accent").
-public enum NookAccent: String, CaseIterable, Sendable {
-    case terracotta, sage, ocean, plum, slate, rose
+// MARK: - User-selectable accent (6 options, PRD §3)
+// Asset catalog folders "Accent" and "OnAccent" must have
+// "Provides Namespace" ticked so names like "Accent/sage" work.
+enum AccentChoice: String, CaseIterable, Identifiable {
+    case terracotta, sage, ocean, plum, honey, graphite
 
-    public var color: Color     { Color("accent.\(rawValue)", bundle: .module) }
-    public var text: Color      { Color("accentText.\(rawValue)", bundle: .module) }
-    public var soft: Color      { Color("accentSoft.\(rawValue)", bundle: .module) }
+    var id: String { rawValue }
+
+    // The accent itself (buttons, selection, Capture button).
+    var color: Color { Color("Accent/\(rawValue)") }
+
+    // Color for text or icons placed ON the accent.
+    var onAccent: Color { Color("OnAccent/\(rawValue)") }
 }
 
-/// The 8 soft room tints. Stored on Room.colorKey.
-public enum RoomColor: String, CaseIterable, Sendable {
-    case clay, sage, sky, butter, lilac, rose, stone, mint
-    public var color: Color { Color("room.\(rawValue)", bundle: .module) }
+// MARK: - Applying the accent app-wide
+@main
+struct NookApp: App {
+    // Remembers the user's choice between launches. Default is terracotta.
+    @AppStorage("accentChoice") private var accent: AccentChoice = .terracotta
+
+    var body: some Scene {
+        WindowGroup {
+            RootView()
+                .tint(accent.color) // tints buttons, toggles, tab bar selection and glass controls
+        }
+    }
 }
 ```
 
 ---
 
 ## 3. Typography
+SF Pro with Dynamic Type everywhere; **SF Pro Rounded for large headings and totals** (PRD §3). Body text stays in SF Pro for readability. Prices and counts use monospaced digits so numbers don't shift as they change.
 
-- **SF Pro** for body text and data, with Dynamic Type everywhere.
-- **SF Pro Rounded** (`.fontDesign(.rounded)`) for large headings and **totals** (PRD visual system).
-- Numbers use `.monospacedDigit()` so values don't "wiggle" as they change.
-- Always use text styles. Never use fixed sizes.
-
-| Token | Text style | Default pt | Weight | Design | Use |
+| Token | Text style | Default size | Weight | Design | Use |
 |---|---|---|---|---|---|
-| `display` | .largeTitle | 34 | Bold | Rounded | Tab root titles |
-| `title` | .title2 | 22 | Semibold | Rounded | Detail headers, room names |
-| `section` | .title3 | 20 | Semibold | Rounded | Card titles |
-| `headline` | .headline | 17 | Semibold | Default | Card and row titles |
-| `body` | .body | 17 | Regular | Default | Body text, fields |
-| `meta` | .subheadline | 15 | Regular | Default | Breadcrumbs, metadata |
-| `footnote` | .footnote | 13 | Regular | Default | "Last confirmed Aug 3", timestamps |
-| `caption` | .caption | 12 | Medium | Rounded | Chips, pills |
-| `value` | .title3 | 20 | Semibold | Rounded + mono digits | Prices, counts |
-| `total` | .largeTitle | 34 | Bold | Rounded + mono digits | Home total value |
-| `serial` | .body | 17 | Regular | Monospaced | Serial and model numbers |
+| `display` | `.largeTitle` | 34 | Bold | Rounded | Tab titles, home name |
+| `total` | `.largeTitle` | 34 | Semibold | Rounded, mono digits | Total home value |
+| `title` | `.title2` | 22 | Semibold | Rounded | Item and room headers |
+| `section` | `.title3` | 20 | Semibold | Rounded | Section and card titles |
+| `headline` | `.headline` | 17 | Semibold | Default | Card item names |
+| `body` | `.body` | 17 | Regular | Default | Body text, fields |
+| `meta` | `.subheadline` | 15 | Regular | Default | Breadcrumbs, last confirmed |
+| `footnote` | `.footnote` | 13 | Regular | Default | Helper text |
+| `caption` | `.caption` | 12 | Medium | Default | Chips, badges |
+| `value` | `.title3` | 20 | Semibold | Rounded, mono digits | Prices on detail screens |
 
-**Dynamic Type rules:**
-- Test from xSmall through AX5.
-- At accessibility sizes (`dynamicTypeSize.isAccessibilitySize`), **photo grids become lists** and horizontal rows stack vertically (`ViewThatFits`).
-- Essential info wraps; it is never truncated. Serials middle-truncate but are fully readable in VoiceOver and on copy.
-- Custom metrics use `@ScaledMetric`.
+Dynamic Type rules (PRD §3 accessibility):
+- Support every size up to the largest accessibility size.
+- At accessibility sizes, photo grids become lists and side-by-side rows stack vertically.
+- Wrap text instead of truncating anything essential; long serials truncate in the middle and show in full on tap.
+- Never put text inside images.
 
 ```swift
-// NookUI/Sources/NookUI/Tokens/NookFont.swift
-import SwiftUI
-
-public extension Font {
+// MARK: - Typography tokens
+// Text styles (like .body) grow and shrink with the user's text size setting.
+extension Font {
     static let nookDisplay  = Font.largeTitle.weight(.bold)
     static let nookTitle    = Font.title2.weight(.semibold)
     static let nookSection  = Font.title3.weight(.semibold)
     static let nookHeadline = Font.headline
     static let nookBody     = Font.body
     static let nookMeta     = Font.subheadline
-    static let nookFootnote = Font.footnote
-    static let nookCaption  = Font.caption.weight(.medium)
-    static let nookValue    = Font.title3.weight(.semibold)
 }
 
-/// A currency amount in the app's value style. Honors "Hide values" (F11).
-public struct PriceText: View {
+// MARK: - Money text (totals and prices)
+struct MoneyText: View {
     let amount: Decimal
     let currencyCode: String
-    @Environment(\.hideValues) private var hideValues   // NookUI environment key
+    var font: Font = .title3.weight(.semibold)
 
-    public init(_ amount: Decimal, currencyCode: String) {
-        self.amount = amount; self.currencyCode = currencyCode
-    }
+    // When "Hide values" is on, prices show as dots (PRD §5 F11).
+    @AppStorage("hideValues") private var hideValues = false
 
-    public var body: some View {
+    var body: some View {
         Group {
-            if hideValues { Text("•••").accessibilityLabel("Value hidden") }
-            else { Text(amount, format: .currency(code: currencyCode)) }
+            if hideValues {
+                Text("••••")
+                    .accessibilityLabel("Value hidden")       // VoiceOver doesn't read the dots
+            } else {
+                Text(amount, format: .currency(code: currencyCode))
+            }
         }
-        .font(.nookValue)
-        .fontDesign(.rounded)
-        .monospacedDigit()
-        .foregroundStyle(NookColor.textPrimary)
+        .font(font)
+        .fontDesign(.rounded)   // soft, friendly numerals (PRD §3)
+        .monospacedDigit()      // every digit the same width, so totals don't wiggle
     }
 }
 ```
 
 ---
 
-## 4. Spacing & layout (8-pt grid, D6)
+## 4. Spacing and layout
+**8-pt spacing grid** (PRD §3), with 4 pt allowed only for tight gaps inside a component.
 
-| Token | pt | Use |
+| Token | Value | Use |
 |---|---|---|
-| `half` | 4 | **Only** chip/pill internals and icon-to-label gaps |
-| `s1` | 8 | Tight stacks |
-| `s2` | 16 | Card padding, side margins (compact) |
-| `s3` | 24 | Section gaps, side margins (regular) |
-| `s4` | 32 | Screen-level breathing room |
-| `s6` | 48 | Empty-state spacing |
+| `half` | 4 | Icon to label inside a chip |
+| `s1` | 8 | Between related lines of text |
+| `s2` | 16 | Card padding, screen side margins on compact width |
+| `s3` | 24 | Between sections |
+| `s4` | 32 | Above major headers |
+| `s5` | 40 | Empty-state spacing |
+| `s6` | 48 | Large hero spacing |
 
-- Card gap: 16. Rows are at least 56 pt tall (72 pt with a thumbnail). Touch targets are at least 44×44 pt with at least 8 pt between them.
-- **Photo grid columns:**
-  - Compact: 2 (3 on Pro Max landscape).
-  - Regular: 4–5, computed from the available width with `GridItem(.adaptive(minimum: 160))`. Never from the device type.
-  - At accessibility sizes: a list.
-- Use readable content width for text-heavy screens at regular width.
+Layout rules (PRD §4):
+- Layouts depend on **size classes only**, never on device model, screen size or orientation.
+- Photo grid columns: 2 on compact width, 3 on Pro Max landscape, 4–5 on regular width.
+- Handle each safe-area edge separately (bars can sit on the left or right in some layouts).
+- **v1.1 (iPhone Duo):** nothing on the hinge; use `ReservedRegion`, which needs the iOS 27.1 SDK.
+- Never use `UIScreen.main`; read size and scale from the environment or window scene.
+- Tap targets are at least 44 × 44 pt, with at least 8 pt between targets.
 
 ```swift
-public enum NookSpace {
-    public static let half: CGFloat = 4
-    public static let s1: CGFloat = 8
-    public static let s2: CGFloat = 16
-    public static let s3: CGFloat = 24
-    public static let s4: CGFloat = 32
-    public static let s6: CGFloat = 48
+// MARK: - Spacing tokens (8-pt grid)
+enum Space {
+    static let half: CGFloat = 4    // only for tight gaps inside a component
+    static let s1: CGFloat = 8
+    static let s2: CGFloat = 16
+    static let s3: CGFloat = 24
+    static let s4: CGFloat = 32
 }
 
-/// Card padding that grows a little with Dynamic Type.
-public struct CardPadding: ViewModifier {
-    @ScaledMetric(relativeTo: .body) private var pad: CGFloat = NookSpace.s2
-    public func body(content: Content) -> some View { content.padding(pad) }
+// MARK: - Photo grid that adapts to width and text size
+struct ItemGrid: View {
+    let items: [ItemSummary]
+    @Environment(\.horizontalSizeClass) private var sizeClass   // compact or regular width
+    @Environment(\.dynamicTypeSize) private var typeSize        // user's text size
+
+    var body: some View {
+        if typeSize.isAccessibilitySize {
+            // Very large text: a list reads better than a grid (PRD §3).
+            LazyVStack(spacing: Space.s1) {
+                ForEach(items) { ItemRow(item: $0) }
+            }
+        } else {
+            // More columns when there's more room (PRD §4).
+            let columnCount = sizeClass == .regular ? 4 : 2
+            let columns = Array(repeating: GridItem(.flexible(), spacing: Space.s2), count: columnCount)
+            LazyVGrid(columns: columns, spacing: Space.s2) {
+                ForEach(items) { ItemPhotoCard(item: $0) }
+            }
+        }
+    }
 }
 ```
 
 ---
 
-## 5. Shape: concentric, continuous, pillowy
+## 5. Shape and corners
+**Concentric corner radii that follow the device's screen corners** (PRD §3). Inner corners equal the outer radius minus the padding between them, so nested shapes look like they belong together. Use `ConcentricRectangle` so cards also follow each screen's corner shape, including iPhone Duo's (PRD §4 rule 7).
 
 | Token | Radius | Use |
 |---|---|---|
-| `xs` | 8 | Tags, small thumbnails |
-| `sm` | 12 | Row thumbnails, inputs |
-| `md` | 16 | Inner photo in a card |
-| `lg` | 24 | Cards, photo cards |
-| `xl` | 32 | Hero / room header |
-| capsule | — | Chips, pills, primary buttons, toasts |
+| `capsule` | Full | Buttons, chips, pills, search field |
+| `small` | 8 | Badges, tiny thumbnails |
+| `medium` | 12 | Text fields, list thumbnails |
+| `card` | 24 | Photo cards, room cards (outer) |
+| `hero` | 32 | Answer card, onboarding panels |
+| `concentric` | Computed | Photos inside cards, cards near screen edges |
 
-- Corners are always continuous.
-- **Nested shapes are concentric:** the inner radius equals the outer radius minus the padding. Use `ConcentricRectangle` with `.containerShape(...)` so cards also follow each screen's corner shape, including the iPhone Duo's (PRD §4 rule 7).
+All rounded rectangles use the continuous corner style (the smooth "squircle" Apple uses).
 
 ```swift
-/// Opaque "paper" card: the base container for all content.
-public struct NookCard<Content: View>: View {
-    @ViewBuilder var content: Content
-    public init(@ViewBuilder content: () -> Content) { self.content = content() }
+// MARK: - Photo card with concentric corners
+struct ItemPhotoCard: View {
+    let item: ItemSummary
 
-    public var body: some View {
-        content
-            .modifier(CardPadding())
-            .background(NookColor.surface, in: .rect(cornerRadius: 24, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(NookColor.hairline, lineWidth: 1)
-            )
-            .containerShape(.rect(cornerRadius: 24))   // inner ConcentricRectangle() derives from this
-            .nookShadow(.low)
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.s1) {
+            // A 4:5 frame that the photo fills; the photo is clipped
+            // to a corner radius computed from the card's own corners.
+            Color.clear
+                .aspectRatio(4 / 5, contentMode: .fit)
+                .overlay {
+                    item.thumbnail
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipShape(ConcentricRectangle())   // inner radius = card radius − padding
+
+            Text(item.name)
+                .font(.nookHeadline)
+                .foregroundStyle(NookColor.textPrimary)
+                .lineLimit(2)
+
+            Text(item.locationText)                  // e.g. "Kitchen → Top shelf"
+                .font(.nookMeta)
+                .foregroundStyle(NookColor.textSecondary)
+                .lineLimit(1)
+        }
+        .padding(Space.s1)
+        // Opaque warm "paper" surface, never glass (principle 6).
+        .background(NookColor.surface, in: .rect(cornerRadius: 24, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(NookColor.hairline, lineWidth: 1)   // crisp edge, important in dark mode
+        }
+        // Tells ConcentricRectangle inside what the outer shape is.
+        .containerShape(.rect(cornerRadius: 24, style: .continuous))
+        .warmShadow()
+        // VoiceOver reads the card as one element with name, room and value (PRD §3).
+        .accessibilityElement(children: .combine)
     }
 }
 ```
 
 ---
 
-## 6. Elevation, materials & Liquid Glass
+## 6. Materials, elevation and texture
 
-There are three layers:
-1. **Canvas:** flat linen.
-2. **Content:** opaque paper cards. In light mode, a warm diffuse shadow. In dark mode, elevation comes from a lighter surface plus a hairline.
-3. **Functional:** system Liquid Glass, which we only tint.
-
-| Elevation | Light (warm brown #5A3A22 shadow) | Dark |
+### 6.1 Three layers
+| Layer | Material | Examples |
 |---|---|---|
-| `flat` | none | none |
-| `low` (cards) | y2 blur8 6% + y1 blur2 4% | surface + hairline |
-| `mid` (pressed / dragging) | y8 blur20 10% | surfaceRaised + hairline |
-| `high` (toast, popover) | y16 blur32 14% | surfaceRaised + lighter border |
+| Canvas | Flat warm linen | App background |
+| Content | Opaque paper with warm shadow (light) or lighter surface plus hairline (dark) | Photo cards, room cards, forms, answer cards |
+| Controls | System Liquid Glass, tinted with the accent | Tab bar, toolbars, sheets, Capture button, camera controls |
 
-**Liquid Glass rules:**
-- Use native bars. For floating controls (the Capture button), use `.buttonStyle(.glass)` or `.glassProminent`. Group custom glass in a `GlassEffectContainer`.
-- **Never** put `.glassEffect()` on cards, rows, photos or toasts. Don't put glass over flat single-color areas.
-- Check both extremes of the glass slider, plus Reduce Transparency (frosty) and Increase Contrast (black/white with a border).
-- Scroll edge: accept the iOS 27 automatic style [Verify in SDK: the reported "hard" default]. Use `.soft` only on photo-heavy screens, and only after a legibility test.
-- In iOS 27 the dark glass is lighter [Verify in SDK], so re-check contrast on custom content inside sheets.
-- Optional tactility: a 2–3% paper-grain texture on `canvas` only. Remove it under Increase Contrast.
+### 6.2 Elevation
+| Level | Light mode (shadow in warm brown, not black) | Dark mode |
+|---|---|---|
+| Flat | None | None |
+| Low (cards) | 2 pt down, 8 pt blur, 6% + 1 pt down, 2 pt blur, 4% | `surface` + hairline |
+| Lifted (pressed or dragging) | 8 pt down, 20 pt blur, 10% | `surfaceRaised` + hairline |
+| Floating (toasts, answer card) | 16 pt down, 32 pt blur, 14% | `surfaceRaised` + lighter border |
+
+### 6.3 Liquid Glass rules
+- Use native bars and sheets; tint with the accent rather than adding backgrounds.
+- Custom glass only for the Capture button and floating camera controls (`.glass` / `.glassProminent` button styles).
+- Never put glass on cards, photos or rows, and never stack glass on glass.
+- Test at both ends of the iOS 27 Liquid Glass transparency setting, and with Reduce Transparency and Increase Contrast.
+
+### 6.4 Tactile texture
+- An optional, very faint paper grain (2–3% opacity) on `canvas` only, to make the background feel like a material rather than a flat color.
+- Removed automatically when Increase Contrast or Reduce Transparency is on.
+- Never on photos, text or glass.
 
 ```swift
-public enum NookElevation { case low, mid, high }
-
-public extension View {
-    func nookShadow(_ level: NookElevation) -> some View { modifier(WarmShadow(level: level)) }
+// MARK: - Warm shadow
+// Brown-tinted shadows feel softer on warm backgrounds than black ones.
+extension View {
+    func warmShadow(lifted: Bool = false) -> some View {
+        modifier(WarmShadow(lifted: lifted))
+    }
 }
 
 struct WarmShadow: ViewModifier {
-    let level: NookElevation
+    var lifted: Bool
     @Environment(\.colorScheme) private var scheme
-    private let tint = Color(red: 0.35, green: 0.23, blue: 0.13)   // warm brown (token source of truth)
+    private let brown = Color(red: 0.35, green: 0.23, blue: 0.13)
 
     func body(content: Content) -> some View {
         if scheme == .dark {
-            content   // dark mode: lighter surfaces + hairlines, not shadows
+            // Shadows barely show in dark mode; lighter surfaces and borders do the work.
+            content
+        } else if lifted {
+            content.shadow(color: brown.opacity(0.10), radius: 20, y: 8)   // picked up
         } else {
-            switch level {
-            case .low:
-                content
-                    .shadow(color: tint.opacity(0.06), radius: 8, y: 2)
-                    .shadow(color: tint.opacity(0.04), radius: 2, y: 1)
-            case .mid:  content.shadow(color: tint.opacity(0.10), radius: 20, y: 8)
-            case .high: content.shadow(color: tint.opacity(0.14), radius: 32, y: 16)
-            }
+            content
+                .shadow(color: brown.opacity(0.06), radius: 8, y: 2)       // soft spread
+                .shadow(color: brown.opacity(0.04), radius: 2, y: 1)       // tight contact
         }
     }
 }
@@ -316,289 +369,293 @@ struct WarmShadow: ViewModifier {
 
 ---
 
-## 7. Iconography & illustration
-- **SF Symbols 7 only** (PRD). Hierarchical rendering by default. Room symbols use palette rendering in the room color. Use variable color for progress and signal (sync, scan). Symbol weight follows the adjacent text.
-- **Symbol effects:**
-  - The checkmark *draws on* when saving.
-  - `.bounce` on "It's here ✓".
-  - Variable draw for report-generation progress.
-  - All of them respect Reduce Motion.
-- **Default room symbols:**
+## 7. Iconography and illustration
+- **SF Symbols 7 only**, with variable color and symbol effects (PRD §3). Hierarchical rendering by default; room symbols use the room's ink color.
+- Symbol weight matches nearby text.
+- Symbol effects with meaning only: a checkmark that draws on when saving, variable color for progress (report rendering, scan progress).
+- **Illustrations** for empty, loading and error states (PRD §3): soft, rounded, hand-made feeling (gouache or clay look) in the warm palette, with the user's accent as the highlight color. They're decorative, so VoiceOver skips them.
+- **App icon:** light, dark, clear and tinted variants built in Icon Composer (PRD §3).
 
-  | Room | Symbol |
-  |---|---|
-  | Kitchen | `fork.knife` |
-  | Living room | `sofa` |
-  | Bedroom | `bed.double` |
-  | Bathroom | `shower` |
-  | Office | `desktopcomputer` |
-  | Garage | `car` |
-  | Basement | `stairs` |
-  | Storage | `shippingbox` |
-  | Custom | `house` |
+Suggested symbols:
 
-- **Illustrations:** soft, rounded clay/gouache style in the warm palette. They are decorative only (`accessibilityHidden(true)`), and every empty, error and onboarding screen has one.
-- **App icon:** a layered Icon Composer mark (a warm "nook" shelf or house) with light, dark, clear and tinted variants.
+| Concept | Symbol |
+|---|---|
+| Home tab | `house` |
+| Find tab | system search tab |
+| Reports tab | `doc.text` |
+| Settings tab | `gearshape` |
+| Capture | `camera.viewfinder` |
+| Scan room | `viewfinder` |
+| Receipt | `receipt` |
+| Barcode | `barcode.viewfinder` |
+| Move | `arrow.up.and.down.and.arrow.left.and.right` |
+| Warranty | `checkmark.shield` |
+| Lent | `person.crop.circle.badge.clock` |
+| Private | `lock.fill` |
+| Container | `shippingbox` |
 
 ---
 
-## 8. Components (NookUI)
+## 8. Components
 
-### 8.1 Buttons
+### 8.1 Capture button (floating, PRD §3 pillar 2)
+- 56 pt circle, Liquid Glass prominent style tinted with the accent, `camera.viewfinder` symbol.
+- Bottom trailing, above the tab bar, inside the safe area. Hidden on capture screens, the paywall and the lock screen.
+- Tap: opens the Capture menu with a light haptic. Long-press: jumps straight to Scan room. [Proposed]
+
+```swift
+// MARK: - Floating Capture button
+struct CaptureButton: View {
+    @Binding var showCaptureMenu: Bool
+
+    var body: some View {
+        Button {
+            showCaptureMenu = true                      // opens the Capture menu (C-01)
+        } label: {
+            Image(systemName: "camera.viewfinder")
+                .font(.title2.weight(.semibold))
+                .frame(width: 56, height: 56)            // well above the 44 pt minimum
+        }
+        .buttonStyle(.glassProminent)                    // Liquid Glass, tinted by the app's accent
+        .buttonBorderShape(.circle)
+        .accessibilityLabel("Capture")
+        .accessibilityHint("Scan a room, add an item, or scan a receipt or barcode")
+        .sensoryFeedback(.impact(weight: .light), trigger: showCaptureMenu)
+    }
+}
+
+// Usage: add it to each tab's content so it sits above the tab bar.
+// SomeTabContent()
+//     .overlay(alignment: .bottomTrailing) {
+//         CaptureButton(showCaptureMenu: $showCapture).padding(Space.s2)
+//     }
+```
+
+### 8.2 Buttons
 | Variant | Look | Use |
 |---|---|---|
-| Primary | Capsule, `accent` fill, `onAccent` label, 50 pt | One per screen: Save, Save all, Move, Continue |
-| Secondary | Capsule, `accentSoft` fill, `accentText` label, 44–50 pt | Alternatives |
-| Tertiary | Text in `accentText` | Links, Cancel-like actions |
-| Destructive | `danger` label (fill only in confirm dialogs) | Delete |
-| Glass | `.glass` / `.glassProminent` | **Floating controls only** (Capture) |
+| Primary | Capsule, accent fill, `onAccent` label, 50 pt tall | One per screen: Save, Save all, Unlock Pro |
+| Secondary | Capsule, accent at 12% fill, accent label | Alternatives: Edit, Add spot |
+| Tertiary | Text in accent | Cancel-like actions, links |
+| Destructive | Danger-colored label | Delete |
+| Glass | System glass styles | Floating controls only |
 
-- **States:**
-  - Pressed: scale 0.97 with the `tap` spring.
-  - Disabled: 40% opacity, no haptic.
-  - Loading: a `ProgressView` with the width locked.
+States: pressed (shrinks to 97% with a soft spring); disabled (40% opacity, no haptic); loading (spinner replaces the label, width stays the same).
+
+### 8.3 Cards
+- **Item photo card:** 4:5 photo, name (2 lines), breadcrumb; badges in the top corner for Private, Lent, warranty ending. Pressed: lifts and shrinks to 98%.
+- **Room card:** room color fill, SF Symbol in room ink, cover photo if set, name, item count. Shelf-like proportions (wider than tall).
+- **Answer card (Find):** `surfaceRaised`, hero radius, breadcrumb in `section` type, item photo and spot photo side by side, "Last confirmed" line, Move and "Found it here instead" buttons.
+- **Move confirmation card:** like the answer card, with the proposed location in bold and Move / Not now. Nothing moves without a tap (PRD §6).
+- **Warranty card:** days left with a small progress ring in the semantic color, plus text ("Ends in 12 days").
+
+### 8.4 Location breadcrumb
+- "Bedroom → Wardrobe → Top shelf" in `meta` type, the room segment in its room ink color.
+- Each segment is tappable; VoiceOver reads it as "Bedroom, Wardrobe, Top shelf".
+- Wraps onto 2 lines at large text sizes instead of truncating.
+
+### 8.5 Detection outline (room scan)
+- Soft rounded outline in the accent at 80% opacity, 2 pt, with a faint glow in light mode.
+- Outlines appear one after another with a light haptic tap each (PRD §3 motion).
+- Selected outline: thicker and filled at 15% opacity; its card highlights below.
+- Under Reduce Motion, outlines fade in without the draw animation; haptics remain.
 
 ```swift
-public struct NookPrimaryButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled
+// MARK: - Detected items appear one by one, each with a light tap
+struct DetectionOverlay: View {
+    let boxes: [CGRect]                    // item boxes from the scan, in view coordinates
+    @State private var visibleCount = 0    // how many outlines are showing so far
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    public init() {}
-
-    public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.headline).fontDesign(.rounded)
-            .foregroundStyle(.white)                               // onAccent (dark variant via asset in real impl)
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .background(.tint, in: .capsule)                       // tint = user's accent
-            .opacity(isEnabled ? 1 : 0.4)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
-            .animation(NookMotion.tap, value: configuration.isPressed)
-    }
-}
-```
-
-### 8.2 Capture button (floating, D2)
-- A 56-pt circle using `.glassProminent`, tinted with the accent, with a `plus.viewfinder` symbol and the accessibility label "Capture".
-- It sits above the tab bar at the trailing edge in compact width, and at the bottom trailing of the detail column in regular width. It respects per-edge safe areas on the Duo.
-- Tap opens the Capture menu. Long-press goes to Scan room with an `.impact(weight: .light)` haptic.
-- It hides while the keyboard is up and inside editors and sheets.
-- Final placement is decided in P1 (overlay vs `tabViewBottomAccessory`) and logged in decisions.md.
-
-### 8.3 Photo cards, rows & the shelf
-- **PhotoCard** (item):
-  - A 4:3 photo with a concentric clip.
-  - The name (headline, 2 lines), and the value (`value`, mono, respecting Hide values).
-  - Optional badges in the top trailing corner: warranty ribbon (honey/danger), "Lent" (info), a lock (Private).
-  - Pressed: lifts to `mid` and scales to 0.98.
-  - It is the source of the **zoom transition** to Item Detail (`.matchedTransitionSource` + `.navigationTransition(.zoom)`).
-- **RoomCard:**
-  - A room-tint header with a palette symbol, a mosaic of up to 4 recent photos, and the name, count and value.
-- **Shelf:** the room grid, grouped by spot with sticky section headers (spot name plus spot photo thumbnail).
-- **Row** (list mode and AX sizes):
-  - A 56-pt thumbnail, the title, and a breadcrumb subtitle.
-  - A trailing value or status and a chevron.
-  - Swipe actions: leading is constructive (Move = accent, Lend = info), trailing is destructive (Delete = danger).
-
-### 8.4 Location components
-- **Breadcrumb:** "Office › Desk › Second drawer". Uses `meta`, and the last segment is semibold. It wraps rather than truncates. VoiceOver reads "Office, then Desk, then Second drawer".
-- **Answer card:**
-  - A `surfaceRaised` card with the item photo and spot photo side by side, the breadcrumb, "You put them there on Aug 3", and the **last-confirmed** footnote.
-  - Buttons: Move (primary), "Found it here instead" (tertiary), and "It's here ✓" (secondary).
-- **Move-confirm card** `[AI]`: "Move **Passports** to **Bedroom › Safe**?" with Move (primary) and Cancel.
-
-### 8.5 Inputs, chips, pills
-- **Text field:**
-  - A `surfaceSunken` well with a 12-pt radius and a height of at least 48 pt.
-  - The label sits above the field, and the helper or error text below.
-  - Focus: a 2-pt accent border. Error: a `danger` border, an icon and a message.
-- **Suggested (AI) field:** a `suggested` background and a small ✦ icon until the user edits or accepts the value. VoiceOver says "Suggested".
-- **Special fields:**
-  - Currency: locale-aware, decimal pad.
-  - Date: a compact `DatePicker`.
-  - Serial: monospaced, with "Scan".
-  - Tags: a token field.
-  - Photos: a grid of up to 10, draggable to reorder.
-- **Chips:**
-  - Filter chips are 32-pt capsules with a 44-pt hit area.
-  - Selected: an `accentSoft` fill, `accentText` label and a checkmark.
-  - Room chips use the room tint.
-- **Status pills** always pair an icon with text:
-
-  | Status | Color |
-  |---|---|
-  | Active | success |
-  | Ending | honey |
-  | Ending in ≤ 7 days | danger |
-  | Expired | textSecondary on surfaceSunken |
-  | Lent | info |
-  | Overdue | honey |
-
-### 8.6 Scan overlay (room scan, F3)
-- **Detected-item outline:**
-  - A 2-pt rounded rectangle in the accent over the photo, with a 12% `accentSoft` fill.
-  - It draws on over 0.25 s. Each outline also has a numbered caption chip that matches its card.
-  - Selected outline: 3 pt plus the `mid` shadow on the matching card.
-- **Detection cascade:** outlines appear **one after another**, 120 ms apart, each with `.impact(weight: .light, intensity: 0.6)`. The cards stream in below in the same order. Under Reduce Motion the outlines fade in with the haptics kept, and the cascade cap is 10 haptics.
-- **Manual tagging box:**
-  - Drawing with a drag shows a dashed accent border. When released, it becomes solid and the name field focuses.
-  - The box can be resized with its corner handles (44-pt hit areas).
-- **Coach overlay:** a glass capsule at the top of the camera with one short hint at a time. It changes at most every 2 s and is announced to VoiceOver.
-
-### 8.7 Sheets & dialogs
-- Use native sheets, which are glass at partial detents.
-  - `.medium`: the Capture menu, Move picker, Lend sheet.
-  - `.large`: editors.
-  - Show a grabber on resizable sheets. Editors use Cancel / Save.
-- Custom content inside sheets stays opaque.
-- Confirmation dialogs spring from the control that triggered them, and label destructive options explicitly ("Delete 3 Items").
-
-### 8.8 Tab bar, sidebar, toolbars (D2)
-- The tab bar shows **Home** (`house`), **Find** (`Tab(role: .search)`), **Reports** (`doc.text.magnifyingglass`) and **Settings** (`gearshape`).
-- No badges (principle 5).
-- The tab bar stays visible: `.tabBarMinimizeBehavior(.never)` [Verify in SDK].
-- No custom bar backgrounds. Tint only.
-- Large rounded titles on tab roots, inline titles on detail screens. The primary action is pinned trailing, secondary actions go in the overflow menu. Content scrolls under the bars.
-
-```swift
-struct RootView: View {
-    @AppStorage("accent") private var accent: NookAccent = .terracotta
-    @State private var showCapture = false
 
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house") { HomeScreen() }
-            Tab("Reports", systemImage: "doc.text.magnifyingglass") { ReportsScreen() }
-            Tab("Settings", systemImage: "gearshape") { SettingsScreen() }
-            Tab(role: .search) { FindScreen() }                  // system search tab placement
+        ZStack(alignment: .topLeading) {
+            ForEach(Array(boxes.prefix(visibleCount).enumerated()), id: \.offset) { _, box in
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(.tint.opacity(0.8), lineWidth: 2)   // uses the app's accent
+                    .frame(width: box.width, height: box.height)
+                    .offset(x: box.minX, y: box.minY)
+                    .transition(reduceMotion ? .opacity : .scale(scale: 0.9).combined(with: .opacity))
+            }
         }
-        .tabViewStyle(.sidebarAdaptable)                         // sidebar at regular width
-        .tint(accent.color)                                      // also tints native glass
-        .overlay(alignment: .bottomTrailing) {                   // placement finalized in P1 (D2)
-            CaptureButton { showCapture = true }
+        // A light haptic each time a new outline appears (PRD §3).
+        .sensoryFeedback(.impact(weight: .light), trigger: visibleCount)
+        .task {
+            // Reveal outlines one after another so detection feels alive.
+            for index in boxes.indices {
+                try? await Task.sleep(for: .milliseconds(180))
+                withAnimation(.spring(duration: 0.35, bounce: 0.2)) {
+                    visibleCount = index + 1
+                }
+            }
         }
-        .sheet(isPresented: $showCapture) { CaptureMenu() }
+        .accessibilityHidden(true)   // the item cards below carry the VoiceOver information
     }
 }
 ```
 
-### 8.9 Empty, loading, error, success
-- **Empty:**
-  - A 120–160 pt illustration, a `section` rounded title, one sentence and one primary button.
-  - Example: "Nothing here yet. Scan this room to fill it in 30 seconds."
-- **Loading:**
-  - Skeleton paper blocks with a slow warm shimmer. The shimmer is static under Reduce Motion.
-  - Never show a spinner for more than 300 ms.
-- **Error:**
-  - `exclamationmark.bubble`, a plain-language reason, and Retry.
-  - The copy never blames the user and never mentions AI.
-- **Toast:**
-  - A bottom capsule on `surfaceRaised` with the `high` elevation. It is **not glass**.
-  - It holds an icon, a message and an optional action (Undo or "Add another").
-  - It lasts 4 s (5 s when it has Undo) and is announced to VoiceOver.
-- **Warranty ring:**
-  - A 6-pt stroke in the status color.
-  - Its accessible value reads, for example, "142 days remaining of 365".
+### 8.6 Inputs
+- Text field: `surfaceSunken` well, medium radius, at least 48 pt tall, label above, helper or error text below.
+- Focus: 2 pt accent border. Error: danger border, icon and message (never color alone).
+- **AI-suggested fields:** `suggested` background tint and a small "Suggested" label until the user edits or accepts.
+- Special fields: name with autocomplete; currency with the locale's decimal keypad; compact date picker; serial in monospaced type with "Read from sticker"; tags as tokens; photo strip with add, reorder and delete.
+
+### 8.7 Chips, pills and badges
+- Filter chip: 32 pt capsule with a 44 pt hit area; selected uses accent at 12% fill plus a checkmark.
+- Room chip (onboarding): room color fill, symbol, name.
+- Status pills: Active (success), Ending soon (warning), Expired (danger), Lent (info), always icon plus text.
+- Badges on cards: small glyphs only (lock, person, clock), each with an accessibility label.
+
+### 8.8 Navigation, sheets and dialogs
+- Tab bar: system Liquid Glass, tinted by the accent, no custom background. Becomes a sidebar on regular width (PRD §4).
+- Large rounded titles on tab roots; inline titles on detail screens. The primary action sits at the trailing end of the toolbar.
+- Sheets: system sheets with a grabber; medium height for pickers (Move, Lend), large for editors. Custom content inside sheets stays on opaque surfaces.
+- Confirmation dialogs name the action clearly ("Delete 3 items"). Remind users that deletes can be undone for 30 days.
+
+### 8.9 Empty, loading, error and success states
+Each state is a designed screen: **illustration, one sentence, one action** (PRD §3).
+
+| State | Design |
+|---|---|
+| Empty | 140–180 pt illustration, `section` title, one sentence, primary button. Example: "Nothing here yet. Scan this room to fill it in 30 seconds." |
+| Loading | Skeleton photo cards in `surfaceSunken` with a slow warm shimmer (static under Reduce Motion) |
+| Error | Calm icon, plain reason, reassurance ("Your items are safe on this iPhone"), Retry |
+| Success | Toast at the bottom on `surfaceRaised`: icon, message, Undo; 4 seconds; announced to VoiceOver |
+| AI fallback | No visible state: the Classic screen appears with the photo already loaded |
+
+### 8.10 Paywall (PRD §7)
+- One screen, one price, one button. Warm illustration of a full shelf, the user's own numbers ("You've documented 25 items worth $4,380") in `total` type, three short benefit lines, the native StoreKit product view, Restore Purchases, and a close button that's always visible.
+- No countdown timers, fake discounts or guilt. On success: a warm settle animation and a success haptic, then straight back to what the user was doing.
 
 ---
 
-## 9. Motion
-
-| Token | Definition | Use |
+## 9. Motion (PRD §3)
+| Moment | Motion | Reduce Motion version |
 |---|---|---|
-| `tap` | `.snappy(duration: 0.2)` | Press, toggle |
-| `settle` | `.spring(duration: 0.45, bounce: 0.25)` | A card settles into the grid after a save or move |
-| `gentle` | `.smooth(duration: 0.35)` | Filters, content changes |
-| `cascade` | 120 ms stagger + `settle` | AI detection outlines and cards |
-| `celebrate` | `.bouncy(duration: 0.6)` | Onboarding complete, Pro unlocked |
-| zoom | `.navigationTransition(.zoom(sourceID:in:))` | Photo card → Item Detail (PRD) |
+| Photo card → item detail | Zoom transition from the card | Cross-fade (PRD §3) |
+| Item saved | Card settles into the grid with a soft spring and success haptic | Fade in |
+| AI detection | Outlines appear one by one with light taps | Fade in; haptics stay |
+| Button press | Shrinks to 97%, springs back | No scale; opacity change |
+| Filters change | Smooth cross-fade of results | Same |
+| Move confirmed | Item card slides toward the new location chip | Fade |
 
-- Motion explains cause and effect.
-- Nothing lasts longer than 0.6 s. Only the loading shimmer loops.
-- **Reduce Motion:**
-  - Cross-fades replace zoom, scale, slide and bounce.
-  - No parallax or shake. The failure shake becomes a color pulse.
-  - Haptics stay.
+Rules: motion explains cause and effect; nothing longer than 0.6 seconds; only loading shimmer loops.
 
 ```swift
-public enum NookMotion {
-    public static let tap       = Animation.snappy(duration: 0.2)
-    public static let settle    = Animation.spring(duration: 0.45, bounce: 0.25)
-    public static let gentle    = Animation.smooth(duration: 0.35)
-    public static let celebrate = Animation.bouncy(duration: 0.6)
-    public static let cascadeStep: Duration = .milliseconds(120)
-}
-
-/// "Settle in" entrance that respects Reduce Motion.
-public struct SettleIn: ViewModifier {
+// MARK: - Zoom into item detail, cross-fade when Reduce Motion is on
+struct ItemLink: View {
+    let item: ItemSummary
+    let namespace: Namespace.ID            // shared between the grid and the detail screen
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var appeared = false
 
-    public func body(content: Content) -> some View {
-        content
-            .opacity(appeared ? 1 : 0)
-            .offset(y: appeared || reduceMotion ? 0 : 12)
-            .onAppear {
-                withAnimation(reduceMotion ? .easeOut(duration: 0.2) : NookMotion.settle) { appeared = true }
+    var body: some View {
+        NavigationLink {
+            if reduceMotion {
+                ItemDetailView(item: item)  // standard transition (PRD §3: cross-fade, not zoom)
+            } else {
+                ItemDetailView(item: item)
+                    .navigationTransition(.zoom(sourceID: item.id, in: namespace)) // grows from the card
             }
+        } label: {
+            ItemPhotoCard(item: item)
+                .matchedTransitionSource(id: item.id, in: namespace)   // where the zoom starts
+        }
+        .buttonStyle(.plain)
     }
 }
 ```
 
 ---
 
-## 10. Haptics
-
-Haptics use declarative `sensoryFeedback`. Some devices have no haptics, and users can turn them off, so **meaning never relies on haptics alone**.
-
+## 10. Haptics (PRD §3)
 | Event | Feedback |
 |---|---|
-| Item saved, Save all, warranty added, scan recognized, "It's here ✓" | `.success` |
-| Each AI-detected item (cascade) | `.impact(weight: .light, intensity: 0.6)` |
-| Photo captured | `.impact(weight: .light)` |
-| Chip toggled, picker or segment changed | `.selection` |
-| Move dropped, reorder snap | `.alignment` |
-| Validation or unlock failed | `.error` |
-| Warranty-ending banner (once per session) | `.warning` |
+| Item or items saved, purchase complete, unlock success | Success |
+| Picker or chip selection, segment change | Selection |
+| Each detected item outline appearing | Light impact |
+| Barcode or QR recognized, photo taken | Light impact |
+| Move confirmed | Success |
+| Unlock failed, validation error | Error |
+
+Haptics never carry meaning alone; every event also has a visual change.
 
 ```swift
-struct SaveButton: View {
-    @State private var saveCount = 0
-    var onSave: () async -> Bool
+// MARK: - Success haptic only when saving actually worked
+struct SaveItemButton: View {
+    var save: () -> Bool                  // returns true when the item saved
+    @State private var savedCount = 0     // changing this number plays the haptic
+
     var body: some View {
-        Button("Save") { Task { if await onSave() { saveCount += 1 } } }
-            .buttonStyle(NookPrimaryButtonStyle())
-            .sensoryFeedback(.success, trigger: saveCount)   // only fires on real success
+        Button("Save") {
+            if save() { savedCount += 1 }
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.capsule)
+        .sensoryFeedback(.success, trigger: savedCount)
     }
 }
 ```
 
 ---
 
-## 11. Accessibility (a release requirement)
-
-- **Contrast:** 4.5:1 for text, 3:1 for large text and UI. Every token has a High Contrast variant. Check at both glass-slider extremes.
-- **VoiceOver:**
-  - **Every card is labeled with its name, room and value:** "Dyson V15 vacuum, Living room, 499 dollars, warranty ends in 42 days".
-  - Cards use `.accessibilityElement(children: .combine)`.
-  - **Custom actions mirror swipes and context menus**: Move, Lend, Delete.
-  - Section headers have the heading trait.
-  - Toasts and the scan coach are announced.
-- **Dynamic Type:** the layout reflows up to AX5 and grids become lists. No text is baked into images.
-- **Honor these settings:** Reduce Motion, Reduce Transparency, Increase Contrast, Bold Text, Button Shapes, Smart Invert (photos use `accessibilityIgnoresInvertColors`).
-- **Voice Control:** labels match the visible text. Targets are at least 44 pt with at least 8 pt between them.
-- **No camera, no AI:** every action is reachable without either (PRD). Room scan offers "Add item without drawing".
-- **Tools:** Xcode 27 Device Hub (appearance, text size and accessibility toggles) and Accessibility Inspector, every phase. The App Store Accessibility Nutrition Label is filled in honestly (P11).
+## 11. Accessibility (release requirement, PRD §3)
+- **VoiceOver:** every card has a label with item name, room and value ("Coffee machine, Kitchen, Top shelf, 249 dollars"); Hide values reads as "Value hidden". Swipe and context-menu actions are also available as accessibility actions. Section headers are marked as headings. Toasts are announced.
+- **Dynamic Type** up to the largest accessibility size; grids switch to lists.
+- **Contrast:** at least 4.5:1 for text and 3:1 for large text and essential icons, in light, dark and Increase Contrast, at every Liquid Glass transparency setting.
+- **Tap targets** at least 44 × 44 pt.
+- **No camera, no AI required:** every action works with manual entry and Photos (PRD §3).
+- **Respect system settings:** Reduce Motion, Reduce Transparency, Increase Contrast, Bold Text, Button Shapes, Smart Invert (photos are excluded from inversion).
+- **Voice Control:** accessibility labels match the visible text.
+- **App Store Accessibility Nutrition Label** filled in honestly (PRD §3).
 
 ---
 
-## 12. Voice & writing
+## 12. Adaptive design (PRD §4)
+| Context | Design response |
+|---|---|
+| iPhone SE (4.7") | Smallest test device; 2-column grid; Touch ID lock; no Dynamic Island assumptions |
+| Standard and Pro Max | 2 columns; 3 on Pro Max landscape; regular width in Pro Max landscape gets the sidebar |
+| Regular width (Pro Max landscape, enlarged iPhone Mirroring) | Sidebar plus `NavigationSplitView`; item detail beside the grid; 4–5 columns. Duo owners also see this on the inner screen in v1.0 |
+| Split View | Works at every width down to compact |
 
-- **Warm, plain, second person, and short:** "Saved to Kitchen." "Moved to Bedroom › Safe." "Nothing here yet."
-- **Numbers over adjectives:** "Ends in 12 days", not "Ending soon!".
-- **Never mention "AI" in errors.** When the AI path fails, the manual path simply appears ("Tap items to add them.").
-- **Label AI estimates "Estimate"**, and label AI-filled fields "Suggested".
-- **Permissions lead with the benefit**, in one line (01 §10).
-- **Dark mode:**
-  - An espresso canvas, never pure black. Warm off-white text, never pure white.
-  - Elevation comes from lighter surfaces and hairlines, and photos get a 1-pt hairline.
-  - Accents are lifted, with dark text on accent fills.
+**v1.1 — iPhone Duo support**
+| Context | Design response |
+|---|---|
+| Duo outer (wide and short) | Short height is a first-class layout: Quick find bar and 2 rows of cards on Home; nothing important below the fold; bars may sit vertically beside the camera |
+| Duo inner (nearly square) | Full edge-to-edge version of the regular-width layout |
+| Duo half-folded | Capture: camera top, items bottom. Item detail: photo above the fold, details below. Nothing on the hinge |
+| Open or close the Duo | Same room and scroll position after the change |
+
+**Design deliverables**
+- **v1.0:** 4.7" SE, 6.3", 6.9", 6.9" landscape (regular width), and the largest accessibility text size.
+- **v1.1:** Duo outer, Duo inner open, and Duo half-folded (PRD §4).
+
+---
+
+## 13. Writing style
+- Warm, plain and short, addressing the user as "you". Example: "Saved to Garage."
+- Answers sound like a helpful friend: "Office → Desk → Second drawer. You put them there on Aug 3."
+- AI is never the hero of the sentence: say "Suggested", not "AI detected".
+- Errors explain and reassure without blame: "Couldn't read this receipt. You can tap the numbers instead."
+- No exclamation marks except on genuine milestones (first room documented).
+
+---
+
+## 14. Dark mode checklist
+- Espresso canvas, never pure black; warm off-white text, never pure white.
+- Elevation through lighter surfaces and hairline borders, not shadows.
+- Accents lighten, and text on accent fills turns dark.
+- Photos get a 1 pt hairline border so dark photos don't melt into dark cards.
+- Room color fills switch to their deep versions; room symbols switch to their light inks.
+- Illustrations have dark-mode versions with lowered brightness.
+- Check custom content inside sheets for contrast against the darker Liquid Glass.
+
+---
+
+## 15. Token checklist for NookUI (P1 in the roadmap)
+- [ ] Neutral, accent (×6), room (×8) and semantic Color Sets with Light, Dark and High Contrast variants
+- [ ] Font tokens and `MoneyText`
+- [ ] Spacing and radius tokens
+- [ ] Warm shadow modifier
+- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view
+- [ ] Motion and haptic helpers with Reduce Motion handling
+- [ ] Debug gallery showing every component in every state, light and dark, default and largest text
