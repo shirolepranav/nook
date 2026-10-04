@@ -1681,6 +1681,526 @@
       "h": 2600,
       "title": "P-01 Paywall · AX5",
       "radius": 40
+    },
+    "S01Settings.dc.html": {
+      "x": 0,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-01 Settings · Free",
+      "radius": 40
+    },
+    "S01Settings-dark.dc.html": {
+      "x": 455,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-01 Settings · Dark",
+      "radius": 40
+    },
+    "S01Settings-pro.dc.html": {
+      "x": 910,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-01 Settings · Pro",
+      "radius": 40
+    },
+    "S01Settings-pro-dark.dc.html": {
+      "x": 1365,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-01 Settings · Pro · Dark",
+      "radius": 40
+    },
+    "S01Settings-ax5.dc.html": {
+      "x": 1820,
+      "y": 77020,
+      "w": 375,
+      "h": 3000,
+      "title": "S-01 Settings · AX5",
+      "radius": 40
+    },
+    "S02Pro.dc.html": {
+      "x": 2275,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-02 Nook Pro · Free",
+      "radius": 40
+    },
+    "S02Pro-dark.dc.html": {
+      "x": 2730,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-02 Nook Pro · Dark",
+      "radius": 40
+    },
+    "S02Pro-pro.dc.html": {
+      "x": 3185,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-02 Nook Pro · Pro",
+      "radius": 40
+    },
+    "S02Pro-pro-dark.dc.html": {
+      "x": 3640,
+      "y": 77020,
+      "w": 375,
+      "h": 667,
+      "title": "S-02 Nook Pro · Pro · Dark",
+      "radius": 40
+    },
+    "S02Pro-ax5.dc.html": {
+      "x": 4095,
+      "y": 77020,
+      "w": 375,
+      "h": 2800,
+      "title": "S-02 Nook Pro · AX5",
+      "radius": 40
+    },
+    "S03Sync.dc.html": {
+      "x": 0,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Free",
+      "radius": 40
+    },
+    "S03Sync-dark.dc.html": {
+      "x": 455,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Dark",
+      "radius": 40
+    },
+    "S03Sync-on.dc.html": {
+      "x": 910,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · On",
+      "radius": 40
+    },
+    "S03Sync-on-dark.dc.html": {
+      "x": 1365,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · On · Dark",
+      "radius": 40
+    },
+    "S03Sync-signedout.dc.html": {
+      "x": 1820,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Signed out",
+      "radius": 40
+    },
+    "S03Sync-signedout-dark.dc.html": {
+      "x": 2275,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Signed out · Dark",
+      "radius": 40
+    },
+    "S03Sync-full.dc.html": {
+      "x": 2730,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Storage full",
+      "radius": 40
+    },
+    "S03Sync-full-dark.dc.html": {
+      "x": 3185,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-03 iCloud Sync · Storage full · Dark",
+      "radius": 40
+    },
+    "S03Sync-ax5.dc.html": {
+      "x": 3640,
+      "y": 80540,
+      "w": 375,
+      "h": 2400,
+      "title": "S-03 iCloud Sync · AX5",
+      "radius": 40
+    },
+    "S04Backup.dc.html": {
+      "x": 4095,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-04 Backup & Restore · Default",
+      "radius": 40
+    },
+    "S04Backup-dark.dc.html": {
+      "x": 4550,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-04 Backup & Restore · Dark",
+      "radius": 40
+    },
+    "S04Backup-restore.dc.html": {
+      "x": 5005,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-04 Backup & Restore · Restore: Merge or Replace",
+      "radius": 40
+    },
+    "S04Backup-restore-dark.dc.html": {
+      "x": 5460,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-04 Backup & Restore · Restore: Merge or Replace · Dark",
+      "radius": 40
+    },
+    "S04Backup-ax5.dc.html": {
+      "x": 5915,
+      "y": 80540,
+      "w": 375,
+      "h": 2400,
+      "title": "S-04 Backup & Restore · AX5",
+      "radius": 40
+    },
+    "S05Lock.dc.html": {
+      "x": 6370,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-05 Face ID Lock",
+      "radius": 40
+    },
+    "S05Lock-dark.dc.html": {
+      "x": 6825,
+      "y": 80540,
+      "w": 375,
+      "h": 667,
+      "title": "S-05 Face ID Lock · Dark",
+      "radius": 40
+    },
+    "S05Lock-ax5.dc.html": {
+      "x": 7280,
+      "y": 80540,
+      "w": 375,
+      "h": 2200,
+      "title": "S-05 Face ID Lock · AX5",
+      "radius": 40
+    },
+    "S06Appearance.dc.html": {
+      "x": 0,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-06 Appearance",
+      "radius": 40
+    },
+    "S06Appearance-dark.dc.html": {
+      "x": 455,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-06 Appearance · Dark",
+      "radius": 40
+    },
+    "S06Appearance-ax5.dc.html": {
+      "x": 910,
+      "y": 83460,
+      "w": 375,
+      "h": 2600,
+      "title": "S-06 Appearance · AX5",
+      "radius": 40
+    },
+    "S07Notifications.dc.html": {
+      "x": 1365,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-07 Notifications · On",
+      "radius": 40
+    },
+    "S07Notifications-dark.dc.html": {
+      "x": 1820,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-07 Notifications · Dark",
+      "radius": 40
+    },
+    "S07Notifications-denied.dc.html": {
+      "x": 2275,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-07 Notifications · Denied",
+      "radius": 40
+    },
+    "S07Notifications-denied-dark.dc.html": {
+      "x": 2730,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-07 Notifications · Denied · Dark",
+      "radius": 40
+    },
+    "S07Notifications-ax5.dc.html": {
+      "x": 3185,
+      "y": 83460,
+      "w": 375,
+      "h": 2600,
+      "title": "S-07 Notifications · AX5",
+      "radius": 40
+    },
+    "S08Deleted.dc.html": {
+      "x": 3640,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-08 Recently Deleted · 3 items",
+      "radius": 40
+    },
+    "S08Deleted-dark.dc.html": {
+      "x": 4095,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-08 Recently Deleted · Dark",
+      "radius": 40
+    },
+    "S08Deleted-empty.dc.html": {
+      "x": 4550,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-08 Recently Deleted · Empty",
+      "radius": 40
+    },
+    "S08Deleted-empty-dark.dc.html": {
+      "x": 5005,
+      "y": 83460,
+      "w": 375,
+      "h": 667,
+      "title": "S-08 Recently Deleted · Empty · Dark",
+      "radius": 40
+    },
+    "S08Deleted-ax5.dc.html": {
+      "x": 5460,
+      "y": 83460,
+      "w": 375,
+      "h": 2400,
+      "title": "S-08 Recently Deleted · AX5",
+      "radius": 40
+    },
+    "S09Privacy.dc.html": {
+      "x": 0,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-09 Privacy",
+      "radius": 40
+    },
+    "S09Privacy-dark.dc.html": {
+      "x": 455,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-09 Privacy · Dark",
+      "radius": 40
+    },
+    "S09Privacy-ax5.dc.html": {
+      "x": 910,
+      "y": 86580,
+      "w": 375,
+      "h": 2800,
+      "title": "S-09 Privacy · AX5",
+      "radius": 40
+    },
+    "S10Tags.dc.html": {
+      "x": 1365,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-10 Tags",
+      "radius": 40
+    },
+    "S10Tags-dark.dc.html": {
+      "x": 1820,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-10 Tags · Dark",
+      "radius": 40
+    },
+    "S10Tags-ax5.dc.html": {
+      "x": 2275,
+      "y": 86580,
+      "w": 375,
+      "h": 2800,
+      "title": "S-10 Tags · AX5",
+      "radius": 40
+    },
+    "S11AI.dc.html": {
+      "x": 2730,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Ready",
+      "radius": 40
+    },
+    "S11AI-dark.dc.html": {
+      "x": 3185,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Dark",
+      "radius": 40
+    },
+    "S11AI-downloading.dc.html": {
+      "x": 3640,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Downloading",
+      "radius": 40
+    },
+    "S11AI-downloading-dark.dc.html": {
+      "x": 4095,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Downloading · Dark",
+      "radius": 40
+    },
+    "S11AI-unavailable.dc.html": {
+      "x": 4550,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Not available",
+      "radius": 40
+    },
+    "S11AI-unavailable-dark.dc.html": {
+      "x": 5005,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Not available · Dark",
+      "radius": 40
+    },
+    "S11AI-off.dc.html": {
+      "x": 5460,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Turned off",
+      "radius": 40
+    },
+    "S11AI-off-dark.dc.html": {
+      "x": 5915,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-11 Apple Intelligence · Turned off · Dark",
+      "radius": 40
+    },
+    "S11AI-ax5.dc.html": {
+      "x": 6370,
+      "y": 86580,
+      "w": 375,
+      "h": 2400,
+      "title": "S-11 Apple Intelligence · AX5",
+      "radius": 40
+    },
+    "S12Help.dc.html": {
+      "x": 6825,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-12 Help & About",
+      "radius": 40
+    },
+    "S12Help-dark.dc.html": {
+      "x": 7280,
+      "y": 86580,
+      "w": 375,
+      "h": 667,
+      "title": "S-12 Help & About · Dark",
+      "radius": 40
+    },
+    "S12Help-ax5.dc.html": {
+      "x": 7735,
+      "y": 86580,
+      "w": 375,
+      "h": 2400,
+      "title": "S-12 Help & About · AX5",
+      "radius": 40
+    },
+    "L02Lock.dc.html": {
+      "x": 0,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Face ID",
+      "radius": 40
+    },
+    "L02Lock-dark.dc.html": {
+      "x": 455,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Dark",
+      "radius": 40
+    },
+    "L02Lock-touchid.dc.html": {
+      "x": 910,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Touch ID (iPhone SE)",
+      "radius": 40
+    },
+    "L02Lock-touchid-dark.dc.html": {
+      "x": 1365,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Touch ID (iPhone SE) · Dark",
+      "radius": 40
+    },
+    "L02Lock-failed.dc.html": {
+      "x": 1820,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Not recognized",
+      "radius": 40
+    },
+    "L02Lock-failed-dark.dc.html": {
+      "x": 2275,
+      "y": 89900,
+      "w": 375,
+      "h": 667,
+      "title": "L-02 App lock · Not recognized · Dark",
+      "radius": 40
+    },
+    "L02Lock-ax5.dc.html": {
+      "x": 2730,
+      "y": 89900,
+      "w": 375,
+      "h": 1600,
+      "title": "L-02 App lock · AX5",
+      "radius": 40
     }
   },
   "createdOnFiles": {
@@ -1875,6 +2395,46 @@
       "w": 240,
       "x": 0,
       "y": 73520
+    },
+    "batch6-row0": {
+      "kind": "title1",
+      "maxW": 4470,
+      "text": "Settings · S-01, S-02",
+      "w": 240,
+      "x": 0,
+      "y": 76760
+    },
+    "batch6-row1": {
+      "kind": "title1",
+      "maxW": 7655,
+      "text": "iCloud, backup, lock · S-03 to S-05",
+      "w": 240,
+      "x": 0,
+      "y": 80280
+    },
+    "batch6-row2": {
+      "kind": "title1",
+      "maxW": 5835,
+      "text": "Appearance, notifications, deleted · S-06 to S-08",
+      "w": 240,
+      "x": 0,
+      "y": 83200
+    },
+    "batch6-row3": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Privacy, tags, Apple Intelligence, help · S-09 to S-12",
+      "w": 240,
+      "x": 0,
+      "y": 86320
+    },
+    "batch6-row4": {
+      "kind": "title1",
+      "maxW": 3105,
+      "text": "App lock · L-02",
+      "w": 240,
+      "x": 0,
+      "y": 89640
     }
   },
   "order": [
@@ -2087,7 +2647,72 @@
     "P01Paywall-success-dark.dc.html",
     "P01Paywall-pro.dc.html",
     "P01Paywall-max.dc.html",
-    "P01Paywall-ax5.dc.html"
+    "P01Paywall-ax5.dc.html",
+    "S01Settings.dc.html",
+    "S01Settings-dark.dc.html",
+    "S01Settings-pro.dc.html",
+    "S01Settings-pro-dark.dc.html",
+    "S01Settings-ax5.dc.html",
+    "S02Pro.dc.html",
+    "S02Pro-dark.dc.html",
+    "S02Pro-pro.dc.html",
+    "S02Pro-pro-dark.dc.html",
+    "S02Pro-ax5.dc.html",
+    "S03Sync.dc.html",
+    "S03Sync-dark.dc.html",
+    "S03Sync-on.dc.html",
+    "S03Sync-on-dark.dc.html",
+    "S03Sync-signedout.dc.html",
+    "S03Sync-signedout-dark.dc.html",
+    "S03Sync-full.dc.html",
+    "S03Sync-full-dark.dc.html",
+    "S03Sync-ax5.dc.html",
+    "S04Backup.dc.html",
+    "S04Backup-dark.dc.html",
+    "S04Backup-restore.dc.html",
+    "S04Backup-restore-dark.dc.html",
+    "S04Backup-ax5.dc.html",
+    "S05Lock.dc.html",
+    "S05Lock-dark.dc.html",
+    "S05Lock-ax5.dc.html",
+    "S06Appearance.dc.html",
+    "S06Appearance-dark.dc.html",
+    "S06Appearance-ax5.dc.html",
+    "S07Notifications.dc.html",
+    "S07Notifications-dark.dc.html",
+    "S07Notifications-denied.dc.html",
+    "S07Notifications-denied-dark.dc.html",
+    "S07Notifications-ax5.dc.html",
+    "S08Deleted.dc.html",
+    "S08Deleted-dark.dc.html",
+    "S08Deleted-empty.dc.html",
+    "S08Deleted-empty-dark.dc.html",
+    "S08Deleted-ax5.dc.html",
+    "S09Privacy.dc.html",
+    "S09Privacy-dark.dc.html",
+    "S09Privacy-ax5.dc.html",
+    "S10Tags.dc.html",
+    "S10Tags-dark.dc.html",
+    "S10Tags-ax5.dc.html",
+    "S11AI.dc.html",
+    "S11AI-dark.dc.html",
+    "S11AI-downloading.dc.html",
+    "S11AI-downloading-dark.dc.html",
+    "S11AI-unavailable.dc.html",
+    "S11AI-unavailable-dark.dc.html",
+    "S11AI-off.dc.html",
+    "S11AI-off-dark.dc.html",
+    "S11AI-ax5.dc.html",
+    "S12Help.dc.html",
+    "S12Help-dark.dc.html",
+    "S12Help-ax5.dc.html",
+    "L02Lock.dc.html",
+    "L02Lock-dark.dc.html",
+    "L02Lock-touchid.dc.html",
+    "L02Lock-touchid-dark.dc.html",
+    "L02Lock-failed.dc.html",
+    "L02Lock-failed-dark.dc.html",
+    "L02Lock-ax5.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"
