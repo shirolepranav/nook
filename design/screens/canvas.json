@@ -31,7 +31,7 @@
       "radius": 40,
       "title": "Paywall",
       "w": 390,
-      "x": 1410,
+      "x": 940,
       "y": 0
     },
     "Room.dc.html": {
@@ -41,14 +41,6 @@
       "h": 667,
       "title": "H-02 Room",
       "radius": 40
-    },
-    "ScanReview.dc.html": {
-      "h": 844,
-      "radius": 40,
-      "title": "Scan review",
-      "w": 390,
-      "x": 940,
-      "y": 0
     },
     "L01Launch.dc.html": {
       "x": 0,
@@ -417,6 +409,374 @@
       "h": 2600,
       "title": "H-07 Arrange rooms · AX5",
       "radius": 40
+    },
+    "C01CaptureMenu.dc.html": {
+      "x": 0,
+      "y": 24964,
+      "w": 375,
+      "h": 667,
+      "title": "C-01 Capture menu",
+      "radius": 40
+    },
+    "C01CaptureMenu-dark.dc.html": {
+      "x": 455,
+      "y": 24964,
+      "w": 375,
+      "h": 667,
+      "title": "C-01 Capture menu · Dark",
+      "radius": 40
+    },
+    "C01CaptureMenu-room.dc.html": {
+      "x": 910,
+      "y": 24964,
+      "w": 375,
+      "h": 667,
+      "title": "C-01 From a room",
+      "radius": 40
+    },
+    "C01CaptureMenu-ax5.dc.html": {
+      "x": 1365,
+      "y": 24964,
+      "w": 375,
+      "h": 1500,
+      "title": "C-01 Capture menu · AX5",
+      "radius": 40
+    },
+    "C02RoomScan.dc.html": {
+      "x": 0,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · First scan coach",
+      "radius": 40
+    },
+    "C02RoomScan-dark.dc.html": {
+      "x": 455,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · Dark",
+      "radius": 40
+    },
+    "C02RoomScan-shooting.dc.html": {
+      "x": 910,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · 2 photos taken",
+      "radius": 40
+    },
+    "C02RoomScan-permission.dc.html": {
+      "x": 1365,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Camera soft ask",
+      "radius": 40
+    },
+    "C02RoomScan-permission-dark.dc.html": {
+      "x": 1820,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Camera soft ask · Dark",
+      "radius": 40
+    },
+    "C02RoomScan-denied.dc.html": {
+      "x": 2275,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Camera off",
+      "radius": 40
+    },
+    "C02RoomScan-denied-dark.dc.html": {
+      "x": 2730,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Camera off · Dark",
+      "radius": 40
+    },
+    "C02RoomScan-pro.dc.html": {
+      "x": 3185,
+      "y": 26984,
+      "w": 402,
+      "h": 874,
+      "title": "C-02 Room scan · 6.3 in",
+      "radius": 40
+    },
+    "C02RoomScan-max.dc.html": {
+      "x": 3667,
+      "y": 26984,
+      "w": 440,
+      "h": 956,
+      "title": "C-02 Room scan · 6.9 in",
+      "radius": 40
+    },
+    "C02RoomScan-ax5.dc.html": {
+      "x": 4187,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · AX5",
+      "radius": 40
+    },
+    "ScanReview.dc.html": {
+      "x": 0,
+      "y": 28460,
+      "w": 375,
+      "h": 667,
+      "title": "C-03 Scan review",
+      "radius": 40
+    },
+    "ScanReview-dark.dc.html": {
+      "x": 455,
+      "y": 28460,
+      "w": 375,
+      "h": 667,
+      "title": "C-03 Scan review · Dark",
+      "radius": 40
+    },
+    "ScanReview-streaming.dc.html": {
+      "x": 910,
+      "y": 28460,
+      "w": 375,
+      "h": 667,
+      "title": "C-03 Streaming in",
+      "radius": 40
+    },
+    "ScanReview-streaming-dark.dc.html": {
+      "x": 1365,
+      "y": 28460,
+      "w": 375,
+      "h": 667,
+      "title": "C-03 Streaming in · Dark",
+      "radius": 40
+    },
+    "ScanReview-pro.dc.html": {
+      "x": 1820,
+      "y": 28460,
+      "w": 402,
+      "h": 874,
+      "title": "C-03 Scan review · 6.3 in",
+      "radius": 40
+    },
+    "ScanReview-max.dc.html": {
+      "x": 2302,
+      "y": 28460,
+      "w": 440,
+      "h": 956,
+      "title": "C-03 Scan review · 6.9 in",
+      "radius": 40
+    },
+    "ScanReview-ax5.dc.html": {
+      "x": 2822,
+      "y": 28460,
+      "w": 375,
+      "h": 2400,
+      "title": "C-03 Scan review · AX5",
+      "radius": 40
+    },
+    "ScanReviewRegular.dc.html": {
+      "x": 3277,
+      "y": 28460,
+      "w": 956,
+      "h": 440,
+      "title": "C-03 Regular width",
+      "radius": 24
+    },
+    "ScanReviewRegular-dark.dc.html": {
+      "x": 4313,
+      "y": 28460,
+      "w": 956,
+      "h": 440,
+      "title": "C-03 Regular width · Dark",
+      "radius": 24
+    },
+    "C04ManualTag.dc.html": {
+      "x": 0,
+      "y": 31380,
+      "w": 375,
+      "h": 667,
+      "title": "C-04 Manual tagging · Naming",
+      "radius": 40
+    },
+    "C04ManualTag-dark.dc.html": {
+      "x": 455,
+      "y": 31380,
+      "w": 375,
+      "h": 667,
+      "title": "C-04 Manual tagging · Dark",
+      "radius": 40
+    },
+    "C04ManualTag-list.dc.html": {
+      "x": 910,
+      "y": 31380,
+      "w": 375,
+      "h": 667,
+      "title": "C-04 Tagged list",
+      "radius": 40
+    },
+    "C04ManualTag-list-dark.dc.html": {
+      "x": 1365,
+      "y": 31380,
+      "w": 375,
+      "h": 667,
+      "title": "C-04 Tagged list · Dark",
+      "radius": 40
+    },
+    "C04ManualTag-ax5.dc.html": {
+      "x": 1820,
+      "y": 31380,
+      "w": 375,
+      "h": 2400,
+      "title": "C-04 Manual tagging · AX5",
+      "radius": 40
+    },
+    "C05QuickAdd.dc.html": {
+      "x": 0,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-05 Quick add",
+      "radius": 40
+    },
+    "C05QuickAdd-dark.dc.html": {
+      "x": 455,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-05 Quick add · Dark",
+      "radius": 40
+    },
+    "C05QuickAdd-ax5.dc.html": {
+      "x": 910,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-05 Quick add · AX5",
+      "radius": 40
+    },
+    "C06Receipt.dc.html": {
+      "x": 1365,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-06 Receipt · Tap to fill",
+      "radius": 40
+    },
+    "C06Receipt-dark.dc.html": {
+      "x": 1820,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-06 Receipt · Dark",
+      "radius": 40
+    },
+    "C06Receipt-suggested.dc.html": {
+      "x": 2275,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-06 Receipt · Suggested",
+      "radius": 40
+    },
+    "C06Receipt-suggested-dark.dc.html": {
+      "x": 2730,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-06 Receipt · Suggested · Dark",
+      "radius": 40
+    },
+    "C06Receipt-ax5.dc.html": {
+      "x": 3185,
+      "y": 34300,
+      "w": 375,
+      "h": 2000,
+      "title": "C-06 Receipt · AX5",
+      "radius": 40
+    },
+    "C07Barcode.dc.html": {
+      "x": 3640,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-07 Barcode",
+      "radius": 40
+    },
+    "C07Barcode-dark.dc.html": {
+      "x": 4095,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-07 Barcode · Dark",
+      "radius": 40
+    },
+    "C07Barcode-found.dc.html": {
+      "x": 4550,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-07 Barcode added",
+      "radius": 40
+    },
+    "C07Barcode-found-dark.dc.html": {
+      "x": 5005,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-07 Barcode added · Dark",
+      "radius": 40
+    },
+    "C07Barcode-ax5.dc.html": {
+      "x": 5460,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-07 Barcode · AX5",
+      "radius": 40
+    },
+    "C08Serial.dc.html": {
+      "x": 5915,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-08 Serial · Pick a line",
+      "radius": 40
+    },
+    "C08Serial-dark.dc.html": {
+      "x": 6370,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-08 Serial · Dark",
+      "radius": 40
+    },
+    "C08Serial-suggested.dc.html": {
+      "x": 6825,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-08 Serial · Suggested",
+      "radius": 40
+    },
+    "C08Serial-suggested-dark.dc.html": {
+      "x": 7280,
+      "y": 34300,
+      "w": 375,
+      "h": 667,
+      "title": "C-08 Serial · Suggested · Dark",
+      "radius": 40
+    },
+    "C08Serial-ax5.dc.html": {
+      "x": 7735,
+      "y": 34300,
+      "w": 375,
+      "h": 2000,
+      "title": "C-08 Serial · AX5",
+      "radius": 40
     }
   },
   "createdOnFiles": {
@@ -430,7 +790,7 @@
   "notes": {
     "heading": {
       "kind": "title1",
-      "maxW": 1800,
+      "maxW": 1330,
       "text": "Not yet rebased · later P0 batches",
       "w": 240,
       "x": 0,
@@ -484,12 +844,46 @@
       "text": "QR label & arrange · H-06, H-07",
       "kind": "title1",
       "maxW": 2650
+    },
+    "batch2-row0": {
+      "x": 0,
+      "y": 24704,
+      "text": "Capture menu · C-01",
+      "kind": "title1",
+      "maxW": 1740
+    },
+    "batch2-row1": {
+      "x": 0,
+      "y": 26724,
+      "text": "Room scan camera · C-02",
+      "kind": "title1",
+      "maxW": 4562
+    },
+    "batch2-row2": {
+      "x": 0,
+      "y": 28200,
+      "text": "Scan review, AI path · C-03",
+      "kind": "title1",
+      "maxW": 5269
+    },
+    "batch2-row3": {
+      "x": 0,
+      "y": 31120,
+      "text": "Manual tagging, Classic path · C-04",
+      "kind": "title1",
+      "maxW": 2195
+    },
+    "batch2-row4": {
+      "x": 0,
+      "y": 34040,
+      "text": "Quick add, receipt, barcode, serial · C-05 to C-08",
+      "kind": "title1",
+      "maxW": 8110
     }
   },
   "order": [
     "ItemDetail.dc.html",
     "Find.dc.html",
-    "ScanReview.dc.html",
     "Paywall.dc.html",
     "L01Launch.dc.html",
     "L01Launch-dark.dc.html",
@@ -538,7 +932,53 @@
     "H06QRLabel-ax5.dc.html",
     "H07Arrange.dc.html",
     "H07Arrange-dark.dc.html",
-    "H07Arrange-ax5.dc.html"
+    "H07Arrange-ax5.dc.html",
+    "C01CaptureMenu.dc.html",
+    "C01CaptureMenu-dark.dc.html",
+    "C01CaptureMenu-room.dc.html",
+    "C01CaptureMenu-ax5.dc.html",
+    "C02RoomScan.dc.html",
+    "C02RoomScan-dark.dc.html",
+    "C02RoomScan-shooting.dc.html",
+    "C02RoomScan-permission.dc.html",
+    "C02RoomScan-permission-dark.dc.html",
+    "C02RoomScan-denied.dc.html",
+    "C02RoomScan-denied-dark.dc.html",
+    "C02RoomScan-pro.dc.html",
+    "C02RoomScan-max.dc.html",
+    "C02RoomScan-ax5.dc.html",
+    "ScanReview.dc.html",
+    "ScanReview-dark.dc.html",
+    "ScanReview-streaming.dc.html",
+    "ScanReview-streaming-dark.dc.html",
+    "ScanReview-pro.dc.html",
+    "ScanReview-max.dc.html",
+    "ScanReview-ax5.dc.html",
+    "ScanReviewRegular.dc.html",
+    "ScanReviewRegular-dark.dc.html",
+    "C04ManualTag.dc.html",
+    "C04ManualTag-dark.dc.html",
+    "C04ManualTag-list.dc.html",
+    "C04ManualTag-list-dark.dc.html",
+    "C04ManualTag-ax5.dc.html",
+    "C05QuickAdd.dc.html",
+    "C05QuickAdd-dark.dc.html",
+    "C05QuickAdd-ax5.dc.html",
+    "C06Receipt.dc.html",
+    "C06Receipt-dark.dc.html",
+    "C06Receipt-suggested.dc.html",
+    "C06Receipt-suggested-dark.dc.html",
+    "C06Receipt-ax5.dc.html",
+    "C07Barcode.dc.html",
+    "C07Barcode-dark.dc.html",
+    "C07Barcode-found.dc.html",
+    "C07Barcode-found-dark.dc.html",
+    "C07Barcode-ax5.dc.html",
+    "C08Serial.dc.html",
+    "C08Serial-dark.dc.html",
+    "C08Serial-suggested.dc.html",
+    "C08Serial-suggested-dark.dc.html",
+    "C08Serial-ax5.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"

@@ -19,10 +19,19 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | H-05 Spot / container editor | `H05SpotEditor` | ✓ | ✓ | spot, container | SE | ✓ |
 | H-06 QR box label | `H06QRLabel` | ✓ | ✓ | — | SE | ✓ |
 | H-07 Arrange rooms | `H07Arrange` | ✓ | ✓ | — | SE | ✓ |
+| C-01 Capture menu | `C01CaptureMenu` | ✓ | ✓ | default, from a room | SE | ✓ |
+| C-02 Room scan camera | `C02RoomScan` | ✓ | ✓ | first-scan coach, 2 photos taken, camera soft ask, camera off (light + dark) | SE, 6.3 in, 6.9 in | ✓ |
+| C-03 Scan review (AI) | `ScanReview` | ✓ | ✓ | complete, streaming in (light + dark) | SE, 6.3 in, 6.9 in | ✓ |
+| C-03 regular width | `ScanReviewRegular` | ✓ | ✓ | photo left, cards right | 6.9 in landscape | — |
+| C-04 Manual tagging (Classic) | `C04ManualTag` | ✓ | ✓ | naming, tagged list (light + dark) | SE | ✓ |
+| C-05 Quick add | `C05QuickAdd` | ✓ | ✓ | — | SE | ✓ |
+| C-06 Receipt scan | `C06Receipt` | ✓ | ✓ | tap to fill (Classic), suggested (AI) | SE | ✓ |
+| C-07 Barcode scanner | `C07Barcode` | ✓ | ✓ | aiming, barcode added | SE | ✓ |
+| C-08 Serial sticker reader | `C08Serial` | ✓ | ✓ | pick a line (Classic), suggested (AI) | SE | ✓ |
 
-**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `ItemDetail` (I-01), `Find` (F-01/F-03), `ScanReview` (C-03), `Paywall` (P-01).
+**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `ItemDetail` (I-01), `Find` (F-01/F-03), `Paywall` (P-01).
 
-Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
+Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
 
 **How to use them**
 - Read the markup for exact colors, type sizes, radii, spacing and layout.
