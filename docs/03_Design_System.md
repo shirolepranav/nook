@@ -161,8 +161,6 @@ Run it before merging any token or mockup change: `python3 design/tools/check_to
 | `#B4502C` | Terracotta accent | Old Terracotta value, darkened in P0 |
 | `#4F7A57` | Sage accent | Old Sage value, darkened in P0 |
 | `#D4C9BD` | `textSecondary` (dark) | Item counts on dark room cards |
-| `#C9BBAB` | `hairlineStrong` (light) | Dashed "+ Room" card |
-| `#5A4F45` | `hairlineStrong` (dark) | Dashed "+ Room" card |
 | `#FBF7F1` | `surface` | Stacked "box" layers behind a container card |
 | `#FDFAF5` | `surface` | Stacked "box" layers behind a container card |
 | `#8F3F22` | mockup only | Web link hover. iOS buttons press by scaling (§8.2), not by color |

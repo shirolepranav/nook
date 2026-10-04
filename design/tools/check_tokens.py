@@ -118,7 +118,7 @@ def main():
                         for h in HEX.findall(line)[:1] if "mockup only" not in line}
 
     failures = check_contrast(neutrals, accents, rooms, semantic)
-    unknown, todo, grid, fonts = check_mockups(token_hexes | mapping, mapped_to_tokens)
+    unknown, todo, grid, fonts = check_mockups(token_hexes | mapping, mapped_to_tokens - token_hexes)
 
     print(f"Contrast: {len(failures)} failure(s)")
     for f in failures:

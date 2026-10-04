@@ -7,56 +7,416 @@
       "radius": 40,
       "title": "Find · Answer card",
       "w": 390,
-      "x": 1410,
+      "x": 470,
       "y": 0
-    },
-    "HomeDark.dc.html": {
-      "h": 844,
-      "radius": 40,
-      "title": "Home · Dark",
-      "w": 390,
-      "x": 0,
-      "y": 964
     },
     "ItemDetail.dc.html": {
       "h": 844,
       "radius": 40,
       "title": "Item detail",
       "w": 390,
-      "x": 940,
+      "x": 0,
       "y": 0
     },
     "Main.dc.html": {
-      "h": 844,
-      "radius": 40,
-      "title": "Home",
-      "w": 390,
       "x": 0,
-      "y": 0
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home",
+      "radius": 40
     },
     "Paywall.dc.html": {
       "h": 844,
       "radius": 40,
       "title": "Paywall",
       "w": 390,
-      "x": 2350,
+      "x": 1410,
       "y": 0
     },
     "Room.dc.html": {
-      "h": 844,
-      "radius": 40,
-      "title": "Room · Kitchen",
-      "w": 390,
-      "x": 470,
-      "y": 0
+      "x": 0,
+      "y": 10164,
+      "w": 375,
+      "h": 667,
+      "title": "H-02 Room",
+      "radius": 40
     },
     "ScanReview.dc.html": {
       "h": 844,
       "radius": 40,
       "title": "Scan review",
       "w": 390,
-      "x": 1880,
+      "x": 940,
       "y": 0
+    },
+    "L01Launch.dc.html": {
+      "x": 0,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "L-01 Launch",
+      "radius": 40
+    },
+    "L01Launch-dark.dc.html": {
+      "x": 455,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "L-01 Launch · Dark",
+      "radius": 40
+    },
+    "O01Welcome.dc.html": {
+      "x": 910,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "O-01 Welcome",
+      "radius": 40
+    },
+    "O01Welcome-dark.dc.html": {
+      "x": 1365,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "O-01 Welcome · Dark",
+      "radius": 40
+    },
+    "O01Welcome-ax5.dc.html": {
+      "x": 1820,
+      "y": 1364,
+      "w": 375,
+      "h": 2000,
+      "title": "O-01 Welcome · AX5",
+      "radius": 40
+    },
+    "O02Rooms.dc.html": {
+      "x": 2275,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "O-02 Pick your rooms",
+      "radius": 40
+    },
+    "O02Rooms-dark.dc.html": {
+      "x": 2730,
+      "y": 1364,
+      "w": 375,
+      "h": 667,
+      "title": "O-02 Pick your rooms · Dark",
+      "radius": 40
+    },
+    "O02Rooms-ax5.dc.html": {
+      "x": 3185,
+      "y": 1364,
+      "w": 375,
+      "h": 2600,
+      "title": "O-02 Pick your rooms · AX5",
+      "radius": 40
+    },
+    "Main-dark.dc.html": {
+      "x": 455,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Dark",
+      "radius": 40
+    },
+    "Main-empty.dc.html": {
+      "x": 910,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Empty",
+      "radius": 40
+    },
+    "Main-empty-dark.dc.html": {
+      "x": 1365,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Empty · Dark",
+      "radius": 40
+    },
+    "Main-loading.dc.html": {
+      "x": 1820,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Loading",
+      "radius": 40
+    },
+    "Main-loading-dark.dc.html": {
+      "x": 2275,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Loading · Dark",
+      "radius": 40
+    },
+    "Main-error.dc.html": {
+      "x": 2730,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Error",
+      "radius": 40
+    },
+    "Main-error-dark.dc.html": {
+      "x": 3185,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Error · Dark",
+      "radius": 40
+    },
+    "Main-pro.dc.html": {
+      "x": 3640,
+      "y": 4484,
+      "w": 402,
+      "h": 874,
+      "title": "H-01 Home · 6.3 in",
+      "radius": 40
+    },
+    "Main-max.dc.html": {
+      "x": 4122,
+      "y": 4484,
+      "w": 440,
+      "h": 956,
+      "title": "H-01 Home · 6.9 in",
+      "radius": 40
+    },
+    "Main-ax5.dc.html": {
+      "x": 4642,
+      "y": 4484,
+      "w": 375,
+      "h": 4200,
+      "title": "H-01 Home · AX5",
+      "radius": 40
+    },
+    "HomeRegular.dc.html": {
+      "x": 0,
+      "y": 9204,
+      "w": 956,
+      "h": 440,
+      "title": "H-01/H-02 Regular width",
+      "radius": 24
+    },
+    "HomeRegular-dark.dc.html": {
+      "x": 1036,
+      "y": 9204,
+      "w": 956,
+      "h": 440,
+      "title": "H-01/H-02 Regular width · Dark",
+      "radius": 24
+    },
+    "Room-dark.dc.html": {
+      "x": 455,
+      "y": 10164,
+      "w": 375,
+      "h": 667,
+      "title": "H-02 Room · Dark",
+      "radius": 40
+    },
+    "Room-empty.dc.html": {
+      "x": 910,
+      "y": 10164,
+      "w": 375,
+      "h": 667,
+      "title": "H-02 Room · Empty",
+      "radius": 40
+    },
+    "Room-empty-dark.dc.html": {
+      "x": 1365,
+      "y": 10164,
+      "w": 375,
+      "h": 667,
+      "title": "H-02 Room · Empty · Dark",
+      "radius": 40
+    },
+    "Room-pro.dc.html": {
+      "x": 1820,
+      "y": 10164,
+      "w": 402,
+      "h": 874,
+      "title": "H-02 Room · 6.3 in",
+      "radius": 40
+    },
+    "Room-max.dc.html": {
+      "x": 2302,
+      "y": 10164,
+      "w": 440,
+      "h": 956,
+      "title": "H-02 Room · 6.9 in",
+      "radius": 40
+    },
+    "Room-ax5.dc.html": {
+      "x": 2822,
+      "y": 10164,
+      "w": 375,
+      "h": 3400,
+      "title": "H-02 Room · AX5",
+      "radius": 40
+    },
+    "H03Spot.dc.html": {
+      "x": 0,
+      "y": 14084,
+      "w": 375,
+      "h": 667,
+      "title": "H-03 Spot",
+      "radius": 40
+    },
+    "H03Spot-dark.dc.html": {
+      "x": 455,
+      "y": 14084,
+      "w": 375,
+      "h": 667,
+      "title": "H-03 Spot · Dark",
+      "radius": 40
+    },
+    "H03Spot-container.dc.html": {
+      "x": 910,
+      "y": 14084,
+      "w": 375,
+      "h": 667,
+      "title": "H-03 Container",
+      "radius": 40
+    },
+    "H03Spot-container-dark.dc.html": {
+      "x": 1365,
+      "y": 14084,
+      "w": 375,
+      "h": 667,
+      "title": "H-03 Container · Dark",
+      "radius": 40
+    },
+    "H03Spot-ax5.dc.html": {
+      "x": 1820,
+      "y": 14084,
+      "w": 375,
+      "h": 3600,
+      "title": "H-03 Spot · AX5",
+      "radius": 40
+    },
+    "H04RoomEditor.dc.html": {
+      "x": 0,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-04 Room editor",
+      "radius": 40
+    },
+    "H04RoomEditor-dark.dc.html": {
+      "x": 455,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-04 Room editor · Dark",
+      "radius": 40
+    },
+    "H04RoomEditor-delete.dc.html": {
+      "x": 910,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-04 Delete room",
+      "radius": 40
+    },
+    "H04RoomEditor-delete-dark.dc.html": {
+      "x": 1365,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-04 Delete room · Dark",
+      "radius": 40
+    },
+    "H04RoomEditor-ax5.dc.html": {
+      "x": 1820,
+      "y": 18204,
+      "w": 375,
+      "h": 3000,
+      "title": "H-04 Room editor · AX5",
+      "radius": 40
+    },
+    "H05SpotEditor.dc.html": {
+      "x": 2275,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-05 Spot editor",
+      "radius": 40
+    },
+    "H05SpotEditor-dark.dc.html": {
+      "x": 2730,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-05 Spot editor · Dark",
+      "radius": 40
+    },
+    "H05SpotEditor-container.dc.html": {
+      "x": 3185,
+      "y": 18204,
+      "w": 375,
+      "h": 667,
+      "title": "H-05 Container editor",
+      "radius": 40
+    },
+    "H05SpotEditor-ax5.dc.html": {
+      "x": 3640,
+      "y": 18204,
+      "w": 375,
+      "h": 2400,
+      "title": "H-05 Spot editor · AX5",
+      "radius": 40
+    },
+    "H06QRLabel.dc.html": {
+      "x": 0,
+      "y": 21724,
+      "w": 375,
+      "h": 667,
+      "title": "H-06 QR box label",
+      "radius": 40
+    },
+    "H06QRLabel-dark.dc.html": {
+      "x": 455,
+      "y": 21724,
+      "w": 375,
+      "h": 667,
+      "title": "H-06 QR box label · Dark",
+      "radius": 40
+    },
+    "H06QRLabel-ax5.dc.html": {
+      "x": 910,
+      "y": 21724,
+      "w": 375,
+      "h": 2400,
+      "title": "H-06 QR box label · AX5",
+      "radius": 40
+    },
+    "H07Arrange.dc.html": {
+      "x": 1365,
+      "y": 21724,
+      "w": 375,
+      "h": 667,
+      "title": "H-07 Arrange rooms",
+      "radius": 40
+    },
+    "H07Arrange-dark.dc.html": {
+      "x": 1820,
+      "y": 21724,
+      "w": 375,
+      "h": 667,
+      "title": "H-07 Arrange rooms · Dark",
+      "radius": 40
+    },
+    "H07Arrange-ax5.dc.html": {
+      "x": 2275,
+      "y": 21724,
+      "w": 375,
+      "h": 2600,
+      "title": "H-07 Arrange rooms · AX5",
+      "radius": 40
     }
   },
   "createdOnFiles": {
@@ -70,21 +430,115 @@
   "notes": {
     "heading": {
       "kind": "title1",
-      "maxW": 2740,
-      "text": "Nook · Everyday core screens",
+      "maxW": 1800,
+      "text": "Not yet rebased · later P0 batches",
       "w": 240,
       "x": 0,
       "y": -300
+    },
+    "batch1-row0": {
+      "x": 0,
+      "y": 1104,
+      "text": "Launch & onboarding · L-01, O-01, O-02",
+      "kind": "title1",
+      "maxW": 3560
+    },
+    "batch1-row1": {
+      "x": 0,
+      "y": 4224,
+      "text": "Home · H-01 (shell: tab bar + Capture)",
+      "kind": "title1",
+      "maxW": 5017
+    },
+    "batch1-row2": {
+      "x": 0,
+      "y": 8944,
+      "text": "Regular width · 6.9 in landscape (sidebar + room)",
+      "kind": "title1",
+      "maxW": 1992
+    },
+    "batch1-row3": {
+      "x": 0,
+      "y": 9904,
+      "text": "Room · H-02",
+      "kind": "title1",
+      "maxW": 3197
+    },
+    "batch1-row4": {
+      "x": 0,
+      "y": 13824,
+      "text": "Spot & container · H-03",
+      "kind": "title1",
+      "maxW": 2195
+    },
+    "batch1-row5": {
+      "x": 0,
+      "y": 17944,
+      "text": "Editors · H-04, H-05",
+      "kind": "title1",
+      "maxW": 4015
+    },
+    "batch1-row6": {
+      "x": 0,
+      "y": 21464,
+      "text": "QR label & arrange · H-06, H-07",
+      "kind": "title1",
+      "maxW": 2650
     }
   },
   "order": [
-    "Main.dc.html",
-    "Room.dc.html",
     "ItemDetail.dc.html",
     "Find.dc.html",
     "ScanReview.dc.html",
     "Paywall.dc.html",
-    "HomeDark.dc.html"
+    "L01Launch.dc.html",
+    "L01Launch-dark.dc.html",
+    "O01Welcome.dc.html",
+    "O01Welcome-dark.dc.html",
+    "O01Welcome-ax5.dc.html",
+    "O02Rooms.dc.html",
+    "O02Rooms-dark.dc.html",
+    "O02Rooms-ax5.dc.html",
+    "Main.dc.html",
+    "Main-dark.dc.html",
+    "Main-empty.dc.html",
+    "Main-empty-dark.dc.html",
+    "Main-loading.dc.html",
+    "Main-loading-dark.dc.html",
+    "Main-error.dc.html",
+    "Main-error-dark.dc.html",
+    "Main-pro.dc.html",
+    "Main-max.dc.html",
+    "Main-ax5.dc.html",
+    "HomeRegular.dc.html",
+    "HomeRegular-dark.dc.html",
+    "Room.dc.html",
+    "Room-dark.dc.html",
+    "Room-empty.dc.html",
+    "Room-empty-dark.dc.html",
+    "Room-pro.dc.html",
+    "Room-max.dc.html",
+    "Room-ax5.dc.html",
+    "H03Spot.dc.html",
+    "H03Spot-dark.dc.html",
+    "H03Spot-container.dc.html",
+    "H03Spot-container-dark.dc.html",
+    "H03Spot-ax5.dc.html",
+    "H04RoomEditor.dc.html",
+    "H04RoomEditor-dark.dc.html",
+    "H04RoomEditor-delete.dc.html",
+    "H04RoomEditor-delete-dark.dc.html",
+    "H04RoomEditor-ax5.dc.html",
+    "H05SpotEditor.dc.html",
+    "H05SpotEditor-dark.dc.html",
+    "H05SpotEditor-container.dc.html",
+    "H05SpotEditor-ax5.dc.html",
+    "H06QRLabel.dc.html",
+    "H06QRLabel-dark.dc.html",
+    "H06QRLabel-ax5.dc.html",
+    "H07Arrange.dc.html",
+    "H07Arrange-dark.dc.html",
+    "H07Arrange-ax5.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"
