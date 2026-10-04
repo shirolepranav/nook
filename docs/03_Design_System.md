@@ -25,36 +25,44 @@ These follow the PRD's design pillars (§3), with one rule added for the warm-an
 ### 2.1 Neutrals and surfaces
 Warm neutral backgrounds (PRD §3). Dark mode uses warm espresso tones, never pure black, and warm off-white text, never pure white.
 
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| `canvas` | `#F7F3EE` | `#1B1714` | App background |
-| `surface` | `#FFFDFA` | `#25201C` | Cards, rows, sheets' custom content |
-| `surfaceRaised` | `#FFFFFF` | `#2E2823` | Toasts, answer cards, popovers |
-| `surfaceSunken` | `#EFE8DF` | `#141110` | Text-field wells, photo placeholders |
-| `hairline` | `#E4DACE` | `#3A322B` | Card borders, dividers |
-| `textPrimary` | `#2A2420` | `#F3ECE3` | Titles and body |
-| `textSecondary` | `#6A5E55` | `#BEB2A6` | Breadcrumbs, metadata |
-| `textTertiary` | `#8A7E75` | `#8E8379` | Placeholders only, never essential information |
+High Contrast (HC) columns are the Increase Contrast variants. Surfaces don't change in HC; text and borders get stronger.
+
+| Token | Light | Dark | HC light | HC dark | Use |
+|---|---|---|---|---|---|
+| `canvas` | `#F7F3EE` | `#1B1714` | `#F7F3EE` | `#1B1714` | App background |
+| `surface` | `#FFFDFA` | `#25201C` | `#FFFDFA` | `#25201C` | Cards, rows, sheets' custom content |
+| `surfaceRaised` | `#FFFFFF` | `#2E2823` | `#FFFFFF` | `#2E2823` | Toasts, answer cards, popovers |
+| `surfaceSunken` | `#EFE8DF` | `#141110` | `#EFE8DF` | `#141110` | Text-field wells, photo placeholders |
+| `hairline` | `#E4DACE` | `#3A322B` | `#8F8070` | `#806F5F` | Card borders, dividers |
+| `hairlineStrong` | `#C9BBAB` | `#5A4F45` | `#8F8070` | `#806F5F` | Dashed "add" cards (+ Room), drop targets |
+| `textPrimary` | `#2A2420` | `#F3ECE3` | `#2A2420` | `#F3ECE3` | Titles and body |
+| `textSecondary` | `#6A5E55` | `#BEB2A6` | `#534A43` | `#BEB2A6` | Breadcrumbs, metadata, placeholders, small chip labels |
+| `textTertiary` | `#8A7E75` | `#8E8379` | `#514A45` | `#BAB4AE` | Disabled and decorative only (exempt from 4.5:1). Never for placeholders or information |
+
+Contrast notes:
+- `textTertiary` is only 3.25–3.6:1 on light surfaces, so it can't carry text a user needs. Placeholders use `textSecondary`; the field's label above carries the meaning (§8.6).
+- `hairline` and `hairlineStrong` are decorative at normal contrast. In HC they reach 3:1 against every surface, so borders stay visible with Increase Contrast.
 
 ### 2.2 Accent colors (user picks 1 of 6, PRD §3)
 The chosen accent tints buttons, selection, links, the Capture button and system controls. Each has its own color for text drawn on top of it (`onAccent`).
 
-| Accent | Light | Dark | `onAccent` light / dark | Feel |
-|---|---|---|---|---|
-| **Terracotta** (default) | `#B4502C` | `#EA8B64` | white / `#1B1714` | Warm clay |
-| Sage | `#4F7A57` | `#94BC9B` | white / `#1B1714` | Calm garden |
-| Ocean | `#2F6A8F` | `#8CBFE0` | white / `#1B1714` | Quiet blue |
-| Plum | `#8A4A78` | `#D9A0C8` | white / `#1B1714` | Soft berry |
-| Slate | `#4E5D6C` | `#AFBCCA` | white / `#1B1714` | Cool stone |
-| Rose | `#A3445C` | `#EDA5B7` | white / `#1B1714` | Dusty petal |
+| Accent | Light | Dark | HC light | HC dark | `onAccent` light / dark | Feel |
+|---|---|---|---|---|---|---|
+| **Terracotta** (default) | `#AC4C2A` | `#EA8B64` | `#7D371E` | `#EEA383` | white / `#1B1714` | Warm clay |
+| Sage | `#4A7251` | `#94BC9B` | `#36533B` | `#97BE9E` | white / `#1B1714` | Calm garden |
+| Ocean | `#2F6A8F` | `#8CBFE0` | `#24506C` | `#8CBFE0` | white / `#1B1714` | Quiet blue |
+| Plum | `#8A4A78` | `#D9A0C8` | `#6E3B5F` | `#DAA4CA` | white / `#1B1714` | Soft berry |
+| Slate | `#4E5D6C` | `#AFBCCA` | `#414E5A` | `#AFBCCA` | white / `#1B1714` | Cool stone |
+| Rose | `#A3445C` | `#EDA5B7` | `#7D3447` | `#EDA5B7` | white / `#1B1714` | Dusty petal |
 
 Rules:
 - In dark mode accents get lighter, and text on accent fills becomes dark.
+- Accents are also used as text (links, tertiary buttons), so each light accent reaches 4.5:1 on every light surface, including `surfaceSunken`. Terracotta (was `#B4502C`) and Sage (was `#4F7A57`) were darkened slightly in P0 for this.
 - Semantic colors (below) never change with the accent, so "expired" always looks the same.
 - Honey isn't an accent, because its gold is the "ending soon" `warning` color (D5). Rose must stay clearly distinct from `danger`; check them side by side on status pills.
 
 ### 2.3 Room colors (PRD §3)
-Every room gets a soft color and an SF Symbol, used on cards, widgets and the map of the home. The **fill** is a soft tint for card backgrounds; the **ink** is a stronger shade for the symbol on that fill.
+Every room gets a soft color and an SF Symbol, used on cards, widgets and the map of the home. The **fill** is a soft tint for card backgrounds; the **ink** is a stronger shade for the symbol on that fill. Text on a room fill uses `textPrimary` and `textSecondary`. Every ink, `textPrimary` and `textSecondary` reaches 4.5:1 on every fill, so room colors need no HC variant.
 
 | Room color | Fill light | Fill dark | Ink light | Ink dark |
 |---|---|---|---|---|
@@ -70,13 +78,15 @@ Every room gets a soft color and an SF Symbol, used on cards, widgets and the ma
 ### 2.4 Semantic colors
 Status is never shown by color alone: always icon plus text ("Ends in 12 days").
 
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| `success` | `#3D7A4C` | `#7FC08C` | Saved, warranty active |
-| `warning` | `#A4610E` | `#E7AE52` | Warranty ending within 30 days, loan due soon |
-| `danger` | `#B3261E` | `#F28B80` | Expired, overdue, delete |
-| `info` | `#3A6889` | `#8FB8D6` | Tips, sync status |
-| `suggested` | accent at 12% opacity | accent at 18% opacity | Background of AI-filled fields until accepted |
+| Token | Light | Dark | HC light | HC dark | Use |
+|---|---|---|---|---|---|
+| `success` | `#3A7549` | `#7FC08C` | `#2A5535` | `#84C391` | Saved, warranty active |
+| `warning` | `#985A0D` | `#E7AE52` | `#6E4109` | `#E7AE52` | Warranty ending within 30 days, loan due soon |
+| `danger` | `#B3261E` | `#F28B80` | `#921F19` | `#F49E95` | Expired, overdue, delete |
+| `info` | `#3A6889` | `#8FB8D6` | `#2C5069` | `#91B9D7` | Tips, sync status |
+| `suggested` | accent at 12% opacity | accent at 18% opacity | accent at 12% | accent at 18% | Background of AI-filled fields until accepted |
+
+`success` (was `#3D7A4C`) and `warning` (was `#A4610E`) were darkened in P0 so they reach 4.5:1 on every light surface, including `surfaceSunken`.
 
 ### 2.5 Implementing colors
 Each token is a Color Set in the asset catalog with Any, Dark, and High Contrast variants.
@@ -93,12 +103,15 @@ enum NookColor {
     static let surface       = Color("surface")        // cards and rows
     static let surfaceRaised = Color("surfaceRaised")  // toasts, answer cards
     static let surfaceSunken = Color("surfaceSunken")  // text-field wells
-    static let hairline      = Color("hairline")       // thin borders
-    static let textPrimary   = Color("textPrimary")    // main text
-    static let textSecondary = Color("textSecondary")  // supporting text
-    static let success       = Color("success")
-    static let warning       = Color("warning")
-    static let danger        = Color("danger")
+    static let hairline       = Color("hairline")       // thin borders
+    static let hairlineStrong = Color("hairlineStrong") // dashed "add" cards
+    static let textPrimary    = Color("textPrimary")    // main text
+    static let textSecondary  = Color("textSecondary")  // supporting text, placeholders
+    static let textTertiary   = Color("textTertiary")   // disabled and decorative only
+    static let success        = Color("success")
+    static let warning        = Color("warning")
+    static let danger         = Color("danger")
+    static let info           = Color("info")
 }
 
 // MARK: - User-selectable accent (6 options, PRD §3)
@@ -130,6 +143,59 @@ struct NookApp: App {
     }
 }
 ```
+
+### 2.6 Checking colors
+`design/tools/check_tokens.py` (standard-library Python) reads the tables above and checks:
+- **Contrast:** every text color on every surface it can sit on reaches 4.5:1, and 7:1 for the HC variants of text and accents. `onAccent` on each accent reaches 4.5:1 (7:1 in HC isn't required, since white on the darker HC accent only gets better). HC hairlines reach 3:1.
+- **Mockups:** every hex color in `design/screens/` is a token from this section, or it's listed in the table below.
+
+Run it before merging any token or mockup change: `python3 design/tools/check_tokens.py`.
+
+**Mockup colors that aren't tokens.** Found in the 7 approved mockups during P0. "Mockup only" colors stand in for things the app gets from the system or from real content; they never become Swift code. Everything else is fixed when that screen is rebased in its P0 screen batch, and this table must be empty of token mappings when P0 closes.
+
+| Mockup color | Becomes | Why |
+|---|---|---|
+| `#5A5048` | `textSecondary` | Small chip and badge labels |
+| `#A4610E` | `warning` | Old `warning` value, darkened in P0 |
+| `#3D7A4C` | `success` | Old `success` value, darkened in P0 |
+| `#B4502C` | Terracotta accent | Old Terracotta value, darkened in P0 |
+| `#4F7A57` | Sage accent | Old Sage value, darkened in P0 |
+| `#D4C9BD` | `textSecondary` (dark) | Item counts on dark room cards |
+| `#C9BBAB` | `hairlineStrong` (light) | Dashed "+ Room" card |
+| `#5A4F45` | `hairlineStrong` (dark) | Dashed "+ Room" card |
+| `#FBF7F1` | `surface` | Stacked "box" layers behind a container card |
+| `#FDFAF5` | `surface` | Stacked "box" layers behind a container card |
+| `#8F3F22` | mockup only | Web link hover. iOS buttons press by scaling (§8.2), not by color |
+| `#F0A586` | mockup only | Web link hover (dark) |
+| `#E9DFD3` | mockup only | Photo stand-in |
+| `#E3DACD` | mockup only | Photo stand-in |
+| `#E6DCCF` | mockup only | Photo stand-in |
+| `#E6DACB` | mockup only | Photo stand-in |
+| `#E4D9CB` | mockup only | Photo stand-in |
+| `#DDD0C0` | mockup only | Photo stand-in |
+| `#D4C7B7` | mockup only | Photo stand-in |
+| `#CFC1B0` | mockup only | Photo stand-in |
+| `#C8B9A7` | mockup only | Photo stand-in |
+| `#CDBFAE` | mockup only | Photo stand-in |
+| `#D3C6B5` | mockup only | Photo stand-in |
+| `#332C26` | mockup only | Photo stand-in (dark) |
+| `#9A8B7C` | mockup only | Glyph on a photo stand-in |
+| `#8C7B6A` | mockup only | Glyph on a photo stand-in |
+| `#A39384` | mockup only | Glyph on a photo stand-in |
+| `#D2C5B6` | mockup only | Sheet grabber (system) |
+| `#A89D92` | mockup only | Dimmed backdrop behind a sheet (system) |
+| `#E3C56E` | mockup only | Paywall illustration (illustrations are assets, §7) |
+| `#DDA0AF` | mockup only | Paywall illustration |
+| `#4A4F57` | mockup only | Paywall illustration |
+| `#B9BEC6` | mockup only | Paywall illustration |
+| `#D9C9B6` | mockup only | Paywall illustration |
+| `#5C8A63` | mockup only | Paywall illustration |
+| `#D99A7E` | mockup only | Paywall illustration |
+| `#C9A94C` | mockup only | Paywall illustration |
+| `#B8ADA0` | mockup only | Paywall illustration |
+| `#8DB4D0` | mockup only | Paywall illustration |
+| `#8CC7B5` | mockup only | Paywall illustration |
+| `#B3A0D0` | mockup only | Paywall illustration |
 
 ---
 
@@ -223,6 +289,8 @@ enum Space {
     static let s2: CGFloat = 16
     static let s3: CGFloat = 24
     static let s4: CGFloat = 32
+    static let s5: CGFloat = 40
+    static let s6: CGFloat = 48
 }
 
 // MARK: - Photo grid that adapts to width and text size
@@ -495,7 +563,7 @@ struct DetectionOverlay: View {
 ```
 
 ### 8.6 Inputs
-- Text field: `surfaceSunken` well, medium radius, at least 48 pt tall, label above, helper or error text below.
+- Text field: `surfaceSunken` well, medium radius, at least 48 pt tall, label above, helper or error text below. Placeholder text uses `textSecondary`.
 - Focus: 2 pt accent border. Error: danger border, icon and message (never color alone).
 - **AI-suggested fields:** `suggested` background tint and a small "Suggested" label until the user edits or accepts.
 - Special fields: name with autocomplete; currency with the locale's decimal keypad; compact date picker; serial in monospaced type with "Read from sticker"; tags as tokens; photo strip with add, reorder and delete.
@@ -541,6 +609,17 @@ Each state is a designed screen: **illustration, one sentence, one action** (PRD
 
 Rules: motion explains cause and effect; nothing longer than 0.6 seconds; only loading shimmer loops.
 
+**Motion tokens.** Every animation in the app uses one of these. NookUI applies the Reduce Motion version automatically.
+
+| Token | Value | Use | Reduce Motion |
+|---|---|---|---|
+| `snappy` | ease-out, 0.2 s | Button press, chip selection, toggles | Opacity only, 0.2 s |
+| `settle` | spring, duration 0.35, bounce 0.2 | Card settling after save, outlines appearing, move confirmed | Fade, 0.25 s |
+| `zoom` | system zoom navigation transition | Photo card → item detail | System cross-fade |
+| `fade` | ease-in-out, 0.3 s | Filters changing, state swaps (empty ↔ loaded) | Same |
+| `stagger` | 180 ms between items | Detection outlines, cards streaming in | 0 ms stagger, fade only; haptics stay |
+| `shimmer` | 1.6 s linear loop | Loading skeletons only | Static, no loop |
+
 ```swift
 // MARK: - Zoom into item detail, cross-fade when Reduce Motion is on
 struct ItemLink: View {
@@ -578,6 +657,15 @@ struct ItemLink: View {
 | Unlock failed, validation error | Error |
 
 Haptics never carry meaning alone; every event also has a visual change.
+
+**Haptic tokens.** Each maps to a SwiftUI `SensoryFeedback`, so call sites never name one directly.
+
+| Token | `SensoryFeedback` | Events above |
+|---|---|---|
+| `saved` | `.success` | Saved, purchase complete, unlock success, move confirmed |
+| `selected` | `.selection` | Picker, chip, segment |
+| `tick` | `.impact(weight: .light)` | Outline appears, code recognized, photo taken |
+| `failed` | `.error` | Unlock failed, validation error |
 
 ```swift
 // MARK: - Success haptic only when saving actually worked
