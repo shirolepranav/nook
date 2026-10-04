@@ -43,8 +43,12 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | F-01/F-03 regular width | `FindRegular` | ✓ | ✓ | results beside the answer | 6.9 in landscape | — |
 | F-04 Move confirmation | `F01Find` | ✓ | ✓ | — | SE | ✓ |
 | F-05 Filters | `F05Filters` | ✓ | ✓ | — | SE | ✓ |
-
-**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `Paywall` (P-01).
+| R-01 Reports | `R01Reports` | ✓ | ✓ | free (Pro badges), Pro | SE | ✓ |
+| R-02 Insurance report | `R02Report` | ✓ | ✓ | builder, free preview (watermarked), generating | SE | ✓ |
+| R-03 CSV export | `R03CSV` | ✓ | ✓ | — | SE | ✓ |
+| R-04 Warranties | `R04Warranties` | ✓ | ✓ | free with 3 reminders, empty | SE | ✓ |
+| R-05 Lent out | `R05Lent` | ✓ | ✓ | default (overdue + swipe), empty | SE | ✓ |
+| P-01 Paywall | `P01Paywall` | ✓ | ✓ | default, loading price, purchasing, Ask to Buy, failed, success | SE, 6.3 in, 6.9 in | ✓ |
 
 Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
 

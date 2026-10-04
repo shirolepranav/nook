@@ -151,49 +151,10 @@ struct NookApp: App {
 
 Run it before merging any token or mockup change: `python3 design/tools/check_tokens.py`.
 
-**Mockup colors that aren't tokens.** Found in the 7 approved mockups during P0. "Mockup only" colors stand in for things the app gets from the system or from real content; they never become Swift code. Everything else is fixed when that screen is rebased in its P0 screen batch, and this table must be empty of token mappings when P0 closes.
+**Mockup colors that aren't tokens.** None. During P0 every board was rebuilt on the token block, so `design/screens/` uses only the colors in §2.1–2.4. Photos, camera feeds and illustrations are drawn as token-colored stand-ins. Paper (labels, receipts, report pages) uses the light `surfaceRaised` and `textPrimary` values in both modes, because it's a physical object. If a new board needs a color with no token, add the token here first.
 
 | Mockup color | Becomes | Why |
 |---|---|---|
-| `#5A5048` | `textSecondary` | Small chip and badge labels |
-| `#A4610E` | `warning` | Old `warning` value, darkened in P0 |
-| `#3D7A4C` | `success` | Old `success` value, darkened in P0 |
-| `#B4502C` | Terracotta accent | Old Terracotta value, darkened in P0 |
-| `#4F7A57` | Sage accent | Old Sage value, darkened in P0 |
-| `#D4C9BD` | `textSecondary` (dark) | Item counts on dark room cards |
-| `#FBF7F1` | `surface` | Stacked "box" layers behind a container card |
-| `#FDFAF5` | `surface` | Stacked "box" layers behind a container card |
-| `#8F3F22` | mockup only | Web link hover. iOS buttons press by scaling (§8.2), not by color |
-| `#F0A586` | mockup only | Web link hover (dark) |
-| `#E9DFD3` | mockup only | Photo stand-in |
-| `#E3DACD` | mockup only | Photo stand-in |
-| `#E6DCCF` | mockup only | Photo stand-in |
-| `#E6DACB` | mockup only | Photo stand-in |
-| `#E4D9CB` | mockup only | Photo stand-in |
-| `#DDD0C0` | mockup only | Photo stand-in |
-| `#D4C7B7` | mockup only | Photo stand-in |
-| `#CFC1B0` | mockup only | Photo stand-in |
-| `#C8B9A7` | mockup only | Photo stand-in |
-| `#CDBFAE` | mockup only | Photo stand-in |
-| `#D3C6B5` | mockup only | Photo stand-in |
-| `#332C26` | mockup only | Photo stand-in (dark) |
-| `#9A8B7C` | mockup only | Glyph on a photo stand-in |
-| `#8C7B6A` | mockup only | Glyph on a photo stand-in |
-| `#A39384` | mockup only | Glyph on a photo stand-in |
-| `#D2C5B6` | mockup only | Sheet grabber (system) |
-| `#A89D92` | mockup only | Dimmed backdrop behind a sheet (system) |
-| `#E3C56E` | mockup only | Paywall illustration (illustrations are assets, §7) |
-| `#DDA0AF` | mockup only | Paywall illustration |
-| `#4A4F57` | mockup only | Paywall illustration |
-| `#B9BEC6` | mockup only | Paywall illustration |
-| `#D9C9B6` | mockup only | Paywall illustration |
-| `#5C8A63` | mockup only | Paywall illustration |
-| `#D99A7E` | mockup only | Paywall illustration |
-| `#C9A94C` | mockup only | Paywall illustration |
-| `#B8ADA0` | mockup only | Paywall illustration |
-| `#8DB4D0` | mockup only | Paywall illustration |
-| `#8CC7B5` | mockup only | Paywall illustration |
-| `#B3A0D0` | mockup only | Paywall illustration |
 
 ---
 

@@ -626,14 +626,6 @@
       "x": 2275,
       "y": 1364
     },
-    "Paywall.dc.html": {
-      "h": 844,
-      "radius": 40,
-      "title": "Paywall",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
     "Room-ax5.dc.html": {
       "h": 3400,
       "radius": 40,
@@ -1369,6 +1361,326 @@
       "h": 2800,
       "title": "F-05 Filters · AX5",
       "radius": 40
+    },
+    "R01Reports.dc.html": {
+      "x": 0,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-01 Reports · Free",
+      "radius": 40
+    },
+    "R01Reports-dark.dc.html": {
+      "x": 455,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-01 Reports · Dark",
+      "radius": 40
+    },
+    "R01Reports-pro.dc.html": {
+      "x": 910,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-01 Reports · Pro",
+      "radius": 40
+    },
+    "R01Reports-pro-dark.dc.html": {
+      "x": 1365,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-01 Reports · Pro · Dark",
+      "radius": 40
+    },
+    "R01Reports-ax5.dc.html": {
+      "x": 1820,
+      "y": 64220,
+      "w": 375,
+      "h": 2400,
+      "title": "R-01 Reports · AX5",
+      "radius": 40
+    },
+    "R03CSV.dc.html": {
+      "x": 2275,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-03 CSV export",
+      "radius": 40
+    },
+    "R03CSV-dark.dc.html": {
+      "x": 2730,
+      "y": 64220,
+      "w": 375,
+      "h": 667,
+      "title": "R-03 CSV export · Dark",
+      "radius": 40
+    },
+    "R03CSV-ax5.dc.html": {
+      "x": 3185,
+      "y": 64220,
+      "w": 375,
+      "h": 2000,
+      "title": "R-03 CSV export · AX5",
+      "radius": 40
+    },
+    "R02Report.dc.html": {
+      "x": 0,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Builder",
+      "radius": 40
+    },
+    "R02Report-dark.dc.html": {
+      "x": 455,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Dark",
+      "radius": 40
+    },
+    "R02Report-preview.dc.html": {
+      "x": 910,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Free preview",
+      "radius": 40
+    },
+    "R02Report-preview-dark.dc.html": {
+      "x": 1365,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Free preview · Dark",
+      "radius": 40
+    },
+    "R02Report-generating.dc.html": {
+      "x": 1820,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Generating",
+      "radius": 40
+    },
+    "R02Report-generating-dark.dc.html": {
+      "x": 2275,
+      "y": 67140,
+      "w": 375,
+      "h": 667,
+      "title": "R-02 Insurance report · Generating · Dark",
+      "radius": 40
+    },
+    "R02Report-ax5.dc.html": {
+      "x": 2730,
+      "y": 67140,
+      "w": 375,
+      "h": 2800,
+      "title": "R-02 Insurance report · AX5",
+      "radius": 40
+    },
+    "R04Warranties.dc.html": {
+      "x": 0,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-04 Warranties · Free, 3 reminders",
+      "radius": 40
+    },
+    "R04Warranties-dark.dc.html": {
+      "x": 455,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-04 Warranties · Dark",
+      "radius": 40
+    },
+    "R04Warranties-empty.dc.html": {
+      "x": 910,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-04 Warranties · Empty",
+      "radius": 40
+    },
+    "R04Warranties-empty-dark.dc.html": {
+      "x": 1365,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-04 Warranties · Empty · Dark",
+      "radius": 40
+    },
+    "R04Warranties-ax5.dc.html": {
+      "x": 1820,
+      "y": 70460,
+      "w": 375,
+      "h": 2800,
+      "title": "R-04 Warranties · AX5",
+      "radius": 40
+    },
+    "R05Lent.dc.html": {
+      "x": 2275,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-05 Lent out · Default",
+      "radius": 40
+    },
+    "R05Lent-dark.dc.html": {
+      "x": 2730,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-05 Lent out · Dark",
+      "radius": 40
+    },
+    "R05Lent-empty.dc.html": {
+      "x": 3185,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-05 Lent out · Empty",
+      "radius": 40
+    },
+    "R05Lent-empty-dark.dc.html": {
+      "x": 3640,
+      "y": 70460,
+      "w": 375,
+      "h": 667,
+      "title": "R-05 Lent out · Empty · Dark",
+      "radius": 40
+    },
+    "R05Lent-ax5.dc.html": {
+      "x": 4095,
+      "y": 70460,
+      "w": 375,
+      "h": 2000,
+      "title": "R-05 Lent out · AX5",
+      "radius": 40
+    },
+    "P01Paywall.dc.html": {
+      "x": 0,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Default",
+      "radius": 40
+    },
+    "P01Paywall-dark.dc.html": {
+      "x": 455,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Dark",
+      "radius": 40
+    },
+    "P01Paywall-loading.dc.html": {
+      "x": 910,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Loading price",
+      "radius": 40
+    },
+    "P01Paywall-loading-dark.dc.html": {
+      "x": 1365,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Loading price · Dark",
+      "radius": 40
+    },
+    "P01Paywall-purchasing.dc.html": {
+      "x": 1820,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Purchasing",
+      "radius": 40
+    },
+    "P01Paywall-purchasing-dark.dc.html": {
+      "x": 2275,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Purchasing · Dark",
+      "radius": 40
+    },
+    "P01Paywall-pending.dc.html": {
+      "x": 2730,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Ask to Buy",
+      "radius": 40
+    },
+    "P01Paywall-pending-dark.dc.html": {
+      "x": 3185,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Ask to Buy · Dark",
+      "radius": 40
+    },
+    "P01Paywall-failed.dc.html": {
+      "x": 3640,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Failed",
+      "radius": 40
+    },
+    "P01Paywall-failed-dark.dc.html": {
+      "x": 4095,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Failed · Dark",
+      "radius": 40
+    },
+    "P01Paywall-success.dc.html": {
+      "x": 4550,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Success",
+      "radius": 40
+    },
+    "P01Paywall-success-dark.dc.html": {
+      "x": 5005,
+      "y": 73780,
+      "w": 375,
+      "h": 667,
+      "title": "P-01 Paywall · Success · Dark",
+      "radius": 40
+    },
+    "P01Paywall-pro.dc.html": {
+      "x": 5460,
+      "y": 73780,
+      "w": 402,
+      "h": 874,
+      "title": "P-01 Paywall · 6.3 in",
+      "radius": 40
+    },
+    "P01Paywall-max.dc.html": {
+      "x": 5942,
+      "y": 73780,
+      "w": 440,
+      "h": 956,
+      "title": "P-01 Paywall · 6.9 in",
+      "radius": 40
+    },
+    "P01Paywall-ax5.dc.html": {
+      "x": 6462,
+      "y": 73780,
+      "w": 375,
+      "h": 2600,
+      "title": "P-01 Paywall · AX5",
+      "radius": 40
     }
   },
   "createdOnFiles": {
@@ -1476,14 +1788,6 @@
       "x": 0,
       "y": 34040
     },
-    "heading": {
-      "kind": "title1",
-      "maxW": 600,
-      "text": "Not yet rebased · later P0 batches",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
     "batch3-row0": {
       "kind": "title1",
       "maxW": 7089,
@@ -1539,10 +1843,41 @@
       "w": 240,
       "x": 0,
       "y": 60520
+    },
+    "batch5-row0": {
+      "kind": "title1",
+      "maxW": 3560,
+      "text": "Reports · R-01, R-03",
+      "w": 240,
+      "x": 0,
+      "y": 63960
+    },
+    "batch5-row1": {
+      "kind": "title1",
+      "maxW": 3105,
+      "text": "Insurance report · R-02",
+      "w": 240,
+      "x": 0,
+      "y": 66880
+    },
+    "batch5-row2": {
+      "kind": "title1",
+      "maxW": 4470,
+      "text": "Warranties & lent out · R-04, R-05",
+      "w": 240,
+      "x": 0,
+      "y": 70200
+    },
+    "batch5-row3": {
+      "kind": "title1",
+      "maxW": 6837,
+      "text": "Paywall · P-01",
+      "w": 240,
+      "x": 0,
+      "y": 73520
     }
   },
   "order": [
-    "Paywall.dc.html",
     "L01Launch.dc.html",
     "L01Launch-dark.dc.html",
     "O01Welcome.dc.html",
@@ -1712,7 +2047,47 @@
     "F01Find-move-ax5.dc.html",
     "F05Filters.dc.html",
     "F05Filters-dark.dc.html",
-    "F05Filters-ax5.dc.html"
+    "F05Filters-ax5.dc.html",
+    "R01Reports.dc.html",
+    "R01Reports-dark.dc.html",
+    "R01Reports-pro.dc.html",
+    "R01Reports-pro-dark.dc.html",
+    "R01Reports-ax5.dc.html",
+    "R03CSV.dc.html",
+    "R03CSV-dark.dc.html",
+    "R03CSV-ax5.dc.html",
+    "R02Report.dc.html",
+    "R02Report-dark.dc.html",
+    "R02Report-preview.dc.html",
+    "R02Report-preview-dark.dc.html",
+    "R02Report-generating.dc.html",
+    "R02Report-generating-dark.dc.html",
+    "R02Report-ax5.dc.html",
+    "R04Warranties.dc.html",
+    "R04Warranties-dark.dc.html",
+    "R04Warranties-empty.dc.html",
+    "R04Warranties-empty-dark.dc.html",
+    "R04Warranties-ax5.dc.html",
+    "R05Lent.dc.html",
+    "R05Lent-dark.dc.html",
+    "R05Lent-empty.dc.html",
+    "R05Lent-empty-dark.dc.html",
+    "R05Lent-ax5.dc.html",
+    "P01Paywall.dc.html",
+    "P01Paywall-dark.dc.html",
+    "P01Paywall-loading.dc.html",
+    "P01Paywall-loading-dark.dc.html",
+    "P01Paywall-purchasing.dc.html",
+    "P01Paywall-purchasing-dark.dc.html",
+    "P01Paywall-pending.dc.html",
+    "P01Paywall-pending-dark.dc.html",
+    "P01Paywall-failed.dc.html",
+    "P01Paywall-failed-dark.dc.html",
+    "P01Paywall-success.dc.html",
+    "P01Paywall-success-dark.dc.html",
+    "P01Paywall-pro.dc.html",
+    "P01Paywall-max.dc.html",
+    "P01Paywall-ax5.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"
