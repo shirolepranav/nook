@@ -2201,6 +2201,22 @@
       "h": 1600,
       "title": "L-02 App lock · AX5",
       "radius": 40
+    },
+    "Illustrations.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 640,
+      "title": "Illustrations",
+      "radius": 24
+    },
+    "Illustrations-dark.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 640,
+      "title": "Illustrations · Dark",
+      "radius": 24
     }
   },
   "createdOnFiles": {
@@ -2435,6 +2451,14 @@
       "w": 240,
       "x": 0,
       "y": 89640
+    },
+    "assets-row0": {
+      "kind": "title1",
+      "maxW": 2960,
+      "text": "Illustrations (empty, loading and error states)",
+      "w": 240,
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -2712,7 +2736,9 @@
     "L02Lock-touchid-dark.dc.html",
     "L02Lock-failed.dc.html",
     "L02Lock-failed-dark.dc.html",
-    "L02Lock-ax5.dc.html"
+    "L02Lock-ax5.dc.html",
+    "Illustrations.dc.html",
+    "Illustrations-dark.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"

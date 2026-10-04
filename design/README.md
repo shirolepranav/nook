@@ -63,7 +63,7 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | S-12 Help & About | `S12Help` | ✓ | ✓ | — | SE | ✓ |
 | L-02 App lock | `L02Lock` | ✓ | ✓ | Face ID, Touch ID, not recognized | SE | ✓ |
 
-Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
+Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are drawn inline from `design/tools/illustrations.py`, which also exports the app's SVG layers to `design/illustrations/` (D25). The **Illustrations** row at the top of the canvas shows them all, in light and dark.
 
 **How to use them**
 - Read the markup for exact colors, type sizes, radii, spacing and layout.

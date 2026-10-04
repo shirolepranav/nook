@@ -402,6 +402,8 @@ struct WarmShadow: ViewModifier {
 - Symbol weight matches nearby text.
 - Symbol effects with meaning only: a checkmark that draws on when saving, variable color for progress (report rendering, scan progress).
 - **Illustrations** for empty, loading and error states (PRD §3): soft, rounded, hand-made feeling (gouache or clay look) in the warm palette, with the user's accent as the highlight color. They're decorative, so VoiceOver skips them.
+- **The set (P0):** shelf-tidy (Welcome), shelf-waiting (empty Home), kitchen-empty (empty room), drawer-empty (no search results), shelf-full (paywall), receipt-ribbon (no warranties), box-hands (nothing lent), bin-empty (Recently Deleted). Errors and "camera off" use a calm SF Symbol in a soft circle instead, so a problem never looks decorative.
+- **How they're built:** a light and a dark base layer plus an accent template layer (D25). Source: `design/tools/illustrations.py`. Exports: `design/illustrations/`.
 - **App icon:** light, dark, clear and tinted variants built in Icon Composer (PRD §3).
 
 Suggested symbols:
