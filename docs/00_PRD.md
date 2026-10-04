@@ -153,7 +153,7 @@ Apple has not published point dimensions for iPhone Duo. Third-party estimates d
 8. **No `UIScreen.main`:** it's ambiguous on a two-display device. Read size and scale from the environment or window scene.
 9. **Split View:** the app must work at any width Split View gives it on the Duo inner screen, down to compact width.
 
-**Design deliverables per screen:** Figma frames for 4.7-inch SE, 6.3-inch, 6.9-inch, Duo outer, Duo inner (open), Duo half-folded, and the largest accessibility text size.
+**Design deliverables per screen:** frames on the Claude Design canvas (D22) for 4.7-inch SE, 6.3-inch, 6.9-inch, Duo outer, Duo inner (open), Duo half-folded, and the largest accessibility text size.
 
 **Test matrix:** see [05_Testing_and_QA.md](05_Testing_and_QA.md). It covers:
 - The iPhone SE simulator
@@ -410,11 +410,11 @@ struct DetectedItem {
 
 ## 10. Roadmap, risks and open questions
 
-The plan is about 14 weeks, part-time, launching in early January 2027 to catch the New Year organizing season. Design gets 3 full weeks up front and a polish phase at the end. The phase-level breakdown is in [02_Roadmap.md](02_Roadmap.md).
+The plan is about 14 weeks, part-time, launching in early January 2027 to catch the New Year organizing season. Design gets 3 full weeks up front and a polish phase at the end. The phase-level breakdown is in [02_Development_Roadmap.md](02_Development_Roadmap.md).
 
 ```
 Start Sep 28, 2026
- ├─ M1 Design ............ wk 1–3   Figma for every screen and iPhone size; clickable prototype
+ ├─ M1 Design ............ wk 1–3   Design frames for every screen and iPhone size; clickable prototype
  │   ◆ G1 Prototype passes a 5-person test
  ├─ M2 Core build ........ wk 4–7   Rooms, items, spots; manual scan and search; move, lend, warranties
  │   ◆ G2 Full app works with AI turned off

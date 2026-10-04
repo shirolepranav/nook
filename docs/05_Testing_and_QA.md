@@ -1,6 +1,6 @@
 # Nook — Testing & QA
 
-How we prove each phase works and keep earlier phases working. The per-phase QA and regression lists and the **cumulative smoke suite (S1–S14)** are in [02_Roadmap.md](02_Roadmap.md). This doc defines the methods those lists rely on. Use the `qa-regression` skill to run a phase's checks and produce the report.
+How we prove each phase works and keep earlier phases working. The per-phase QA and regression lists and the **cumulative smoke suite (S1–S14)** are in [02_Development_Roadmap.md](02_Development_Roadmap.md). This doc defines the methods those lists rely on. Use the `qa-regression` skill to run a phase's checks and produce the report.
 
 ---
 
@@ -11,9 +11,9 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | Unit | Swift Testing (`@Test`, `#expect`) | Each package's `Tests/` | Models, invariants, services, search ranking, scheduler, router fallback, report/CSV/backup | Every PR (CI) |
 | Snapshot | Image snapshots of NookUI components and key screens | `NookUI` tests + `NookTests` | {light, dark} × {Large, AX3}, plus Increase Contrast for components | Every PR |
 | UI flow | XCUITest | `NookUITests` | The 6 user stories plus the smoke suite rows that can be automated | Every PR (SE sim); nightly on the full matrix |
-| App Intents | App Intents testing | `NookTests/Intents` | Find, Move, ListRoom, Add, ScanRoom | Every PR from P8 |
+| App Intents | App Intents testing | `NookTests/Intents` | Find, Move, ListRoom, Add, ScanRoom | Every PR from P12 |
 | AI quality | Evaluations framework [Verify in SDK] | `NookAI/Evaluations` + `Fixtures/eval` | Room-scan naming accuracy; question→query correctness | Per AI PR, on every iOS beta, before each release |
-| Performance | XCTest metrics + Instruments | `NookTests/Perf` | PRD budgets (04 §12) | Nightly; release blocking in P11 |
+| Performance | XCTest metrics + Instruments | `NookTests/Perf` | PRD budgets (04 §12) | Nightly; release blocking in P13 |
 | Manual | Checklists in this doc | Real devices | Device matrix, accessibility, No-AI pass, exploratory | End of phase; every release |
 
 **Rules:**
@@ -24,7 +24,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 
 ---
 
-## 2. CI (GitHub Actions, macOS runner, set up in P0)
+## 2. CI (GitHub Actions, macOS runner, set up in P1)
 
 - **On every PR to `main`:**
   - build with zero warnings
@@ -69,7 +69,7 @@ Each phase's QA runs on at least SE, 18 Pro Max and one Duo configuration. G2, G
 - **100-photo evaluation:**
   - Metrics: per-photo recall (items correctly named ÷ labeled items) and precision (correct ÷ suggested).
   - The baseline is recorded at G3. A drop of more than 5 points on an iOS update is a P1 bug.
-- **Where-is evaluation (P8):**
+- **Where-is evaluation (P9):**
   - 30 questions: 20 answerable, 5 about items that aren't recorded, and 5 move statements.
   - Pass criteria:
     - **Zero invented locations.** A record is required for every answer.
@@ -90,7 +90,7 @@ Each phase's QA runs on at least SE, 18 Pro Max and one Duo configuration. G2, G
 - [ ] The screen can be used **without the camera** and **without AI**.
 - [ ] Bold Text, Button Shapes and Smart Invert (photos are not inverted).
 
-In P11 the audit runs on every screen, and the App Store Accessibility Nutrition Label is filled in from the results.
+In P13 the audit runs on every screen, and the App Store Accessibility Nutrition Label is filled in from the results.
 
 ---
 

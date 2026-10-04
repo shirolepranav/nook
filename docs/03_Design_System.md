@@ -45,12 +45,13 @@ The chosen accent tints buttons, selection, links, the Capture button and system
 | Sage | `#4F7A57` | `#94BC9B` | white / `#1B1714` | Calm garden |
 | Ocean | `#2F6A8F` | `#8CBFE0` | white / `#1B1714` | Quiet blue |
 | Plum | `#8A4A78` | `#D9A0C8` | white / `#1B1714` | Soft berry |
-| Honey | `#9A6210` | `#E8B04F` | white / `#1B1714` | Golden wood |
-| Graphite | `#4A4F57` | `#B9BEC6` | white / `#1B1714` | Neutral, minimal |
+| Slate | `#4E5D6C` | `#AFBCCA` | white / `#1B1714` | Cool stone |
+| Rose | `#A3445C` | `#EDA5B7` | white / `#1B1714` | Dusty petal |
 
 Rules:
 - In dark mode accents get lighter, and text on accent fills becomes dark.
 - Semantic colors (below) never change with the accent, so "expired" always looks the same.
+- Honey isn't an accent, because its gold is the "ending soon" `warning` color (D5). Rose must stay clearly distinct from `danger`; check them side by side on status pills.
 
 ### 2.3 Room colors (PRD §3)
 Every room gets a soft color and an SF Symbol, used on cards, widgets and the map of the home. The **fill** is a soft tint for card backgrounds; the **ink** is a stronger shade for the symbol on that fill.
@@ -104,7 +105,7 @@ enum NookColor {
 // Asset catalog folders "Accent" and "OnAccent" must have
 // "Provides Namespace" ticked so names like "Accent/sage" work.
 enum AccentChoice: String, CaseIterable, Identifiable {
-    case terracotta, sage, ocean, plum, honey, graphite
+    case terracotta, sage, ocean, plum, slate, rose
 
     var id: String { rawValue }
 
