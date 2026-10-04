@@ -28,8 +28,17 @@ Each screen is one **component board** (iPhone SE, 375×667, light) with tweaks 
 | C-06 Receipt scan | `C06Receipt` | ✓ | ✓ | tap to fill (Classic), suggested (AI) | SE | ✓ |
 | C-07 Barcode scanner | `C07Barcode` | ✓ | ✓ | aiming, barcode added | SE | ✓ |
 | C-08 Serial sticker reader | `C08Serial` | ✓ | ✓ | pick a line (Classic), suggested (AI) | SE | ✓ |
+| I-01 Item detail | `ItemDetail` | ✓ | ✓ | default, lent, private (unlocked), private (locked) | SE, 6.3 in, 6.9 in | ✓ |
+| I-01 regular width | `ItemDetailRegular` | ✓ | ✓ | detail beside the grid | 6.9 in landscape | — |
+| I-02 Item editor | `I02Editor` | ✓ | ✓ | new, suggested fields, warranty warning, discard changes | SE | ✓ |
+| I-03 Photo viewer | `I03Photo` | ✓ | ✓ | — | SE | ✓ |
+| I-04 Move picker | `I04Move` | ✓ | ✓ | one item, 3 items, moved with Undo | SE | ✓ |
+| I-05 Location history | `I05History` | ✓ | ✓ | — | SE | ✓ |
+| I-06 Lend sheet | `I06Lend` | ✓ | ✓ | — | SE | ✓ |
+| I-07 Receipt viewer | `I07Receipt` | ✓ | ✓ | — | SE | ✓ |
+| I-08 Multi-select | `I08Select` | ✓ | ✓ | 3 selected | SE | ✓ |
 
-**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `ItemDetail` (I-01), `Find` (F-01/F-03), `Paywall` (P-01).
+**Not yet rebased** (later P0 batches; still 390×844 and partly untokenized): `Find` (F-01/F-03), `Paywall` (P-01).
 
 Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are labelled placeholders (`[ILLUSTRATION: …]`) until the illustrations PR.
 
