@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Room: Kitchen</title>
+<title>Spot and container</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -90,33 +90,46 @@ h1,h2,h3,p{margin:0}
 </style>
 </helmet>
 <div class="{{cls}}" style="position: relative; width: {{w}}px; height: {{h}}px; overflow: hidden; background: var(--canvas); color: var(--text); font-family: var(--sans); font-size: var(--fs-body); line-height: var(--lh-body)">
-<header class="r-butter" style="padding: {{navTop}}px 16px 24px; border-radius: 0 0 32px 32px; background: var(--rf); display: flex; flex-direction: column; gap: 16px">
-<div style="display: flex; align-items: center; justify-content: space-between"><a href="Main.dc.html" class="glass glass-btn" aria-label="Back to Home"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg></a><div class="glass glass-group"><button aria-label="Scan this room"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/></svg></button><button aria-label="Add spot"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><button aria-label="More: Select, Edit room, Room report"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h.01M12 12h.01M18 12h.01" style="stroke-width: 2.6"/></svg></button></div></div>
-<div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; align-items: center; gap: 8px"><span style="color: var(--ri); display: flex"><svg class="i" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v5a2.5 2.5 0 0 0 5 0v-5M8.5 3.5v17M16 20.5v-17c2.2 1.5 3 4.5 3 8h-3"/></svg></span><h1 class="t-display">Kitchen</h1></div>
-<sc-if value="{{is_populated}}" hint-placeholder-val="{{ true }}"><p class="t-meta num">48 items · $6,240</p></sc-if>
-<sc-if value="{{is_empty}}" hint-placeholder-val="{{ false }}"><p class="t-meta">3 spots · no items yet</p></sc-if>
+<div style="display: flex; flex-direction: column; gap: 24px; padding: {{navTop}}px 16px 160px">
+<div style="display: flex; align-items: center; justify-content: space-between"><a href="Main.dc.html" class="glass glass-btn" aria-label="Back to Kitchen"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg></a><div class="glass glass-group"><button aria-label="Add item here"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><button aria-label="Edit"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5l4 4L9 19H5v-4z"/></svg></button><button aria-label="More: Move container, Select"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h.01M12 12h.01M18 12h.01" style="stroke-width: 2.6"/></svg></button></div></div>
+<sc-if value="{{is_spot}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<button aria-label="Pantry photo" class="photo" style="aspect-ratio: 16 / 9; border-radius: 24px"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M3.5 5h17M3.5 12h17M3.5 19h17M5 5v14M19 5v14"/></svg></button>
+<div class="r-butter" style="display: flex; flex-direction: column; gap: 4px">
+<p class="t-meta" aria-label="Kitchen, Pantry"><span style="color: var(--ri); font-weight: 600">Kitchen</span> → Pantry</p>
+<h1 class="t-display">Pantry</h1>
+<p class="t-meta">14 items · 2 containers</p>
 </div>
-</header>
-<div style="display: flex; flex-direction: column; gap: 24px; padding: 16px 16px 160px">
-<sc-if value="{{is_populated}}" hint-placeholder-val="{{ true }}">
+</div>
 <section style="display: flex; flex-direction: column; gap: 8px">
-<a href="H03Spot.dc.html" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 16px"><span style="display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 8px"><h2 class="t-section">Counter</h2><span class="t-meta">6 items</span></span><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a>
-<div class="grid">
-<button class="card" aria-label="Espresso machine, $649" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M6 4h12v5H6zM8 9v11h8V9M5 20h14M10.5 14h3v2.5a1.5 1.5 0 0 1-3 0V14ZM12 9v2.5"/></svg></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Espresso machine</span><span class="t-meta num">$649</span></div></button>
-<button class="card" aria-label="Stand mixer, 429 dollars, lent out" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M5 20h12M6 5.5h9a3 3 0 0 1 3 3V10H6zM11 10v3M7.5 13h7a3.5 3.5 0 0 1-7 0ZM16 10v10"/></svg><span role="img" aria-label="Lent out" style="position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 14px; background: var(--surface); color: var(--info); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow)"><svg class="i" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Stand mixer</span><span class="t-meta num">$429</span></div></button>
-</div>
+<h2 class="t-section">Containers</h2>
+<div style="position: relative; margin-bottom: 8px"><div aria-hidden="true" style="position: absolute; left: 16px; right: 16px; bottom: -8px; height: 24px; border-radius: 0 0 16px 16px; background: var(--surface); border: 1px solid var(--hairline)"></div><div aria-hidden="true" style="position: absolute; left: 8px; right: 8px; bottom: -4px; height: 24px; border-radius: 0 0 18px 18px; background: var(--surface); border: 1px solid var(--hairline)"></div><a href="H03Spot-container.dc.html" class="card wcard r-butter" aria-label="Baking bin, container, 7 items" style="position: relative; width: 100%"><div class="thumb" style="background: var(--rf); color: var(--ri)"><svg class="i" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16V8ZM3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></div><div style="display: flex; flex-direction: column; flex: 1; min-width: 0"><span class="t-headline">Baking bin</span><span class="t-meta">Container · 7 items</span></div><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a></div><div style="position: relative; margin-bottom: 8px"><div aria-hidden="true" style="position: absolute; left: 16px; right: 16px; bottom: -8px; height: 24px; border-radius: 0 0 16px 16px; background: var(--surface); border: 1px solid var(--hairline)"></div><div aria-hidden="true" style="position: absolute; left: 8px; right: 8px; bottom: -4px; height: 24px; border-radius: 0 0 18px 18px; background: var(--surface); border: 1px solid var(--hairline)"></div><a href="H03Spot-container.dc.html" class="card wcard r-butter" aria-label="Spice tins, container, 5 items" style="position: relative; width: 100%"><div class="thumb" style="background: var(--rf); color: var(--ri)"><svg class="i" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16V8ZM3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></div><div style="display: flex; flex-direction: column; flex: 1; min-width: 0"><span class="t-headline">Spice tins</span><span class="t-meta">Container · 5 items</span></div><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a></div>
 </section>
-<section style="display: flex; flex-direction: column; gap: 8px">
-<a href="H03Spot.dc.html" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 16px"><span style="display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 8px"><h2 class="t-section">Pantry</h2><span class="t-meta">14 items</span></span><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a><div style="position: relative; margin-bottom: 8px"><div aria-hidden="true" style="position: absolute; left: 16px; right: 16px; bottom: -8px; height: 24px; border-radius: 0 0 16px 16px; background: var(--surface); border: 1px solid var(--hairline)"></div><div aria-hidden="true" style="position: absolute; left: 8px; right: 8px; bottom: -4px; height: 24px; border-radius: 0 0 18px 18px; background: var(--surface); border: 1px solid var(--hairline)"></div><a href="H03Spot-container.dc.html" class="card wcard r-butter" aria-label="Baking bin, container, 7 items" style="position: relative; width: 100%"><div class="thumb" style="background: var(--rf); color: var(--ri)"><svg class="i" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16V8ZM3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></div><div style="display: flex; flex-direction: column; flex: 1; min-width: 0"><span class="t-headline">Baking bin</span><span class="t-meta">Container · 7 items</span></div><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a></div>
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 class="t-section">On this spot</h2>
 <div class="grid">
 <button class="card" aria-label="Dutch oven, $320" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M5 10h14v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-6ZM3 12h2M19 12h2M7 10a5 5 0 0 1 10 0M12 4v1"/></svg></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Dutch oven</span><span class="t-meta num">$320</span></div></button>
 <button class="card" aria-label="Blender, $180" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M8 4h9l-1.5 10h-6zM8 6.5H6.5v3h2M9 14l-1 6h9l-1-6M12 17h1"/></svg></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Blender</span><span class="t-meta num">$180</span></div></button>
 </div>
 </section>
 </sc-if>
-<sc-if value="{{is_empty}}" hint-placeholder-val="{{ false }}">
-<div class="card" style="padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center"><div aria-hidden="true" class="t-foot" style="width: 100%; height: 160px; border-radius: 16px; background: var(--sunken); color: var(--text3); display: flex; align-items: center; justify-content: center">[ILLUSTRATION: empty kitchen shelf]</div><h2 class="t-section">Nothing here yet.</h2><p class="t-meta">Scan this room to fill it in 30 seconds.</p><button class="btn-primary" style="align-self: stretch"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/></svg>Scan this room</button></div>
+<sc-if value="{{is_container}}" hint-placeholder-val="{{ false }}">
+<div class="r-butter" style="display: flex; flex-direction: column; gap: 4px">
+<p class="t-meta" aria-label="Kitchen, Pantry, Baking bin"><span style="color: var(--ri); font-weight: 600">Kitchen</span> → Pantry → Baking bin</p>
+<div style="display: flex; align-items: center; gap: 8px"><span style="color: var(--ri); display: flex"><svg class="i" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16V8ZM3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></span><h1 class="t-display">Baking bin</h1></div>
+<p class="t-meta">Container · 7 items</p>
+</div>
+<div class="rows">
+<a href="H06QRLabel.dc.html" class="row"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent)"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2v2M20 14v.01M14 20h.01M17 17h3v3"/></svg><span class="t-body" style="flex: 1">Print or share label</span><svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text3)"><path d="m9 6 6 6-6 6"/></svg></a>
+<button class="row"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent)"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span class="t-body" style="flex: 1">Packed on</span><span class="t-meta">Not packed</span></button>
+</div>
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 class="t-section">Inside</h2>
+<div class="grid">
+<button class="card" aria-label="Measuring cups, $24" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M8 3.5h8M7 6h10v13.5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1ZM7 10h10"/></svg></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Measuring cups</span><span class="t-meta num">$24</span></div></button>
+<button class="card" aria-label="Hand mixer, $59" style="padding: 8px; display: flex; flex-direction: column; gap: 8px; text-align: left"><div class="photo" style="position: relative"><svg class="i" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.3"><path d="M5 20h12M6 5.5h9a3 3 0 0 1 3 3V10H6zM11 10v3M7.5 13h7a3.5 3.5 0 0 1-7 0ZM16 10v10"/></svg></div><div style="display: flex; flex-direction: column; padding: 0 4px 4px"><span class="t-headline">Hand mixer</span><span class="t-meta num">$59</span></div></button>
+</div>
+</section>
 </sc-if>
 </div>
 <button aria-label="Capture" style="position: absolute; right: 16px; top: {{capTop}}px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent); color: var(--on-accent); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.35); box-shadow: var(--glass-shadow)"><svg class="i" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><rect x="7.5" y="9.5" width="9" height="6.5" rx="1.5"/><circle cx="12" cy="12.75" r="1.5"/></svg></button>
@@ -128,14 +141,14 @@ h1,h2,h3,p{margin:0}
 </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"accent":{"editor":"enum","options":["terracotta","sage","ocean","plum","slate","rose"],"default":"terracotta"},"ax5":{"editor":"boolean","default":false},"device":{"editor":"enum","options":["se","pro","max"],"default":"se"},"state":{"editor":"enum","options":["populated","empty"],"default":"populated"},"tall":{"editor":null},"$preview":{"width":375,"height":667}}'>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"accent":{"editor":"enum","options":["terracotta","sage","ocean","plum","slate","rose"],"default":"terracotta"},"ax5":{"editor":"boolean","default":false},"device":{"editor":"enum","options":["se","pro","max"],"default":"se"},"state":{"editor":"enum","options":["spot","container"],"default":"spot"},"tall":{"editor":null},"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
 renderVals() {
 // Device frames from 03 §12 (iPhone 18 point sizes still to verify, D11). Safe areas: top, bottom.
 const devices = { se: [375, 667, 20, 0], pro: [402, 874, 62, 34], max: [440, 956, 62, 34] };
 const p = this.props;
 const d = devices[p.device] || devices.se;
-const st = p.state || 'populated';
+const st = p.state || 'spot';
 const vals = {
 cls: ['nk', p.dark ? 'dark' : '', p.ax5 ? 'ax5' : '', 'acc-' + (p.accent || 'terracotta')].filter(Boolean).join(' '),
 w: d[0],
@@ -148,7 +161,7 @@ padBottom: d[3] + 16,
 tabTop: d[1] - d[3] - 8 - 62,
 capTop: d[1] - d[3] - 8 - 62 - 16 - 56
 };
-["populated", "empty"].forEach((s) => { vals['is_' + s] = st === s; });
+["spot", "container"].forEach((s) => { vals['is_' + s] = st === s; });
 return vals;
 }
 }
