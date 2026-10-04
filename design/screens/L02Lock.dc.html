@@ -95,7 +95,7 @@ h1,h2,h3,p{margin:0}
 <h1 class="t-title">Nook is locked</h1>
 <sc-if value="{{is_failed}}" hint-placeholder-val="{{ false }}"><p role="alert" class="t-meta">Face ID didn’t recognize you. Try again, or use your passcode.</p></sc-if>
 <sc-if value="{{is_touchid}}" hint-placeholder-val="{{ false }}"><button class="btn-primary" style="align-self: stretch"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6.5a7 7 0 0 1 10 0M5 10a7.5 7.5 0 0 1 14 0M8 20a10 10 0 0 0 1.5-6.5 2.5 2.5 0 0 1 5 0c0 2-.3 4-1 5.5M12 13.5c0 3-.6 5-1.8 7M16.5 18.5a14 14 0 0 0 .5-4"/></svg>Unlock with Touch ID</button></sc-if>
-<sc-if value="{{show_faceid}}" hint-placeholder-val="{{ true }}"><button class="btn-primary" style="align-self: stretch"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M9 9.5v1M15 9.5v1M12 9.5V13h-1M9.5 16a3.5 3.5 0 0 0 5 0"/></svg>Unlock with Face ID</button></sc-if>
+<sc-if value="{{show_faceid}}" hint-placeholder-val="{{ true }}"><a href="Main.dc.html" class="btn-primary" style="align-self: stretch"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M9 9.5v1M15 9.5v1M12 9.5V13h-1M9.5 16a3.5 3.5 0 0 0 5 0"/></svg>Unlock with Face ID</a></sc-if>
 </div>
 </div>
 </x-dc>

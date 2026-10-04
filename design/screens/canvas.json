@@ -8,7 +8,8 @@
       "title": "C-01 Capture menu · AX5",
       "w": 375,
       "x": 1365,
-      "y": 24964
+      "y": 24964,
+      "is_interactive": true
     },
     "C01CaptureMenu-dark.dc.html": {
       "h": 667,
@@ -16,7 +17,8 @@
       "title": "C-01 Capture menu · Dark",
       "w": 375,
       "x": 455,
-      "y": 24964
+      "y": 24964,
+      "is_interactive": true
     },
     "C01CaptureMenu-room.dc.html": {
       "h": 667,
@@ -24,7 +26,8 @@
       "title": "C-01 From a room",
       "w": 375,
       "x": 910,
-      "y": 24964
+      "y": 24964,
+      "is_interactive": true
     },
     "C01CaptureMenu.dc.html": {
       "h": 667,
@@ -32,7 +35,8 @@
       "title": "C-01 Capture menu",
       "w": 375,
       "x": 0,
-      "y": 24964
+      "y": 24964,
+      "is_interactive": true
     },
     "C02RoomScan-ax5.dc.html": {
       "h": 667,
@@ -40,7 +44,8 @@
       "title": "C-02 Room scan · AX5",
       "w": 375,
       "x": 4187,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-dark.dc.html": {
       "h": 667,
@@ -48,7 +53,8 @@
       "title": "C-02 Room scan · Dark",
       "w": 375,
       "x": 455,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-denied-dark.dc.html": {
       "h": 667,
@@ -56,7 +62,8 @@
       "title": "C-02 Camera off · Dark",
       "w": 375,
       "x": 2730,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-denied.dc.html": {
       "h": 667,
@@ -64,7 +71,8 @@
       "title": "C-02 Camera off",
       "w": 375,
       "x": 2275,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-max.dc.html": {
       "h": 956,
@@ -72,7 +80,8 @@
       "title": "C-02 Room scan · 6.9 in",
       "w": 440,
       "x": 3667,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-permission-dark.dc.html": {
       "h": 667,
@@ -80,7 +89,8 @@
       "title": "C-02 Camera soft ask · Dark",
       "w": 375,
       "x": 1820,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-permission.dc.html": {
       "h": 667,
@@ -88,7 +98,8 @@
       "title": "C-02 Camera soft ask",
       "w": 375,
       "x": 1365,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-pro.dc.html": {
       "h": 874,
@@ -96,7 +107,8 @@
       "title": "C-02 Room scan · 6.3 in",
       "w": 402,
       "x": 3185,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan-shooting.dc.html": {
       "h": 667,
@@ -104,7 +116,8 @@
       "title": "C-02 Room scan · 2 photos taken",
       "w": 375,
       "x": 910,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C02RoomScan.dc.html": {
       "h": 667,
@@ -112,7 +125,8 @@
       "title": "C-02 Room scan · First scan coach",
       "w": 375,
       "x": 0,
-      "y": 26984
+      "y": 26984,
+      "is_interactive": true
     },
     "C04ManualTag-ax5.dc.html": {
       "h": 2400,
@@ -120,7 +134,8 @@
       "title": "C-04 Manual tagging · AX5",
       "w": 375,
       "x": 1820,
-      "y": 31380
+      "y": 31380,
+      "is_interactive": true
     },
     "C04ManualTag-dark.dc.html": {
       "h": 667,
@@ -128,7 +143,8 @@
       "title": "C-04 Manual tagging · Dark",
       "w": 375,
       "x": 455,
-      "y": 31380
+      "y": 31380,
+      "is_interactive": true
     },
     "C04ManualTag-list-dark.dc.html": {
       "h": 667,
@@ -136,7 +152,8 @@
       "title": "C-04 Tagged list · Dark",
       "w": 375,
       "x": 1365,
-      "y": 31380
+      "y": 31380,
+      "is_interactive": true
     },
     "C04ManualTag-list.dc.html": {
       "h": 667,
@@ -144,7 +161,8 @@
       "title": "C-04 Tagged list",
       "w": 375,
       "x": 910,
-      "y": 31380
+      "y": 31380,
+      "is_interactive": true
     },
     "C04ManualTag.dc.html": {
       "h": 667,
@@ -152,7 +170,8 @@
       "title": "C-04 Manual tagging · Naming",
       "w": 375,
       "x": 0,
-      "y": 31380
+      "y": 31380,
+      "is_interactive": true
     },
     "C05QuickAdd-ax5.dc.html": {
       "h": 667,
@@ -160,7 +179,8 @@
       "title": "C-05 Quick add · AX5",
       "w": 375,
       "x": 910,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C05QuickAdd-dark.dc.html": {
       "h": 667,
@@ -168,7 +188,8 @@
       "title": "C-05 Quick add · Dark",
       "w": 375,
       "x": 455,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C05QuickAdd.dc.html": {
       "h": 667,
@@ -176,7 +197,8 @@
       "title": "C-05 Quick add",
       "w": 375,
       "x": 0,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C06Receipt-ax5.dc.html": {
       "h": 2000,
@@ -184,7 +206,8 @@
       "title": "C-06 Receipt · AX5",
       "w": 375,
       "x": 3185,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C06Receipt-dark.dc.html": {
       "h": 667,
@@ -192,7 +215,8 @@
       "title": "C-06 Receipt · Dark",
       "w": 375,
       "x": 1820,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C06Receipt-suggested-dark.dc.html": {
       "h": 667,
@@ -200,7 +224,8 @@
       "title": "C-06 Receipt · Suggested · Dark",
       "w": 375,
       "x": 2730,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C06Receipt-suggested.dc.html": {
       "h": 667,
@@ -208,7 +233,8 @@
       "title": "C-06 Receipt · Suggested",
       "w": 375,
       "x": 2275,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C06Receipt.dc.html": {
       "h": 667,
@@ -216,7 +242,8 @@
       "title": "C-06 Receipt · Tap to fill",
       "w": 375,
       "x": 1365,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C07Barcode-ax5.dc.html": {
       "h": 667,
@@ -224,7 +251,8 @@
       "title": "C-07 Barcode · AX5",
       "w": 375,
       "x": 5460,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C07Barcode-dark.dc.html": {
       "h": 667,
@@ -232,7 +260,8 @@
       "title": "C-07 Barcode · Dark",
       "w": 375,
       "x": 4095,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C07Barcode-found-dark.dc.html": {
       "h": 667,
@@ -240,7 +269,8 @@
       "title": "C-07 Barcode added · Dark",
       "w": 375,
       "x": 5005,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C07Barcode-found.dc.html": {
       "h": 667,
@@ -248,7 +278,8 @@
       "title": "C-07 Barcode added",
       "w": 375,
       "x": 4550,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C07Barcode.dc.html": {
       "h": 667,
@@ -256,7 +287,8 @@
       "title": "C-07 Barcode",
       "w": 375,
       "x": 3640,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C08Serial-ax5.dc.html": {
       "h": 2000,
@@ -264,7 +296,8 @@
       "title": "C-08 Serial · AX5",
       "w": 375,
       "x": 7735,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C08Serial-dark.dc.html": {
       "h": 667,
@@ -272,7 +305,8 @@
       "title": "C-08 Serial · Dark",
       "w": 375,
       "x": 6370,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C08Serial-suggested-dark.dc.html": {
       "h": 667,
@@ -280,7 +314,8 @@
       "title": "C-08 Serial · Suggested · Dark",
       "w": 375,
       "x": 7280,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C08Serial-suggested.dc.html": {
       "h": 667,
@@ -288,7 +323,8 @@
       "title": "C-08 Serial · Suggested",
       "w": 375,
       "x": 6825,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "C08Serial.dc.html": {
       "h": 667,
@@ -296,7 +332,8 @@
       "title": "C-08 Serial · Pick a line",
       "w": 375,
       "x": 5915,
-      "y": 34300
+      "y": 34300,
+      "is_interactive": true
     },
     "H03Spot-ax5.dc.html": {
       "h": 3600,
@@ -304,7 +341,8 @@
       "title": "H-03 Spot · AX5",
       "w": 375,
       "x": 1820,
-      "y": 14084
+      "y": 14084,
+      "is_interactive": true
     },
     "H03Spot-container-dark.dc.html": {
       "h": 667,
@@ -312,7 +350,8 @@
       "title": "H-03 Container · Dark",
       "w": 375,
       "x": 1365,
-      "y": 14084
+      "y": 14084,
+      "is_interactive": true
     },
     "H03Spot-container.dc.html": {
       "h": 667,
@@ -320,7 +359,8 @@
       "title": "H-03 Container",
       "w": 375,
       "x": 910,
-      "y": 14084
+      "y": 14084,
+      "is_interactive": true
     },
     "H03Spot-dark.dc.html": {
       "h": 667,
@@ -328,7 +368,8 @@
       "title": "H-03 Spot · Dark",
       "w": 375,
       "x": 455,
-      "y": 14084
+      "y": 14084,
+      "is_interactive": true
     },
     "H03Spot.dc.html": {
       "h": 667,
@@ -336,7 +377,8 @@
       "title": "H-03 Spot",
       "w": 375,
       "x": 0,
-      "y": 14084
+      "y": 14084,
+      "is_interactive": true
     },
     "H04RoomEditor-ax5.dc.html": {
       "h": 3000,
@@ -344,7 +386,8 @@
       "title": "H-04 Room editor · AX5",
       "w": 375,
       "x": 1820,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H04RoomEditor-dark.dc.html": {
       "h": 667,
@@ -352,7 +395,8 @@
       "title": "H-04 Room editor · Dark",
       "w": 375,
       "x": 455,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H04RoomEditor-delete-dark.dc.html": {
       "h": 667,
@@ -360,7 +404,8 @@
       "title": "H-04 Delete room · Dark",
       "w": 375,
       "x": 1365,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H04RoomEditor-delete.dc.html": {
       "h": 667,
@@ -368,7 +413,8 @@
       "title": "H-04 Delete room",
       "w": 375,
       "x": 910,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H04RoomEditor.dc.html": {
       "h": 667,
@@ -376,7 +422,8 @@
       "title": "H-04 Room editor",
       "w": 375,
       "x": 0,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H05SpotEditor-ax5.dc.html": {
       "h": 2400,
@@ -384,7 +431,8 @@
       "title": "H-05 Spot editor · AX5",
       "w": 375,
       "x": 3640,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H05SpotEditor-container.dc.html": {
       "h": 667,
@@ -392,7 +440,8 @@
       "title": "H-05 Container editor",
       "w": 375,
       "x": 3185,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H05SpotEditor-dark.dc.html": {
       "h": 667,
@@ -400,7 +449,8 @@
       "title": "H-05 Spot editor · Dark",
       "w": 375,
       "x": 2730,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H05SpotEditor.dc.html": {
       "h": 667,
@@ -408,7 +458,8 @@
       "title": "H-05 Spot editor",
       "w": 375,
       "x": 2275,
-      "y": 18204
+      "y": 18204,
+      "is_interactive": true
     },
     "H06QRLabel-ax5.dc.html": {
       "h": 2400,
@@ -416,7 +467,8 @@
       "title": "H-06 QR box label · AX5",
       "w": 375,
       "x": 910,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "H06QRLabel-dark.dc.html": {
       "h": 667,
@@ -424,7 +476,8 @@
       "title": "H-06 QR box label · Dark",
       "w": 375,
       "x": 455,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "H06QRLabel.dc.html": {
       "h": 667,
@@ -432,7 +485,8 @@
       "title": "H-06 QR box label",
       "w": 375,
       "x": 0,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "H07Arrange-ax5.dc.html": {
       "h": 2600,
@@ -440,7 +494,8 @@
       "title": "H-07 Arrange rooms · AX5",
       "w": 375,
       "x": 2275,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "H07Arrange-dark.dc.html": {
       "h": 667,
@@ -448,7 +503,8 @@
       "title": "H-07 Arrange rooms · Dark",
       "w": 375,
       "x": 1820,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "H07Arrange.dc.html": {
       "h": 667,
@@ -456,7 +512,8 @@
       "title": "H-07 Arrange rooms",
       "w": 375,
       "x": 1365,
-      "y": 21724
+      "y": 21724,
+      "is_interactive": true
     },
     "HomeRegular-dark.dc.html": {
       "h": 440,
@@ -464,7 +521,8 @@
       "title": "H-01/H-02 Regular width · Dark",
       "w": 956,
       "x": 1036,
-      "y": 9204
+      "y": 9204,
+      "is_interactive": true
     },
     "HomeRegular.dc.html": {
       "h": 440,
@@ -472,7 +530,8 @@
       "title": "H-01/H-02 Regular width",
       "w": 956,
       "x": 0,
-      "y": 9204
+      "y": 9204,
+      "is_interactive": true
     },
     "L01Launch-dark.dc.html": {
       "h": 667,
@@ -480,7 +539,8 @@
       "title": "L-01 Launch · Dark",
       "w": 375,
       "x": 455,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "L01Launch.dc.html": {
       "h": 667,
@@ -488,7 +548,8 @@
       "title": "L-01 Launch",
       "w": 375,
       "x": 0,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "Main-ax5.dc.html": {
       "h": 4200,
@@ -496,7 +557,8 @@
       "title": "H-01 Home · AX5",
       "w": 375,
       "x": 4642,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-dark.dc.html": {
       "h": 667,
@@ -504,7 +566,8 @@
       "title": "H-01 Home · Dark",
       "w": 375,
       "x": 455,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-empty-dark.dc.html": {
       "h": 667,
@@ -512,7 +575,8 @@
       "title": "H-01 Home · Empty · Dark",
       "w": 375,
       "x": 1365,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-empty.dc.html": {
       "h": 667,
@@ -520,7 +584,8 @@
       "title": "H-01 Home · Empty",
       "w": 375,
       "x": 910,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-error-dark.dc.html": {
       "h": 667,
@@ -528,7 +593,8 @@
       "title": "H-01 Home · Error · Dark",
       "w": 375,
       "x": 3185,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-error.dc.html": {
       "h": 667,
@@ -536,7 +602,8 @@
       "title": "H-01 Home · Error",
       "w": 375,
       "x": 2730,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-loading-dark.dc.html": {
       "h": 667,
@@ -544,7 +611,8 @@
       "title": "H-01 Home · Loading · Dark",
       "w": 375,
       "x": 2275,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-loading.dc.html": {
       "h": 667,
@@ -552,7 +620,8 @@
       "title": "H-01 Home · Loading",
       "w": 375,
       "x": 1820,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-max.dc.html": {
       "h": 956,
@@ -560,7 +629,8 @@
       "title": "H-01 Home · 6.9 in",
       "w": 440,
       "x": 4122,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main-pro.dc.html": {
       "h": 874,
@@ -568,7 +638,8 @@
       "title": "H-01 Home · 6.3 in",
       "w": 402,
       "x": 3640,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "Main.dc.html": {
       "h": 667,
@@ -576,7 +647,8 @@
       "title": "H-01 Home",
       "w": 375,
       "x": 0,
-      "y": 4484
+      "y": 4484,
+      "is_interactive": true
     },
     "O01Welcome-ax5.dc.html": {
       "h": 2000,
@@ -584,7 +656,8 @@
       "title": "O-01 Welcome · AX5",
       "w": 375,
       "x": 1820,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "O01Welcome-dark.dc.html": {
       "h": 667,
@@ -592,7 +665,8 @@
       "title": "O-01 Welcome · Dark",
       "w": 375,
       "x": 1365,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "O01Welcome.dc.html": {
       "h": 667,
@@ -600,7 +674,8 @@
       "title": "O-01 Welcome",
       "w": 375,
       "x": 910,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "O02Rooms-ax5.dc.html": {
       "h": 2600,
@@ -608,7 +683,8 @@
       "title": "O-02 Pick your rooms · AX5",
       "w": 375,
       "x": 3185,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "O02Rooms-dark.dc.html": {
       "h": 667,
@@ -616,7 +692,8 @@
       "title": "O-02 Pick your rooms · Dark",
       "w": 375,
       "x": 2730,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "O02Rooms.dc.html": {
       "h": 667,
@@ -624,7 +701,8 @@
       "title": "O-02 Pick your rooms",
       "w": 375,
       "x": 2275,
-      "y": 1364
+      "y": 1364,
+      "is_interactive": true
     },
     "Room-ax5.dc.html": {
       "h": 3400,
@@ -632,7 +710,8 @@
       "title": "H-02 Room · AX5",
       "w": 375,
       "x": 2822,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room-dark.dc.html": {
       "h": 667,
@@ -640,7 +719,8 @@
       "title": "H-02 Room · Dark",
       "w": 375,
       "x": 455,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room-empty-dark.dc.html": {
       "h": 667,
@@ -648,7 +728,8 @@
       "title": "H-02 Room · Empty · Dark",
       "w": 375,
       "x": 1365,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room-empty.dc.html": {
       "h": 667,
@@ -656,7 +737,8 @@
       "title": "H-02 Room · Empty",
       "w": 375,
       "x": 910,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room-max.dc.html": {
       "h": 956,
@@ -664,7 +746,8 @@
       "title": "H-02 Room · 6.9 in",
       "w": 440,
       "x": 2302,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room-pro.dc.html": {
       "h": 874,
@@ -672,7 +755,8 @@
       "title": "H-02 Room · 6.3 in",
       "w": 402,
       "x": 1820,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "Room.dc.html": {
       "h": 667,
@@ -680,7 +764,8 @@
       "title": "H-02 Room",
       "w": 375,
       "x": 0,
-      "y": 10164
+      "y": 10164,
+      "is_interactive": true
     },
     "ScanReview-ax5.dc.html": {
       "h": 2400,
@@ -688,7 +773,8 @@
       "title": "C-03 Scan review · AX5",
       "w": 375,
       "x": 2822,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview-dark.dc.html": {
       "h": 667,
@@ -696,7 +782,8 @@
       "title": "C-03 Scan review · Dark",
       "w": 375,
       "x": 455,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview-max.dc.html": {
       "h": 956,
@@ -704,7 +791,8 @@
       "title": "C-03 Scan review · 6.9 in",
       "w": 440,
       "x": 2302,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview-pro.dc.html": {
       "h": 874,
@@ -712,7 +800,8 @@
       "title": "C-03 Scan review · 6.3 in",
       "w": 402,
       "x": 1820,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview-streaming-dark.dc.html": {
       "h": 667,
@@ -720,7 +809,8 @@
       "title": "C-03 Streaming in · Dark",
       "w": 375,
       "x": 1365,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview-streaming.dc.html": {
       "h": 667,
@@ -728,7 +818,8 @@
       "title": "C-03 Streaming in",
       "w": 375,
       "x": 910,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReview.dc.html": {
       "h": 667,
@@ -736,7 +827,8 @@
       "title": "C-03 Scan review",
       "w": 375,
       "x": 0,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReviewRegular-dark.dc.html": {
       "h": 440,
@@ -744,7 +836,8 @@
       "title": "C-03 Regular width · Dark",
       "w": 956,
       "x": 4313,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ScanReviewRegular.dc.html": {
       "h": 440,
@@ -752,7 +845,8 @@
       "title": "C-03 Regular width",
       "w": 956,
       "x": 3277,
-      "y": 28460
+      "y": 28460,
+      "is_interactive": true
     },
     "ItemDetail.dc.html": {
       "x": 0,
@@ -760,7 +854,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Default",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-dark.dc.html": {
       "x": 455,
@@ -768,7 +863,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-lent.dc.html": {
       "x": 910,
@@ -776,7 +872,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Lent",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-lent-dark.dc.html": {
       "x": 1365,
@@ -784,7 +881,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Lent · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-private.dc.html": {
       "x": 1820,
@@ -792,7 +890,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Private, unlocked",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-private-dark.dc.html": {
       "x": 2275,
@@ -800,7 +899,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Private, unlocked · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-locked.dc.html": {
       "x": 2730,
@@ -808,7 +908,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Private, locked",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-locked-dark.dc.html": {
       "x": 3185,
@@ -816,7 +917,8 @@
       "w": 375,
       "h": 667,
       "title": "I-01 Item detail · Private, locked · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-pro.dc.html": {
       "x": 3640,
@@ -824,7 +926,8 @@
       "w": 402,
       "h": 874,
       "title": "I-01 Item detail · 6.3 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-max.dc.html": {
       "x": 4122,
@@ -832,7 +935,8 @@
       "w": 440,
       "h": 956,
       "title": "I-01 Item detail · 6.9 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetail-ax5.dc.html": {
       "x": 4642,
@@ -840,7 +944,8 @@
       "w": 375,
       "h": 4600,
       "title": "I-01 Item detail · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "ItemDetailRegular.dc.html": {
       "x": 5097,
@@ -848,7 +953,8 @@
       "w": 956,
       "h": 440,
       "title": "I-01 Regular width",
-      "radius": 24
+      "radius": 24,
+      "is_interactive": true
     },
     "ItemDetailRegular-dark.dc.html": {
       "x": 6133,
@@ -856,7 +962,8 @@
       "w": 956,
       "h": 440,
       "title": "I-01 Regular width · Dark",
-      "radius": 24
+      "radius": 24,
+      "is_interactive": true
     },
     "I02Editor.dc.html": {
       "x": 0,
@@ -864,7 +971,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · New",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-dark.dc.html": {
       "x": 455,
@@ -872,7 +980,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-suggested.dc.html": {
       "x": 910,
@@ -880,7 +989,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Suggested fields",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-suggested-dark.dc.html": {
       "x": 1365,
@@ -888,7 +998,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Suggested fields · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-warning.dc.html": {
       "x": 1820,
@@ -896,7 +1007,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Warranty warning",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-warning-dark.dc.html": {
       "x": 2275,
@@ -904,7 +1016,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Warranty warning · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-discard.dc.html": {
       "x": 2730,
@@ -912,7 +1025,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Discard changes?",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-discard-dark.dc.html": {
       "x": 3185,
@@ -920,7 +1034,8 @@
       "w": 375,
       "h": 667,
       "title": "I-02 Item editor · Discard changes? · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I02Editor-ax5.dc.html": {
       "x": 3640,
@@ -928,7 +1043,8 @@
       "w": 375,
       "h": 4000,
       "title": "I-02 Item editor · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I03Photo.dc.html": {
       "x": 0,
@@ -936,7 +1052,8 @@
       "w": 375,
       "h": 667,
       "title": "I-03 Photo viewer",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I03Photo-dark.dc.html": {
       "x": 455,
@@ -944,7 +1061,8 @@
       "w": 375,
       "h": 667,
       "title": "I-03 Photo viewer · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I03Photo-ax5.dc.html": {
       "x": 910,
@@ -952,7 +1070,8 @@
       "w": 375,
       "h": 1200,
       "title": "I-03 Photo viewer · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move.dc.html": {
       "x": 1365,
@@ -960,7 +1079,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · One item",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-dark.dc.html": {
       "x": 1820,
@@ -968,7 +1088,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-many.dc.html": {
       "x": 2275,
@@ -976,7 +1097,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · 3 items",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-many-dark.dc.html": {
       "x": 2730,
@@ -984,7 +1106,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · 3 items · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-moved.dc.html": {
       "x": 3185,
@@ -992,7 +1115,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · Moved, with Undo",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-moved-dark.dc.html": {
       "x": 3640,
@@ -1000,7 +1124,8 @@
       "w": 375,
       "h": 667,
       "title": "I-04 Move · Moved, with Undo · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I04Move-ax5.dc.html": {
       "x": 4095,
@@ -1008,7 +1133,8 @@
       "w": 375,
       "h": 3000,
       "title": "I-04 Move · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I05History.dc.html": {
       "x": 4550,
@@ -1016,7 +1142,8 @@
       "w": 375,
       "h": 667,
       "title": "I-05 Location history",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I05History-dark.dc.html": {
       "x": 5005,
@@ -1024,7 +1151,8 @@
       "w": 375,
       "h": 667,
       "title": "I-05 Location history · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I05History-ax5.dc.html": {
       "x": 5460,
@@ -1032,7 +1160,8 @@
       "w": 375,
       "h": 3000,
       "title": "I-05 Location history · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I06Lend.dc.html": {
       "x": 0,
@@ -1040,7 +1169,8 @@
       "w": 375,
       "h": 667,
       "title": "I-06 Lend",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I06Lend-dark.dc.html": {
       "x": 455,
@@ -1048,7 +1178,8 @@
       "w": 375,
       "h": 667,
       "title": "I-06 Lend · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I06Lend-ax5.dc.html": {
       "x": 910,
@@ -1056,7 +1187,8 @@
       "w": 375,
       "h": 2000,
       "title": "I-06 Lend · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I07Receipt.dc.html": {
       "x": 1365,
@@ -1064,7 +1196,8 @@
       "w": 375,
       "h": 667,
       "title": "I-07 Receipt viewer",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I07Receipt-dark.dc.html": {
       "x": 1820,
@@ -1072,7 +1205,8 @@
       "w": 375,
       "h": 667,
       "title": "I-07 Receipt viewer · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I07Receipt-ax5.dc.html": {
       "x": 2275,
@@ -1080,7 +1214,8 @@
       "w": 375,
       "h": 1400,
       "title": "I-07 Receipt viewer · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I08Select.dc.html": {
       "x": 2730,
@@ -1088,7 +1223,8 @@
       "w": 375,
       "h": 667,
       "title": "I-08 Multi-select",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I08Select-dark.dc.html": {
       "x": 3185,
@@ -1096,7 +1232,8 @@
       "w": 375,
       "h": 667,
       "title": "I-08 Multi-select · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "I08Select-ax5.dc.html": {
       "x": 3640,
@@ -1104,7 +1241,8 @@
       "w": 375,
       "h": 3000,
       "title": "I-08 Multi-select · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find.dc.html": {
       "x": 0,
@@ -1112,7 +1250,8 @@
       "w": 375,
       "h": 667,
       "title": "F-01 Find · Before typing",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-dark.dc.html": {
       "x": 455,
@@ -1120,7 +1259,8 @@
       "w": 375,
       "h": 667,
       "title": "F-01 Find · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-saved.dc.html": {
       "x": 910,
@@ -1128,7 +1268,8 @@
       "w": 375,
       "h": 667,
       "title": "F-06 Saved search, swiped",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-saved-dark.dc.html": {
       "x": 1365,
@@ -1136,7 +1277,8 @@
       "w": 375,
       "h": 667,
       "title": "F-06 Saved search, swiped · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-results.dc.html": {
       "x": 1820,
@@ -1144,7 +1286,8 @@
       "w": 375,
       "h": 667,
       "title": "F-02 Results (typo, private)",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-results-dark.dc.html": {
       "x": 2275,
@@ -1152,7 +1295,8 @@
       "w": 375,
       "h": 667,
       "title": "F-02 Results · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-noresults.dc.html": {
       "x": 2730,
@@ -1160,7 +1304,8 @@
       "w": 375,
       "h": 667,
       "title": "F-02 No results",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-noresults-dark.dc.html": {
       "x": 3185,
@@ -1168,7 +1313,8 @@
       "w": 375,
       "h": 667,
       "title": "F-02 No results · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-pro.dc.html": {
       "x": 3640,
@@ -1176,7 +1322,8 @@
       "w": 402,
       "h": 874,
       "title": "F-01 Find · 6.3 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-max.dc.html": {
       "x": 4122,
@@ -1184,7 +1331,8 @@
       "w": 440,
       "h": 956,
       "title": "F-01 Find · 6.9 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-ax5.dc.html": {
       "x": 4642,
@@ -1192,7 +1340,8 @@
       "w": 375,
       "h": 3000,
       "title": "F-01 Find · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-answer.dc.html": {
       "x": 0,
@@ -1200,7 +1349,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Location",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-answer-dark.dc.html": {
       "x": 455,
@@ -1208,7 +1358,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Location · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-lent.dc.html": {
       "x": 910,
@@ -1216,7 +1367,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Lent",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-lent-dark.dc.html": {
       "x": 1365,
@@ -1224,7 +1376,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Lent · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-packed.dc.html": {
       "x": 1820,
@@ -1232,7 +1385,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Packed",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-packed-dark.dc.html": {
       "x": 2275,
@@ -1240,7 +1394,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Packed · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-contents.dc.html": {
       "x": 2730,
@@ -1248,7 +1403,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Room contents",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-contents-dark.dc.html": {
       "x": 3185,
@@ -1256,7 +1412,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Room contents · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-quantity.dc.html": {
       "x": 3640,
@@ -1264,7 +1421,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Quantity",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-quantity-dark.dc.html": {
       "x": 4095,
@@ -1272,7 +1430,8 @@
       "w": 375,
       "h": 667,
       "title": "F-03 Answer · Quantity · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-answer-pro.dc.html": {
       "x": 4550,
@@ -1280,7 +1439,8 @@
       "w": 402,
       "h": 874,
       "title": "F-03 Answer · 6.3 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-answer-max.dc.html": {
       "x": 5032,
@@ -1288,7 +1448,8 @@
       "w": 440,
       "h": 956,
       "title": "F-03 Answer · 6.9 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-answer-ax5.dc.html": {
       "x": 5552,
@@ -1296,7 +1457,8 @@
       "w": 375,
       "h": 3000,
       "title": "F-03 Answer · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "FindRegular.dc.html": {
       "x": 6007,
@@ -1304,7 +1466,8 @@
       "w": 956,
       "h": 440,
       "title": "F-01/F-03 Regular width",
-      "radius": 24
+      "radius": 24,
+      "is_interactive": true
     },
     "FindRegular-dark.dc.html": {
       "x": 7043,
@@ -1312,7 +1475,8 @@
       "w": 956,
       "h": 440,
       "title": "F-01/F-03 Regular width · Dark",
-      "radius": 24
+      "radius": 24,
+      "is_interactive": true
     },
     "F01Find-move.dc.html": {
       "x": 0,
@@ -1320,7 +1484,8 @@
       "w": 375,
       "h": 667,
       "title": "F-04 Move confirmation",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-move-dark.dc.html": {
       "x": 455,
@@ -1328,7 +1493,8 @@
       "w": 375,
       "h": 667,
       "title": "F-04 Move confirmation · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F01Find-move-ax5.dc.html": {
       "x": 910,
@@ -1336,7 +1502,8 @@
       "w": 375,
       "h": 2400,
       "title": "F-04 Move confirmation · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F05Filters.dc.html": {
       "x": 1365,
@@ -1344,7 +1511,8 @@
       "w": 375,
       "h": 667,
       "title": "F-05 Filters",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F05Filters-dark.dc.html": {
       "x": 1820,
@@ -1352,7 +1520,8 @@
       "w": 375,
       "h": 667,
       "title": "F-05 Filters · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "F05Filters-ax5.dc.html": {
       "x": 2275,
@@ -1360,7 +1529,8 @@
       "w": 375,
       "h": 2800,
       "title": "F-05 Filters · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R01Reports.dc.html": {
       "x": 0,
@@ -1368,7 +1538,8 @@
       "w": 375,
       "h": 667,
       "title": "R-01 Reports · Free",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R01Reports-dark.dc.html": {
       "x": 455,
@@ -1376,7 +1547,8 @@
       "w": 375,
       "h": 667,
       "title": "R-01 Reports · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R01Reports-pro.dc.html": {
       "x": 910,
@@ -1384,7 +1556,8 @@
       "w": 375,
       "h": 667,
       "title": "R-01 Reports · Pro",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R01Reports-pro-dark.dc.html": {
       "x": 1365,
@@ -1392,7 +1565,8 @@
       "w": 375,
       "h": 667,
       "title": "R-01 Reports · Pro · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R01Reports-ax5.dc.html": {
       "x": 1820,
@@ -1400,7 +1574,8 @@
       "w": 375,
       "h": 2400,
       "title": "R-01 Reports · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R03CSV.dc.html": {
       "x": 2275,
@@ -1408,7 +1583,8 @@
       "w": 375,
       "h": 667,
       "title": "R-03 CSV export",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R03CSV-dark.dc.html": {
       "x": 2730,
@@ -1416,7 +1592,8 @@
       "w": 375,
       "h": 667,
       "title": "R-03 CSV export · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R03CSV-ax5.dc.html": {
       "x": 3185,
@@ -1424,7 +1601,8 @@
       "w": 375,
       "h": 2000,
       "title": "R-03 CSV export · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report.dc.html": {
       "x": 0,
@@ -1432,7 +1610,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Builder",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-dark.dc.html": {
       "x": 455,
@@ -1440,7 +1619,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-preview.dc.html": {
       "x": 910,
@@ -1448,7 +1628,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Free preview",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-preview-dark.dc.html": {
       "x": 1365,
@@ -1456,7 +1637,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Free preview · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-generating.dc.html": {
       "x": 1820,
@@ -1464,7 +1646,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Generating",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-generating-dark.dc.html": {
       "x": 2275,
@@ -1472,7 +1655,8 @@
       "w": 375,
       "h": 667,
       "title": "R-02 Insurance report · Generating · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R02Report-ax5.dc.html": {
       "x": 2730,
@@ -1480,7 +1664,8 @@
       "w": 375,
       "h": 2800,
       "title": "R-02 Insurance report · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R04Warranties.dc.html": {
       "x": 0,
@@ -1488,7 +1673,8 @@
       "w": 375,
       "h": 667,
       "title": "R-04 Warranties · Free, 3 reminders",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R04Warranties-dark.dc.html": {
       "x": 455,
@@ -1496,7 +1682,8 @@
       "w": 375,
       "h": 667,
       "title": "R-04 Warranties · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R04Warranties-empty.dc.html": {
       "x": 910,
@@ -1504,7 +1691,8 @@
       "w": 375,
       "h": 667,
       "title": "R-04 Warranties · Empty",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R04Warranties-empty-dark.dc.html": {
       "x": 1365,
@@ -1512,7 +1700,8 @@
       "w": 375,
       "h": 667,
       "title": "R-04 Warranties · Empty · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R04Warranties-ax5.dc.html": {
       "x": 1820,
@@ -1520,7 +1709,8 @@
       "w": 375,
       "h": 2800,
       "title": "R-04 Warranties · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R05Lent.dc.html": {
       "x": 2275,
@@ -1528,7 +1718,8 @@
       "w": 375,
       "h": 667,
       "title": "R-05 Lent out · Default",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R05Lent-dark.dc.html": {
       "x": 2730,
@@ -1536,7 +1727,8 @@
       "w": 375,
       "h": 667,
       "title": "R-05 Lent out · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R05Lent-empty.dc.html": {
       "x": 3185,
@@ -1544,7 +1736,8 @@
       "w": 375,
       "h": 667,
       "title": "R-05 Lent out · Empty",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R05Lent-empty-dark.dc.html": {
       "x": 3640,
@@ -1552,7 +1745,8 @@
       "w": 375,
       "h": 667,
       "title": "R-05 Lent out · Empty · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "R05Lent-ax5.dc.html": {
       "x": 4095,
@@ -1560,7 +1754,8 @@
       "w": 375,
       "h": 2000,
       "title": "R-05 Lent out · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall.dc.html": {
       "x": 0,
@@ -1568,7 +1763,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Default",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-dark.dc.html": {
       "x": 455,
@@ -1576,7 +1772,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-loading.dc.html": {
       "x": 910,
@@ -1584,7 +1781,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Loading price",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-loading-dark.dc.html": {
       "x": 1365,
@@ -1592,7 +1790,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Loading price · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-purchasing.dc.html": {
       "x": 1820,
@@ -1600,7 +1799,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Purchasing",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-purchasing-dark.dc.html": {
       "x": 2275,
@@ -1608,7 +1808,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Purchasing · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-pending.dc.html": {
       "x": 2730,
@@ -1616,7 +1817,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Ask to Buy",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-pending-dark.dc.html": {
       "x": 3185,
@@ -1624,7 +1826,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Ask to Buy · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-failed.dc.html": {
       "x": 3640,
@@ -1632,7 +1835,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Failed",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-failed-dark.dc.html": {
       "x": 4095,
@@ -1640,7 +1844,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Failed · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-success.dc.html": {
       "x": 4550,
@@ -1648,7 +1853,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Success",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-success-dark.dc.html": {
       "x": 5005,
@@ -1656,7 +1862,8 @@
       "w": 375,
       "h": 667,
       "title": "P-01 Paywall · Success · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-pro.dc.html": {
       "x": 5460,
@@ -1664,7 +1871,8 @@
       "w": 402,
       "h": 874,
       "title": "P-01 Paywall · 6.3 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-max.dc.html": {
       "x": 5942,
@@ -1672,7 +1880,8 @@
       "w": 440,
       "h": 956,
       "title": "P-01 Paywall · 6.9 in",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "P01Paywall-ax5.dc.html": {
       "x": 6462,
@@ -1680,7 +1889,8 @@
       "w": 375,
       "h": 2600,
       "title": "P-01 Paywall · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S01Settings.dc.html": {
       "x": 0,
@@ -1688,7 +1898,8 @@
       "w": 375,
       "h": 667,
       "title": "S-01 Settings · Free",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S01Settings-dark.dc.html": {
       "x": 455,
@@ -1696,7 +1907,8 @@
       "w": 375,
       "h": 667,
       "title": "S-01 Settings · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S01Settings-pro.dc.html": {
       "x": 910,
@@ -1704,7 +1916,8 @@
       "w": 375,
       "h": 667,
       "title": "S-01 Settings · Pro",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S01Settings-pro-dark.dc.html": {
       "x": 1365,
@@ -1712,7 +1925,8 @@
       "w": 375,
       "h": 667,
       "title": "S-01 Settings · Pro · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S01Settings-ax5.dc.html": {
       "x": 1820,
@@ -1720,7 +1934,8 @@
       "w": 375,
       "h": 3000,
       "title": "S-01 Settings · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S02Pro.dc.html": {
       "x": 2275,
@@ -1728,7 +1943,8 @@
       "w": 375,
       "h": 667,
       "title": "S-02 Nook Pro · Free",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S02Pro-dark.dc.html": {
       "x": 2730,
@@ -1736,7 +1952,8 @@
       "w": 375,
       "h": 667,
       "title": "S-02 Nook Pro · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S02Pro-pro.dc.html": {
       "x": 3185,
@@ -1744,7 +1961,8 @@
       "w": 375,
       "h": 667,
       "title": "S-02 Nook Pro · Pro",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S02Pro-pro-dark.dc.html": {
       "x": 3640,
@@ -1752,7 +1970,8 @@
       "w": 375,
       "h": 667,
       "title": "S-02 Nook Pro · Pro · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S02Pro-ax5.dc.html": {
       "x": 4095,
@@ -1760,7 +1979,8 @@
       "w": 375,
       "h": 2800,
       "title": "S-02 Nook Pro · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync.dc.html": {
       "x": 0,
@@ -1768,7 +1988,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Free",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-dark.dc.html": {
       "x": 455,
@@ -1776,7 +1997,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-on.dc.html": {
       "x": 910,
@@ -1784,7 +2006,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · On",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-on-dark.dc.html": {
       "x": 1365,
@@ -1792,7 +2015,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · On · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-signedout.dc.html": {
       "x": 1820,
@@ -1800,7 +2024,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Signed out",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-signedout-dark.dc.html": {
       "x": 2275,
@@ -1808,7 +2033,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Signed out · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-full.dc.html": {
       "x": 2730,
@@ -1816,7 +2042,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Storage full",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-full-dark.dc.html": {
       "x": 3185,
@@ -1824,7 +2051,8 @@
       "w": 375,
       "h": 667,
       "title": "S-03 iCloud Sync · Storage full · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S03Sync-ax5.dc.html": {
       "x": 3640,
@@ -1832,7 +2060,8 @@
       "w": 375,
       "h": 2400,
       "title": "S-03 iCloud Sync · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S04Backup.dc.html": {
       "x": 4095,
@@ -1840,7 +2069,8 @@
       "w": 375,
       "h": 667,
       "title": "S-04 Backup & Restore · Default",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S04Backup-dark.dc.html": {
       "x": 4550,
@@ -1848,7 +2078,8 @@
       "w": 375,
       "h": 667,
       "title": "S-04 Backup & Restore · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S04Backup-restore.dc.html": {
       "x": 5005,
@@ -1856,7 +2087,8 @@
       "w": 375,
       "h": 667,
       "title": "S-04 Backup & Restore · Restore: Merge or Replace",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S04Backup-restore-dark.dc.html": {
       "x": 5460,
@@ -1864,7 +2096,8 @@
       "w": 375,
       "h": 667,
       "title": "S-04 Backup & Restore · Restore: Merge or Replace · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S04Backup-ax5.dc.html": {
       "x": 5915,
@@ -1872,7 +2105,8 @@
       "w": 375,
       "h": 2400,
       "title": "S-04 Backup & Restore · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S05Lock.dc.html": {
       "x": 6370,
@@ -1880,7 +2114,8 @@
       "w": 375,
       "h": 667,
       "title": "S-05 Face ID Lock",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S05Lock-dark.dc.html": {
       "x": 6825,
@@ -1888,7 +2123,8 @@
       "w": 375,
       "h": 667,
       "title": "S-05 Face ID Lock · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S05Lock-ax5.dc.html": {
       "x": 7280,
@@ -1896,7 +2132,8 @@
       "w": 375,
       "h": 2200,
       "title": "S-05 Face ID Lock · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S06Appearance.dc.html": {
       "x": 0,
@@ -1904,7 +2141,8 @@
       "w": 375,
       "h": 667,
       "title": "S-06 Appearance",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S06Appearance-dark.dc.html": {
       "x": 455,
@@ -1912,7 +2150,8 @@
       "w": 375,
       "h": 667,
       "title": "S-06 Appearance · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S06Appearance-ax5.dc.html": {
       "x": 910,
@@ -1920,7 +2159,8 @@
       "w": 375,
       "h": 2600,
       "title": "S-06 Appearance · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S07Notifications.dc.html": {
       "x": 1365,
@@ -1928,7 +2168,8 @@
       "w": 375,
       "h": 667,
       "title": "S-07 Notifications · On",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S07Notifications-dark.dc.html": {
       "x": 1820,
@@ -1936,7 +2177,8 @@
       "w": 375,
       "h": 667,
       "title": "S-07 Notifications · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S07Notifications-denied.dc.html": {
       "x": 2275,
@@ -1944,7 +2186,8 @@
       "w": 375,
       "h": 667,
       "title": "S-07 Notifications · Denied",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S07Notifications-denied-dark.dc.html": {
       "x": 2730,
@@ -1952,7 +2195,8 @@
       "w": 375,
       "h": 667,
       "title": "S-07 Notifications · Denied · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S07Notifications-ax5.dc.html": {
       "x": 3185,
@@ -1960,7 +2204,8 @@
       "w": 375,
       "h": 2600,
       "title": "S-07 Notifications · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S08Deleted.dc.html": {
       "x": 3640,
@@ -1968,7 +2213,8 @@
       "w": 375,
       "h": 667,
       "title": "S-08 Recently Deleted · 3 items",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S08Deleted-dark.dc.html": {
       "x": 4095,
@@ -1976,7 +2222,8 @@
       "w": 375,
       "h": 667,
       "title": "S-08 Recently Deleted · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S08Deleted-empty.dc.html": {
       "x": 4550,
@@ -1984,7 +2231,8 @@
       "w": 375,
       "h": 667,
       "title": "S-08 Recently Deleted · Empty",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S08Deleted-empty-dark.dc.html": {
       "x": 5005,
@@ -1992,7 +2240,8 @@
       "w": 375,
       "h": 667,
       "title": "S-08 Recently Deleted · Empty · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S08Deleted-ax5.dc.html": {
       "x": 5460,
@@ -2000,7 +2249,8 @@
       "w": 375,
       "h": 2400,
       "title": "S-08 Recently Deleted · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S09Privacy.dc.html": {
       "x": 0,
@@ -2008,7 +2258,8 @@
       "w": 375,
       "h": 667,
       "title": "S-09 Privacy",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S09Privacy-dark.dc.html": {
       "x": 455,
@@ -2016,7 +2267,8 @@
       "w": 375,
       "h": 667,
       "title": "S-09 Privacy · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S09Privacy-ax5.dc.html": {
       "x": 910,
@@ -2024,7 +2276,8 @@
       "w": 375,
       "h": 2800,
       "title": "S-09 Privacy · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S10Tags.dc.html": {
       "x": 1365,
@@ -2032,7 +2285,8 @@
       "w": 375,
       "h": 667,
       "title": "S-10 Tags",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S10Tags-dark.dc.html": {
       "x": 1820,
@@ -2040,7 +2294,8 @@
       "w": 375,
       "h": 667,
       "title": "S-10 Tags · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S10Tags-ax5.dc.html": {
       "x": 2275,
@@ -2048,7 +2303,8 @@
       "w": 375,
       "h": 2800,
       "title": "S-10 Tags · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI.dc.html": {
       "x": 2730,
@@ -2056,7 +2312,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Ready",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-dark.dc.html": {
       "x": 3185,
@@ -2064,7 +2321,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-downloading.dc.html": {
       "x": 3640,
@@ -2072,7 +2330,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Downloading",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-downloading-dark.dc.html": {
       "x": 4095,
@@ -2080,7 +2339,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Downloading · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-unavailable.dc.html": {
       "x": 4550,
@@ -2088,7 +2348,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Not available",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-unavailable-dark.dc.html": {
       "x": 5005,
@@ -2096,7 +2357,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Not available · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-off.dc.html": {
       "x": 5460,
@@ -2104,7 +2366,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Turned off",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-off-dark.dc.html": {
       "x": 5915,
@@ -2112,7 +2375,8 @@
       "w": 375,
       "h": 667,
       "title": "S-11 Apple Intelligence · Turned off · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S11AI-ax5.dc.html": {
       "x": 6370,
@@ -2120,7 +2384,8 @@
       "w": 375,
       "h": 2400,
       "title": "S-11 Apple Intelligence · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S12Help.dc.html": {
       "x": 6825,
@@ -2128,7 +2393,8 @@
       "w": 375,
       "h": 667,
       "title": "S-12 Help & About",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S12Help-dark.dc.html": {
       "x": 7280,
@@ -2136,7 +2402,8 @@
       "w": 375,
       "h": 667,
       "title": "S-12 Help & About · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "S12Help-ax5.dc.html": {
       "x": 7735,
@@ -2144,7 +2411,8 @@
       "w": 375,
       "h": 2400,
       "title": "S-12 Help & About · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock.dc.html": {
       "x": 0,
@@ -2152,7 +2420,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Face ID",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-dark.dc.html": {
       "x": 455,
@@ -2160,7 +2429,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-touchid.dc.html": {
       "x": 910,
@@ -2168,7 +2438,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Touch ID (iPhone SE)",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-touchid-dark.dc.html": {
       "x": 1365,
@@ -2176,7 +2447,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Touch ID (iPhone SE) · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-failed.dc.html": {
       "x": 1820,
@@ -2184,7 +2456,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Not recognized",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-failed-dark.dc.html": {
       "x": 2275,
@@ -2192,7 +2465,8 @@
       "w": 375,
       "h": 667,
       "title": "L-02 App lock · Not recognized · Dark",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "L02Lock-ax5.dc.html": {
       "x": 2730,
@@ -2200,7 +2474,8 @@
       "w": 375,
       "h": 1600,
       "title": "L-02 App lock · AX5",
-      "radius": 40
+      "radius": 40,
+      "is_interactive": true
     },
     "Illustrations.dc.html": {
       "x": 0,
@@ -2225,6 +2500,51 @@
       "h": 640,
       "title": "App icon",
       "radius": 24
+    },
+    "Main-accessory.dc.html": {
+      "x": 5097,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Capture B (accessory)",
+      "radius": 40,
+      "is_interactive": true
+    },
+    "Main-empty-accessory.dc.html": {
+      "x": 5552,
+      "y": 4484,
+      "w": 375,
+      "h": 667,
+      "title": "H-01 Home · Empty · Capture B",
+      "radius": 40,
+      "is_interactive": true
+    },
+    "C02RoomScan-classic.dc.html": {
+      "x": 4642,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · AI off",
+      "radius": 40,
+      "is_interactive": true
+    },
+    "C02RoomScan-classic-shooting.dc.html": {
+      "x": 5097,
+      "y": 26984,
+      "w": 375,
+      "h": 667,
+      "title": "C-02 Room scan · AI off · 2 photos",
+      "radius": 40,
+      "is_interactive": true
+    },
+    "Prototype.dc.html": {
+      "x": 0,
+      "y": -1400,
+      "w": 1440,
+      "h": 900,
+      "title": "Prototype · start here",
+      "radius": 24,
+      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -2467,6 +2787,14 @@
       "w": 240,
       "x": 0,
       "y": -260
+    },
+    "proto-row0": {
+      "kind": "title1",
+      "maxW": 1440,
+      "text": "Prototype · press Play",
+      "w": 240,
+      "x": 0,
+      "y": -1660
     }
   },
   "order": [
@@ -2747,7 +3075,12 @@
     "L02Lock-ax5.dc.html",
     "Illustrations.dc.html",
     "Illustrations-dark.dc.html",
-    "AppIcon.dc.html"
+    "AppIcon.dc.html",
+    "Main-accessory.dc.html",
+    "Main-empty-accessory.dc.html",
+    "C02RoomScan-classic.dc.html",
+    "C02RoomScan-classic-shooting.dc.html",
+    "Prototype.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"
