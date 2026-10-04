@@ -11,7 +11,11 @@ An arched nook with a shelf, a small plant and a leaning book. There's no letter
 
 All colors are tokens from `docs/03_Design_System.md` §2.
 
-## Assembling the `.icon` file in Icon Composer (one-time, about 5 minutes)
+## Ready to use: `AppIcon.appiconset`
+`AppIcon.appiconset/` is a standard Xcode asset-catalog icon: 1024 px light, dark and tinted PNGs, with no transparency. In P1, drop it into the app's `Assets.xcassets` and it works as-is. iOS 26 and later add their glass treatment to it automatically.
+
+## Optional polish: a `.icon` file in Icon Composer
+This gives finer control over the clear and glass looks. Do it whenever there's time, any phase before P13.
 Icon Composer is a Mac app with no command-line export, so this step is done by hand. Its file format isn't documented, and hand-writing one risks a file Xcode rejects.
 
 1. Open Icon Composer and create a new icon. Save it as `design/icon/Nook.icon`.
