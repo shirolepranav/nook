@@ -59,7 +59,7 @@ Fixtures/        receipts, test shelf, eval photos, seeds, golden files
 docs/            PRD, screens, roadmap, design system, architecture, QA, decisions
 design/          approved screen mockups (Claude Design export): visual source of truth
 ```
-(The Xcode project is created in P1. Until then this layout is the target.)
+`Nook.xcodeproj` at the root uses synchronized folders: new files in `Nook/`, `NookTests/`, `NookUITests/` and `NookWidgets/` join their target automatically (D31).
 
 ## Commands
 > TBD in P1. Fill these in when the Xcode project and CI exist.

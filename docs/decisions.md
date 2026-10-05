@@ -191,3 +191,17 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Not checked:** the menu bar opened on screen. A simulated swipe from the top edge didn't keep it open, so the menu contents were read from the menu system instead. P1 takes a screenshot with a hardware keyboard and pointer, and also checks ⌘1–⌘4.
 
 *Affects:* 01 §1.5 (Move is ⇧⌘M, ⌘, opens Settings), 04 §9 (the `[Verify in SDK]` tags are resolved), the roadmap P1 scope, the `iPadMenu` board, Nook's Xcode project settings.
+
+### P1 (2026-10-05)
+
+**D31 · 2026-10-05 · Accepted (2026-10-05, product owner)** — **Project setup.**
+- **Project:** the Xcode starter in `nook/` moved to the root as `Nook.xcodeproj`, with the targets `Nook`, `NookTests`, `NookUITests` and `NookWidgets`. It uses synchronized folders (`objectVersion 110`), so new files join their target without project-file edits. Swift 6 language mode, iOS and iPadOS 27.0, universal.
+- **Identifiers:** these follow the owner's other app. App `pranav.nook`, widgets `pranav.nook.NookWidgets`, App Group `group.pranav.nook` (`NookKit.appGroupID`), team `6WSVMM9FGS`. The iCloud container `iCloud.pranav.nook` is reserved for P11 and isn't added until then.
+- **One window (D30):** `INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO` and `Nook/Info.plist` sets `UIApplicationSupportsMultipleScenes` to `NO`. `NookTests/SceneTests.swift` checks it on iPhone and on the 13-inch iPad simulator. Remove that test in P15.
+- **Packages:** `Packages/NookUI`, `NookKit` and `NookAI` are local Swift packages. NookAI depends on NookKit; the other two have no dependencies (04 §1). The app links all three. The widget extension links only NookUI and NookKit, because widgets never call the router. NookKit also lists macOS so `swift test` runs without a simulator.
+- **Widgets:** `NookWidgets` holds one placeholder widget until P12, since a widget bundle can't be empty.
+- **CI** runs on a self-hosted GitHub Actions runner on the owner's Mac (Xcode 27.0, iOS 27.0 simulators), set up in P1's CI PR. *Why:* GitHub-hosted runners may not have Xcode 27 yet, and macOS minutes cost 10× on a private repo.
+- **Snapshot tests** use a small in-house helper in the NookUI tests, not a third-party library, to keep zero dependencies.
+- **Lint:** SwiftLint and SwiftFormat aren't used for now. The policy greps (05 §2) enforce the hard rules. Add a linter if the style drifts.
+
+*Affects:* CLAUDE.md (layout, commands), README, 05 §2, the roadmap P1.

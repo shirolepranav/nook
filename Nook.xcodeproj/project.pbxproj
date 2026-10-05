@@ -1,0 +1,692 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+/* Begin PBXBuildFile section */
+		4E4F4F4B0000000000000060 /* NookWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4E4F4F4B0000000000000023 /* NookWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4E4F4F4B0000000000000080 /* NookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4F4F4B0000000000000090 /* NookUI */; };
+		4E4F4F4B0000000000000081 /* NookKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4F4F4B0000000000000091 /* NookKit */; };
+		4E4F4F4B0000000000000082 /* NookAI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4F4F4B0000000000000092 /* NookAI */; };
+		4E4F4F4B0000000000000083 /* NookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4F4F4B0000000000000093 /* NookUI */; };
+		4E4F4F4B0000000000000084 /* NookKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4F4F4B0000000000000094 /* NookKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4E4F4F4B00000000000000A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E4F4F4B0000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E4F4F4B0000000000000030;
+			remoteInfo = Nook;
+		};
+		4E4F4F4B00000000000000A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E4F4F4B0000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E4F4F4B0000000000000030;
+			remoteInfo = Nook;
+		};
+		4E4F4F4B00000000000000A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E4F4F4B0000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E4F4F4B0000000000000033;
+			remoteInfo = NookWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4E4F4F4B0000000000000050 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4E4F4F4B0000000000000060 /* NookWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4E4F4F4B0000000000000020 /* Nook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E4F4F4B0000000000000021 /* NookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E4F4F4B0000000000000022 /* NookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E4F4F4B0000000000000023 /* NookWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NookWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4E4F4F4B0000000000000014 /* Exceptions for "Nook" folder in "Nook" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				Nook.entitlements,
+			);
+			target = 4E4F4F4B0000000000000030 /* Nook */;
+		};
+		4E4F4F4B0000000000000015 /* Exceptions for "NookWidgets" folder in "NookWidgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				NookWidgets.entitlements,
+			);
+			target = 4E4F4F4B0000000000000033 /* NookWidgets */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4E4F4F4B0000000000000010 /* Nook */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4E4F4F4B0000000000000014,
+			);
+			path = Nook;
+			sourceTree = "<group>";
+		};
+		4E4F4F4B0000000000000011 /* NookTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NookTests;
+			sourceTree = "<group>";
+		};
+		4E4F4F4B0000000000000012 /* NookUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NookUITests;
+			sourceTree = "<group>";
+		};
+		4E4F4F4B0000000000000013 /* NookWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4E4F4F4B0000000000000015,
+			);
+			path = NookWidgets;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4E4F4F4B0000000000000041 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E4F4F4B0000000000000080 /* NookUI in Frameworks */,
+				4E4F4F4B0000000000000081 /* NookKit in Frameworks */,
+				4E4F4F4B0000000000000082 /* NookAI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B0000000000000045 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B0000000000000049 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B000000000000004D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E4F4F4B0000000000000083 /* NookUI in Frameworks */,
+				4E4F4F4B0000000000000084 /* NookKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E4F4F4B0000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				4E4F4F4B0000000000000010 /* Nook */,
+				4E4F4F4B0000000000000011 /* NookTests */,
+				4E4F4F4B0000000000000012 /* NookUITests */,
+				4E4F4F4B0000000000000013 /* NookWidgets */,
+				4E4F4F4B0000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4E4F4F4B0000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E4F4F4B0000000000000020 /* Nook.app */,
+				4E4F4F4B0000000000000021 /* NookTests.xctest */,
+				4E4F4F4B0000000000000022 /* NookUITests.xctest */,
+				4E4F4F4B0000000000000023 /* NookWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4E4F4F4B0000000000000030 /* Nook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E4F4F4B00000000000000C1 /* Build configuration list for PBXNativeTarget "Nook" */;
+			buildPhases = (
+				4E4F4F4B0000000000000040 /* Sources */,
+				4E4F4F4B0000000000000041 /* Frameworks */,
+				4E4F4F4B0000000000000042 /* Resources */,
+				4E4F4F4B0000000000000050 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E4F4F4B00000000000000B2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4E4F4F4B0000000000000010 /* Nook */,
+			);
+			name = Nook;
+			packageProductDependencies = (
+				4E4F4F4B0000000000000090 /* NookUI */,
+				4E4F4F4B0000000000000091 /* NookKit */,
+				4E4F4F4B0000000000000092 /* NookAI */,
+			);
+			productName = Nook;
+			productReference = 4E4F4F4B0000000000000020 /* Nook.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4E4F4F4B0000000000000031 /* NookTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E4F4F4B00000000000000C2 /* Build configuration list for PBXNativeTarget "NookTests" */;
+			buildPhases = (
+				4E4F4F4B0000000000000044 /* Sources */,
+				4E4F4F4B0000000000000045 /* Frameworks */,
+				4E4F4F4B0000000000000046 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E4F4F4B00000000000000B0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4E4F4F4B0000000000000011 /* NookTests */,
+			);
+			name = NookTests;
+			productName = NookTests;
+			productReference = 4E4F4F4B0000000000000021 /* NookTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4E4F4F4B0000000000000032 /* NookUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E4F4F4B00000000000000C3 /* Build configuration list for PBXNativeTarget "NookUITests" */;
+			buildPhases = (
+				4E4F4F4B0000000000000048 /* Sources */,
+				4E4F4F4B0000000000000049 /* Frameworks */,
+				4E4F4F4B000000000000004A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E4F4F4B00000000000000B1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4E4F4F4B0000000000000012 /* NookUITests */,
+			);
+			name = NookUITests;
+			productName = NookUITests;
+			productReference = 4E4F4F4B0000000000000022 /* NookUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		4E4F4F4B0000000000000033 /* NookWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E4F4F4B00000000000000C4 /* Build configuration list for PBXNativeTarget "NookWidgets" */;
+			buildPhases = (
+				4E4F4F4B000000000000004C /* Sources */,
+				4E4F4F4B000000000000004D /* Frameworks */,
+				4E4F4F4B000000000000004E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E4F4F4B0000000000000013 /* NookWidgets */,
+			);
+			name = NookWidgets;
+			packageProductDependencies = (
+				4E4F4F4B0000000000000093 /* NookUI */,
+				4E4F4F4B0000000000000094 /* NookKit */,
+			);
+			productName = NookWidgets;
+			productReference = 4E4F4F4B0000000000000023 /* NookWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E4F4F4B0000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					4E4F4F4B0000000000000030 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					4E4F4F4B0000000000000031 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 4E4F4F4B0000000000000030;
+					};
+					4E4F4F4B0000000000000032 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 4E4F4F4B0000000000000030;
+					};
+					4E4F4F4B0000000000000033 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = 4E4F4F4B00000000000000C0 /* Build configuration list for PBXProject "Nook" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4E4F4F4B0000000000000002;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4E4F4F4B0000000000000070 /* XCLocalSwiftPackageReference "Packages/NookUI" */,
+				4E4F4F4B0000000000000071 /* XCLocalSwiftPackageReference "Packages/NookKit" */,
+				4E4F4F4B0000000000000072 /* XCLocalSwiftPackageReference "Packages/NookAI" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4E4F4F4B0000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4E4F4F4B0000000000000030 /* Nook */,
+				4E4F4F4B0000000000000031 /* NookTests */,
+				4E4F4F4B0000000000000032 /* NookUITests */,
+				4E4F4F4B0000000000000033 /* NookWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E4F4F4B0000000000000042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B0000000000000046 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B000000000000004A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B000000000000004E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4E4F4F4B0000000000000040 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B0000000000000044 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B0000000000000048 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E4F4F4B000000000000004C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4E4F4F4B00000000000000B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E4F4F4B0000000000000030 /* Nook */;
+			targetProxy = 4E4F4F4B00000000000000A0 /* PBXContainerItemProxy */;
+		};
+		4E4F4F4B00000000000000B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E4F4F4B0000000000000030 /* Nook */;
+			targetProxy = 4E4F4F4B00000000000000A1 /* PBXContainerItemProxy */;
+		};
+		4E4F4F4B00000000000000B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E4F4F4B0000000000000033 /* NookWidgets */;
+			targetProxy = 4E4F4F4B00000000000000A2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4E4F4F4B00000000000000D0 /* Debug configuration for PBXProject "Nook" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6WSVMM9FGS;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4E4F4F4B00000000000000D1 /* Release configuration for PBXProject "Nook" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6WSVMM9FGS;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E4F4F4B00000000000000D2 /* Debug configuration for PBXNativeTarget "Nook" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Nook/Nook.entitlements";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Nook/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4E4F4F4B00000000000000D3 /* Release configuration for PBXNativeTarget "Nook" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Nook/Nook.entitlements";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Nook/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		4E4F4F4B00000000000000D4 /* Debug configuration for PBXNativeTarget "NookTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nook.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nook";
+			};
+			name = Debug;
+		};
+		4E4F4F4B00000000000000D5 /* Release configuration for PBXNativeTarget "NookTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nook.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nook";
+			};
+			name = Release;
+		};
+		4E4F4F4B00000000000000D6 /* Debug configuration for PBXNativeTarget "NookUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = Nook;
+			};
+			name = Debug;
+		};
+		4E4F4F4B00000000000000D7 /* Release configuration for PBXNativeTarget "NookUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = Nook;
+			};
+			name = Release;
+		};
+		4E4F4F4B00000000000000D8 /* Debug configuration for PBXNativeTarget "NookWidgets" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "NookWidgets/NookWidgets.entitlements";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NookWidgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nook.NookWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4E4F4F4B00000000000000D9 /* Release configuration for PBXNativeTarget "NookWidgets" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "NookWidgets/NookWidgets.entitlements";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NookWidgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pranav.nook.NookWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E4F4F4B00000000000000C0 /* Build configuration list for PBXProject "Nook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E4F4F4B00000000000000D0 /* Debug configuration for PBXProject "Nook" */,
+				4E4F4F4B00000000000000D1 /* Release configuration for PBXProject "Nook" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		4E4F4F4B00000000000000C1 /* Build configuration list for PBXNativeTarget "Nook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E4F4F4B00000000000000D2 /* Debug configuration for PBXNativeTarget "Nook" */,
+				4E4F4F4B00000000000000D3 /* Release configuration for PBXNativeTarget "Nook" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		4E4F4F4B00000000000000C2 /* Build configuration list for PBXNativeTarget "NookTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E4F4F4B00000000000000D4 /* Debug configuration for PBXNativeTarget "NookTests" */,
+				4E4F4F4B00000000000000D5 /* Release configuration for PBXNativeTarget "NookTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		4E4F4F4B00000000000000C3 /* Build configuration list for PBXNativeTarget "NookUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E4F4F4B00000000000000D6 /* Debug configuration for PBXNativeTarget "NookUITests" */,
+				4E4F4F4B00000000000000D7 /* Release configuration for PBXNativeTarget "NookUITests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		4E4F4F4B00000000000000C4 /* Build configuration list for PBXNativeTarget "NookWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E4F4F4B00000000000000D8 /* Debug configuration for PBXNativeTarget "NookWidgets" */,
+				4E4F4F4B00000000000000D9 /* Release configuration for PBXNativeTarget "NookWidgets" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4E4F4F4B0000000000000070 /* XCLocalSwiftPackageReference "Packages/NookUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NookUI;
+		};
+		4E4F4F4B0000000000000071 /* XCLocalSwiftPackageReference "Packages/NookKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NookKit;
+		};
+		4E4F4F4B0000000000000072 /* XCLocalSwiftPackageReference "Packages/NookAI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NookAI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E4F4F4B0000000000000090 /* NookUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E4F4F4B0000000000000070 /* XCLocalSwiftPackageReference "Packages/NookUI" */;
+			productName = NookUI;
+		};
+		4E4F4F4B0000000000000091 /* NookKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E4F4F4B0000000000000071 /* XCLocalSwiftPackageReference "Packages/NookKit" */;
+			productName = NookKit;
+		};
+		4E4F4F4B0000000000000092 /* NookAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E4F4F4B0000000000000072 /* XCLocalSwiftPackageReference "Packages/NookAI" */;
+			productName = NookAI;
+		};
+		4E4F4F4B0000000000000093 /* NookUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E4F4F4B0000000000000070 /* XCLocalSwiftPackageReference "Packages/NookUI" */;
+			productName = NookUI;
+		};
+		4E4F4F4B0000000000000094 /* NookKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E4F4F4B0000000000000071 /* XCLocalSwiftPackageReference "Packages/NookKit" */;
+			productName = NookKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4E4F4F4B0000000000000001 /* Project object */;
+}
