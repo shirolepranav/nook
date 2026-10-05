@@ -258,7 +258,7 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 - **iPad (D29):**
   - One target, universal (iPhone + iPad), iPadOS 27.0 minimum.
   - **One window in v1.0** (verified in D30): set `INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO` and give the Info.plist a `UIApplicationSceneManifest` with `UIApplicationSupportsMultipleScenes` = `NO`. The template's generated manifest turns multiple windows **on**. A test checks `UIApplication.shared.supportsMultipleScenes == false`. Multiple windows are v1.2.
-  - **Keyboard shortcuts:** `.keyboardShortcut` on the commands in 01 §1.5, grouped in a `CommandMenu` inside `.commands`, so they appear in the iPad menu bar (verified in D30). The system adds File, Edit (Undo, Redo, Cut, Copy, Paste), View, Window and Help itself.
+  - **Keyboard shortcuts:** `.keyboardShortcut` on the commands in 01 §1.5, grouped in a `CommandMenu` inside `.commands`, so they appear in the iPad menu bar (verified in D30). The system adds File, Edit (Undo, Redo, Cut, Copy, Paste), View, Window and Help itself. Replace `.appSettings` so ⌘, opens Nook's Settings tab instead of the iPad Settings app. Don't use ⌘M, which is reserved for minimizing (D30).
   - **Pointer:** `.hoverEffect` on custom cards and rows; system controls get it for free. Secondary click comes from `.contextMenu`.
   - **Undo:** moves, deletes and saves register with the window's `UndoManager`, so ⌘Z and the shake gesture behave the same as the Undo toast.
 - **Duo hinge:** use `ReservedRegion` [Verify in SDK] on the capture and item-detail screens.

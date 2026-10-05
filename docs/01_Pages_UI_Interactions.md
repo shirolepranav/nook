@@ -76,9 +76,10 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | ⌘N | Add item (C-05) |
 | ⇧⌘N | Scan room (C-02) |
 | ⌘E | Edit the selected item or room |
-| ⌘M | Move the selected items (I-04) |
+| ⇧⌘M | Move the selected items (I-04). Not ⌘M, which iPadOS keeps for minimizing a window (D30) |
 | ⌘⌫ | Delete the selected items (to Recently Deleted, with Undo) |
 | ⌘Z / ⇧⌘Z | Undo / Redo the last move, delete or save |
+| ⌘, | Nook's Settings tab. This replaces the system "Settings…" item, which would open the iPad Settings app (D30) |
 
 - **[v1.2 iPad]** Drag and drop: items onto rooms, spots and containers (through `LocationService.move`, with Undo); photos and receipts from Files.
 
