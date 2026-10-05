@@ -257,8 +257,8 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 - **Regular width** uses `NavigationSplitView` with the sidebar tab placement. On iPad it's the same view; the system decides how many columns fit the window (D29).
 - **iPad (D29):**
   - One target, universal (iPhone + iPad), iPadOS 27.0 minimum.
-  - **One window in v1.0:** turn off multiple scenes [Verify in SDK: that a SwiftUI app on iPadOS 27 can still do this; log the result as a new D#]. Multiple windows are v1.2.
-  - **Keyboard shortcuts:** `.keyboardShortcut` on the commands in 01 §1.5, grouped in `.commands` so they appear in the iPad menu bar [Verify in SDK].
+  - **One window in v1.0** (verified in D30): set `INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO` and give the Info.plist a `UIApplicationSceneManifest` with `UIApplicationSupportsMultipleScenes` = `NO`. The template's generated manifest turns multiple windows **on**. A test checks `UIApplication.shared.supportsMultipleScenes == false`. Multiple windows are v1.2.
+  - **Keyboard shortcuts:** `.keyboardShortcut` on the commands in 01 §1.5, grouped in a `CommandMenu` inside `.commands`, so they appear in the iPad menu bar (verified in D30). The system adds File, Edit (Undo, Redo, Cut, Copy, Paste), View, Window and Help itself.
   - **Pointer:** `.hoverEffect` on custom cards and rows; system controls get it for free. Secondary click comes from `.contextMenu`.
   - **Undo:** moves, deletes and saves register with the window's `UndoManager`, so ⌘Z and the shake gesture behave the same as the Undo toast.
 - **Duo hinge:** use `ReservedRegion` [Verify in SDK] on the capture and item-detail screens.
