@@ -32,4 +32,18 @@ public enum NookLayout {
     public static let maxGridWidth = cardMinWidth * CGFloat(maxGridColumns) + NookSpace.s2 * CGFloat(maxGridColumns - 1)
     /// Smallest tap target (03 §4).
     public static let minTapTarget: CGFloat = 44
+
+    // Component sizes from 03 §8 and the mockups.
+    /// Primary and secondary buttons (03 §8.2).
+    public static let buttonHeight: CGFloat = 50
+    /// Text-field wells (03 §8.6).
+    public static let fieldHeight: CGFloat = 48
+    /// Corner badges on cards (03 §8.7).
+    public static let badgeSize: CGFloat = 24
+    /// Empty-state illustrations: 140–180 pt in 03 §8.9; the mockups draw 160.
+    public static let illustrationHeight: CGFloat = 160
+    /// The soft circle behind an error or "camera off" symbol (03 §7).
+    public static let stateIconSize: CGFloat = 64
+    /// The floating Capture button (03 §8.1, D26).
+    public static let captureButtonSize: CGFloat = 56
 }

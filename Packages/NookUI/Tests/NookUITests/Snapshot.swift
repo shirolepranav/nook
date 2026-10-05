@@ -74,31 +74,49 @@ func assertSnapshot(
 
 @MainActor
 private func render(_ view: some View, variant: SnapshotVariant, width: CGFloat) throws -> UIImage {
-    let host = UIHostingController(rootView: view)
+    // The view sits at the top of a very tall window at its own height, which a
+    // GeometryReader reports; only that region is drawn. Shrinking the window to the view's
+    // height instead makes SwiftUI hold back 20 pt (the SE status bar) even with every
+    // inset at 0, which squeezes the view: truncated text and gaps at the edges.
+    let measured = HeightBox()
+    let pinned = view
+        .background(GeometryReader { proxy in
+            Color.clear
+                .onAppear { measured.height = proxy.size.height }
+                .onChange(of: proxy.size.height) { measured.height = $1 }
+        })
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+
+    let host = UIHostingController(rootView: pinned)
+    host.safeAreaRegions = []
     host.traitOverrides.userInterfaceStyle = variant.style
     host.traitOverrides.preferredContentSizeCategory = variant.size
     host.traitOverrides.accessibilityContrast = variant.contrast
 
-    // SwiftUI needs a window to lay out; it never appears on screen. Package tests have no
-    // window scene for init(windowScene:), and UIWindow() is deprecated since iOS 26, so the
-    // window is made through NSObject's initializer (test-only).
+    // SwiftUI needs a window to lay out, and trait overrides only apply once the view is in
+    // one; it never appears on screen. Package tests have no window scene for
+    // init(windowScene:), and UIWindow() is deprecated since iOS 26, so the window is made
+    // through NSObject's initializer (test-only).
     let window = try #require((UIWindow.self as NSObject.Type).init() as? UIWindow)
+    window.frame = CGRect(x: 0, y: 0, width: width, height: 10_000)
     window.rootViewController = host
     window.isHidden = false
-
-    let height = host.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
-    let bounds = CGRect(x: 0, y: 0, width: width, height: ceil(height))
-    window.frame = bounds
-    host.view.frame = bounds
     host.view.layoutIfNeeded()
+    CATransaction.flush()   // commit layer contents before drawing them
+    let height = ceil(try #require(measured.height, "the view reported no height"))
 
     let format = UIGraphicsImageRendererFormat()
     format.scale = 2   // fixed, so references don't depend on the simulator's screen scale
     // layer.render, not drawHierarchy: package tests have no app scene, so the view never
     // reaches the render server and drawHierarchy draws a blank image.
+    let bounds = CGRect(x: 0, y: 0, width: width, height: height)
     return UIGraphicsImageRenderer(bounds: bounds, format: format).image { context in
         host.view.layer.render(in: context.cgContext)
     }
+}
+
+private final class HeightBox: @unchecked Sendable {
+    var height: CGFloat?
 }
 
 /// Counts pixels whose color differs by more than a small rounding tolerance.

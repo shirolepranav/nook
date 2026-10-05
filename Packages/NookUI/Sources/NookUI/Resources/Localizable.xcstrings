@@ -1,9 +1,24 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "Value hidden" : {
-      "comment" : "VoiceOver label for a price masked by Hide values (F11)."
+  "sourceLanguage": "en",
+  "strings": {
+    "Lent": {
+      "comment": "VoiceOver label for the badge on a lent item's card."
+    },
+    "Loading": {
+      "comment": "VoiceOver label for a loading placeholder card."
+    },
+    "Private": {
+      "comment": "VoiceOver label for the lock badge on a Private item's card."
+    },
+    "Try Again": {
+      "comment": "Button on an error state."
+    },
+    "Value hidden": {
+      "comment": "VoiceOver label for a price masked by Hide values (F11)."
+    },
+    "Warranty ending soon": {
+      "comment": "VoiceOver label for the clock badge on an item whose warranty ends within 30 days."
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

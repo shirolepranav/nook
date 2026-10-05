@@ -165,6 +165,34 @@ def export(out_dir):
         (out_dir / f"{name}-accent.svg").write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}">{acc}</svg>\n')
 
 
+def catalog(svg_dir, catalog_dir):
+    """NookUI's Illustrations.xcassets (D25): <name> (light + dark base) and <name>-accent (template)."""
+    import json
+    import shutil
+    info = {"author": "xcode", "version": 1}
+    shutil.rmtree(catalog_dir, ignore_errors=True)
+    catalog_dir.mkdir(parents=True)
+    (catalog_dir / "Contents.json").write_text(json.dumps({"info": info}, indent=2) + "\n")
+    for name in ILL:
+        base = catalog_dir / f"{name}.imageset"
+        base.mkdir()
+        for mode in ("light", "dark"):
+            shutil.copy(svg_dir / f"{name}-{mode}.svg", base)
+        images = [{"filename": f"{name}-light.svg", "idiom": "universal"},
+                  {"appearances": [{"appearance": "luminosity", "value": "dark"}],
+                   "filename": f"{name}-dark.svg", "idiom": "universal"}]
+        props = {"preserves-vector-representation": True}
+        (base / "Contents.json").write_text(json.dumps({"images": images, "info": info, "properties": props}, indent=2) + "\n")
+        accent = catalog_dir / f"{name}-accent.imageset"
+        accent.mkdir()
+        shutil.copy(svg_dir / f"{name}-accent.svg", accent)
+        props = {"preserves-vector-representation": True, "template-rendering-intent": "template"}
+        images = [{"filename": f"{name}-accent.svg", "idiom": "universal"}]
+        (accent / "Contents.json").write_text(json.dumps({"images": images, "info": info, "properties": props}, indent=2) + "\n")
+
+
 if __name__ == "__main__":
     from pathlib import Path
-    export(Path(__file__).resolve().parents[1] / "illustrations")
+    root = Path(__file__).resolve().parents[2]
+    export(root / "design/illustrations")
+    catalog(root / "design/illustrations", root / "Packages/NookUI/Sources/NookUI/Resources/Illustrations.xcassets")

@@ -473,12 +473,14 @@ struct CaptureButton: View {
 | Variant | Look | Use |
 |---|---|---|
 | Primary | Capsule, accent fill, `onAccent` label, 50 pt tall | One per screen: Save, Save all, Unlock Pro |
-| Secondary | Capsule, accent at 12% fill, accent label | Alternatives: Edit, Add spot |
+| Secondary | Capsule, accent at 12% fill (18% dark), `textPrimary` label (as in the mockups) | Alternatives: Edit, Add spot, Try Again |
 | Tertiary | Text in accent | Cancel-like actions, links |
 | Destructive | Danger-colored label | Delete |
 | Glass | System glass styles | Floating controls only |
 
 States: pressed (shrinks to 97% with a soft spring); disabled (40% opacity, no haptic); loading (spinner replaces the label, width stays the same).
+
+At large text sizes labels wrap instead of truncating, the icon moves above the title at accessibility sizes, and the button grows, keeping its 25 pt corners, so a tall button is a rounded rectangle rather than an oval. The same goes for chips. (P1, `NookButtonStyle`)
 
 ### 8.3 Cards
 - **Item photo card:** 4:5 photo, name (2 lines), breadcrumb; badges in the top corner for Private, Lent, warranty ending. Pressed: lifts and shrinks to 98%.
@@ -538,10 +540,10 @@ struct DetectionOverlay: View {
 - Special fields: name with autocomplete; currency with the locale's decimal keypad; compact date picker; serial in monospaced type with "Read from sticker"; tags as tokens; photo strip with add, reorder and delete.
 
 ### 8.7 Chips, pills and badges
-- Filter chip: 32 pt capsule with a 44 pt hit area; selected uses accent at 12% fill plus a checkmark.
-- Room chip (onboarding): room color fill, symbol, name.
+- Filter chip: 44 pt capsule (the mockups draw it at the full tap height); unselected is `surface` with a hairline; selected uses accent at 12% fill plus a checkmark.
+- Room chip (onboarding, filters): symbol in the room's ink and the name; selected fills with the room color and adds a checkmark.
 - Status pills: Active (success), Ending soon (warning), Expired (danger), Lent (info), always icon plus text.
-- Badges on cards: small glyphs only (lock, person, clock), each with an accessibility label.
+- Badges on cards: small glyphs only (lock, person, clock) in a 24 pt circle, each with an accessibility label. The glyph stays at the default text size so it never covers the photo; the card's text carries the scaling.
 
 ### 8.8 Navigation, sheets and dialogs
 - Tab bar: system Liquid Glass, tinted by the accent, no custom background. Becomes a sidebar on regular width (PRD §4).
@@ -717,6 +719,6 @@ struct SaveItemButton: View {
 - [x] Font tokens and `MoneyText` (P1)
 - [x] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`; Swift name `NookLayout`, since SwiftUI has a `Layout` protocol) (P1)
 - [x] Warm shadow modifier, with the low, lifted and floating levels (P1)
-- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view
+- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view (P1 done: buttons, chips, pills, badges, fields, empty and error states, skeletons; the answer card and breadcrumb come with Find in P4–P5)
 - [x] Motion and haptic helpers with Reduce Motion handling (`NookMotion`, `NookHaptic`) (P1)
 - [ ] Debug gallery showing every component in every state, light and dark, default and largest text
