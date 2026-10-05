@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Accent color" : {
+
+    },
     "Add Item" : {
 
     },
@@ -10,10 +13,16 @@
     "Add item" : {
 
     },
+    "Appearance" : {
+
+    },
     "Capture" : {
 
     },
     "Components" : {
+
+    },
+    "Dark" : {
 
     },
     "Delete" : {
@@ -28,10 +37,16 @@
     "Find" : {
 
     },
+    "Hide values by default" : {
+
+    },
     "Home" : {
 
     },
     "Let’s start with one room." : {
+
+    },
+    "Light" : {
 
     },
     "Move" : {
@@ -43,10 +58,25 @@
     "Nothing to find yet." : {
 
     },
+    "Ocean" : {
+
+    },
+    "Plum" : {
+
+    },
+    "Prices show as •••• until you tap the eye on Home." : {
+
+    },
     "Reports" : {
 
     },
     "Reports live here." : {
+
+    },
+    "Rose" : {
+
+    },
+    "Sage" : {
 
     },
     "Scan Room" : {
@@ -71,6 +101,18 @@
 
     },
     "Settings…" : {
+
+    },
+    "Slate" : {
+
+    },
+    "System" : {
+
+    },
+    "Terracotta" : {
+
+    },
+    "Theme" : {
 
     },
     "Warranties, lent things and your insurance report will appear as you add items." : {

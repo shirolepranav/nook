@@ -76,6 +76,7 @@ public struct ComponentGallery: View {
                     .padding(NookSpace.s1)
                 }
             }
+            .foregroundStyle(NookColor.textPrimary)
             .padding(NookSpace.s2)
             .frame(maxWidth: NookLayout.readableWidth)
             .frame(maxWidth: .infinity)

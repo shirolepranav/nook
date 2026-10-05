@@ -15,14 +15,8 @@ final class ShellTests: XCTestCase {
         app.launch()
     }
 
-    /// A tab is a tab-bar button on iPhone and a sidebar cell on iPad.
     @MainActor
-    private func tab(_ name: String) -> XCUIElement {
-        app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", name))
-            .matching(NSPredicate(format: "elementType == %d OR elementType == %d",
-                                  XCUIElement.ElementType.button.rawValue, XCUIElement.ElementType.cell.rawValue))
-            .firstMatch
-    }
+    private func tab(_ name: String) -> XCUIElement { app.tab(name) }
 
     @MainActor
     private var isRegularWidth: Bool { app.windows.firstMatch.frame.width >= 700 }

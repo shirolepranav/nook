@@ -47,6 +47,8 @@ public enum NookLayout {
     public static let stateIconSize: CGFloat = 64
     /// Room cards and the dashed add card (03 §8.3): shelf-like, wider than tall.
     public static let roomCardMinHeight: CGFloat = 100
+    /// Accent swatches in Appearance (S-06).
+    public static let swatchSize: CGFloat = 48
     /// The floating Capture button (03 §8.1, D26).
     public static let captureButtonSize: CGFloat = 56
 }
