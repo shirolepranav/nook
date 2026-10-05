@@ -205,3 +205,19 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Lint:** SwiftLint and SwiftFormat aren't used for now. The policy greps (05 §2) enforce the hard rules. Add a linter if the style drifts.
 
 *Affects:* CLAUDE.md (layout, commands), README, 05 §2, the roadmap P1.
+
+**D32 · 2026-10-05 · Accepted** — **The app shell's SwiftUI mechanisms (D2, D26, D29), checked in the iOS 27.0 SDK (Xcode 27.0, 27A266a) and on the iPhone SE and 13-inch iPad simulators.**
+- **Capture button:** an `.overlay(alignment: .bottomTrailing)` on each tab's content, not `tabViewBottomAccessory`.
+  - The overlay keeps it in the content column, so on regular width it never sits over the sidebar (01 §1.5).
+  - D26 rejected the accessory placement: it takes about 60 pt of content on iPhone SE, and Apple meant it for ongoing content.
+  - Tab roots add a bottom content margin the height of the button, so the end of a scroll view can always clear it.
+  - **Where it shows (from the boards):** on the tab roots and on Home's Room, Spot and Item screens. Other pushed screens (history, Warranties, Lent out, the Settings pages) don't show it. On compact width it's also left off Find, where the search field sits at the bottom of the screen; the iPad Find board keeps it. The overlay goes on a root's own content, not around its navigation stack, so pushed screens don't inherit it. 01 §1.2 only said "hidden on capture, paywall and lock screens", so it now matches.
+- **C-01 presentation:** `.popover` anchored to the button, with `.presentationCompactAdaptation(.sheet)` and a medium detent. That gives a popover on regular width and a sheet on compact width from one modifier (D29). The menu is a stack, not a `List`, so the popover sizes to fit.
+- **Tabs:** `TabView` with `.sidebarAdaptable`, with Find as `Tab(role: .search)`.
+  - **`defaultTabBarPlacement(.sidebar)`** (new in iOS 27, next to iOS 18's `defaultAdaptableTabBarPlacement`) shows the sidebar on iPad landscape. Portrait floats the tab bar at the top, matching the P0b boards.
+  - **`tabViewSearchActivation(.searchTabSelection)`** focuses the search field whenever Find is chosen, including from ⌘2 and ⌘F.
+  - The selected tab is `@SceneStorage`.
+- **Commands** reach the window through `focusedSceneValue` bindings (`selectedTab`), not closures: Swift 6 warns that closures in focused values invalidate on every update. ⌘1–⌘4 pass in an XCUITest on the iPad simulator. The hardware-keyboard checks of ⌘⌫ and the menu bar are in the P1 close (D30).
+- **Titles:** SwiftUI has no modifier for the navigation-bar title font. `NookAppearance.configure()` sets the rounded `display`/`headline` styles and `textPrimary` through the UIKit appearance proxy once at launch (03 §8.8).
+
+*Affects:* `Nook/App`, `Nook/Features/Capture`, 01 §1.5.

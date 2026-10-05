@@ -33,7 +33,7 @@
 ### 1.2 Patterns that appear on many screens
 | Pattern | Behavior | Source |
 |---|---|---|
-| **Capture button** | Floating glass button, bottom trailing, above the tab bar. Opens C-01. Hidden on capture, paywall and lock screens. | [PRD §3] |
+| **Capture button** | Floating glass button, bottom trailing, above the tab bar. Opens C-01. Shown on the tab roots and on Room, Spot and Item detail; not on other pushed screens, and not on Find at compact width, where the search field sits at the bottom (D32). Hidden on capture, paywall and lock screens. | [PRD §3] |
 | **Move button** | Opens the Move picker (I-04). Present on item detail, answer cards, search results, widgets, Siri and a Lock Screen control. | [PRD §5 F6, §6] |
 | **Location breadcrumb** | "Bedroom → Wardrobe → Top shelf". Tapping a segment opens that room, spot or container. | [PRD §6] |
 | **Last confirmed label** | "Last confirmed Aug 3" on every location answer, so users know how fresh it is. | [PRD §6 honest limits] |

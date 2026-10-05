@@ -1,14 +1,17 @@
 import SwiftUI
 import NookUI
-import NookKit
-import NookAI
 
 @main
 struct NookApp: App {
+    init() {
+        NookAppearance.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
-            // P1 PR 7 replaces this with RootView (tab shell + Capture button).
-            Text("Nook")
+            RootView()
+                .nookAccent(.terracotta)   // S-06 makes this the user's choice (P1 PR 8)
         }
+        .commands { NookCommands() }
     }
 }

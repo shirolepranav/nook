@@ -1,5 +1,84 @@
 {
   "sourceLanguage" : "en",
-  "strings" : {},
+  "strings" : {
+    "Add Item" : {
+
+    },
+    "Add a few things and Nook will tell you where they are." : {
+
+    },
+    "Add item" : {
+
+    },
+    "Capture" : {
+
+    },
+    "Components" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete shortcut received." : {
+
+    },
+    "Edit" : {
+
+    },
+    "Find" : {
+
+    },
+    "Home" : {
+
+    },
+    "Let’s start with one room." : {
+
+    },
+    "Move" : {
+
+    },
+    "Nook" : {
+
+    },
+    "Nothing to find yet." : {
+
+    },
+    "Reports" : {
+
+    },
+    "Reports live here." : {
+
+    },
+    "Scan Room" : {
+
+    },
+    "Scan barcode" : {
+
+    },
+    "Scan receipt" : {
+
+    },
+    "Scan room" : {
+
+    },
+    "Search" : {
+
+    },
+    "Search your things" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Settings…" : {
+
+    },
+    "Warranties, lent things and your insurance report will appear as you add items." : {
+
+    },
+    "Your rooms and everything in them will show up here." : {
+
+    }
+  },
   "version" : "1.0"
 }

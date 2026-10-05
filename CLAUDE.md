@@ -74,6 +74,7 @@ Its pieces, for quicker loops:
 # App tests:     xcodebuild -project Nook.xcodeproj -scheme Nook -destination '…' test
 # NookKit:       swift test --package-path Packages/NookKit
 # NookUI/NookAI: cd Packages/NookUI && xcodebuild -scheme NookUI -destination '…' test   (iOS only)
+# Strings:      scripts/sync-strings.sh <DerivedData>   (adds new copy to Localizable.xcstrings after a CLI build)
 ```
 CI runs `scripts/ci.sh` on a self-hosted runner on every PR (D31). There's no linter yet; the policy greps enforce the hard rules.
 

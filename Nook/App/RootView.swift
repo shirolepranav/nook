@@ -1,0 +1,35 @@
+import SwiftUI
+import NookUI
+
+/// The adaptive shell (01 §1.1): a Liquid Glass tab bar on compact width, a sidebar on
+/// regular width (Pro Max landscape, iPad). Size classes only, via the system (D29).
+struct RootView: View {
+    // Survives relaunch, and resizing an iPad window between compact and regular (S1).
+    @SceneStorage("tab") private var tab: AppTab = .home
+    @State private var toast: ToastMessage?
+
+    var body: some View {
+        TabView(selection: $tab) {
+            Tab("Home", systemImage: "house", value: AppTab.home) {
+                HomeScreen()
+            }
+            Tab("Find", systemImage: "magnifyingglass", value: AppTab.find, role: .search) {
+                FindScreen()
+            }
+            Tab("Reports", systemImage: "doc.text", value: AppTab.reports) {
+                ReportsScreen()
+            }
+            Tab("Settings", systemImage: "gearshape", value: AppTab.settings) {
+                SettingsScreen()
+            }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+        .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
+        .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
+        .toast($toast)
+        .focusedSceneValue(\.selectedTab, $tab)
+        #if DEBUG
+        .focusedSceneValue(\.shortcutToast, $toast)
+        #endif
+    }
+}
