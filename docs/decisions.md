@@ -172,3 +172,18 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - App Store iPad screenshots are needed
 
 *Affects:* PRD §1, §4, §5, §8, §9, §10; 01 header, §1.1, §1.3, §1.5, §14, §15; 03 §5; 04 §9; 05 §3; roadmap (P0b, P1, P13, the smoke suite, v1.2); CLAUDE.md; the canvas (iPad boards).
+
+**D30 · 2026-10-05 · Accepted** — **D29's two `[Verify in SDK]` checks pass in Xcode 27.0 (27A266a), on the iOS 27.0 simulator (13-inch iPad Pro M5).** Both were tested with a throwaway SwiftUI app, and both results apply to Nook.
+- **One window is possible, but it's not the default.**
+  - The SwiftUI app template generates `UIApplicationSupportsMultipleScenes = YES`. Nook's starter project in `nook/` has the same setting (`INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES`).
+  - With `INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO` and an Info.plist whose `UIApplicationSceneManifest` sets `UIApplicationSupportsMultipleScenes` to `NO`:
+    - `supportsMultipleScenes` is `false`
+    - `openWindow(id:)` does nothing
+    - `activateSceneSession` fails with "The application does not support multiple scenes."
+    - the app stays at 1 scene
+  - With the default, the same calls opened a new window each time.
+  - **P1 must set this**, and a unit or UI test checks `supportsMultipleScenes == false` until P15.
+- **Keyboard shortcuts reach the iPad menu bar.** A `CommandMenu("Item")` with `.keyboardShortcut` buttons appears in the main menu, between View and Window, with the right keys: ⌘N, ⇧⌘N, ⌘M and ⌘⌫. The system also adds the app menu (with "Settings…" on ⌘,), File (Close, ⌘W), Edit (Undo and Redo on ⌘Z and ⇧⌘Z, plus Cut, Copy and Paste), View, Window and Help. So 01 §1.5's ⌘Z and ⇧⌘Z work once moves, deletes and saves register with the `UndoManager` (04 §9).
+- **Not checked:** the menu bar was read from the menu system, not opened on screen; P1 takes a screenshot of it. P1 also checks what the system "Settings…" item opens, and whether it should go to Nook's Settings tab.
+
+*Affects:* 04 §9 (the `[Verify in SDK]` tags are resolved), the roadmap P1 scope, Nook's Xcode project settings.
