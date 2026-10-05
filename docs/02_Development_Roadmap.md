@@ -80,7 +80,7 @@ Run on the iPhone SE, iPhone 18 Pro Max and 13-inch iPad simulators at minimum. 
 **Gate 1 — Design sign-off:** prototype tested, open design questions closed, assets exported.
 
 ### P0b · iPad design (D29)
-**Status:** Not started. Runs alongside P1. It must be signed off before P2, because P2 builds the first real screens.
+**Status:** In review (60 iPad boards on the canvas; waiting for the product owner's sign-off). Runs alongside P1. It must be signed off before P2, because P2 builds the first real screens.
 **Goal:** make the existing designs look right on iPad before screens are built, so iPad costs a few checks per screen instead of a later rework.
 **Scope**
 - iPad boards on the Claude Design canvas (re-synced into `design/`) at 13-inch landscape and portrait, and iPad mini portrait, for every screen that changes at wide widths: Home, Room, Spot, Item detail, Find, Scan review, Reports, Settings.

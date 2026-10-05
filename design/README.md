@@ -66,6 +66,28 @@ Open the canvas, find **Prototype · start here** (top left), and press **Play**
 | S-12 Help & About | `S12Help` | ✓ | ✓ | — | SE | ✓ |
 | L-02 App lock | `L02Lock` | ✓ | ✓ | Face ID, Touch ID, not recognized | SE | ✓ |
 
+### Coverage (P0b, iPad, D29)
+iPad component boards (`iPad<Screen>`) are drawn at the 13-inch iPad in landscape, 1376×1032. The `size` tweak switches them to `13p` (13-inch portrait, 1032×1376) or `mini` (iPad mini portrait, 744×1133). Landscape shows the sidebar. Portrait collapses it to a floating tab bar at the top. Grids follow `cardMinWidth`/`maxGridColumns`, and text columns follow `readableWidth` (03 §4).
+
+| ID | Component | Light | Dark | Sizes |
+|---|---|---|---|---|
+| H-01 Home | `iPadHome` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| H-01 Pointer hover | `iPadHover` | ✓ | ✓ | 13 in landscape |
+| H-02 Room | `iPadRoom` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| H-03 Spot | `iPadSpot` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| I-01 Item detail (beside the grid in landscape) | `iPadItem` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| I-02 Editor as a form sheet | `iPadSheet` | ✓ | ✓ | 13 in landscape |
+| F-01/F-03 Find + answer | `iPadFind` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| C-01 Capture popover | `iPadCapture` | ✓ | ✓ | 13 in landscape |
+| C-03 Scan review | `iPadScan` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| R-01 Reports | `iPadReports` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| S-01 Settings | `iPadSettings` | ✓ | ✓ | 13 in landscape, 13 in portrait, mini |
+| P-01 Paywall as a form sheet | `iPadPaywall` | ✓ | ✓ | 13 in landscape |
+| 01 §1.5 Menu bar + shortcuts | `iPadMenu` | ✓ | ✓ | 13 in landscape |
+| 01 §1.5 Resized window (Stage Manager) | `iPadResize` | ✓ | ✓ | 13 in landscape |
+
+Sheets and pickers that aren't drawn here (H-04, H-05, I-04, I-06, F-05) use the same form sheet as `iPadSheet`.
+
 Camera feeds and photos are token-colored stand-ins (wall, shelf, objects); the app shows the user's photo. Illustrations are drawn inline from `design/tools/illustrations.py`, which also exports the app's SVG layers to `design/illustrations/` (D25). The **Illustrations** row at the top of the canvas shows them all, in light and dark.
 
 **How to use them**

@@ -2527,6 +2527,546 @@
       "title": "Prototype · start here",
       "radius": 24,
       "is_interactive": true
+    },
+    "iPadHome.dc.html": {
+      "x": 0,
+      "y": 92200,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-01 iPad · Home · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHome-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 92200,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-01 iPad · Home · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHome-13p.dc.html": {
+      "x": 2912,
+      "y": 92200,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-01 iPad · Home · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHome-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 92200,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-01 iPad · Home · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHome-mini.dc.html": {
+      "x": 5136,
+      "y": 92200,
+      "w": 744,
+      "h": 1133,
+      "title": "H-01 iPad · Home · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHome-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 92200,
+      "w": 744,
+      "h": 1133,
+      "title": "H-01 iPad · Home · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom.dc.html": {
+      "x": 0,
+      "y": 93996,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-02 iPad · Room · Kitchen · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 93996,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-02 iPad · Room · Kitchen · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom-13p.dc.html": {
+      "x": 2912,
+      "y": 93996,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-02 iPad · Room · Kitchen · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 93996,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-02 iPad · Room · Kitchen · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom-mini.dc.html": {
+      "x": 5136,
+      "y": 93996,
+      "w": 744,
+      "h": 1133,
+      "title": "H-02 iPad · Room · Kitchen · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadRoom-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 93996,
+      "w": 744,
+      "h": 1133,
+      "title": "H-02 iPad · Room · Kitchen · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot.dc.html": {
+      "x": 0,
+      "y": 95792,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-03 iPad · Spot · Top shelf · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 95792,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-03 iPad · Spot · Top shelf · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot-13p.dc.html": {
+      "x": 2912,
+      "y": 95792,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-03 iPad · Spot · Top shelf · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 95792,
+      "w": 1032,
+      "h": 1376,
+      "title": "H-03 iPad · Spot · Top shelf · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot-mini.dc.html": {
+      "x": 5136,
+      "y": 95792,
+      "w": 744,
+      "h": 1133,
+      "title": "H-03 iPad · Spot · Top shelf · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSpot-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 95792,
+      "w": 744,
+      "h": 1133,
+      "title": "H-03 iPad · Spot · Top shelf · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem.dc.html": {
+      "x": 0,
+      "y": 97588,
+      "w": 1376,
+      "h": 1032,
+      "title": "I-01 iPad · Item detail · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 97588,
+      "w": 1376,
+      "h": 1032,
+      "title": "I-01 iPad · Item detail · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem-13p.dc.html": {
+      "x": 2912,
+      "y": 97588,
+      "w": 1032,
+      "h": 1376,
+      "title": "I-01 iPad · Item detail · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 97588,
+      "w": 1032,
+      "h": 1376,
+      "title": "I-01 iPad · Item detail · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem-mini.dc.html": {
+      "x": 5136,
+      "y": 97588,
+      "w": 744,
+      "h": 1133,
+      "title": "I-01 iPad · Item detail · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadItem-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 97588,
+      "w": 744,
+      "h": 1133,
+      "title": "I-01 iPad · Item detail · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind.dc.html": {
+      "x": 0,
+      "y": 99384,
+      "w": 1376,
+      "h": 1032,
+      "title": "F-01/F-03 iPad · Find · Answer · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 99384,
+      "w": 1376,
+      "h": 1032,
+      "title": "F-01/F-03 iPad · Find · Answer · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind-13p.dc.html": {
+      "x": 2912,
+      "y": 99384,
+      "w": 1032,
+      "h": 1376,
+      "title": "F-01/F-03 iPad · Find · Answer · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 99384,
+      "w": 1032,
+      "h": 1376,
+      "title": "F-01/F-03 iPad · Find · Answer · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind-mini.dc.html": {
+      "x": 5136,
+      "y": 99384,
+      "w": 744,
+      "h": 1133,
+      "title": "F-01/F-03 iPad · Find · Answer · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadFind-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 99384,
+      "w": 744,
+      "h": 1133,
+      "title": "F-01/F-03 iPad · Find · Answer · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan.dc.html": {
+      "x": 0,
+      "y": 101180,
+      "w": 1376,
+      "h": 1032,
+      "title": "C-03 iPad · Scan review · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 101180,
+      "w": 1376,
+      "h": 1032,
+      "title": "C-03 iPad · Scan review · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan-13p.dc.html": {
+      "x": 2912,
+      "y": 101180,
+      "w": 1032,
+      "h": 1376,
+      "title": "C-03 iPad · Scan review · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 101180,
+      "w": 1032,
+      "h": 1376,
+      "title": "C-03 iPad · Scan review · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan-mini.dc.html": {
+      "x": 5136,
+      "y": 101180,
+      "w": 744,
+      "h": 1133,
+      "title": "C-03 iPad · Scan review · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadScan-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 101180,
+      "w": 744,
+      "h": 1133,
+      "title": "C-03 iPad · Scan review · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports.dc.html": {
+      "x": 0,
+      "y": 102976,
+      "w": 1376,
+      "h": 1032,
+      "title": "R-01 iPad · Reports · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 102976,
+      "w": 1376,
+      "h": 1032,
+      "title": "R-01 iPad · Reports · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports-13p.dc.html": {
+      "x": 2912,
+      "y": 102976,
+      "w": 1032,
+      "h": 1376,
+      "title": "R-01 iPad · Reports · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 102976,
+      "w": 1032,
+      "h": 1376,
+      "title": "R-01 iPad · Reports · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports-mini.dc.html": {
+      "x": 5136,
+      "y": 102976,
+      "w": 744,
+      "h": 1133,
+      "title": "R-01 iPad · Reports · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadReports-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 102976,
+      "w": 744,
+      "h": 1133,
+      "title": "R-01 iPad · Reports · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings.dc.html": {
+      "x": 0,
+      "y": 104772,
+      "w": 1376,
+      "h": 1032,
+      "title": "S-01 iPad · Settings · 13 in landscape",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings-13l-dark.dc.html": {
+      "x": 1456,
+      "y": 104772,
+      "w": 1376,
+      "h": 1032,
+      "title": "S-01 iPad · Settings · 13 in landscape · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings-13p.dc.html": {
+      "x": 2912,
+      "y": 104772,
+      "w": 1032,
+      "h": 1376,
+      "title": "S-01 iPad · Settings · 13 in portrait",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings-13p-dark.dc.html": {
+      "x": 4024,
+      "y": 104772,
+      "w": 1032,
+      "h": 1376,
+      "title": "S-01 iPad · Settings · 13 in portrait · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings-mini.dc.html": {
+      "x": 5136,
+      "y": 104772,
+      "w": 744,
+      "h": 1133,
+      "title": "S-01 iPad · Settings · iPad mini",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSettings-mini-dark.dc.html": {
+      "x": 5960,
+      "y": 104772,
+      "w": 744,
+      "h": 1133,
+      "title": "S-01 iPad · Settings · iPad mini · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSheet.dc.html": {
+      "x": 0,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "I-02 iPad · Form sheet · New item",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadSheet-dark.dc.html": {
+      "x": 1456,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "I-02 iPad · Form sheet · New item · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadCapture.dc.html": {
+      "x": 2912,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "C-01 iPad · Capture popover",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadCapture-dark.dc.html": {
+      "x": 4368,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "C-01 iPad · Capture popover · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadPaywall.dc.html": {
+      "x": 5824,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "P-01 iPad · Paywall form sheet",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadPaywall-dark.dc.html": {
+      "x": 7280,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "P-01 iPad · Paywall form sheet · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadMenu.dc.html": {
+      "x": 8736,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "§1.5 iPad · Menu bar · keyboard shortcuts",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadMenu-dark.dc.html": {
+      "x": 10192,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "§1.5 iPad · Menu bar · keyboard shortcuts · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadResize.dc.html": {
+      "x": 11648,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "§1.5 iPad · Resized window (Stage Manager)",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadResize-dark.dc.html": {
+      "x": 13104,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "§1.5 iPad · Resized window (Stage Manager) · Dark",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHover.dc.html": {
+      "x": 14560,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-01 iPad · Pointer hover on a photo card",
+      "radius": 18,
+      "is_interactive": true
+    },
+    "iPadHover-dark.dc.html": {
+      "x": 16016,
+      "y": 106568,
+      "w": 1376,
+      "h": 1032,
+      "title": "H-01 iPad · Pointer hover · Dark",
+      "radius": 18,
+      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -2777,6 +3317,78 @@
       "w": 240,
       "x": 0,
       "y": -1660
+    },
+    "ipad-row0": {
+      "kind": "title1",
+      "text": "iPad · Home (H-01)",
+      "x": 0,
+      "y": 91900,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row1": {
+      "kind": "title1",
+      "text": "iPad · Room · Kitchen (H-02)",
+      "x": 0,
+      "y": 93696,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row2": {
+      "kind": "title1",
+      "text": "iPad · Spot · Top shelf (H-03)",
+      "x": 0,
+      "y": 95492,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row3": {
+      "kind": "title1",
+      "text": "iPad · Item detail (I-01)",
+      "x": 0,
+      "y": 97288,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row4": {
+      "kind": "title1",
+      "text": "iPad · Find · Answer (F-01/F-03)",
+      "x": 0,
+      "y": 99084,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row5": {
+      "kind": "title1",
+      "text": "iPad · Scan review (C-03)",
+      "x": 0,
+      "y": 100880,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row6": {
+      "kind": "title1",
+      "text": "iPad · Reports (R-01)",
+      "x": 0,
+      "y": 102676,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row7": {
+      "kind": "title1",
+      "text": "iPad · Settings (S-01)",
+      "x": 0,
+      "y": 104472,
+      "w": 240,
+      "maxW": 6704
+    },
+    "ipad-row8": {
+      "kind": "title1",
+      "text": "iPad · Sheets, popover, menu bar, windows, pointer (01 §1.5)",
+      "x": 0,
+      "y": 106268,
+      "w": 240,
+      "maxW": 8000
     }
   },
   "order": [
@@ -3060,7 +3672,67 @@
     "AppIcon.dc.html",
     "C02RoomScan-classic.dc.html",
     "C02RoomScan-classic-shooting.dc.html",
-    "Prototype.dc.html"
+    "Prototype.dc.html",
+    "iPadHome.dc.html",
+    "iPadHome-13l-dark.dc.html",
+    "iPadHome-13p.dc.html",
+    "iPadHome-13p-dark.dc.html",
+    "iPadHome-mini.dc.html",
+    "iPadHome-mini-dark.dc.html",
+    "iPadRoom.dc.html",
+    "iPadRoom-13l-dark.dc.html",
+    "iPadRoom-13p.dc.html",
+    "iPadRoom-13p-dark.dc.html",
+    "iPadRoom-mini.dc.html",
+    "iPadRoom-mini-dark.dc.html",
+    "iPadSpot.dc.html",
+    "iPadSpot-13l-dark.dc.html",
+    "iPadSpot-13p.dc.html",
+    "iPadSpot-13p-dark.dc.html",
+    "iPadSpot-mini.dc.html",
+    "iPadSpot-mini-dark.dc.html",
+    "iPadItem.dc.html",
+    "iPadItem-13l-dark.dc.html",
+    "iPadItem-13p.dc.html",
+    "iPadItem-13p-dark.dc.html",
+    "iPadItem-mini.dc.html",
+    "iPadItem-mini-dark.dc.html",
+    "iPadFind.dc.html",
+    "iPadFind-13l-dark.dc.html",
+    "iPadFind-13p.dc.html",
+    "iPadFind-13p-dark.dc.html",
+    "iPadFind-mini.dc.html",
+    "iPadFind-mini-dark.dc.html",
+    "iPadScan.dc.html",
+    "iPadScan-13l-dark.dc.html",
+    "iPadScan-13p.dc.html",
+    "iPadScan-13p-dark.dc.html",
+    "iPadScan-mini.dc.html",
+    "iPadScan-mini-dark.dc.html",
+    "iPadReports.dc.html",
+    "iPadReports-13l-dark.dc.html",
+    "iPadReports-13p.dc.html",
+    "iPadReports-13p-dark.dc.html",
+    "iPadReports-mini.dc.html",
+    "iPadReports-mini-dark.dc.html",
+    "iPadSettings.dc.html",
+    "iPadSettings-13l-dark.dc.html",
+    "iPadSettings-13p.dc.html",
+    "iPadSettings-13p-dark.dc.html",
+    "iPadSettings-mini.dc.html",
+    "iPadSettings-mini-dark.dc.html",
+    "iPadSheet.dc.html",
+    "iPadSheet-dark.dc.html",
+    "iPadCapture.dc.html",
+    "iPadCapture-dark.dc.html",
+    "iPadPaywall.dc.html",
+    "iPadPaywall-dark.dc.html",
+    "iPadMenu.dc.html",
+    "iPadMenu-dark.dc.html",
+    "iPadResize.dc.html",
+    "iPadResize-dark.dc.html",
+    "iPadHover.dc.html",
+    "iPadHover-dark.dc.html"
   ],
   "pages": [],
   "title": "Nook — App screens"

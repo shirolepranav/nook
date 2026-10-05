@@ -107,6 +107,23 @@ def check_mockups(allowed, mapped_to_tokens):
     return unknown, todo, grid, fonts
 
 
+def check_wide_layouts(doc):
+    """D29: nothing on an iPad board is wider than maxGridColumns cards (03 §4)."""
+    tokens = dict(re.findall(r"\| `(cardMinWidth|maxGridColumns|readableWidth)` \| (\d+)", doc))
+    cols, card = int(tokens["maxGridColumns"]), int(tokens["cardMinWidth"])
+    widest = cols * card + (cols - 1) * 16
+    failures = []
+    for path in sorted(glob.glob(str(ROOT / "design/screens/iPad*.html"))):
+        html = Path(path).read_text()
+        failures += [f"{Path(path).name}: max-width {v}px is wider than {widest}px"
+                     for v in re.findall(r"max-width:\s*(\d+)px", html) if int(v) > widest]
+        if ".pgrid" in html and f"minmax({card}px" not in html:
+            failures.append(f"{Path(path).name}: photo grid doesn't use cardMinWidth ({card}px)")
+        if ".readable" in html and f"max-width:{tokens['readableWidth']}px" not in html:
+            failures.append(f"{Path(path).name}: readable column isn't readableWidth")
+    return failures
+
+
 def main():
     assert round(contrast("#000000", "#FFFFFF"), 1) == 21.0  # sanity check of the WCAG math
 
@@ -123,6 +140,10 @@ def main():
     print(f"Contrast: {len(failures)} failure(s)")
     for f in failures:
         print("  FAIL", f)
+    wide = check_wide_layouts(doc)
+    print(f"iPad wide-window rules (D29): {len(wide)} failure(s)")
+    for f in wide:
+        print("  FAIL", f)
     print(f"Mockup colors not in tokens or §2.6: {len(unknown)}")
     for h, files in sorted(unknown.items()):
         print("  FAIL", h, "in", ", ".join(sorted(set(files))))
@@ -134,7 +155,7 @@ def main():
     print(f"Font sizes outside the type scale (§3): {len(fonts)}")
     for line in sorted(set(grid + fonts)):
         print("  TODO", line)
-    return 1 if failures or unknown else 0
+    return 1 if failures or unknown or wide else 0
 
 
 if __name__ == "__main__":
