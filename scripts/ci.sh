@@ -23,6 +23,12 @@ step "Design tokens"
 python3 design/tools/check_tokens.py > "$OUT/tokens.log" || { cat "$OUT/tokens.log"; exit 1; }
 tail -4 "$OUT/tokens.log" | sed "s/^/  /"
 
+step "Color sets match 03 (design/tools/export_colorsets.py)"
+(cd design/tools && python3 export_colorsets.py >/dev/null)
+git diff --exit-code --stat -- Packages/NookUI/Sources/NookUI/Resources Nook/Resources/Assets.xcassets \
+    || { echo "  ✘ Color sets differ from 03. Run the exporter and commit the result."; exit 1; }
+echo "  ✔ In sync"
+
 step "Build app and tests (zero warnings)"
 xcodebuild build-for-testing -quiet -project Nook.xcodeproj -scheme Nook \
     -destination 'generic/platform=iOS Simulator' -derivedDataPath "$DD" \

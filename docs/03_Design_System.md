@@ -89,7 +89,7 @@ Status is never shown by color alone: always icon plus text ("Ends in 12 days").
 `success` (was `#3D7A4C`) and `warning` (was `#A4610E`) were darkened in P0 so they reach 4.5:1 on every light surface, including `surfaceSunken`.
 
 ### 2.5 Implementing colors
-Each token is a Color Set in the asset catalog with Any, Dark, and High Contrast variants.
+Each token is a Color Set in NookUI's `Colors.xcassets` with Any, Dark, and High Contrast variants. **The color sets are generated from the tables above** by `design/tools/export_colorsets.py`: change a value here, run the script, and commit both. CI fails if the color sets and this doc disagree. The real code is `Packages/NookUI/Sources/NookUI/Tokens/NookColor.swift` (`NookColor`, `AccentChoice`, `RoomColor`, all loading from `bundle: .module`); the sample below shows the idea.
 
 ```swift
 import SwiftUI
@@ -713,7 +713,7 @@ struct SaveItemButton: View {
 ---
 
 ## 15. Token checklist for NookUI (P1 in the roadmap)
-- [ ] Neutral, accent (×6), room (×8) and semantic Color Sets with Light, Dark and High Contrast variants
+- [x] Neutral, accent (×6), room (×8) and semantic Color Sets with Light, Dark and High Contrast variants (generated, P1)
 - [ ] Font tokens and `MoneyText`
 - [ ] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`)
 - [ ] Warm shadow modifier

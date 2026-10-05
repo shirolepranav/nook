@@ -7,7 +7,7 @@ let package = Package(
     platforms: [.iOS("27.0")],
     products: [.library(name: "NookUI", targets: ["NookUI"])],
     targets: [
-        .target(name: "NookUI"),
+        .target(name: "NookUI", resources: [.process("Resources")]),
         .testTarget(name: "NookUITests", dependencies: ["NookUI"]),
     ]
 )
