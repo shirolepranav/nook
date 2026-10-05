@@ -62,13 +62,20 @@ design/          approved screen mockups (Claude Design export): visual source o
 `Nook.xcodeproj` at the root uses synchronized folders: new files in `Nook/`, `NookTests/`, `NookUITests/` and `NookWidgets/` join their target automatically (D31).
 
 ## Commands
-> TBD in P1. Fill these in when the Xcode project and CI exist.
+Every check CI runs, in one script (needs Xcode 27 and the iOS 27.0 iPhone SE (3rd generation) and iPad Pro 13-inch (M5) simulators):
 ```bash
-# Build:      xcodebuild -scheme Nook -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)' build
-# Unit tests: swift test --package-path Packages/NookKit   (and NookAI, NookUI)
-# App tests:  xcodebuild -scheme Nook -destination '…' test
-# Lint:       swiftlint && swiftformat --lint .
+scripts/ci.sh
 ```
+Its pieces, for quicker loops:
+```bash
+# Policy greps:  scripts/policy-check.sh
+# Tokens:        python3 design/tools/check_tokens.py
+# Build:         xcodebuild -project Nook.xcodeproj -scheme Nook -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation),OS=27.0' build
+# App tests:     xcodebuild -project Nook.xcodeproj -scheme Nook -destination '…' test
+# NookKit:       swift test --package-path Packages/NookKit
+# NookUI/NookAI: cd Packages/NookUI && xcodebuild -scheme NookUI -destination '…' test   (iOS only)
+```
+CI runs `scripts/ci.sh` on a self-hosted runner on every PR (D31). There's no linter yet; the policy greps enforce the hard rules.
 
 ## Skills (in `.claude/skills/`)
 | Skill | Use when |

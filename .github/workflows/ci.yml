@@ -1,0 +1,27 @@
+# Runs scripts/ci.sh on the self-hosted Mac runner (D31).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: [self-hosted, macOS]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, test and policy checks
+        run: scripts/ci.sh
+      - name: Keep result bundles when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresults
+          path: .build/ci/results
+          retention-days: 7

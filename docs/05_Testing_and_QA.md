@@ -24,13 +24,16 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 
 ---
 
-## 2. CI (GitHub Actions, macOS runner, set up in P1)
+## 2. CI (GitHub Actions, self-hosted Mac runner, D31)
 
-- **On every PR to `main`:**
+`scripts/ci.sh` runs every check below, locally or in `.github/workflows/ci.yml`.
+- **On every PR:**
   - build with zero warnings
   - unit and snapshot tests
   - UI smoke on the iPhone SE simulator
-  - the policy greps below
+  - the policy greps below (`scripts/policy-check.sh`)
+  - the token checker (`design/tools/check_tokens.py`)
+  - UI tests also run on the 13-inch iPad simulator (D29)
 - **Policy greps** (fail the build when they match):
 
 | Grep | Rule |
@@ -38,7 +41,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | `UIScreen.main`, `userInterfaceIdiom` | Size classes only |
 | `import FoundationModels`/`import Vision` outside `Packages/NookAI` | The router contract |
 | `URLSession` outside the allowlist | No network |
-| `Color(red:`, `.font(.system(size:` in the app target | Tokens only |
+| `Color(red:`, `.system(size:` outside `Packages/NookUI` | Tokens only |
 | `@Attribute(.unique)` | CloudKit-safe |
 
 - **Nightly:** UI tests on the full simulator matrix, the perf suite, and the evaluation set on an AI-capable runner (if available; otherwise run it manually on the team device).
