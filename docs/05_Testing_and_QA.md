@@ -9,7 +9,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | Layer | Tool | Where | What | Runs |
 |---|---|---|---|---|
 | Unit | Swift Testing (`@Test`, `#expect`) | Each package's `Tests/` | Models, invariants, services, search ranking, scheduler, router fallback, report/CSV/backup | Every PR (CI) |
-| Snapshot | Image snapshots of NookUI components and key screens | `NookUI` tests + `NookTests` | {light, dark} × {Large, AX3}, plus Increase Contrast for components | Every PR |
+| Snapshot | Image snapshots of NookUI components and key screens (in-house helper, D31) | `NookUI` tests + `NookTests`; references in `Fixtures/snapshots/` | {light, dark} × {Large, AX5}, plus Increase Contrast (light) for components | Every PR |
 | UI flow | XCUITest | `NookUITests` | The 6 user stories plus the smoke suite rows that can be automated | Every PR (SE sim); nightly on the full matrix |
 | App Intents | App Intents testing | `NookTests/Intents` | Find, Move, ListRoom, Add, ScanRoom | Every PR from P12 |
 | AI quality | Evaluations framework [Verify in SDK] | `NookAI/Evaluations` + `Fixtures/eval` | Room-scan naming accuracy; question→query correctness | Per AI PR, on every iOS beta, before each release |
@@ -19,7 +19,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 **Rules:**
 - **Test the classic path first.** Every router method gets tests for the forced `.classic` engine, `.ai`, and AI throwing or timing out.
 - **Inject time and the system.** Clocks, calendars, the notification center, availability and the file system are all injected. No test sleeps, and no test depends on the wall clock.
-- **Fixtures are in the repo:** `Fixtures/receipts/` (50 receipts including crumpled, faded and foreign ones), `Fixtures/shelf/` (the G3 test shelf), `Fixtures/eval/` (100 labeled household photos), `Fixtures/seed/` (100, 1k and 5k items), and `Fixtures/golden/` (PDF page counts, CSV text).
+- **Fixtures are in the repo:** `Fixtures/receipts/` (50 receipts including crumpled, faded and foreign ones), `Fixtures/shelf/` (the G3 test shelf), `Fixtures/eval/` (100 labeled household photos), `Fixtures/seed/` (100, 1k and 5k items), and `Fixtures/golden/` (PDF page counts, CSV text) and `Fixtures/snapshots/` (snapshot references, recorded on the iPhone SE (3rd generation) iOS 27.0 simulator; re-record with `TEST_RUNNER_SNAPSHOT_RECORD=1`).
 - **A bug fix ships with a test** that fails without the fix.
 
 ---

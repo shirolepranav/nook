@@ -1,0 +1,9 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Value hidden" : {
+      "comment" : "VoiceOver label for a price masked by Hide values (F11)."
+    }
+  },
+  "version" : "1.0"
+}

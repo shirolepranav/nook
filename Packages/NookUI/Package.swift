@@ -4,6 +4,7 @@ import PackageDescription
 // Design tokens and components. Depends on nothing (04 §1).
 let package = Package(
     name: "NookUI",
+    defaultLocalization: "en",
     platforms: [.iOS("27.0")],
     products: [.library(name: "NookUI", targets: ["NookUI"])],
     targets: [

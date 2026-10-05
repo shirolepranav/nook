@@ -714,9 +714,9 @@ struct SaveItemButton: View {
 
 ## 15. Token checklist for NookUI (P1 in the roadmap)
 - [x] Neutral, accent (×6), room (×8) and semantic Color Sets with Light, Dark and High Contrast variants (generated, P1)
-- [ ] Font tokens and `MoneyText`
-- [ ] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`)
-- [ ] Warm shadow modifier
+- [x] Font tokens and `MoneyText` (P1)
+- [x] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`; Swift name `NookLayout`, since SwiftUI has a `Layout` protocol) (P1)
+- [x] Warm shadow modifier, with the low, lifted and floating levels (P1)
 - [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view
-- [ ] Motion and haptic helpers with Reduce Motion handling
+- [x] Motion and haptic helpers with Reduce Motion handling (`NookMotion`, `NookHaptic`) (P1)
 - [ ] Debug gallery showing every component in every state, light and dark, default and largest text

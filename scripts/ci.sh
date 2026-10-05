@@ -10,7 +10,8 @@ PHONE='platform=iOS Simulator,name=iPhone SE (3rd generation),OS=27.0'
 IPAD='platform=iOS Simulator,name=iPad Pro 13-inch (M5),OS=27.0'
 rm -rf "$OUT/results"; mkdir -p "$OUT/results"
 # One simulator per destination, no clones: parallel testing can't boot extra devices
-# on a busy Mac ("insufficient system resources").
+# on a busy Mac ("insufficient system resources"). No diagnostics collection either: on a
+# failure it stalls for 10 minutes on a busy Mac.
 
 step() { echo; echo "▶ $1"; }
 
@@ -41,7 +42,7 @@ swift test --quiet --package-path Packages/NookKit
 for pkg in NookUI NookAI; do
     step "$pkg tests (iPhone SE)"
     (cd "Packages/$pkg" && xcodebuild test -quiet -scheme "$pkg" -destination "$PHONE" \
-        -parallel-testing-enabled NO -derivedDataPath "../../$DD-$pkg" \
+        -parallel-testing-enabled NO -collect-test-diagnostics never -derivedDataPath "../../$DD-$pkg" \
         -resultBundlePath "../../$OUT/results/$pkg.xcresult") > "$OUT/$pkg.log" 2>&1 || true
     summarize "$OUT/results/$pkg.xcresult"
 done
@@ -50,7 +51,7 @@ for dest in "$PHONE" "$IPAD"; do
     name=$(echo "$dest" | sed 's/.*name=\([^,]*\).*/\1/')
     step "App unit and UI tests ($name)"
     xcodebuild test-without-building -quiet -project Nook.xcodeproj -scheme Nook -destination "$dest" \
-        -parallel-testing-enabled NO -derivedDataPath "$DD" \
+        -parallel-testing-enabled NO -collect-test-diagnostics never -derivedDataPath "$DD" \
         -resultBundlePath "$OUT/results/app-${name// /_}.xcresult" > "$OUT/app-${name// /_}.log" 2>&1 || true
     summarize "$OUT/results/app-${name// /_}.xcresult"
 done
