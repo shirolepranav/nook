@@ -5,8 +5,9 @@
 ## How this roadmap is organized
 - **Order, not dates.** Phases are listed in build order. There are no durations or deadlines; a phase is finished when its acceptance criteria, QA and regression all pass.
 - **Two releases.**
-  - **v1.0:** phases P0–P13. Built with the current release of Xcode; no beta needed.
+  - **v1.0:** phases P0–P13, for iPhone and iPad (D29). Built with the current release of Xcode; no beta needed.
   - **v1.1 (iPhone Duo support):** phase P14. Needs the iOS 27.1 SDK in Xcode 27.1.
+  - **v1.2 (iPad drag and drop, multiple windows):** phase P15 (D29).
 - **Stages and gates:** the PRD describes 4 stages with a gate at the end of each. Each gate must pass before the next stage starts. Gate 2, "works with AI off", protects everyone on older iPhones (PRD §10). The PRD's embedded roadmap diagram wasn't readable in the attached file, so the stages are reconstructed from the PRD text.
 - **Stack (PRD §8):** Swift 6, SwiftUI, Observation; iOS 27.0 minimum; SwiftData in an App Group; Foundation Models; Vision and VisionKit; Core Spotlight; CloudKit private database (Pro); StoreKit 2; WidgetKit; App Intents. No third-party dependencies.
 - **Packages (PRD §8):** NookKit (models and storage), NookAI (router and both engines), NookUI (design system).
@@ -15,16 +16,18 @@
 
 | Stage | Phases | Gate |
 |---|---|---|
-| 1. Design | P0 | Gate 1: Design sign-off |
+| 1. Design | P0, P0b | Gate 1: Design sign-off (P0b: iPad boards signed off by the product owner) |
 | 2. Core app, Classic path | P1–P7 | Gate 2: Works with AI off |
 | 3. AI, exports, Pro | P8–P11 | Gate 3: Feature complete |
 | 4. Platform, polish, release | P12–P13 | Gate 4: v1.0 ready to submit |
 | v1.1 | P14 | Gate 5: Duo support ready to submit |
+| v1.2 | P15 | Gate 6: iPad extras ready to submit |
 
 ## Testing rules for every phase
 - **QA:** manual and exploratory testing of the phase's new screens on this matrix:
   - iPhone SE simulator (smallest screen)
   - iPhone 18 Pro and Pro Max simulators, including Pro Max in landscape for regular-width layouts
+  - 13-inch iPad simulator in portrait, landscape and a narrow resized window, plus iPad mini (D29)
   - SwiftUI previews at custom sizes for wide layouts
   - one real Apple Intelligence iPhone and one real older iPhone (PRD §9)
   - light and dark mode, the largest accessibility text size, and VoiceOver on every new screen
@@ -34,11 +37,11 @@
 - **Definition of Done:** code reviewed; unit tests and a UI test for each primary flow; light, dark and largest-text screenshots attached to the pull request; no new Accessibility Inspector warnings; smoke results logged.
 
 ## Cumulative smoke suite
-Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs every line up to and including its own.
+Run on the iPhone SE, iPhone 18 Pro Max and 13-inch iPad simulators at minimum. A phase runs every line up to and including its own.
 
 | ID | Added in | Check |
 |---|---|---|
-| S1 | P1 | Cold launch to Home in light and dark mode, no crash, tab bar and Capture button visible; Pro Max landscape shows the sidebar |
+| S1 | P1 | Cold launch to Home in light and dark mode, no crash, tab bar and Capture button visible; Pro Max landscape and the 13-inch iPad show the sidebar; resizing the iPad window to narrow switches to the tab bar without losing the current tab; ⌘1–⌘4 switch tabs |
 | S2 | P2 | Create a room with 3 spots and a container in under 30 s |
 | S3 | P3 | Add an item with photo and name in 2 taps; edit it; delete it; restore from Recently Deleted |
 | S4 | P4 | Move an item in 2 taps; the move appears in its location history |
@@ -52,6 +55,7 @@ Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs e
 | S12 | P12 | Lock the app with Face ID; a Private item is missing from Spotlight and widgets; FindItemIntent works from Shortcuts |
 | S13 | P13 | Complete S3 and S5 end-to-end with VoiceOver only |
 | S14 | P14 (v1.1) | On the iPhone Duo simulator: opening and closing keeps the room and scroll position; half-folded capture uses top and bottom halves |
+| S15 | P15 (v1.2) | On iPad: drag an item onto another room and Undo it; open a second window and lock the app, and both windows are covered |
 
 ---
 
@@ -75,6 +79,20 @@ Run on the iPhone SE and iPhone 18 Pro Max simulators at minimum. A phase runs e
 
 **Gate 1 — Design sign-off:** prototype tested, open design questions closed, assets exported.
 
+### P0b · iPad design (D29)
+**Status:** Not started. Runs alongside P1. It must be signed off before P2, because P2 builds the first real screens.
+**Goal:** make the existing designs look right on iPad before screens are built, so iPad costs a few checks per screen instead of a later rework.
+**Scope**
+- iPad boards on the Claude Design canvas (re-synced into `design/`) at 13-inch landscape and portrait, and iPad mini portrait, for every screen that changes at wide widths: Home, Room, Spot, Item detail, Find, Scan review, Reports, Settings.
+- One form-sheet board for editors and pickers, plus the paywall as a form sheet and the Capture menu as a popover.
+- One resized-window board showing the switch from regular to compact.
+- Pointer hover states for photo cards and rows; the keyboard shortcut list (01 §1.5).
+- Teach `design/tools/check_tokens.py` the wide-window tokens in `03` §4 (`cardMinWidth`, `maxGridColumns`, `readableWidth`).
+
+**Acceptance:** every iPad board uses tokens only (`check_tokens.py` passes); nothing stretches past `readableWidth` or 6 grid columns; every board has light and dark.
+**QA:** expert review of the iPad boards against `03` §12 and an accessibility review (D27 format).
+**Regression:** the token checker over all of `design/screens/`.
+
 ---
 
 ## Stage 2 — Core app on the Classic path
@@ -82,8 +100,8 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 
 ### P1 · Project setup & app shell
 **Status:** Not started
-**Scope:** Xcode project with the app target, widget extension and the three local packages; CI running unit and UI tests; NookUI with tokens and core components (buttons, photo card, room card, chips, fields, empty state, toast, skeleton); tab shell (Home, Find, Reports, Settings) with the floating Capture button; adaptive shell (tab bar on compact width, sidebar on regular width); appearance settings with the 6-accent picker (S-06); launch screen (L-01).
-**Acceptance:** builds with no warnings; cold launch to Home under 400 ms on iPhone 15 (PRD §9); no hard-coded colors or sizes outside NookUI; tab bar becomes a sidebar on Pro Max landscape.
+**Scope:** Xcode project with a universal app target (iPhone and iPad, D29), widget extension and the three local packages; one window on iPad (Info.plist setting from D30, with a test) and the shortcut menu (D30), plus a screenshot of the iPad menu bar and a hardware-keyboard check of ⌘⌫ and ⌘1–⌘4; CI running unit and UI tests on iPhone and iPad simulators; NookUI with tokens and core components (buttons, photo card, room card, chips, fields, empty state, toast, skeleton); tab shell (Home, Find, Reports, Settings) with the floating Capture button; adaptive shell (tab bar on compact width, sidebar on regular width); appearance settings with the 6-accent picker (S-06); launch screen (L-01).
+**Acceptance:** builds with no warnings; cold launch to Home under 400 ms on iPhone 15 (PRD §9); no hard-coded colors or sizes outside NookUI; tab bar becomes a sidebar on Pro Max landscape and iPad; ⌘1–⌘4 switch tabs.
 **QA:** components gallery checked in light, dark, Increase Contrast, Reduce Transparency, and the strongest and weakest Liquid Glass settings.
 **Regression:** new — snapshot tests for each component in light and dark, default and largest text. Smoke — S1.
 
@@ -183,7 +201,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 
 ### P13 · Polish, accessibility, performance & v1.0 release
 **Status:** Not started
-**Scope:** motion and haptics polish; full accessibility audit (VoiceOver, Voice Control, largest text, Reduce Motion, Reduce Transparency, Increase Contrast, every Liquid Glass setting) and an honest App Store Accessibility Nutrition Label (PRD §3); regular-width layout review on Pro Max landscape, since Duo owners will see these layouts on the inner screen; Instruments passes against every PRD §9 budget; download size under 30 MB; "Data Not Collected" privacy label; TestFlight beta with at least 30 testers, 10 of them on iPhones without Apple Intelligence (PRD §9); App Store keywords and screenshots; final app name check (PRD §10 open questions).
+**Scope:** motion and haptics polish; full accessibility audit (VoiceOver, Voice Control, largest text, Reduce Motion, Reduce Transparency, Increase Contrast, every Liquid Glass setting) and an honest App Store Accessibility Nutrition Label (PRD §3); regular-width layout review on Pro Max landscape and every iPad size, since Duo owners will also see these layouts on the inner screen; pointer and keyboard pass on iPad (D29); Instruments passes against every PRD §9 budget; download size under 30 MB; "Data Not Collected" privacy label; TestFlight beta with at least 30 testers, 10 of them on iPhones without Apple Intelligence and at least 5 on iPads (PRD §9); App Store keywords and screenshots, including the 13-inch iPad set; final app name check (PRD §10 open questions).
 **Acceptance:** zero known crash or data-loss bugs; crash-free sessions at 99.8% or higher in beta (PRD §1); all PRD §9 performance budgets met.
 **QA:** exploratory sessions per tab; one full "no AI" release pass (PRD §9).
 **Regression:** new — full run of every phase's automated suite. Smoke — S1–S13.
@@ -207,6 +225,23 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 
 ---
 
+## v1.2 — iPad extras (D29)
+
+### P15 · iPad drag and drop & multiple windows
+**Status:** Not started
+**Scope:** items tagged **[v1.2 iPad]** in `01_Pages_UI_Interactions.md`:
+- **Drag and drop:** items onto rooms, spots and containers, always through `LocationService.move` with Undo, a VoiceOver equivalent, and a "Move" accessibility action. Photos and receipts can be dropped in from Files and other apps.
+- **Multiple windows:** each window remembers its own tab, room and scroll position. Locking the app or Hide values covers every window at once. Private items stay hidden in every window until unlocked.
+- **Widgets:** the extra-large family on iPad.
+
+**Acceptance:** a drop never moves anything without Undo; two windows editing the same item never lose a change; locking covers every window.
+**QA:** dragging between windows, dropping onto a container in a collapsed sidebar, locking with two windows open, a drop while a sheet is open.
+**Regression:** new — drag-and-drop UI tests; a two-window lock test. Smoke — S1–S15.
+
+**Gate 6 — v1.2 ready to submit:** P15 acceptance met and every smoke check passes on iPhone and iPad.
+
+---
+
 ## PRD performance budgets to track (PRD §9)
 | Moment | Budget | Checked from |
 |---|---|---|
@@ -225,6 +260,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 | Some AI iPhones can't read images | P8 | Vision check in the router; those iPhones use the Classic photo path |
 | Users stop updating locations | P4, P12 | Move from answer cards, search, widgets, Siri and Lock Screen |
 | Duo owners see v1.0 before Duo polish | P13, P14 | Size-class layouts reviewed in P13; P14 follows in v1.1 |
+| iPad support can't be removed once shipped | P0b, P13 | iPad boards before P2; iPad in every phase's QA and the smoke suite (D29) |
 | Apple changes Foundation Models behavior | P8 onward | Router fallback; rerun evaluations on each iOS update |
 | Scope needs trimming | Any | Move AI room summaries in the report, saved searches and Declutter to a later version, since none are in the top 6 user stories |
 

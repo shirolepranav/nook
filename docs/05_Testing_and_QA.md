@@ -53,10 +53,13 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | iPhone 18 Pro | Simulator | Mainline |
 | iPhone 18 Pro Max | Simulator | Largest slab; regular width in landscape |
 | iPhone Duo: open, closed, rotated, half-folded, Split View both sides | Xcode 27.1 Device Hub | Size-class transitions, hinge, per-edge safe areas |
+| 13-inch iPad: portrait, landscape, Split View, a narrow resized window | Simulator | Widest layout; regular ↔ compact on resize (D29) |
+| iPad mini | Simulator | Smallest regular-width screen |
+| iPad with a hardware keyboard and pointer | Simulator (or a real iPad if available) | Shortcuts, hover effects, secondary click |
 | **Real Apple Intelligence iPhone** (15 Pro or newer) | Device | AI path, performance budgets |
 | **Real older iPhone** (no Apple Intelligence) | Device | Classic path, performance on slow hardware |
 
-Each phase's QA runs on at least SE, 18 Pro Max and one Duo configuration. G2, G3 and G4 run the full matrix.
+Each phase's QA runs on at least SE, 18 Pro Max, the 13-inch iPad (portrait and landscape) and one Duo configuration. G2, G3 and G4 run the full matrix.
 
 ---
 

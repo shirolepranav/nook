@@ -234,7 +234,14 @@ struct MoneyText: View {
 
 Layout rules (PRD §4):
 - Layouts depend on **size classes only**, never on device model, screen size or orientation.
-- Photo grid columns: 2 on compact width, 3 on Pro Max landscape, 4–5 on regular width.
+- Photo grid columns: 2 on compact width, 3 on Pro Max landscape, 4–5 on regular width. On wider iPad windows the grid keeps adding columns as long as each card stays at least `Layout.cardMinWidth` wide, up to `Layout.maxGridColumns` (D29).
+- Text-heavy content (item detail fields, editors, settings, report builder) is never wider than `Layout.readableWidth`. It stays centered in the column instead of stretching across a 13-inch iPad (D29).
+
+| Layout token | Value | Use |
+|---|---|---|
+| `cardMinWidth` | 160 pt | Narrowest photo card before the grid drops a column |
+| `maxGridColumns` | 6 | Most photo-grid columns at any width |
+| `readableWidth` | 640 pt | Widest column for forms, settings and long text |
 - Handle each safe-area edge separately (bars can sit on the left or right in some layouts).
 - **v1.1 (iPhone Duo):** nothing on the hinge; use `ReservedRegion`, which needs the iOS 27.1 SDK.
 - Never use `UIScreen.main`; read size and scale from the environment or window scene.
@@ -265,12 +272,13 @@ struct ItemGrid: View {
                 ForEach(items) { ItemRow(item: $0) }
             }
         } else {
-            // More columns when there's more room (PRD §4).
-            let columnCount = sizeClass == .regular ? 4 : 2
-            let columns = Array(repeating: GridItem(.flexible(), spacing: Space.s2), count: columnCount)
+            // More columns when there's more room (PRD §4), capped for wide iPad windows (D29).
+            let columns = [GridItem(.adaptive(minimum: Layout.cardMinWidth), spacing: Space.s2)]
             LazyVGrid(columns: columns, spacing: Space.s2) {
-                ForEach(items) { ItemPhotoCard(item: $0) }
+                ForEach(items) { ItemPhotoCard(item: $0).hoverEffect(.lift) }   // D29: pointer
             }
+            .frame(maxWidth: Layout.cardMinWidth * CGFloat(Layout.maxGridColumns)
+                   + Space.s2 * CGFloat(Layout.maxGridColumns - 1))
         }
     }
 }
@@ -666,6 +674,9 @@ struct SaveItemButton: View {
 | Standard and Pro Max | 2 columns; 3 on Pro Max landscape; regular width in Pro Max landscape gets the sidebar |
 | Regular width (Pro Max landscape, enlarged iPhone Mirroring) | Sidebar plus `NavigationSplitView`; item detail beside the grid; 4–5 columns. Duo owners also see this on the inner screen in v1.0 |
 | Split View | Works at every width down to compact |
+| iPad (D29) | The regular-width layout. Sidebar, grid and item detail show together when the window is wide enough; grids grow to at most 6 columns; forms and long text cap at `readableWidth`; editors, pickers and the paywall are centered form sheets; the Capture menu is a popover |
+| Resized iPad window | Every size works; narrow windows get the compact layout, wide ones the regular layout. One window at a time in v1.0 |
+| Pointer and keyboard (iPad) | Photo cards lift and rows highlight under the pointer; secondary click opens long-press menus; shortcuts in 01 §1.5 |
 
 **v1.1 — iPhone Duo support**
 | Context | Design response |
@@ -676,7 +687,7 @@ struct SaveItemButton: View {
 | Open or close the Duo | Same room and scroll position after the change |
 
 **Design deliverables**
-- **v1.0:** 4.7" SE, 6.3", 6.9", 6.9" landscape (regular width), and the largest accessibility text size.
+- **v1.0:** 4.7" SE, 6.3", 6.9", 6.9" landscape (regular width), and the largest accessibility text size. iPad (D29): 13-inch landscape and portrait, and iPad mini portrait, for every screen that changes at wide widths. Sheets and pickers are drawn once as a form sheet.
 - **v1.1:** Duo outer, Duo inner open, and Duo half-folded (PRD §4).
 
 ---
@@ -704,7 +715,7 @@ struct SaveItemButton: View {
 ## 15. Token checklist for NookUI (P1 in the roadmap)
 - [ ] Neutral, accent (×6), room (×8) and semantic Color Sets with Light, Dark and High Contrast variants
 - [ ] Font tokens and `MoneyText`
-- [ ] Spacing and radius tokens
+- [ ] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`)
 - [ ] Warm shadow modifier
 - [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view
 - [ ] Motion and haptic helpers with Reduce Motion handling

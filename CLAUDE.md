@@ -1,6 +1,6 @@
 # CLAUDE.md — Nook
 
-Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everything you own **and where it is**. You photograph a room and the app lists the items. It reads receipts and serials, answers "Where is my…?", tracks warranties and loans, and exports an insurance report. **It is private and on-device, with no server and no account.** It is a one-time $19.99 Pro unlock. A small team plus Claude agents build it in phases.
+Nook is a native iPhone and iPad app (Swift 6, SwiftUI, iOS/iPadOS 27.0+) that catalogs everything you own **and where it is**. You photograph a room and the app lists the items. It reads receipts and serials, answers "Where is my…?", tracks warranties and loans, and exports an insurance report. **It is private and on-device, with no server and no account.** It is a one-time $19.99 Pro unlock. A small team plus Claude agents build it in phases.
 
 ## Principles (in priority order: when two conflict, the higher one wins)
 1. **Design and UX first.** It should feel like a first-party Apple app, only warmer. If a feature isn't delightful yet, it waits.
@@ -31,7 +31,7 @@ Nook is a native iPhone app (Swift 6, SwiftUI, iOS 27.0+) that catalogs everythi
   - no `.unique`, no `.deny`, no ordered relationships
   - identity is an app-owned `id: UUID`
   - blobs live on disk, not in the database
-- **Size classes only.** No `UIScreen.main`, no device or idiom branching. Every screen works compact, regular and on iPhone Duo (fold, half-fold, Split View).
+- **Size classes only.** No `UIScreen.main`, no device or idiom branching. Every screen works compact, regular, on iPad (any window size, pointer and keyboard; D29) and on iPhone Duo (fold, half-fold, Split View).
 - **Glass for controls, paper for content.** Never put `.glassEffect()` on cards, rows, photos or toasts.
 - **Tokens only.** No color, font size, spacing, radius, motion or haptic literals outside `NookUI`.
 - **Accessibility is part of "done":** VoiceOver labels (name, room, value), custom actions, Dynamic Type to AX5 (grids become lists), Reduce Motion, 44-pt targets, 4.5:1 contrast. Every action works without the camera and without AI.
