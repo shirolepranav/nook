@@ -150,3 +150,25 @@ Real-user testing moves to the existing P13 TestFlight beta (30 testers, 10 with
 - **The report cover** shows the home name, insurer, policy number and date.
 
 New since `01` was written: the room editor lists the room's spots with "Add spot" (F1's 30-second target), and scan review has "Accept All" (F3's 2-minute target). *Affects:* 01, the canvas.
+
+**D29 · 2026-10-05 · Accepted (2026-10-05, product owner)** — **iPad ships in v1.0, with layout parity plus pointer and keyboard support.** This moves iPad up from v1.2 (PRD §10). Nook becomes a universal app: iOS 27.0 and iPadOS 27.0 minimum, with one adaptive layout and no device or idiom branching.
+- **In v1.0:**
+  - Every screen looks right and works on iPad in portrait, landscape and any resized window (Split View, Stage Manager, windowed apps), using the regular-width layout that's already designed (PRD §4 rule 2).
+  - Wide-window rules (03 §5): photo grids grow to at most 6 columns, and text-heavy content is capped at a readable width.
+  - On regular width, editors, pickers and the paywall open as centered form sheets, and the Capture menu (C-01) opens as a popover from the Capture button.
+  - **Pointer:** a hover effect on every tappable card and row, and long-press menus also open with a secondary click.
+  - **Keyboard shortcuts** for the main commands (01 §1.5). They also appear in the iPad menu bar.
+- **In v1.2:**
+  - drag and drop (items onto rooms and spots, photos and receipts from Files)
+  - multiple windows
+  - extra-large widgets
+- **v1.0 shows one window at a time.** P1 confirms in the SDK that multiple scenes can be turned off for a SwiftUI app on iPadOS 27 [Verify in SDK]. If not, P1 logs a new decision.
+- **Room scan on iPad** keeps the same flow. Quick add and receipt scan stay one tap away in the Capture menu, because holding up a big tablet to scan a room is awkward.
+- **Apple Intelligence** works on iPads that support it, through the same router check (PRD §8). Every other iPad uses the Classic path.
+
+*Why:* the layouts already follow size classes, and regular-width layouts exist for Pro Max landscape and the Duo inner screen. That makes iPad cheap now and expensive to add after the screens are built. An iPhone-only Nook would run on iPad in a small, phone-sized window, and App Review tests it there anyway. Pointer support and shortcuts are close to free in SwiftUI and make the app feel native with a keyboard. Drag and drop has to go through `LocationService.move`, with Undo and VoiceOver equivalents. Multiple windows would have to keep the Face ID lock, Hide values and Private items correct in every window. Both deserve their own phase. *Cost accepted:*
+- every PR's QA adds iPad checks
+- iPad support can't be removed once it ships
+- App Store iPad screenshots are needed
+
+*Affects:* PRD §1, §4, §5, §8, §9, §10; 01 header, §1.1, §1.3, §1.5, §14, §15; 03 §5; 04 §9; 05 §3; roadmap (P0b, P1, P13, the smoke suite, v1.2); CLAUDE.md; the canvas (iPad boards).

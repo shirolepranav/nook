@@ -254,7 +254,13 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 ## 9. Adaptive layout rules (PRD §4)
 
 - **Size classes only.** Use `@Environment(\.horizontalSizeClass)` and `ViewThatFits`, with geometry from the container. **Never** `UIScreen.main`, and never branch on device model or idiom. CI greps for `UIScreen.main` and `userInterfaceIdiom`.
-- **Regular width** uses `NavigationSplitView` with the sidebar tab placement.
+- **Regular width** uses `NavigationSplitView` with the sidebar tab placement. On iPad it's the same view; the system decides how many columns fit the window (D29).
+- **iPad (D29):**
+  - One target, universal (iPhone + iPad), iPadOS 27.0 minimum.
+  - **One window in v1.0:** turn off multiple scenes [Verify in SDK: that a SwiftUI app on iPadOS 27 can still do this; log the result as a new D#]. Multiple windows are v1.2.
+  - **Keyboard shortcuts:** `.keyboardShortcut` on the commands in 01 §1.5, grouped in `.commands` so they appear in the iPad menu bar [Verify in SDK].
+  - **Pointer:** `.hoverEffect` on custom cards and rows; system controls get it for free. Secondary click comes from `.contextMenu`.
+  - **Undo:** moves, deletes and saves register with the window's `UndoManager`, so ⌘Z and the shake gesture behave the same as the Undo toast.
 - **Duo hinge:** use `ReservedRegion` [Verify in SDK] on the capture and item-detail screens.
 - **Safe areas:** read each edge separately.
 - **State restoration:** use `@SceneStorage` for the tab, the navigation path (Codable IDs) and scroll anchors, so fold/unfold and relaunch keep context.

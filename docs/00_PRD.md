@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-**Nook** (working name) is a carefully designed iPhone app that knows everything you own and where it is. Photograph a room and the app lists the items in it. It reads receipts and serial numbers, remembers where each thing is kept, and produces an insurance-ready report in one tap. The whole app works fully on any iPhone that runs iOS 27. AI makes it faster, but AI is never required.
+**Nook** (working name) is a carefully designed iPhone and iPad app that knows everything you own and where it is. Photograph a room and the app lists the items in it. It reads receipts and serial numbers, remembers where each thing is kept, and produces an insurance-ready report in one tap. The whole app works fully on any iPhone that runs iOS 27 and any iPad that runs iPadOS 27 (D29). AI makes it faster, but AI is never required.
 
 **Positioning:** "Everything you own, and exactly where it is. Pay once." Insurance is why people buy it. Finding things and knowing what you own is why they open it every week.
 
@@ -30,7 +30,8 @@
 | Crash-free sessions | 99.8% or higher |
 
 **Non-goals for v1:**
-- iPad, Mac or Watch apps
+- Mac or Watch apps
+- iPad-only behaviors beyond pointer and keyboard support: drag and drop, and multiple windows (v1.2, D29)
 - Sharing with a household or other users
 - A web dashboard
 - Live price lookups for items
@@ -124,7 +125,7 @@ The app should feel calm, tactile and personal, like a well-organized home rathe
 
 ## 4. Device and screen support
 
-The app supports every iPhone that runs iOS 27, from the 4.7-inch iPhone SE to the iPhone Duo's 7.6-inch inner screen. One adaptive layout, driven by size classes, covers them all. We never branch on device model, screen size or orientation. Apple's own iPhone Duo guidance says the same: avoid assumptions based on idiom and use size classes instead ([Apple Tech Talk](https://developer.apple.com/videos/play/tech-talks/111461/)).
+The app supports every iPhone that runs iOS 27, from the 4.7-inch iPhone SE to the iPhone Duo's 7.6-inch inner screen, and every iPad that runs iPadOS 27, from iPad mini to the 13-inch iPad Pro (D29). One adaptive layout, driven by size classes, covers them all. We never branch on device model, screen size or orientation. Apple's own iPhone Duo guidance says the same: avoid assumptions based on idiom and use size classes instead ([Apple Tech Talk](https://developer.apple.com/videos/play/tech-talks/111461/)).
 
 ### Screens we design and test for
 | Device | Screen | Pixels | Layout class | Notes |
@@ -135,6 +136,12 @@ The app supports every iPhone that runs iOS 27, from the 4.7-inch iPhone SE to t
 | iPhone 18 Pro | 6.3-inch | 2622 × 1206 at 460 ppi | Compact width | Same size class as iPhone 17 |
 | iPhone Air, 17, 17e, 16 | 6.1 to 6.6-inch | Various | Compact width | Standard tall 19.5:9 screens |
 | iPhone SE (2nd/3rd gen), iPhone 11 | 4.7 and 6.1-inch | Various | Compact width | Oldest supported; no Apple Intelligence; SE has Touch ID and no Dynamic Island |
+| iPad Pro / iPad Air, 13-inch | 13-inch | ~1032 × 1376 pt | Regular width, regular height | Widest layout; sidebar, grid and item detail can all show at once in landscape |
+| iPad Pro / iPad Air / iPad, 11-inch | 11-inch | ~820–834 × 1180–1210 pt | Regular width, regular height | Mainline iPad |
+| iPad mini | 8.3-inch | ~744 × 1133 pt | Regular width, regular height | Smallest iPad; checks that regular-width layouts don't assume a big screen |
+| Any iPad, resized window | Any | Any size the user drags it to | Compact or regular width | Narrow windows get the iPhone layout |
+
+iPad point sizes are from Apple's specs and are confirmed in the simulator in P1. As with Duo, layouts never use them as fixed values.
 
 Apple has not published point dimensions for iPhone Duo. Third-party estimates differ, so the layout never uses fixed point values ([CodeConfig](https://codeconfig.dev/blog/iphone-duo-screen-size)).
 
@@ -152,20 +159,30 @@ Apple has not published point dimensions for iPhone Duo. Third-party estimates d
 7. **Corners:** use `ConcentricRectangle` so cards follow each screen's corner shape, including Duo's.
 8. **No `UIScreen.main`:** it's ambiguous on a two-display device. Read size and scale from the environment or window scene.
 9. **Split View:** the app must work at any width Split View gives it on the Duo inner screen, down to compact width.
+10. **iPad uses the regular-width layout.** It's the same layout as rule 2, with a few rules for very wide windows (D29):
+    - Photo grids add columns as the width grows, up to 6.
+    - Text-heavy content (item detail fields, editors, settings, reports) is capped at a readable width instead of stretching.
+    - Editors, pickers and the paywall open as centered form sheets. The Capture menu opens as a popover from the Capture button.
+11. **iPad windows resize freely** (Split View, Stage Manager and windowed apps). The app works at every size, and a narrow window gets the compact layout. v1.0 shows **one window at a time**; multiple windows come in v1.2 (D29).
+12. **Pointer and keyboard (iPad, v1.0):**
+    - Every tappable card and row shows a pointer hover effect.
+    - Long-press menus also open with a secondary click.
+    - The main commands have keyboard shortcuts, which also appear in the iPad menu bar (D29).
 
-**Design deliverables per screen:** frames on the Claude Design canvas (D22) for 4.7-inch SE, 6.3-inch, 6.9-inch, Duo outer, Duo inner (open), Duo half-folded, and the largest accessibility text size.
+**Design deliverables per screen:** frames on the Claude Design canvas (D22) for 4.7-inch SE, 6.3-inch, 6.9-inch, Duo outer, Duo inner (open), Duo half-folded, and the largest accessibility text size. For iPad (D29): the 13-inch iPad in landscape and portrait, and iPad mini in portrait, for the screens that change at wide widths.
 
 **Test matrix:** see [05_Testing_and_QA.md](05_Testing_and_QA.md). It covers:
 - The iPhone SE simulator
 - The iPhone 18 Pro and Pro Max simulators
 - iPhone Duo in Xcode 27.1 Device Hub (open, closed, rotated, folded, Split View on both sides)
+- The 13-inch iPad and iPad mini simulators, in portrait, landscape and a narrow resized window
 - One real Apple Intelligence iPhone and one real older iPhone
 
 ---
 
 ## 5. Feature requirements
 
-Every feature works on every supported iPhone. On iPhone 15 Pro and newer with Apple Intelligence on, the AI path does the typing for you. On older iPhones, or when Apple Intelligence is off, the manual path uses Apple's older on-device tools (Vision text recognition, barcode scanning, Spotlight search), which need no AI. The user never sees an error. They just see a slightly different, still polished flow.
+Every feature works on every supported iPhone and iPad. On iPhone 15 Pro and newer (and Apple Intelligence iPads) with Apple Intelligence on, the AI path does the typing for you. On older iPhones, or when Apple Intelligence is off, the manual path uses Apple's older on-device tools (Vision text recognition, barcode scanning, Spotlight search), which need no AI. The user never sees an error. They just see a slightly different, still polished flow.
 
 | Feature | AI path (Apple Intelligence iPhones) | Manual path (every iPhone) |
 |---|---|---|
@@ -195,7 +212,7 @@ Every feature works on every supported iPhone. On iPhone 15 Pro and newer with A
 
   *Acceptance:* a 500-item PDF generates on the device in under 20 seconds.
 - **F10. Widgets and controls.** Home Screen widgets: "Warranties ending soon", "Total home value" and "Quick find". A Control Center control opens room scan. *Acceptance:* widgets render correctly on all screens, including Duo inner.
-- **F11. Privacy lock.** Optional Face ID or Touch ID lock (Touch ID on iPhone Duo and SE). Values can be hidden with a tap for screen sharing.
+- **F11. Privacy lock.** Optional Face ID or Touch ID lock (Touch ID on iPhone Duo, SE and iPads with Touch ID). Values can be hidden with a tap for screen sharing.
 
 ---
 
@@ -287,7 +304,7 @@ Services never call the AI directly. They ask the router, which returns the same
 | Layer | Choice | Why |
 |---|---|---|
 | Language and UI | Swift 6, SwiftUI, Observation | Best support for Liquid Glass, iPhone Duo layouts and Dynamic Type |
-| Minimum OS | iOS 27.0; v1.0 builds with the current release of Xcode 27, and v1.1 (iPhone Duo) with the iOS 27.1 SDK (D23) | Foundation Models image input is in the iOS 27 SDK; full-screen iPhone Duo support needs 27.1 |
+| Minimum OS | iOS 27.0 and iPadOS 27.0 (D29); v1.0 builds with the current release of Xcode 27, and v1.1 (iPhone Duo) with the iOS 27.1 SDK (D23) | Foundation Models image input is in the iOS 27 SDK; full-screen iPhone Duo support needs 27.1 |
 | Storage | SwiftData in an App Group container | Shared with widgets and App Intents; simple migrations |
 | Photos | HEIC files on disk, 400-px thumbnails cached | Keeps the database small and scrolling fast |
 | AI | Foundation Models (on-device model), `@Generable` structured output, tool calling, OCR and barcode tools | Free, private, offline |
@@ -400,11 +417,11 @@ struct DetectedItem {
 ### Testing
 - Unit tests for the data model, warranty dates, search ranking and the router's fallback logic.
 - AI quality tests using Apple's Evaluations framework. A set of 100 labeled household photos tracks how many items are correctly named per photo, run on each iOS update.
-- UI tests for the top 6 user stories, run on iPhone SE, iPhone 18 Pro Max and iPhone Duo (open, closed, half-folded) in Device Hub.
+- UI tests for the top 6 user stories, run on iPhone SE, iPhone 18 Pro Max, the 13-inch iPad and iPad mini (D29), and iPhone Duo (open, closed, half-folded) in Device Hub.
 - The App Intents Testing framework for Siri and Shortcuts flows.
 - An accessibility audit with Xcode's Accessibility Inspector and a manual VoiceOver pass before every release.
 - A "No AI" test pass: the full app is tested with Apple Intelligence turned off, on every release.
-- A TestFlight beta with at least 30 testers, including 10 on iPhones without Apple Intelligence.
+- A TestFlight beta with at least 30 testers, including 10 on iPhones without Apple Intelligence and at least 5 on iPads.
 
 ---
 
@@ -428,7 +445,7 @@ Each gate must pass before the next phase starts. The "works with AI off" gate p
 
 ### After launch (v1.1 to v2)
 - **v1.1:** household sharing through iCloud shared zones, and more languages (German, Spanish, French, Japanese first).
-- **v1.2:** iPad layout (mostly free, thanks to the iPhone Duo inner-screen work).
+- **v1.2:** iPad-only behaviors: drag and drop (items onto rooms, photos and receipts from Files) and multiple windows (D29). The iPad layout, pointer and keyboard support ship in v1.0.
 - **v2:** optional Private Cloud Compute for long insurance write-ups, an Apple Watch "Where is…?" glance, and a Mac app for bulk editing.
 
 ### Risks
@@ -445,6 +462,7 @@ Each gate must pass before the next phase starts. The "works with AI off" gate p
 - [ ] Final app name: "Nook" is a placeholder; check App Store and trademark availability.
 - [ ] Confirm the oldest iPhone that iOS 27 supports, to finalize the smallest test device.
 - [ ] Confirm official iPhone Duo point sizes once Apple documents them.
+- [ ] Confirm the oldest iPad that iPadOS 27 supports, and which iPads have Apple Intelligence (D29).
 - [ ] Pick the launch countries and currencies for the value fields.
 
 ### Sources

@@ -1,11 +1,12 @@
 # Nook — Pages, UI & Interactions
 
 **Source:** *Home Inventory & Warranty Vault — PRD + Technical Spec* (Sep 27, 2026, @Pranav Shirole). Section references such as "PRD §5 F3" point back to that document.
-**Platform:** iPhone only, iOS 27.0 minimum (PRD §8), built with the current release of Xcode (no beta needed). One adaptive layout from iPhone SE (4.7") to iPhone Pro Max (PRD §4).
+**Platform:** iPhone and iPad (D29), iOS 27.0 and iPadOS 27.0 minimum (PRD §8), built with the current release of Xcode (no beta needed). One adaptive layout from iPhone SE (4.7") to the 13-inch iPad (PRD §4).
 
 **Release split**
-- **v1.0:** everything in this document except items tagged **[v1.1 Duo]**. Layouts adapt by size class, so iPhone Duo owners can run v1.0 on both screens; the hinge-aware poses come later.
+- **v1.0:** everything in this document except items tagged **[v1.1 Duo]** or **[v1.2 iPad]**. Layouts adapt by size class, so iPhone Duo owners can run v1.0 on both screens; the hinge-aware poses come later.
 - **v1.1 (iPhone Duo support):** items tagged **[v1.1 Duo]**: half-folded layouts, hinge avoidance, open/close continuity, and the Duo outer-screen Home layout. These need the iOS 27.1 SDK.
+- **v1.2:** items tagged **[v1.2 iPad]**: drag and drop, and multiple windows (D29).
 
 **Legend**
 - **[PRD]**: stated in the PRD.
@@ -21,7 +22,7 @@
 | Width class | Structure | Source |
 |---|---|---|
 | Compact (all standard iPhones; Duo outer screen) | Bottom Liquid Glass tab bar: **Home · Find · Reports · Settings**, plus a floating Liquid Glass **Capture** button | [PRD §3 Navigation, §4 rule 1] |
-| Regular (Pro Max landscape, enlarged iPhone Mirroring, Duo inner screen) | Tab bar becomes a sidebar; two-column `NavigationSplitView` (room list beside item grid); item details open beside the grid | [PRD §4 rule 2] |
+| Regular (every iPad, Pro Max landscape, enlarged iPhone Mirroring, Duo inner screen) | Tab bar becomes a sidebar; two-column `NavigationSplitView` (room list beside item grid); item details open beside the grid | [PRD §4 rule 2] |
 
 > **Interpretation note:** the PRD lists Capture as tab 3 *and* calls it a floating button. This spec treats Capture as a floating action, not a destination: one tap opens the Capture menu (C-01) from any tab. This keeps "Capture is always one tap away" (PRD §3 pillar 2). Validate in the design prototype.
 
@@ -46,7 +47,7 @@ Each state is a designed screen with an **illustration, one sentence and one act
 - **Empty:** e.g. empty room: "Nothing here yet. Scan this room to fill it in 30 seconds." → Scan room.
 - **Loading:** skeleton photo cards in the warm palette; spinners only for waits under 1 second. [Inferred]
 - **AI unavailable or failed:** never shown as an error. The screen quietly becomes its Classic version with the user's photo already loaded (PRD §8 step 5).
-- **Error (rare: storage full, iCloud, StoreKit):** plain reason, reassurance ("Your items are safe on this iPhone"), and Retry.
+- **Error (rare: storage full, iCloud, StoreKit):** plain reason, reassurance ("Your items are safe on this iPhone"), and Retry. Copy that names the device says "iPad" on iPad (D29).
 - **Offline:** not a state. The app needs no network except StoreKit and optional iCloud (PRD §9).
 
 ### 1.4 Free vs Pro gating (PRD §7)
@@ -60,6 +61,26 @@ Each state is a designed screen with an **illustration, one sentence and one act
 | iCloud sync and backup | No | Yes |
 
 Free users can always view, search and delete everything they entered (PRD §7).
+
+### 1.5 iPad: windows, pointer and keyboard (D29)
+- **Windows:** v1.0 shows one window. It resizes freely (Split View, Stage Manager, windowed apps); a narrow window gets the compact layout. **[v1.2 iPad]** Multiple windows.
+- **Presentation on regular width:** editors (H-04, H-05, I-02), pickers (I-04, I-06), filters (F-05) and the paywall (P-01) open as centered form sheets. The Capture menu (C-01) opens as a popover anchored to the Capture button. Camera screens (C-02, C-06–C-08) stay full screen.
+- **Capture button:** bottom trailing corner of the content column, never over the sidebar.
+- **Pointer:** every tappable card and row has a hover effect (a highlight for rows, a lift for photo cards). Long-press menus also open with a secondary click.
+- **Keyboard shortcuts** (they also show in the iPad menu bar; standard text editing and Esc to close a sheet come from the system):
+
+| Shortcut | Action |
+|---|---|
+| ⌘1 – ⌘4 | Home, Find, Reports, Settings |
+| ⌘F | Find (focuses the search field) |
+| ⌘N | Add item (C-05) |
+| ⇧⌘N | Scan room (C-02) |
+| ⌘E | Edit the selected item or room |
+| ⌘M | Move the selected items (I-04) |
+| ⌘⌫ | Delete the selected items (to Recently Deleted, with Undo) |
+| ⌘Z / ⇧⌘Z | Undo / Redo the last move, delete or save |
+
+- **[v1.2 iPad]** Drag and drop: items onto rooms, spots and containers (through `LocationService.move`, with Undo); photos and receipts from Files.
 
 ---
 
@@ -400,8 +421,9 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | Item detail | Photo above details | Opens beside grid | Single column, larger text |
 | Room scan | Full camera, cards in a bottom sheet | Camera left, cards right [Inferred] | Cards as a list |
 | Find | Field + results | Results with answer card beside [Inferred] | Rows stack vertically |
+| Editors, settings, reports | Full width | Form sheet or readable-width column, never stretched (D29) | Single column |
 
-v1.0 rules: layout depends on size classes only, never on device model (PRD §4); each safe-area edge is handled separately; the app works at any Split View width. Apps built with Xcode 27 can't opt out of resizing, so these regular-width layouts are what Duo owners see on the inner screen in v1.0.
+v1.0 rules: layout depends on size classes only, never on device model (PRD §4); each safe-area edge is handled separately; the app works at any Split View width and any resized iPad window. On iPad, the same split view shows sidebar, grid and item detail together when the window is wide enough; the system hides the sidebar in narrower windows (D29). Apps built with Xcode 27 can't opt out of resizing, so these regular-width layouts are what Duo owners see on the inner screen in v1.0.
 
 ### [v1.1 Duo] layouts
 | Screen | Duo outer | Duo half-folded |
@@ -430,6 +452,7 @@ v1.1 rules: nothing sits on the hinge (`ReservedRegion`, iOS 27.1 SDK); content 
 - Restore from backup onto a device that already has data.
 - VoiceOver, Voice Control, largest text size, Reduce Motion, Reduce Transparency, Increase Contrast, Bold Text, and every Liquid Glass transparency setting.
 - **[v1.1 Duo]** iPhone Duo: opening or closing mid-flow, rotating, Split View on either side.
+- iPad: resizing the window mid-flow (regular ↔ compact), rotating, a hardware keyboard attached or removed, pointer-only use, an iPad without Apple Intelligence (D29).
 
 ---
 
