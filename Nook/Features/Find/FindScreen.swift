@@ -15,7 +15,12 @@ struct FindScreen: View {
                            title: Text("Nothing to find yet."),
                            message: Text("Add a few things and Nook will tell you where they are."))
         }
-        .searchable(text: $query, prompt: Text("Search your things"))
+        // Regular width: the field stays open under the title, as on the iPad boards; iOS
+        // would otherwise shrink it to a button in narrow iPad windows. Compact: the system's
+        // search tab keeps it at the bottom of the screen (D32).
+        .searchable(text: $query,
+                    placement: sizeClass == .regular ? .navigationBarDrawer(displayMode: .always) : .automatic,
+                    prompt: Text("Search your things"))
     }
 }
 

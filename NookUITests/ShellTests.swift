@@ -11,6 +11,7 @@ final class ShellTests: XCTestCase {
 
     @MainActor
     private func launch() {
+        XCUIDevice.shared.orientation = .portrait   // a landscape test may have left it rotated
         app = XCUIApplication()
         app.launch()
     }
@@ -59,12 +60,16 @@ final class ShellTests: XCTestCase {
     }
 
     @MainActor
-    func testRegularWidthShowsTheSidebar() throws {
+    func testLandscapeOnRegularWidthShowsTheSidebar() throws {
         launch()
-        try XCTSkipUnless(isRegularWidth, "compact width has a tab bar")
-        // P0b boards: landscape shows the sidebar; portrait floats the tab bar at the top.
+        // S1: Pro Max landscape and the iPad get the sidebar (P0b: iPad portrait floats the
+        // tab bar). Narrow phones stay compact in landscape and keep the tab bar.
         XCUIDevice.shared.orientation = .landscapeLeft
         defer { XCUIDevice.shared.orientation = .portrait }
+        XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 5))
+        // Landscape widths: SE 667 and 18 Pro 874 stay compact; Pro Max 956 and every iPad
+        // (1,133+) are regular.
+        try XCTSkipUnless(app.windows.firstMatch.frame.width >= 900, "compact even in landscape: tab bar")
         let toggle = app.buttons["ToggleSidebar"]
         XCTAssertTrue(toggle.waitForExistence(timeout: 5))
         XCTAssertEqual(toggle.label, "Hide Sidebar")

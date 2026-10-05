@@ -99,7 +99,7 @@ Run on the iPhone SE, iPhone 18 Pro Max and 13-inch iPad simulators at minimum. 
 Everything in this stage works with no AI, so Gate 2 can prove the app is complete on older iPhones.
 
 ### P1 · Project setup & app shell
-**Status:** Not started
+**Status:** In QA (PRs #16–#23, close PR open; owner checks listed in `docs/qa/p1-qa-report.md`)
 **Scope:** Xcode project with a universal app target (iPhone and iPad, D29), widget extension and the three local packages; one window on iPad (Info.plist setting from D30, with a test) and the shortcut menu (D30), plus a screenshot of the iPad menu bar and a hardware-keyboard check of ⌘⌫ and ⌘1–⌘4; CI running unit and UI tests on iPhone and iPad simulators; NookUI with tokens and core components (buttons, photo card, room card, chips, fields, empty state, toast, skeleton); tab shell (Home, Find, Reports, Settings) with the floating Capture button; adaptive shell (tab bar on compact width, sidebar on regular width); appearance settings with the 6-accent picker (S-06); launch screen (L-01).
 **Acceptance:** builds with no warnings; cold launch to Home under 400 ms on iPhone 15 (PRD §9); no hard-coded colors or sizes outside NookUI; tab bar becomes a sidebar on Pro Max landscape and iPad; ⌘1–⌘4 switch tabs.
 **QA:** components gallery checked in light, dark, Increase Contrast, Reduce Transparency, and the strongest and weakest Liquid Glass settings.
