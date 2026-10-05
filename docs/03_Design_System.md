@@ -242,6 +242,8 @@ Layout rules (PRD §4):
 | `cardMinWidth` | 160 pt | Narrowest photo card before the grid drops a column |
 | `maxGridColumns` | 6 | Most photo-grid columns at any width |
 | `readableWidth` | 640 pt | Widest column for forms, settings and long text |
+
+`NookGrid` (NookUI) implements these rules plus the accessibility-size switch to a single column; screens use it instead of building their own grid.
 - Handle each safe-area edge separately (bars can sit on the left or right in some layouts).
 - **v1.1 (iPhone Duo):** nothing on the hinge; use `ReservedRegion`, which needs the iOS 27.1 SDK.
 - Never use `UIScreen.main`; read size and scale from the environment or window scene.
@@ -296,6 +298,7 @@ struct ItemGrid: View {
 | `medium` | 12 | Text fields, list thumbnails |
 | `card` | 24 | Photo cards, room cards (outer) |
 | `hero` | 32 | Answer card, onboarding panels |
+| `toast` | 20 | Toasts (from the mockups) |
 | `concentric` | Computed | Photos inside cards, cards near screen edges |
 
 All rounded rectangles use the continuous corner style (the smooth "squircle" Apple uses).
@@ -719,6 +722,6 @@ struct SaveItemButton: View {
 - [x] Font tokens and `MoneyText` (P1)
 - [x] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`; Swift name `NookLayout`, since SwiftUI has a `Layout` protocol) (P1)
 - [x] Warm shadow modifier, with the low, lifted and floating levels (P1)
-- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view (P1 done: buttons, chips, pills, badges, fields, empty and error states, skeletons; the answer card and breadcrumb come with Find in P4–P5)
+- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view (P1 done: Capture button, buttons, photo card, room card, add card, chips, pills, badges, fields, toast, skeletons, empty and error states, `NookGrid`; the answer card and breadcrumb come with Find in P4–P5)
 - [x] Motion and haptic helpers with Reduce Motion handling (`NookMotion`, `NookHaptic`) (P1)
-- [ ] Debug gallery showing every component in every state, light and dark, default and largest text
+- [x] Debug gallery showing every component in every state, light and dark, default and largest text (`ComponentGallery`, P1)

@@ -1,6 +1,38 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@, %@": {
+      "comment": "Joins parts of a card's VoiceOver label: name, location, value."
+    },
+    "%lld items": {
+      "comment": "Item count on a room card.",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld item"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld items"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Capture": {
+      "comment": "VoiceOver label for the floating Capture button."
+    },
+    "Empty": {
+      "comment": "Item count on a room card with no items."
+    },
     "Lent": {
       "comment": "VoiceOver label for the badge on a lent item's card."
     },
@@ -10,8 +42,14 @@
     "Private": {
       "comment": "VoiceOver label for the lock badge on a Private item's card."
     },
+    "Scan a room, add an item, or scan a receipt or barcode": {
+      "comment": "VoiceOver hint for the Capture button."
+    },
     "Try Again": {
       "comment": "Button on an error state."
+    },
+    "Undo": {
+      "comment": "Button on a toast that reverses the last action."
     },
     "Value hidden": {
       "comment": "VoiceOver label for a price masked by Hide values (F11)."

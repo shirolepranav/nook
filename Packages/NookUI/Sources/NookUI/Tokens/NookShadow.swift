@@ -3,6 +3,7 @@ import SwiftUI
 /// Elevation levels (03 §6.2). Light mode uses warm brown shadows; dark mode uses none,
 /// because lighter surfaces and hairlines carry elevation there.
 public enum NookElevation: Sendable {
+    case flat       // no shadow
     case low        // cards
     case lifted     // pressed or dragging
     case floating   // toasts, answer card
@@ -26,6 +27,8 @@ struct WarmShadow: ViewModifier {
             content
         } else {
             switch level {
+            case .flat:
+                content
             case .low:
                 content
                     .shadow(color: Self.brown.opacity(0.06), radius: 8, y: 2)
