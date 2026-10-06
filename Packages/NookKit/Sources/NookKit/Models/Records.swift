@@ -85,7 +85,10 @@ extension NookSchemaV1 {
     @Model
     public final class LocationEvent {
         /// `found` is "Found it here instead" (I-01, F-03), a correction rather than a move (D44).
-        public enum Source: String, Sendable { case manual, found, siri, ai, qr }
+        public enum Source: String, Sendable, Identifiable {
+            case manual, found, siri, ai, qr
+            public var id: String { rawValue }
+        }
 
         public var id: UUID = UUID()
         public var fromPath: String = ""

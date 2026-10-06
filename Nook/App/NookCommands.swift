@@ -35,8 +35,9 @@ struct NookCommands: Commands {
             .keyboardShortcut("e")
             .disabled(itemCommands?.edit == nil && editsSelectedRoom == nil)
             // ⇧⌘M, not ⌘M: iPadOS keeps ⌘M for minimizing a window (D30).
-            Button("Move") {}.keyboardShortcut("m", modifiers: [.command, .shift])         // I-04, P4
-                .disabled(true)
+            Button("Move") { itemCommands?.move?() }                                      // I-04
+                .keyboardShortcut("m", modifiers: [.command, .shift])
+                .disabled(itemCommands?.move == nil)
             Button("Delete") { itemCommands?.delete() }                                    // to Recently Deleted
                 .keyboardShortcut(.delete)
                 .disabled(itemCommands == nil)

@@ -37,7 +37,7 @@ extension FocusedValues {
     @Entry var selectedTab: Binding<AppTab>?
     /// Set while a room is selected in the sidebar; ⌘E turns it on to edit that room.
     @Entry var editsSelectedRoom: Binding<Bool>?
-    /// The item on screen, or the items selected (I-01, I-08): ⌘E edits, ⌘⌫ deletes.
+    /// The item on screen, or the items selected (I-01, I-08): ⌘E edits, ⇧⌘M moves, ⌘⌫ deletes.
     @Entry var itemCommands: ItemCommands?
     /// ⌘N: Add Item (C-05).
     @Entry var addItem: AddItemAction?
@@ -48,8 +48,9 @@ struct AddItemAction {
     let run: () -> Void
 }
 
-/// What ⌘E and ⌘⌫ do on the current item screen.
+/// What ⌘E, ⇧⌘M and ⌘⌫ do on the current item screen.
 struct ItemCommands {
     var edit: (() -> Void)?
+    var move: (() -> Void)?
     var delete: () -> Void
 }

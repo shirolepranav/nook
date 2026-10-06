@@ -5,8 +5,8 @@ import NookUI
 
 extension View {
     /// I-08 Multi-select for a screen of items: "N Selected" in the title, Cancel and Select
-    /// All, and a bottom bar with Tag, Private and Delete in place of the tab bar. Move joins
-    /// in P4. `selection` is nil while not selecting.
+    /// All, and a bottom bar with Move, Tag, Private and Delete in place of the tab bar.
+    /// `selection` is nil while not selecting.
     func itemSelection(_ selection: Binding<Set<UUID>?>, among items: [Item], toast: Binding<ToastMessage?>) -> some View {
         modifier(ItemSelection(selection: selection, items: items, toast: toast))
     }
@@ -19,6 +19,7 @@ private struct ItemSelection: ViewModifier {
 
     @State private var confirmsDelete = false
     @State private var tagging = false
+    @State private var moving = false
     @State private var tag = ""
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
@@ -60,6 +61,9 @@ private struct ItemSelection: ViewModifier {
                     }
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
+                    Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { moving = true }
+                        .disabled(none)
+                    Spacer()
                     Button("Tag", systemImage: "tag") { tag = ""; tagging = true }
                         .disabled(none)
                     Spacer()
@@ -75,7 +79,7 @@ private struct ItemSelection: ViewModifier {
             }
             .accessibilityElement(children: .contain)
             .accessibilityLabel(Text("Actions for \(count) items"))
-            .focusedSceneValue(\.itemCommands, none ? nil : ItemCommands(edit: nil, delete: { confirmsDelete = true }))
+            .focusedSceneValue(\.itemCommands, none ? nil : ItemCommands(edit: nil, move: { moving = true }, delete: { confirmsDelete = true }))
             .confirmationDialog(Text("Delete \(count) items?"), isPresented: $confirmsDelete, titleVisibility: .visible) {
                 Button("Delete \(count) Items", role: .destructive) {
                     toast = actions.delete(selected)
@@ -83,6 +87,15 @@ private struct ItemSelection: ViewModifier {
                 }
             } message: {
                 Text("You can restore them from Recently Deleted for 30 days.")
+            }
+            .sheet(isPresented: $moving) {
+                let current = Set(selected.map { Location(of: $0) })
+                MovePicker(title: count == 1 ? Text("Move \(selected[0].name)") : Text("Move \(count) Items"),
+                           current: current.count == 1 ? current.first ?? nil : nil) { place in
+                    guard let place else { return }
+                    toast = actions.move(selected, to: place)
+                    selection = nil
+                }
             }
             .alert(Text("Add a tag to \(count) items"), isPresented: $tagging) {
                 TextField("Tag", text: $tag)

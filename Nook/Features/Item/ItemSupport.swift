@@ -53,6 +53,21 @@ struct ItemActions {
         }
     }
 
+    /// F6: moves through `LocationService` (the only writer), as one Undo step named "Move".
+    /// `nil` when nothing actually moved.
+    func move(_ items: [Item], to location: Location, source: LocationEvent.Source = .manual) -> ToastMessage? {
+        let moved = LocationService(context: context).move(items, to: location, source: source)
+        guard !moved.isEmpty else { return nil }
+        undoManager?.setActionName(String(localized: "Move"))
+        try? context.save()
+        let text: LocalizedStringResource = switch (source, moved.count) {
+        case (.found, _): "Found in \(location.path)."
+        case (_, 1): "Moved to \(location.path)."
+        default: "Moved \(moved.count) items to \(location.path)."
+        }
+        return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, undo: undo)
+    }
+
     func restore(_ items: [Item]) -> ToastMessage {
         service.restore(items)
         try? context.save()

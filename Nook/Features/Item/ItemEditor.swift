@@ -27,12 +27,12 @@ struct ItemEditor: View {
     @State private var confirmsDiscard = false
     @State private var namesCategory = false
     @State private var newCategory = ""
+    @State private var choosesPlace = false
     @State private var failure: LocalizedStringResource?
     @State private var saved = 0
     @State private var failed = 0
     @FocusState private var focus: Field?
 
-    @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
@@ -217,43 +217,30 @@ struct ItemEditor: View {
         suggestions = []
     }
 
-    // MARK: Where (P4 brings the full Move picker, I-04)
+    // MARK: Where (the Move picker in choose mode, I-04; Save writes through LocationService)
 
     private var whereRow: some View {
         FieldWell(Text("Where")) {
-            Menu {
-                ForEach(rooms) { room in
-                    Menu(room.name) {
-                        Button("In the room") { draft.location = Location(room: room) }
-                        let roomService = RoomService(context: context)
-                        ForEach(roomService.spots(in: room)) { spot in
-                            Button(spot.name) { draft.location = Location(room: room, spot: spot) }
-                            ForEach(roomService.containers(in: spot)) { box in
-                                Button("\(spot.name) → \(box.name)") { draft.location = Location(room: room, spot: box) }
-                            }
-                        }
-                        ForEach(roomService.looseContainers(in: room)) { box in
-                            Button(box.name) { draft.location = Location(room: room, spot: box) }
-                        }
-                    }
-                }
-                if draft.location != nil {
-                    Divider()
-                    Button("No Room Yet") { draft.location = nil }
-                }
-            } label: {
+            Button { choosesPlace = true } label: {
                 HStack {
                     Text(verbatim: draft.location?.path ?? String(localized: "Choose a room"))
                         .multilineTextAlignment(.leading)
                         .foregroundStyle(draft.location == nil ? NookColor.textSecondary : NookColor.textPrimary)
                     Spacer(minLength: 0)
-                    Image(systemName: "chevron.up.chevron.down")
+                    Image(systemName: "chevron.right")
                         .foregroundStyle(NookColor.textSecondary)
                         .accessibilityHidden(true)
                 }
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
             .accessibilityLabel(Text("Where"))
             .accessibilityValue(Text(verbatim: draft.location.map { $0.names.joined(separator: ", ") } ?? ""))
+            .sheet(isPresented: $choosesPlace) {
+                MovePicker(title: Text("Where is it?"), current: draft.location, allowsNoRoom: true) {
+                    draft.location = $0
+                }
+            }
         }
     }
 
