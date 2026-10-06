@@ -127,8 +127,8 @@ final class AccessibilityAuditTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Move Espresso machine"].waitForExistence(timeout: 5))
         // Audited at full height: at medium height the sheet is drawn slightly scaled, and the
         // auditor reads the List's own section header as clipped (D45).
-        app.buttons["Sheet Grabber"].swipeUp()
-        sleep(1)
+        let grabber = app.buttons["Sheet Grabber"]   // iPad's form sheet has none (D45)
+        if grabber.exists { grabber.swipeUp(); sleep(1) }
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         let garage = app.buttons.matching(NSPredicate(format: "label MATCHES %@", "Garage, \\d+ spots?")).firstMatch
         for _ in 0..<6 where !(garage.exists && garage.isHittable) { app.collectionViews.firstMatch.swipeUp() }

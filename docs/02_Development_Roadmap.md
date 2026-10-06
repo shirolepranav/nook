@@ -120,7 +120,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — item CRUD unit tests, thumbnail cache tests, editor UI tests, grid scrolling performance test. Smoke — S1–S3.
 
 ### P4 · Move & location history
-**Status:** In progress (branch `p4/move-history`)
+**Status:** In QA (branch `p4/move-history`, QA report `docs/qa/p4-qa-report.md`)
 **Scope:** Move picker (I-04) with the last 5 locations; multi-item move; LocationEvent recording with source; location history (I-05); last confirmed date; "Found it here instead".
 **PRD acceptance:** moving one item takes 2 taps (F6).
 **QA:** moving containers with items inside, moving into a container, undo after move, history after deleting a spot.
