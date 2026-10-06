@@ -3,16 +3,20 @@ import SwiftData
 import NookKit
 import NookUI
 
-/// H-02 Room: a header in the room's color, then each spot as a section with its containers.
-/// Items fill the sections from P3; "Scan this room" arrives with capture in P6.
+/// H-02 Room: a header in the room's color, the items placed straight in the room, then each
+/// spot as a section with its items and containers. "Scan this room" arrives in P6.
 struct RoomScreen: View {
     let room: Room
     @State private var editing = false
     @State private var adding: Spot.Kind?
     @State private var arranging = false
+    @State private var addsItem = false
+    @State private var selection: Set<UUID>?
+    @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
 
     private var rooms: RoomService { RoomService(context: context) }
+    private var items: ItemService { ItemService(context: context) }
     private var color: RoomColor { RoomColor(rawValue: room.colorKey) ?? .stone }
 
     var body: some View {
@@ -20,6 +24,9 @@ struct RoomScreen: View {
             VStack(alignment: .leading, spacing: NookSpace.s3) {
                 header
                 let spots = rooms.spots(in: room)
+                ItemSection(items: items.looseItems(in: room), selection: $selection, toast: $toast) {
+                    sectionTitle("In this room")
+                }
                 if spots.isEmpty {
                     EmptyStateView(.kitchenEmpty, title: Text("Nothing here yet."),
                                    message: Text("Add the spots in this room, like shelves, drawers and cupboards.")) {
@@ -30,33 +37,33 @@ struct RoomScreen: View {
                     }
                 } else {
                     ForEach(spots) { spot in
-                        SpotSection(spot: spot, containers: rooms.containers(in: spot))
+                        SpotSection(spot: spot, items: items.items(in: spot), containers: rooms.containers(in: spot),
+                                    selection: $selection, toast: $toast)
                     }
                 }
                 let loose = rooms.looseContainers(in: room)
                 if !loose.isEmpty {
                     // D34: containers sitting on the room itself.
                     VStack(alignment: .leading, spacing: NookSpace.s1) {
-                        Text("Containers")
-                            .font(.nookSection)
-                            .foregroundStyle(NookColor.textPrimary)
-                            .accessibilityAddTraits(.isHeader)
+                        sectionTitle("Containers")
                         ContainerList(containers: loose)
                     }
                 }
             }
             .padding(NookSpace.s2)
-            .frame(maxWidth: NookLayout.readableWidth)
+            .frame(maxWidth: NookLayout.maxGridWidth)   // item grids use the width (D29)
             .frame(maxWidth: .infinity)
         }
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
-        .captureButton()   // D32: Room shows Capture
+        .captureButton(isShown: selection == nil, at: Location(room: room))   // D32: Room shows Capture
         .navigationTitle(room.name)
         .toolbarTitleDisplayMode(.inline)
+        .itemSelection($selection, among: shownItems, toast: $toast)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu("Add", systemImage: "plus") {
+                    Button("Add Item", systemImage: "plus.square") { addsItem = true }
                     Button("Add Spot", systemImage: "square.stack") { adding = .spot }
                     Button("Add Container", systemImage: "shippingbox") { adding = .container }
                 }
@@ -74,7 +81,22 @@ struct RoomScreen: View {
         .sheet(isPresented: $editing) { RoomEditor(room: room) }
         .sheet(item: $adding) { SpotEditor(room: room, kind: $0) }
         .sheet(isPresented: $arranging) { ArrangeSheet.spots(in: room) }
+        .quickAdd(isPresented: $addsItem, at: Location(room: room))
         .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
+        .toast($toast)
+    }
+
+    /// The items on this screen: loose ones and those on spots (container items live on the
+    /// container's screen).
+    private var shownItems: [Item] {
+        items.looseItems(in: room) + rooms.spots(in: room).flatMap(items.items(in:))
+    }
+
+    private func sectionTitle(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(.nookSection)
+            .foregroundStyle(NookColor.textPrimary)
+            .accessibilityAddTraits(.isHeader)
     }
 
     private var header: some View {
@@ -88,7 +110,7 @@ struct RoomScreen: View {
                     .font(.nookTitle)
                     .foregroundStyle(NookColor.textPrimary)
                     .accessibilityAddTraits(.isHeader)
-                Text("\(rooms.spots(in: room).count) spots")
+                Text("\(items.allItems(in: room).count) items · \(rooms.spots(in: room).count) spots")
                     .font(.nookMeta)
                     .foregroundStyle(NookColor.textSecondary)
             }
@@ -100,10 +122,14 @@ struct RoomScreen: View {
     }
 }
 
-/// One spot in a room: its name (opens the spot, H-03) and its containers as "box" rows.
+/// One spot in a room: its name (opens the spot, H-03), its items, and its containers as
+/// "box" rows.
 private struct SpotSection: View {
     let spot: Spot
+    let items: [Item]
     let containers: [Spot]
+    @Binding var selection: Set<UUID>?
+    @Binding var toast: ToastMessage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
@@ -122,12 +148,15 @@ private struct SpotSection: View {
             }
             .buttonStyle(.plain)
             .accessibilityAddTraits(.isHeader)
-            if containers.isEmpty {
+            if !items.isEmpty {
+                ItemGrid(items: items, selection: $selection, toast: $toast)
+            }
+            if !containers.isEmpty {
+                ContainerList(containers: containers)
+            } else if items.isEmpty {
                 Text("Empty")
                     .font(.nookMeta)
                     .foregroundStyle(NookColor.textSecondary)
-            } else {
-                ContainerList(containers: containers)
             }
         }
     }

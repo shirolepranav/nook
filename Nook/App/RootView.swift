@@ -28,6 +28,7 @@ private struct TabShell: View {
     @Environment(\.undoManager) private var undoManager
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var roomTabsHidden = true
+    @State private var addsItem = false
 
     private var selectedRoom: Room? {
         guard case .room(let id) = tab else { return nil }
@@ -55,7 +56,7 @@ private struct TabShell: View {
             TabSection("Rooms") {
                 ForEach(rooms) { room in
                     Tab(room.name, systemImage: room.symbol, value: AppTab.room(room.id)) {
-                        NavigationStack { RoomScreen(room: room) }
+                        NavigationStack { RoomScreen(room: room).itemNavigation() }
                     }
                     .tabPlacement(.sidebarOnly)
                     .hidden(roomTabsHidden)
@@ -70,6 +71,8 @@ private struct TabShell: View {
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
+        .focusedSceneValue(\.addItem, AddItemAction { addsItem = true })
+        .quickAdd(isPresented: $addsItem, at: selectedRoom.map { Location(room: $0) })
         .focusedSceneValue(\.editsSelectedRoom, selectedRoom == nil ? nil : $editsSelectedRoom)
         .sheet(isPresented: $editsSelectedRoom) {
             if let selectedRoom { RoomEditor(room: selectedRoom) }
@@ -86,5 +89,19 @@ private struct TabShell: View {
         }
         // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
         .onAppear { context.undoManager = undoManager }
+        .task { await tidyUp() }
+    }
+
+    /// D14, D40: after the first frame, purge what's been in Recently Deleted 30 days, then
+    /// sweep files no row points at.
+    private func tidyUp() async {
+        let items = ItemService(context: context)
+        try? items.purgeExpired()
+        try? context.save()
+        guard let files = try? items.referencedFiles() else { return }
+        let blobs = BlobStore.shared
+        await Task.detached(priority: .background) {
+            blobs.sweepOrphans(photos: files.photos, receipts: files.receipts)
+        }.value
     }
 }

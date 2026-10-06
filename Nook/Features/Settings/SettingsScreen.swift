@@ -1,4 +1,5 @@
 import SwiftUI
+import NookKit
 import NookUI
 
 /// S-01. Rows arrive with their features.
@@ -11,6 +12,12 @@ struct SettingsScreen: View {
                         AppearanceScreen()
                     } label: {
                         Label("Appearance", systemImage: "paintpalette")
+                            .frame(minHeight: NookLayout.minTapTarget)
+                    }
+                    NavigationLink {
+                        RecentlyDeletedScreen()
+                    } label: {
+                        Label("Recently Deleted", systemImage: "trash")
                             .frame(minHeight: NookLayout.minTapTarget)
                     }
                 }

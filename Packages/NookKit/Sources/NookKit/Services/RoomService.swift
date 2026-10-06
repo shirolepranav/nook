@@ -17,6 +17,12 @@ public struct RoomService {
         case hasItems
     }
 
+    /// Where the items of a deleted room or spot go (D28).
+    public enum Rehoming {
+        case move(to: Location)
+        case recentlyDeleted
+    }
+
     let context: ModelContext
 
     public init(context: ModelContext) {
@@ -53,11 +59,12 @@ public struct RoomService {
         }
     }
 
-    /// Deletes a room and its spots. Throws while it still holds items that aren't deleted.
-    public func delete(_ room: Room) throws {
-        let liveItems = (room.items ?? []) + (room.spots ?? []).flatMap(allItems)
-        guard liveItems.allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
+    /// Deletes a room and its spots. Items still in it need `rehoming` (D28), or it throws.
+    /// One Undo brings the room back with its items in place.
+    public func delete(_ room: Room, rehoming: Rehoming? = nil) throws {
+        let liveItems = Set((room.items ?? []) + (room.spots ?? []).flatMap(allItems)).filter { $0.deletedAt == nil }
         let snapshot = RoomSnapshot(room)
+        try rehome(Array(liveItems), rehoming)
         context.deleteWithUndo(room) { snapshot.restore(in: $0) }
     }
 
@@ -132,14 +139,28 @@ public struct RoomService {
     }
 
     /// Deletes a spot and the containers in it. Same rule as rooms for items.
-    public func delete(_ spot: Spot) throws {
-        guard allItems(in: spot).allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
+    public func delete(_ spot: Spot, rehoming: Rehoming? = nil) throws {
         let snapshot = SpotSnapshot(spot)
+        try rehome(allItems(in: spot).filter { $0.deletedAt == nil }, rehoming)
         let room = spot.room, parent = spot.parent
         context.deleteWithUndo(spot) { snapshot.restore(room: room, parent: parent, in: $0) }
     }
 
     // MARK: Helpers
+
+    /// Moves or soft-deletes items without undo steps of their own: the delete's snapshot
+    /// undo puts them back, since SwiftData's would point them at the deleted room (D35).
+    private func rehome(_ items: [Item], _ rehoming: Rehoming?) throws {
+        guard !items.isEmpty else { return }
+        guard let rehoming else { throw Failure.hasItems }
+        let undo = context.undoManager
+        undo?.disableUndoRegistration()
+        defer { undo?.enableUndoRegistration() }
+        switch rehoming {
+        case .move(let location): LocationService(context: context).move(items, to: location)
+        case .recentlyDeleted: ItemService(context: context).delete(items)
+        }
+    }
 
     private func validated(_ name: String) throws -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -162,12 +183,14 @@ public struct RoomService {
 private struct RoomSnapshot {
     let id: UUID, name: String, symbol: String, colorKey: String, order: Int, createdAt: Date
     let items: [Item]
+    let liveItemIDs: Set<UUID>   // these were live; a rehoming to Recently Deleted is undone
     let spots: [SpotSnapshot]   // spots and containers on the floor; containers in a spot nest
 
     init(_ room: Room) {
         (id, name, symbol, colorKey, order, createdAt) =
             (room.id, room.name, room.symbol, room.colorKey, room.order, room.createdAt)
         items = room.items ?? []
+        liveItemIDs = Set(items.filter { $0.deletedAt == nil }.map(\.id))
         spots = (room.spots ?? []).filter { $0.parent == nil }.map(SpotSnapshot.init)
     }
 
@@ -175,7 +198,10 @@ private struct RoomSnapshot {
         let room = Room(name: name, symbol: symbol, colorKey: colorKey, order: order)
         (room.id, room.createdAt) = (id, createdAt)
         context.insert(room)
-        for item in items { item.room = room }
+        for item in items {
+            item.room = room
+            if liveItemIDs.contains(item.id) { item.deletedAt = nil }
+        }
         for spot in spots { spot.restore(room: room, parent: nil, in: context) }
     }
 }
@@ -187,6 +213,7 @@ private struct SpotSnapshot {
     let id: UUID, name: String, qrID: String, packedAt: Date?, order: Int, createdAt: Date
     let kind: Spot.Kind
     let items: [Item]
+    let liveItemIDs: Set<UUID>
     let photo: (fileName: String, width: Int, height: Int)?
     let children: [SpotSnapshot]
 
@@ -194,6 +221,7 @@ private struct SpotSnapshot {
         (id, name, qrID, packedAt, order, createdAt, kind) =
             (spot.id, spot.name, spot.qrID, spot.packedAt, spot.order, spot.createdAt, spot.kind)
         items = spot.items ?? []
+        liveItemIDs = Set(items.filter { $0.deletedAt == nil }.map(\.id))
         photo = spot.photo.map { ($0.fileName, $0.width, $0.height) }
         children = (spot.children ?? []).map(SpotSnapshot.init)
     }
@@ -203,7 +231,10 @@ private struct SpotSnapshot {
         (spot.id, spot.qrID, spot.packedAt, spot.createdAt) = (id, qrID, packedAt, createdAt)
         context.insert(spot)
         (spot.room, spot.parent) = (room, parent)
-        for item in items { item.spot = spot }
+        for item in items {
+            (item.room, item.spot) = (room, spot)
+            if liveItemIDs.contains(item.id) { item.deletedAt = nil }
+        }
         if let photo {
             let restored = Photo(fileName: photo.fileName)
             (restored.width, restored.height) = (photo.width, photo.height)

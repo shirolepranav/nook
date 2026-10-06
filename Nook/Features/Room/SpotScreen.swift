@@ -3,15 +3,21 @@ import SwiftData
 import NookKit
 import NookUI
 
-/// H-03 Spot / container: where it is, what's inside. Items join in P3, the QR label (H-06)
-/// in P10, "Move container" in P4.
+/// H-03 Spot / container: where it is, what's inside. The QR label (H-06) arrives in P10,
+/// "Move container" in P4.
 struct SpotScreen: View {
     let spot: Spot
     @State private var editing = false
     @State private var addingContainer = false
+    @State private var addsItem = false
+    @State private var viewsPhoto = false
+    @State private var selection: Set<UUID>?
+    @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
 
     private var rooms: RoomService { RoomService(context: context) }
+    private var spotItems: [Item] { ItemService(context: context).items(in: spot) }
+    private var location: Location? { spot.room.map { Location(room: $0, spot: spot) } }
 
     var body: some View {
         ScrollView {
@@ -24,27 +30,53 @@ struct SpotScreen: View {
                     .font(.nookMeta)
                     .foregroundStyle(NookColor.textSecondary)
                 }
+                if let photo = spot.photo {
+                    Button { viewsPhoto = true } label: {
+                        StoredImage(fileName: photo.fileName) { NookPhotoThumb(image: $0) }
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text("Spot photo: \(spot.name)"))
+                }
+                let items = spotItems
+                if items.isEmpty {
+                    EmptyStateView(.drawerEmpty, title: Text("Nothing here yet."),
+                                   message: Text(spot.isContainer ? "Things you put in this container will show up here."
+                                                                  : "Things you put on this spot will show up here.")) {
+                        Button { addsItem = true } label: {
+                            Label("Add Item Here", systemImage: "plus").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.nookPrimary)
+                    }
+                } else {
+                    ItemGrid(items: items, selection: $selection, toast: $toast)
+                }
                 if !spot.isContainer {
                     containersSection
                 }
-                EmptyStateView(.drawerEmpty, title: Text("Nothing here yet."),
-                               message: Text(spot.isContainer ? "Things you put in this container will show up here."
-                                                              : "Things you put on this spot will show up here."))
             }
             .padding(NookSpace.s2)
-            .frame(maxWidth: NookLayout.readableWidth)
+            .frame(maxWidth: NookLayout.maxGridWidth)
             .frame(maxWidth: .infinity)
         }
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
-        .captureButton()   // D32
+        .captureButton(isShown: selection == nil, at: location)   // D32
         .navigationTitle(spot.name)
         .toolbarTitleDisplayMode(.large)
+        .itemSelection($selection, among: spotItems, toast: $toast)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
+                Button("Add Item Here", systemImage: "plus") { addsItem = true }
+            }
+            ToolbarItem(placement: .secondaryAction) {
                 Button("Edit", systemImage: "pencil") { editing = true }
             }
         }
+        .quickAdd(isPresented: $addsItem, at: location)
+        .fullScreenCover(isPresented: $viewsPhoto) {
+            if let photo = spot.photo { SpotPhotoViewer(fileName: photo.fileName) }
+        }
+        .toast($toast)
         .sheet(isPresented: $editing) {
             if let room = spot.room { SpotEditor(room: room, spot: spot) }
         }

@@ -154,3 +154,36 @@ private func service() throws -> (RoomService, ModelContext) {
     #expect(spot.name == "Metal shelf")
     #expect(rooms.containers(in: spot).map(\.qrID) == [qrID])   // QR labels keep working
 }
+
+/// D28: a room's items move to another room, or go to Recently Deleted, and one Undo puts
+/// the room back with its items where they were.
+@MainActor @Test func deletingARoomRehomesItsItemsAndUndoesInOneStep() throws {
+    let container = try NookStore.makeContainer(inMemory: true)
+    let context = container.mainContext
+    let rooms = RoomService(context: context)
+    let garage = try rooms.addRoom(named: "Garage")
+    let shelf = try rooms.addSpot(named: "Shelf", in: garage)
+    let attic = try rooms.addRoom(named: "Attic")
+    let drill = Item(name: "Drill"), saw = Item(name: "Saw")
+    for item in [drill, saw] { context.insert(item) }
+    LocationService(context: context).move([drill], to: Location(room: garage, spot: shelf))
+    LocationService(context: context).move([saw], to: Location(room: garage))
+    try context.save()
+    let undo = UndoManager()
+    context.undoManager = undo
+
+    try rooms.delete(garage, rehoming: .recentlyDeleted)
+    try context.save()
+    RunLoop.main.run(until: .now + 0.1)
+    #expect(drill.deletedAt != nil && saw.deletedAt != nil)
+
+    undo.undo()
+    try context.save()
+    let restored = try #require(try rooms.rooms().first { $0.name == "Garage" })
+    #expect(drill.deletedAt == nil && saw.deletedAt == nil)
+    #expect(drill.room == restored && drill.spot?.name == "Shelf" && saw.room == restored)
+
+    try rooms.delete(restored, rehoming: .move(to: Location(room: attic)))
+    try context.save()
+    #expect(drill.room == attic && drill.spot == nil && drill.deletedAt == nil)
+}

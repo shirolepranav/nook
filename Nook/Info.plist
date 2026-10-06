@@ -8,6 +8,9 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
+	<!-- C-05: asked the first time Add Item opens the camera (D15, D37). -->
+	<key>NSCameraUsageDescription</key>
+	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
 	<!-- L-01: warm canvas with the Nook mark. LaunchBackground is generated from 03 (export_colorsets.py). -->
 	<key>UILaunchScreen</key>
 	<dict>

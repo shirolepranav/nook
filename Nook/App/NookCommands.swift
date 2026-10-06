@@ -5,6 +5,8 @@ import SwiftUI
 struct NookCommands: Commands {
     @FocusedValue(\.selectedTab) private var selectedTab
     @FocusedValue(\.editsSelectedRoom) private var editsSelectedRoom
+    @FocusedValue(\.itemCommands) private var itemCommands
+    @FocusedValue(\.addItem) private var addItem
 
     private func show(_ tab: AppTab) { selectedTab?.wrappedValue = tab }
 
@@ -23,16 +25,21 @@ struct NookCommands: Commands {
             Button("Search") { show(.find) }.keyboardShortcut("f")
             Divider()
             // Each command turns on with its feature.
-            Button("Add Item") {}.keyboardShortcut("n").disabled(true)                     // C-05, P3
+            Button("Add Item") { addItem?.run() }.keyboardShortcut("n").disabled(addItem == nil)   // C-05
             Button("Scan Room") {}.keyboardShortcut("n", modifiers: [.command, .shift])    // C-02, P6
                 .disabled(true)
-            Button("Edit") { editsSelectedRoom?.wrappedValue = true }                      // the selected room; items in P3
-                .keyboardShortcut("e")
-                .disabled(editsSelectedRoom == nil)
+            // The item on screen first, else the room selected in the sidebar.
+            Button("Edit") {
+                if let edit = itemCommands?.edit { edit() } else { editsSelectedRoom?.wrappedValue = true }
+            }
+            .keyboardShortcut("e")
+            .disabled(itemCommands?.edit == nil && editsSelectedRoom == nil)
             // ⇧⌘M, not ⌘M: iPadOS keeps ⌘M for minimizing a window (D30).
             Button("Move") {}.keyboardShortcut("m", modifiers: [.command, .shift])         // I-04, P4
                 .disabled(true)
-            Button("Delete") {}.keyboardShortcut(.delete).disabled(true)                   // P3
+            Button("Delete") { itemCommands?.delete() }                                    // to Recently Deleted
+                .keyboardShortcut(.delete)
+                .disabled(itemCommands == nil)
         }
     }
 }

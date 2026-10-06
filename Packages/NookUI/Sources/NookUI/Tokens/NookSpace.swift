@@ -51,6 +51,16 @@ public enum NookLayout {
     public static let stateIconSize: CGFloat = 64
     /// Room cards and the dashed add card (03 §8.3): shelf-like, wider than tall.
     public static let roomCardMinHeight: CGFloat = 100
+    /// The check circle on a selectable card (I-08 mockup).
+    public static let selectionMarkSize: CGFloat = 28
+    /// Thumbnails in item rows (S-08 mockup).
+    public static let rowThumbnailSize: CGFloat = 56
+    /// Photo tiles in the editor's strip, 4:5 (I-02 mockup: 88 × 110).
+    public static let photoTileWidth: CGFloat = 88
+    /// The photo hero on item detail (I-01 mockup).
+    public static let heroPhotoHeight: CGFloat = 300
+    /// The item column beside the detail on a wide window (iPadItem board).
+    public static let itemColumnWidth: CGFloat = 360
     /// Accent swatches in Appearance (S-06).
     public static let swatchSize: CGFloat = 48
     /// The floating Capture button (03 §8.1, D26).

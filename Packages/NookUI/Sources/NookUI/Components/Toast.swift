@@ -17,7 +17,7 @@ public struct ToastMessage: Identifiable {
 }
 
 public extension View {
-    /// Shows `message` as a toast at the bottom for 4 seconds and announces it to VoiceOver.
+    /// Shows `message` as a toast at the bottom for 5 seconds (D14) and announces it to VoiceOver.
     func toast(_ message: Binding<ToastMessage?>) -> some View {
         modifier(ToastPresenter(message: message))
     }
@@ -35,7 +35,7 @@ private struct ToastPresenter: ViewModifier {
                     .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
                     .task(id: current.id) {
                         AccessibilityNotification.Announcement(String(localized: current.text)).post()
-                        try? await Task.sleep(for: .seconds(4))
+                        try? await Task.sleep(for: .seconds(5))
                         if message?.id == current.id { message = nil }
                     }
             }

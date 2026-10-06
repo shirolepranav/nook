@@ -98,9 +98,16 @@ struct SpotEditor: View {
             }
             .confirmationDialog(Text("Delete \(spot?.name ?? "")?"), isPresented: $confirmsDelete,
                                 titleVisibility: .visible) {
-                Button("Delete", role: .destructive, action: delete)
+                if let spot {
+                    RehomeChoices(itemCount: rooms.liveItemCount(in: spot), destinations: [Location(room: room)],
+                                  deleteTitle: "Delete", delete: delete)
+                }
             } message: {
-                Text(holdsContainers ? "The containers in it are deleted too." : "You can undo right after.")
+                if let spot, rooms.liveItemCount(in: spot) > 0 {
+                    Text("It holds \(rooms.liveItemCount(in: spot)) items. Where should they go? You can undo right after.")
+                } else {
+                    Text(holdsContainers ? "The containers in it are deleted too." : "You can undo right after.")
+                }
             }
             .alert(Text(failure ?? ""), isPresented: Binding { failure != nil } set: { if !$0 { failure = nil } }) {
                 Button("OK") {}
@@ -141,14 +148,14 @@ struct SpotEditor: View {
         }
     }
 
-    private func delete() {
+    private func delete(_ rehoming: RoomService.Rehoming?) {
         guard let spot else { return }
         do {
-            try rooms.delete(spot)
+            try rooms.delete(spot, rehoming: rehoming)
             try context.save()
             dismiss()
         } catch {
-            failure = "Move the things in it somewhere else first."   // P3 adds the choice (D28)
+            failure = "Couldn’t delete this. Your items are safe."
         }
     }
 }

@@ -8,12 +8,14 @@ public struct PhotoCard: View {
     let photo: Image?
     let badges: [CardBadge.Kind]
     let value: (amount: Decimal, currencyCode: String)?
+    let isSelected: Bool?
 
     @AppStorage(MoneyText.hideValuesKey) private var hideValues = false
     @Environment(\.dynamicTypeSize) private var typeSize
 
     public init(name: String, location: String, photo: Image? = nil, badges: [CardBadge.Kind] = [],
-                value: (amount: Decimal, currencyCode: String)? = nil) {
+                value: (amount: Decimal, currencyCode: String)? = nil, isSelected: Bool? = nil) {
+        self.isSelected = isSelected
         self.name = name
         self.location = location
         self.photo = photo
@@ -26,8 +28,14 @@ public struct PhotoCard: View {
             NookPhoto(photo)
                 .aspectRatio(4 / 5, contentMode: .fit)
                 .overlay(alignment: .topTrailing) {
-                    HStack(spacing: NookSpace.half) {
-                        ForEach(badges, id: \.self) { CardBadge($0) }
+                    Group {
+                        if let isSelected {
+                            SelectionMark(isSelected: isSelected)   // I-08 replaces the badges
+                        } else {
+                            HStack(spacing: NookSpace.half) {
+                                ForEach(badges, id: \.self) { CardBadge($0) }
+                            }
+                        }
                     }
                     .padding(NookSpace.s1)
                 }
@@ -58,6 +66,7 @@ public struct PhotoCard: View {
                 : Text(value.amount, format: .currency(code: value.currencyCode)))
         }
         for badge in badges { parts.append(badge.label) }
+        if let isSelected { parts.append(SelectionMark.label(isSelected)) }
         return parts.dropFirst().reduce(parts[0]) { Text("\($0), \($1)") }
     }
 }

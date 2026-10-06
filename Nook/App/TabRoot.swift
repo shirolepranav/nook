@@ -29,6 +29,7 @@ struct TabRoot<Content: View>: View {
             .captureButton(isShown: showsCapture)
             .navigationTitle(title)
             .toolbarTitleDisplayMode(.large)
+            .itemNavigation()   // I-01 opens with a zoom from any item card in this tab
         }
     }
 }

@@ -73,9 +73,16 @@ struct RoomEditor: View {
             }
             .confirmationDialog(Text("Delete \(room?.name ?? "")?"), isPresented: $confirmsDelete,
                                 titleVisibility: .visible) {
-                Button("Delete Room", role: .destructive, action: delete)
+                if let room {
+                    RehomeChoices(itemCount: rooms.liveItemCount(in: room), destinations: rooms.destinations(leaving: room),
+                                  deleteTitle: "Delete Room", delete: delete)
+                }
             } message: {
-                Text("Its spots and containers are deleted too. You can undo right after.")
+                if let room, rooms.liveItemCount(in: room) > 0 {
+                    Text("It holds \(rooms.liveItemCount(in: room)) items. Where should they go? You can undo right after.")
+                } else {
+                    Text("Its spots and containers are deleted too. You can undo right after.")
+                }
             }
             .alert(Text(failure ?? ""), isPresented: Binding { failure != nil } set: { if !$0 { failure = nil } }) {
                 Button("OK") {}
@@ -252,16 +259,15 @@ struct RoomEditor: View {
         }
     }
 
-    private func delete() {
+    private func delete(_ rehoming: RoomService.Rehoming?) {
         guard let room else { return }
         do {
-            try rooms.delete(room)
+            try rooms.delete(room, rehoming: rehoming)
             try context.save()
             dismiss()
             onDelete?()
         } catch {
-            // P2 rooms hold no items yet; P3 adds the "where should they go?" choice (D28).
-            failure = String(localized: "Move the things in this room somewhere else first.")
+            failure = String(localized: "Couldn’t delete this room. Your items are safe.")
         }
     }
 

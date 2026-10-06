@@ -4,6 +4,8 @@ import SwiftUI
 public struct StatusPill: View {
     public enum Status: Sendable {
         case active, endingSoon, expired, lent
+        /// I-01's Private badge: quiet, not a warning.
+        case privateItem
 
         var color: Color {
             switch self {
@@ -11,6 +13,7 @@ public struct StatusPill: View {
             case .endingSoon: NookColor.warning
             case .expired: NookColor.danger
             case .lent: NookColor.info
+            case .privateItem: NookColor.textSecondary
             }
         }
 
@@ -20,6 +23,7 @@ public struct StatusPill: View {
             case .endingSoon: "clock"
             case .expired: "exclamationmark.triangle"
             case .lent: "person.crop.circle.badge.clock"
+            case .privateItem: "lock.fill"
             }
         }
     }
