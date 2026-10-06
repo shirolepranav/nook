@@ -4,6 +4,7 @@ import SwiftUI
 /// bar (D30). The system adds File, Edit (Undo, Redo, Cut, Copy, Paste), View, Window and Help.
 struct NookCommands: Commands {
     @FocusedValue(\.selectedTab) private var selectedTab
+    @FocusedValue(\.editsSelectedRoom) private var editsSelectedRoom
 
     private func show(_ tab: AppTab) { selectedTab?.wrappedValue = tab }
 
@@ -25,7 +26,9 @@ struct NookCommands: Commands {
             Button("Add Item") {}.keyboardShortcut("n").disabled(true)                     // C-05, P3
             Button("Scan Room") {}.keyboardShortcut("n", modifiers: [.command, .shift])    // C-02, P6
                 .disabled(true)
-            Button("Edit") {}.keyboardShortcut("e").disabled(true)                         // P2, P3
+            Button("Edit") { editsSelectedRoom?.wrappedValue = true }                      // the selected room; items in P3
+                .keyboardShortcut("e")
+                .disabled(editsSelectedRoom == nil)
             // ⇧⌘M, not ⌘M: iPadOS keeps ⌘M for minimizing a window (D30).
             Button("Move") {}.keyboardShortcut("m", modifiers: [.command, .shift])         // I-04, P4
                 .disabled(true)

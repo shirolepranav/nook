@@ -9,6 +9,7 @@ struct HomeScreen: View {
     @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
     @State private var editing: EditTarget?
     @State private var deleting: Room?
+    @State private var arranging = false
     @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
@@ -53,6 +54,7 @@ struct HomeScreen: View {
         } message: {
             Text("Its spots and containers are deleted too. You can undo right after.")
         }
+        .sheet(isPresented: $arranging) { ArrangeRoomsSheet() }
         .toast($toast)
     }
 
@@ -72,6 +74,7 @@ struct HomeScreen: View {
                     .contextMenu {
                         Button("Rename", systemImage: "pencil") { editing = .room(room) }
                         Button("Change Color and Symbol", systemImage: "paintpalette") { editing = .room(room) }
+                        Button("Arrange Rooms", systemImage: "arrow.up.arrow.down") { arranging = true }
                         Button("Delete", systemImage: "trash", role: .destructive) { deleting = room }
                     }
                 }

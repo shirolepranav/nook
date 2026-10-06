@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import NookKit
 import NookUI
 
 /// First run shows onboarding (O-01, O-02); after that, the tabs.
@@ -20,8 +21,16 @@ struct RootView: View {
 private struct TabShell: View {
     // Survives relaunch, and resizing an iPad window between compact and regular (S1).
     @SceneStorage("tab") private var tab: AppTab = .home
+    @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
+    @State private var editsSelectedRoom = false
+    @State private var arranging = false
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
+
+    private var selectedRoom: Room? {
+        guard case .room(let id) = tab else { return nil }
+        return rooms.first { $0.id == id }
+    }
 
     var body: some View {
         TabView(selection: $tab) {
@@ -37,11 +46,32 @@ private struct TabShell: View {
             Tab("Settings", systemImage: "gearshape", value: AppTab.settings) {
                 SettingsScreen()
             }
+            // Regular width: the rooms in the sidebar, the selected one beside it (01 H-01).
+            TabSection("Rooms") {
+                ForEach(rooms) { room in
+                    Tab(room.name, systemImage: room.symbol, value: AppTab.room(room.id)) {
+                        NavigationStack { RoomScreen(room: room) }
+                    }
+                    .tabPlacement(.sidebarOnly)
+                }
+            }
+            .sectionActions {
+                Button("Arrange Rooms", systemImage: "arrow.up.arrow.down") { arranging = true }
+            }
         }
         .tabViewStyle(.sidebarAdaptable)
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
+        .focusedSceneValue(\.editsSelectedRoom, selectedRoom == nil ? nil : $editsSelectedRoom)
+        .sheet(isPresented: $editsSelectedRoom) {
+            if let selectedRoom { RoomEditor(room: selectedRoom) }
+        }
+        .sheet(isPresented: $arranging) { ArrangeRoomsSheet() }
+        .onChange(of: rooms.map(\.id)) { _, ids in
+            // A deleted room can't stay selected.
+            if case .room(let id) = tab, !ids.contains(id) { tab = .home }
+        }
         // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
         .onAppear { context.undoManager = undoManager }
     }

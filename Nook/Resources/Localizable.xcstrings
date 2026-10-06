@@ -4,6 +4,16 @@
     "" : {
 
     },
+    "%@ moved to position %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ moved to position %2$lld of %3$lld"
+          }
+        }
+      }
+    },
     "%lld rooms, ready to fill" : {
       "localizations" : {
         "en" : {
@@ -99,6 +109,9 @@
     "Appearance" : {
 
     },
+    "Arrange Rooms" : {
+
+    },
     "Blue bin" : {
 
     },
@@ -181,6 +194,9 @@
     "Deleted %@." : {
 
     },
+    "Done" : {
+
+    },
     "Edit" : {
 
     },
@@ -259,6 +275,12 @@
 
     },
     "Move" : {
+
+    },
+    "Move Down" : {
+
+    },
+    "Move Up" : {
 
     },
     "Move the things in %@ somewhere else first." : {
