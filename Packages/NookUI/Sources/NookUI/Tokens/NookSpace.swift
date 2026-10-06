@@ -35,6 +35,8 @@ public enum NookLayout {
     public static let minTapTarget: CGFloat = 44
 
     // Component sizes from 03 §8 and the mockups.
+    /// A row in a grouped list.
+    public static let rowHeight: CGFloat = 52
     /// Primary and secondary buttons (03 §8.2).
     public static let buttonHeight: CGFloat = 50
     /// Text-field wells (03 §8.6).

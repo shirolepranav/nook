@@ -1,10 +1,60 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld rooms, ready to fill" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld room, ready to fill"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld rooms, ready to fill"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld spots" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spot"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spots"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Accent color" : {
 
     },
     "Add Item" : {
+
+    },
+    "Add Spots" : {
+
+    },
+    "Add a Room" : {
 
     },
     "Add a few things and Nook will tell you where they are." : {
@@ -13,13 +63,40 @@
     "Add item" : {
 
     },
+    "Add room" : {
+
+    },
+    "Add spot" : {
+
+    },
+    "Add the rooms you have, then fill them in." : {
+
+    },
+    "Add the spots in this room, like shelves, drawers and cupboards." : {
+
+    },
     "Add your own" : {
 
     },
     "Appearance" : {
 
     },
+    "Butter" : {
+
+    },
+    "Cancel" : {
+
+    },
     "Capture" : {
+
+    },
+    "Change Color and Symbol" : {
+
+    },
+    "Clay" : {
+
+    },
+    "Color" : {
 
     },
     "Components" : {
@@ -50,13 +127,31 @@
     "Continue without rooms" : {
 
     },
+    "Couldn’t save this room. Try again." : {
+
+    },
     "Dark" : {
 
     },
     "Delete" : {
 
     },
+    "Delete %@?" : {
+
+    },
+    "Delete Room" : {
+
+    },
+    "Deleted %@." : {
+
+    },
     "Edit" : {
+
+    },
+    "Edit Room" : {
+
+    },
+    "Empty" : {
 
     },
     "Everything stays on your device. No account." : {
@@ -94,7 +189,16 @@
     "Home" : {
 
     },
+    "Its spots and containers are deleted too. You can undo right after." : {
+
+    },
+    "Kitchen" : {
+
+    },
     "Know what you own and where it is." : {
+
+    },
+    "Lavender" : {
 
     },
     "Let’s start with one room." : {
@@ -103,7 +207,22 @@
     "Light" : {
 
     },
+    "Mint" : {
+
+    },
     "Move" : {
+
+    },
+    "Move the things in %@ somewhere else first." : {
+
+    },
+    "Move the things in this room somewhere else first." : {
+
+    },
+    "Name" : {
+
+    },
+    "New Room" : {
 
     },
     "Nook" : {
@@ -115,7 +234,13 @@
     "Nothing has been deleted. Free up some storage or update Nook, then try again." : {
 
     },
+    "Nothing here yet." : {
+
+    },
     "Nothing to find yet." : {
+
+    },
+    "OK" : {
 
     },
     "Ocean" : {
@@ -128,6 +253,9 @@
 
     },
     "Prices show as •••• until you tap the eye on Home." : {
+
+    },
+    "Rename" : {
 
     },
     "Reports" : {
@@ -146,6 +274,9 @@
 
     },
     "Sage" : {
+
+    },
+    "Save" : {
 
     },
     "Scan Room" : {
@@ -172,13 +303,28 @@
     "Settings…" : {
 
     },
+    "Sky" : {
+
+    },
     "Slate" : {
 
     },
     "Snap a room, tag what’s on the shelves, and ask where anything is, any time." : {
 
     },
+    "Spot name" : {
+
+    },
+    "Spots" : {
+
+    },
+    "Stone" : {
+
+    },
     "Studio" : {
+
+    },
+    "Symbol" : {
 
     },
     "System" : {
@@ -190,13 +336,13 @@
     "Theme" : {
 
     },
+    "Top shelf" : {
+
+    },
     "Warranties, lent things and your insurance report will appear as you add items." : {
 
     },
     "Which rooms do you have?" : {
-
-    },
-    "Your rooms and everything in them will show up here." : {
 
     }
   },

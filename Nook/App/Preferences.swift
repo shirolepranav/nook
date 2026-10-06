@@ -56,3 +56,19 @@ extension AccentChoice {
         }
     }
 }
+
+extension RoomColor {
+    /// The name VoiceOver reads in the room color picker (H-04).
+    var title: LocalizedStringKey {
+        switch self {
+        case .clay: "Clay"
+        case .sage: "Sage"
+        case .sky: "Sky"
+        case .lavender: "Lavender"
+        case .butter: "Butter"
+        case .rose: "Rose"
+        case .stone: "Stone"
+        case .mint: "Mint"
+        }
+    }
+}
