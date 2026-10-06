@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import NookUI
 
 /// The adaptive shell (01 §1.1): a Liquid Glass tab bar on compact width, a sidebar on
@@ -6,6 +7,8 @@ import NookUI
 struct RootView: View {
     // Survives relaunch, and resizing an iPad window between compact and regular (S1).
     @SceneStorage("tab") private var tab: AppTab = .home
+    @Environment(\.modelContext) private var context
+    @Environment(\.undoManager) private var undoManager
 
     var body: some View {
         TabView(selection: $tab) {
@@ -26,5 +29,7 @@ struct RootView: View {
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
+        // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
+        .onAppear { context.undoManager = undoManager }
     }
 }
