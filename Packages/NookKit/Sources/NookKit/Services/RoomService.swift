@@ -111,14 +111,15 @@ public struct RoomService {
         spot.name = try validated(name)
     }
 
-    /// Moves a container onto the room (nil) or into one of the room's spots.
+    /// Moves a container onto the room (nil) or into one of the room's spots. It goes through
+    /// `LocationService`, so the items inside get a history entry (P4).
     public func place(_ container: Spot, inside spot: Spot?) throws {
-        guard container.isContainer else { throw Failure.containerTooDeep }
-        if let spot, spot.isContainer || spot.room?.id != container.room?.id { throw Failure.containerTooDeep }
-        guard container.parent?.id != spot?.id else { return }
-        let siblings = spot.map(containers(in:)) ?? container.room.map(looseContainers(in:)) ?? []
-        container.parent = spot
-        container.order = (siblings.last?.order ?? -1) + 1
+        guard container.isContainer, let room = container.room else { throw Failure.containerTooDeep }
+        do {
+            try LocationService(context: context).move(container, to: Location(room: room, spot: spot))
+        } catch {
+            throw Failure.containerTooDeep
+        }
     }
 
     /// Turns a spot into a container (it must hold no containers) or a container into a spot

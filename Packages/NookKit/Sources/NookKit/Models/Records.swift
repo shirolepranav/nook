@@ -80,16 +80,19 @@ extension NookSchemaV1 {
     }
 
     /// One move in an item's location history (F6, I-05). Paths are stored as text so
-    /// history survives deleting the spot.
+    /// history survives deleting the spot. `toRoomID` lets the Move picker offer a room-only
+    /// place again (I-04 recents, D44).
     @Model
     public final class LocationEvent {
-        public enum Source: String, Sendable { case manual, siri, ai, qr }
+        /// `found` is "Found it here instead" (I-01, F-03), a correction rather than a move (D44).
+        public enum Source: String, Sendable { case manual, found, siri, ai, qr }
 
         public var id: UUID = UUID()
         public var fromPath: String = ""
         public var toPath: String = ""
         public var fromSpotID: UUID?
         public var toSpotID: UUID?
+        public var toRoomID: UUID?
         public var date: Date = Date.now
         public var sourceRaw: String = Source.manual.rawValue
 
