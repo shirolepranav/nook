@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "%lld rooms, ready to fill" : {
       "localizations" : {
         "en" : {
@@ -45,10 +48,22 @@
         }
       }
     },
+    "A container sits in a room or a spot. It can’t go inside another container." : {
+
+    },
     "Accent color" : {
 
     },
+    "Add" : {
+
+    },
+    "Add Container" : {
+
+    },
     "Add Item" : {
+
+    },
+    "Add Spot" : {
 
     },
     "Add Spots" : {
@@ -58,6 +73,9 @@
 
     },
     "Add a few things and Nook will tell you where they are." : {
+
+    },
+    "Add container" : {
 
     },
     "Add item" : {
@@ -81,6 +99,9 @@
     "Appearance" : {
 
     },
+    "Blue bin" : {
+
+    },
     "Butter" : {
 
     },
@@ -100,6 +121,12 @@
 
     },
     "Components" : {
+
+    },
+    "Container" : {
+
+    },
+    "Containers" : {
 
     },
     "Continue with %lld rooms" : {
@@ -130,6 +157,9 @@
     "Couldn’t save this room. Try again." : {
 
     },
+    "Couldn’t save this. Try again." : {
+
+    },
     "Dark" : {
 
     },
@@ -139,7 +169,13 @@
     "Delete %@?" : {
 
     },
+    "Delete Container" : {
+
+    },
     "Delete Room" : {
+
+    },
+    "Delete Spot" : {
 
     },
     "Deleted %@." : {
@@ -148,7 +184,13 @@
     "Edit" : {
 
     },
+    "Edit Container" : {
+
+    },
     "Edit Room" : {
+
+    },
+    "Edit Spot" : {
 
     },
     "Empty" : {
@@ -189,6 +231,12 @@
     "Home" : {
 
     },
+    "Inside" : {
+
+    },
+    "It holds containers, so it stays a spot." : {
+
+    },
     "Its spots and containers are deleted too. You can undo right after." : {
 
     },
@@ -216,13 +264,22 @@
     "Move the things in %@ somewhere else first." : {
 
     },
+    "Move the things in it somewhere else first." : {
+
+    },
     "Move the things in this room somewhere else first." : {
 
     },
     "Name" : {
 
     },
+    "New Container" : {
+
+    },
     "New Room" : {
+
+    },
+    "New Spot" : {
 
     },
     "Nook" : {
@@ -244,6 +301,15 @@
 
     },
     "Ocean" : {
+
+    },
+    "Packed" : {
+
+    },
+    "Packed on" : {
+
+    },
+    "Packed on %@" : {
 
     },
     "Pick a few to start. You can change them any time." : {
@@ -312,6 +378,9 @@
     "Snap a room, tag what’s on the shelves, and ask where anything is, any time." : {
 
     },
+    "Spot" : {
+
+    },
     "Spot name" : {
 
     },
@@ -333,16 +402,31 @@
     "Terracotta" : {
 
     },
+    "The containers in it are deleted too." : {
+
+    },
     "Theme" : {
 
     },
+    "Things you put in this container will show up here." : {
+
+    },
+    "Things you put on this spot will show up here." : {
+
+    },
     "Top shelf" : {
+
+    },
+    "Type" : {
 
     },
     "Warranties, lent things and your insurance report will appear as you add items." : {
 
     },
     "Which rooms do you have?" : {
+
+    },
+    "You can undo right after." : {
 
     }
   },

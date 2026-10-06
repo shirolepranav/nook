@@ -51,3 +51,40 @@ final class RoomTests: XCTestCase {
         XCTAssertTrue(garage.waitForExistence(timeout: 5))
     }
 }
+
+final class SpotTests: XCTestCase {
+    /// H-02, H-03, H-05 and D34: a container on the room's floor, another inside a spot.
+    @MainActor
+    func testAddContainersOnTheFloorAndInsideASpot() {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "small")
+        app.launch()
+        let garage = app.buttons["Garage, Empty"]
+        XCTAssertTrue(garage.waitForExistence(timeout: 10))
+        garage.tap()
+
+        // On the floor (D34).
+        app.buttons["Add"].tap()
+        app.buttons["Add Container"].tap()
+        let name = app.textFields["Name"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.typeText("Toolbox")
+        app.buttons["Save"].tap()
+        XCTAssertTrue(app.buttons["Toolbox"].waitForExistence(timeout: 5))
+
+        // Inside a spot, from the spot's own screen.
+        app.buttons["Metal shelf"].tap()
+        XCTAssertTrue(app.navigationBars["Metal shelf"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Box 14"].exists)
+        app.buttons["Add container"].tap()
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.typeText("Paint cans")
+        app.buttons["Save"].tap()
+        XCTAssertTrue(app.buttons["Paint cans"].waitForExistence(timeout: 5))
+
+        // A container opens to its own screen.
+        app.buttons["Box 14"].tap()
+        XCTAssertTrue(app.navigationBars["Box 14"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Garage → Metal shelf"].exists)
+    }
+}

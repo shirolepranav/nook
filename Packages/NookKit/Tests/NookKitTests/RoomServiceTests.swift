@@ -43,17 +43,23 @@ private func service() throws -> (RoomService, ModelContext) {
     #expect([c, a, b].map(\.order) == [0, 1, 2])
 }
 
-@MainActor @Test func containersNestOneLevelOnly() throws {
+@MainActor @Test func containersSitInARoomOrASpotButNotInAContainer() throws {
     let (rooms, _) = try service()
     let garage = try rooms.addRoom(named: "Garage")
     let shelf = try rooms.addSpot(named: "Shelf", in: garage)
-    let box = try rooms.addSpot(named: "Box 14", in: garage, inside: shelf)
-    #expect(box.isContainer)
+    let box = try rooms.addContainer(named: "Box 14", in: garage, inside: shelf)
+    let bin = try rooms.addContainer(named: "Blue bin", in: garage)        // on the floor (D34)
+    #expect(box.isContainer && bin.isContainer)
     #expect(rooms.containers(in: shelf).map(\.name) == ["Box 14"])
-    #expect(rooms.spots(in: garage).map(\.name) == ["Shelf"])   // containers aren't top-level
-    // D3
+    #expect(rooms.looseContainers(in: garage).map(\.name) == ["Blue bin"])
+    #expect(rooms.spots(in: garage).map(\.name) == ["Shelf"])            // containers aren't spots
+    // D3, D34: never inside another container, never across rooms.
     #expect(throws: RoomService.Failure.containerTooDeep) {
-        try rooms.addSpot(named: "Bag", in: garage, inside: box)
+        try rooms.addContainer(named: "Bag", in: garage, inside: box)
+    }
+    let attic = try rooms.addRoom(named: "Attic")
+    #expect(throws: RoomService.Failure.containerTooDeep) {
+        try rooms.addContainer(named: "Crate", in: attic, inside: shelf)
     }
 }
 
@@ -72,7 +78,7 @@ private func service() throws -> (RoomService, ModelContext) {
     let (rooms, context) = try service()
     let garage = try rooms.addRoom(named: "Garage")
     let shelf = try rooms.addSpot(named: "Shelf", in: garage)
-    let box = try rooms.addSpot(named: "Box", in: garage, inside: shelf)
+    let box = try rooms.addContainer(named: "Box", in: garage, inside: shelf)
     let drill = Item(name: "Drill")
     context.insert(drill)
     drill.room = garage
@@ -95,4 +101,28 @@ private func service() throws -> (RoomService, ModelContext) {
     for name in ["Desk", "Shelf", "Closet"] { try rooms.addSpot(named: name, in: office) }
     try context.save()
     #expect(rooms.spots(in: office).count == 3)
+}
+
+@MainActor @Test func containersMoveAndSpotsChangeKindWithinTheRules() throws {
+    let (rooms, _) = try service()
+    let garage = try rooms.addRoom(named: "Garage")
+    let shelf = try rooms.addSpot(named: "Shelf", in: garage)
+    let bin = try rooms.addContainer(named: "Blue bin", in: garage)
+    let box = try rooms.addContainer(named: "Box", in: garage, inside: shelf)
+
+    try rooms.place(bin, inside: shelf)                  // floor → shelf
+    #expect(rooms.containers(in: shelf).map(\.name) == ["Box", "Blue bin"])
+    try rooms.place(bin, inside: nil)                    // back on the floor
+    #expect(rooms.looseContainers(in: garage).map(\.name) == ["Blue bin"])
+    #expect(throws: RoomService.Failure.containerTooDeep) { try rooms.place(box, inside: bin) }
+    #expect(throws: RoomService.Failure.containerTooDeep) { try rooms.place(shelf, inside: nil) }  // not a container
+
+    // A spot holding containers can't become one; an empty one can.
+    #expect(throws: RoomService.Failure.containerTooDeep) { try rooms.setKind(of: shelf, to: .container) }
+    let crate = try rooms.addSpot(named: "Crate", in: garage)
+    try rooms.setKind(of: crate, to: .container)
+    #expect(rooms.looseContainers(in: garage).map(\.name) == ["Blue bin", "Crate"])
+    try rooms.setKind(of: box, to: .spot)                // comes out onto the room as a spot
+    #expect(box.parent == nil)
+    #expect(rooms.spots(in: garage).map(\.name) == ["Shelf", "Box"])
 }

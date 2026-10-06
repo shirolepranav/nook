@@ -26,12 +26,13 @@ public enum PreviewStore {
         for spot in ["Counter", "Pantry", "Top drawer"] { try rooms.addSpot(named: spot, in: kitchen) }
         let living = try rooms.addRoom(named: "Living room")
         try rooms.addSpot(named: "Bookshelf", in: living)
+        try rooms.addContainer(named: "Blue bin", in: living)
         let bedroom = try rooms.addRoom(named: "Bedroom")
         let wardrobe = try rooms.addSpot(named: "Wardrobe", in: bedroom)
-        try rooms.addSpot(named: "Top shelf", in: bedroom, inside: wardrobe)
+        try rooms.addContainer(named: "Shoe box", in: bedroom, inside: wardrobe)
         let garage = try rooms.addRoom(named: "Garage")
         let shelf = try rooms.addSpot(named: "Metal shelf", in: garage)
-        try rooms.addSpot(named: "Box 14", in: garage, inside: shelf)
+        try rooms.addContainer(named: "Box 14", in: garage, inside: shelf)
         try context.save()
     }
 }

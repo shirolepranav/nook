@@ -8,6 +8,7 @@ import NookUI
 struct RoomScreen: View {
     let room: Room
     @State private var editing = false
+    @State private var adding: Spot.Kind?
     @Environment(\.modelContext) private var context
 
     private var rooms: RoomService { RoomService(context: context) }
@@ -31,6 +32,17 @@ struct RoomScreen: View {
                         SpotSection(spot: spot, containers: rooms.containers(in: spot))
                     }
                 }
+                let loose = rooms.looseContainers(in: room)
+                if !loose.isEmpty {
+                    // D34: containers sitting on the room itself.
+                    VStack(alignment: .leading, spacing: NookSpace.s1) {
+                        Text("Containers")
+                            .font(.nookSection)
+                            .foregroundStyle(NookColor.textPrimary)
+                            .accessibilityAddTraits(.isHeader)
+                        ContainerList(containers: loose)
+                    }
+                }
             }
             .padding(NookSpace.s2)
             .frame(maxWidth: NookLayout.readableWidth)
@@ -43,10 +55,18 @@ struct RoomScreen: View {
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Edit", systemImage: "pencil") { editing = true }
+                Menu("Add", systemImage: "plus") {
+                    Button("Add Spot", systemImage: "square.stack") { adding = .spot }
+                    Button("Add Container", systemImage: "shippingbox") { adding = .container }
+                }
+            }
+            ToolbarItem(placement: .secondaryAction) {
+                Button("Edit Room", systemImage: "pencil") { editing = true }
             }
         }
         .sheet(isPresented: $editing) { RoomEditor(room: room) }
+        .sheet(item: $adding) { SpotEditor(room: room, kind: $0) }
+        .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
     }
 
     private var header: some View {
@@ -72,34 +92,55 @@ struct RoomScreen: View {
     }
 }
 
-/// One spot in a room: its name, and its containers as "box" rows.
+/// One spot in a room: its name (opens the spot, H-03) and its containers as "box" rows.
 private struct SpotSection: View {
     let spot: Spot
     let containers: [Spot]
 
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
-            Text(verbatim: spot.name)
-                .font(.nookSection)
-                .foregroundStyle(NookColor.textPrimary)
-                .accessibilityAddTraits(.isHeader)
+            NavigationLink(value: spot) {
+                HStack {
+                    Text(verbatim: spot.name)
+                        .font(.nookSection)
+                        .foregroundStyle(NookColor.textPrimary)
+                    Image(systemName: "chevron.forward")
+                        .font(.nookFootnote)
+                        .foregroundStyle(NookColor.textSecondary)
+                        .accessibilityHidden(true)
+                }
+                .frame(minHeight: NookLayout.minTapTarget)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityAddTraits(.isHeader)
             if containers.isEmpty {
                 Text("Empty")
                     .font(.nookMeta)
                     .foregroundStyle(NookColor.textSecondary)
             } else {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(containers) { box in
-                        Label { Text(verbatim: box.name) } icon: { Image(systemName: "shippingbox") }
-                            .font(.nookBody)
-                            .foregroundStyle(NookColor.textPrimary)
-                            .frame(maxWidth: .infinity, minHeight: NookLayout.rowHeight, alignment: .leading)
-                            .padding(.horizontal, NookSpace.s2)
-                        if box.id != containers.last?.id { Divider() }
-                    }
-                }
-                .nookCard(elevation: .flat)
+                ContainerList(containers: containers)
             }
         }
     }
+}
+
+/// Containers as tappable "box" rows on a paper card.
+private struct ContainerList: View {
+    let containers: [Spot]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(containers) { box in
+                NavigationLink(value: box) { ContainerRow(container: box) }
+                    .buttonStyle(.plain)
+                if box.id != containers.last?.id { Divider() }
+            }
+        }
+        .nookCard(elevation: .flat)
+    }
+}
+
+extension Spot.Kind: @retroactive Identifiable {
+    public var id: String { rawValue }
 }

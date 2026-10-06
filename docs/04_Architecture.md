@@ -143,7 +143,7 @@ The entities come from PRD §8, plus `Warranty` (D21).
 | Model | Fields (all optional or defaulted) | Relationships (all optional, with inverses) |
 |---|---|---|
 | `Room` | id: UUID, name, symbol, colorKey, order, createdAt | spots [Spot], items [Item] (items placed directly in the room) |
-| `Spot` | id, name, qrID: String, packedAt?, order, createdAt | room: Room?, parent: Spot?, children [Spot], items [Item], photo: Photo? |
+| `Spot` | id, name, qrID: String, packedAt?, order, createdAt, kindRaw (spot or container, D34) | room: Room?, parent: Spot?, children [Spot], items [Item], photo: Photo? |
 | `Item` | id, name, category, tags [String], quantity = 1, brand, model, serial, barcode, price: Decimal?, currencyCode, purchaseDate, store, notes, isPrivate = false, valueEstimateLow/High?, createdAt, lastConfirmedAt, lastSeenAt, deletedAt? | room: Room?, spot: Spot?, photos [Photo], receipts [Receipt], warranties [Warranty], events [LocationEvent], loans [Loan] |
 | `Photo` | id, fileName, width, height, boxX/Y/W/H? (normalized, from a scan), order | item: Item?, spot: Spot? |
 | `Receipt` | id, fileName, kind (image or pdf), extractedText | item: Item? |
@@ -186,7 +186,7 @@ final class Item {
 - **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
 - **Soft delete:** `deletedAt` is set on delete, and queries filter out deleted rows. Rows older than 30 days are purged on launch.
 - **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload.
-- **Container depth:** `Spot.parent.parent` must be nil (containers nest one level, D3). The service layer enforces this.
+- **Container depth:** a container sits on its room or inside a spot, never inside another container; spots are always top-level (D3, D34). `RoomService` enforces this.
 - **Free limit:** `EntitlementStore.canAddItems(count:)` counts non-deleted items. It is checked in services, not views.
 
 ---

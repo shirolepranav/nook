@@ -2,14 +2,16 @@ import Foundation
 import SwiftData
 
 /// Rooms, spots and containers (F1). Every change to them goes through here, so the rules
-/// hold everywhere: names aren't blank, order stays dense, containers nest one level (D3),
-/// and a room with items can't be deleted until they're rehomed (D28, P3).
+/// hold everywhere: names aren't blank, order stays dense, a container sits in a room or a
+/// spot but never in another container (D3, D34), and a room with items can't be deleted
+/// until they're rehomed (D28, P3).
 /// Undo comes from the context's `UndoManager`, which the app ties to the window (04 §9).
 @MainActor
 public struct RoomService {
     public enum Failure: Error, Equatable {
         case emptyName
-        /// D3: a container can't hold another container.
+        /// D3, D34: a container can't go inside another container, and a spot can't go inside
+        /// anything.
         case containerTooDeep
         /// Items must be moved or sent to Recently Deleted first (D28).
         case hasItems
@@ -60,9 +62,14 @@ public struct RoomService {
 
     // MARK: Spots and containers
 
-    /// The room's top-level spots, in order.
+    /// The room's spots, in order.
     public func spots(in room: Room) -> [Spot] {
-        (room.spots ?? []).filter { $0.parent == nil }.sorted(by: Self.byOrder)
+        (room.spots ?? []).filter { $0.kind == .spot }.sorted(by: Self.byOrder)
+    }
+
+    /// The containers sitting on the room itself, not in a spot (D34).
+    public func looseContainers(in room: Room) -> [Spot] {
+        (room.spots ?? []).filter { $0.isContainer && $0.parent == nil }.sorted(by: Self.byOrder)
     }
 
     /// The containers inside a spot, in order.
@@ -70,21 +77,51 @@ public struct RoomService {
         (spot.children ?? []).sorted(by: Self.byOrder)
     }
 
-    /// Adds a spot to a room, or a container inside a spot (one level only, D3).
     @discardableResult
-    public func addSpot(named name: String, in room: Room, inside parent: Spot? = nil) throws -> Spot {
+    public func addSpot(named name: String, in room: Room) throws -> Spot {
         let name = try validated(name)
-        if let parent, parent.isContainer { throw Failure.containerTooDeep }
-        let siblings = parent.map(containers(in:)) ?? spots(in: room)
-        let spot = Spot(name: name, order: (siblings.last?.order ?? -1) + 1)
+        let spot = Spot(name: name, kind: .spot, order: (spots(in: room).last?.order ?? -1) + 1)
         context.insert(spot)
         spot.room = room
-        spot.parent = parent
         return spot
+    }
+
+    /// Adds a container to a room, or inside one of its spots (never inside a container, D34).
+    @discardableResult
+    public func addContainer(named name: String, in room: Room, inside spot: Spot? = nil) throws -> Spot {
+        let name = try validated(name)
+        if let spot, spot.isContainer || spot.room?.id != room.id { throw Failure.containerTooDeep }
+        let siblings = spot.map(containers(in:)) ?? looseContainers(in: room)
+        let container = Spot(name: name, kind: .container, order: (siblings.last?.order ?? -1) + 1)
+        context.insert(container)
+        container.room = room
+        container.parent = spot
+        return container
     }
 
     public func rename(_ spot: Spot, to name: String) throws {
         spot.name = try validated(name)
+    }
+
+    /// Moves a container onto the room (nil) or into one of the room's spots.
+    public func place(_ container: Spot, inside spot: Spot?) throws {
+        guard container.isContainer else { throw Failure.containerTooDeep }
+        if let spot, spot.isContainer || spot.room?.id != container.room?.id { throw Failure.containerTooDeep }
+        guard container.parent?.id != spot?.id else { return }
+        let siblings = spot.map(containers(in:)) ?? container.room.map(looseContainers(in:)) ?? []
+        container.parent = spot
+        container.order = (siblings.last?.order ?? -1) + 1
+    }
+
+    /// Turns a spot into a container (it must hold no containers) or a container into a spot
+    /// (it comes out onto the room).
+    public func setKind(of spot: Spot, to kind: Spot.Kind) throws {
+        guard spot.kind != kind else { return }
+        if kind == .container, !(spot.children ?? []).isEmpty { throw Failure.containerTooDeep }
+        let siblings = spot.room.map { kind == .spot ? spots(in: $0) : looseContainers(in: $0) } ?? []
+        spot.parent = nil
+        spot.kind = kind
+        spot.order = (siblings.last?.order ?? -1) + 1   // joins the end of its new list
     }
 
     public func reorder(_ spots: [Spot]) {

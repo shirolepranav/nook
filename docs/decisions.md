@@ -231,3 +231,12 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Stage Manager resize → waived.** The tab is kept in `@SceneStorage`, and the iPad mini and both orientations are covered by UI tests.
 
 *Why:* keep the phases moving without the owner's hands-on time; each check either runs automatically from now on or has a named later phase. *Risk accepted:* nobody has used a hardware keyboard with Nook yet. *Affects:* the P1 QA report, the roadmap P1 status, P13's audit list.
+
+**D34 · 2026-10-05 · Accepted** — **Containers can sit on a room's floor (refines D3).** D3 said a container is a spot with a parent spot. The H-05 board says "A container sits in a room or a spot. It can't go inside another container", and its Inside picker offers the room itself. Following the board:
+- `Spot` stores its kind (`kindRaw`: spot or container), which H-05's Type picker needs anyway.
+- **Spots** are always top-level in a room and can hold containers.
+- **Containers** sit on the room (`parent == nil`) or inside a spot, never inside another container, and hold only items.
+- Turning a spot into a container needs it to hold no containers. Turning a container into a spot brings it out onto the room.
+- The rules live in `RoomService` (`addContainer`, `place`, `setKind`), with tests.
+
+*Why:* a box on the garage floor is common, and forcing a "Floor" spot just to hold it is busywork. Nesting stays at one level, as PRD F1 says. *Affects:* 04 §4 (Spot gains `kindRaw`; schema V1 is unshipped, so no migration), 01 H-02, H-05.
