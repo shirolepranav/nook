@@ -126,4 +126,23 @@ final class ItemTests: XCTestCase {
         app.buttons["Recently Deleted"].tap()
         XCTAssertTrue(app.staticTexts["Cordless drill"].waitForExistence(timeout: 5))
     }
+
+    /// D35: selection hides the tab bar; rotating a Pro Max (compact ↔ regular) while
+    /// selecting must not crash or lose the selection.
+    @MainActor
+    func testRotatingWhileSelectingKeepsTheSelection() {
+        let app = launch("lived")
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 15))
+        kitchen.tap()
+        app.navigationBars.buttons["More"].tap()
+        app.buttons["Select"].tap()
+        card(app, "Espresso machine").tap()
+        XCTAssertTrue(app.navigationBars["1 Selected"].waitForExistence(timeout: 5))
+        XCUIDevice.shared.orientation = .landscapeLeft
+        XCTAssertTrue(app.navigationBars["1 Selected"].waitForExistence(timeout: 5))
+        XCUIDevice.shared.orientation = .portrait
+        XCTAssertTrue(app.navigationBars["1 Selected"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.state, .runningForeground)
+    }
 }

@@ -13,14 +13,20 @@ final class GridScrollPerfTests: XCTestCase {
         let storage = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Storage,")).firstMatch
         XCTAssertTrue(storage.waitForExistence(timeout: 30))
         storage.tap()
-        XCTAssertTrue(app.navigationBars["Storage"].waitForExistence(timeout: 10))
+        // From here, no queries on the app: a full accessibility snapshot of a 1,000-card grid
+        // times out XCUITest. Swipes go through SpringBoard's coordinates, whose tree is tiny;
+        // the touches still land on Nook in front.
+        sleep(2)
+        let screen = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let low = screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
+        let high = screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2))
 
         let options = XCTMeasureOptions()
         options.invocationOptions = [.manuallyStop]
         measure(metrics: [XCTOSSignpostMetric.scrollingAndDecelerationMetric], options: options) {
-            app.swipeUp(velocity: .fast)
+            low.press(forDuration: 0.01, thenDragTo: high, withVelocity: .fast, thenHoldForDuration: 0)
             stopMeasuring()
-            app.swipeDown(velocity: .fast)
+            high.press(forDuration: 0.01, thenDragTo: low, withVelocity: .fast, thenHoldForDuration: 0)
         }
     }
 }

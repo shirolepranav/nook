@@ -91,7 +91,7 @@ public enum PreviewStore {
             context.insert(item)
             item.room = room
             item.price = Decimal(number)
-            item.currencyCode = "USD"
+            item.currencyCode = Locale.current.currency?.identifier ?? "USD"
             if !photos.isEmpty {
                 let saved = photos[number % photos.count]
                 let photo = Photo(fileName: saved.fileName)   // shared files; fine for a test seed
