@@ -5,7 +5,7 @@ Runs:
 - `scripts/ci.sh`: 0 warnings, NookKit 41 ✔, NookUI 17 ✔, NookAI 1 ✔. App tests: SE 20 ✔ (7 skipped: opt-in perf and screenshots, iPad-only shortcuts). iPad: 20 ✔ and 3 ✘ on the first run; all 3 pass on rerun after the fixes below.
 - iPhone 18 Pro Max, the whole app suite: 19 ✔ and 2 ✘ on the first run. Both are flakes and pass on rerun: a keyboard flake in P2's `testFirstRunPicksRoomsAndLandsOnHome`, and an audit that took too long to finish. `testRotatingWhileSelectingKeepsTheSelection` ✔.
 
-**Status:** In QA. Every automated check passes. The rows marked **Owner** need a real device, VoiceOver, or hands on a camera. P3 is Done once they pass and the PR is merged.
+**Status:** Done (2026-10-06). Every automated check passes, and the product owner passed every **Owner** row on a device: 120 fps on ProMotion, the real camera, VoiceOver, a large PDF and the dark-mode Edit contrast.
 
 Closing P3 turned up these problems, all fixed on the branch:
 - **Selection title:** "N Selected" never showed, because the room's own title won. `itemSelection` now sits inside `navigationTitle`.

@@ -113,7 +113,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — model unit tests (nesting, ordering, deletes); onboarding and room UI tests. Smoke — S1–S2.
 
 ### P3 · Items, photos & Recently Deleted
-**Status:** In QA (2026-10-06, branch `p3/items-photos`). Automated checks pass; the owner's device checks are listed in `docs/qa/p3-qa-report.md`.
+**Status:** Done (2026-10-06, pushed to `main` at `a00a0c6`). The product owner finished the device checks on 2026-10-06.
 **Scope:** item editor (I-02) with every F2 field and the 500 common items autocomplete; item detail (I-01) with zoom transition; photo viewer (I-03); photos stored as HEIC on disk with cached 400-px thumbnails (PRD §8); receipts as image or PDF (I-07); Private flag stored (lock behavior comes in P12); Hide values; Recently Deleted for 30 days (S-08); multi-select (I-08).
 **PRD acceptance:** a photo-and-name item saves in 2 taps (F2); a 1,000-item grid scrolls at 120 fps on ProMotion with no dropped frames (PRD §9).
 **QA:** 10 photos per item, huge PDFs, camera denied, low storage, emoji and right-to-left names, killing the app mid-edit.
