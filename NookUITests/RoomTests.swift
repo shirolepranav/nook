@@ -3,12 +3,12 @@ import XCTest
 final class RoomTests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
-        XCUIDevice.shared.orientation = .portrait
     }
 
     /// Smoke S2 / F1: a room with 3 spots in under 30 seconds.
     @MainActor
     func testCreateARoomWithThreeSpotsInUnder30Seconds() {
+        XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: "empty")
         app.launch()
         let addRoom = app.buttons["Add a Room"]
@@ -37,6 +37,7 @@ final class RoomTests: XCTestCase {
     /// D14: deleting a room shows an Undo toast, and Undo brings it back.
     @MainActor
     func testDeleteARoomAndUndo() {
+        XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: "small")
         app.launch()
         let garage = app.buttons["Garage, Empty"]
