@@ -61,6 +61,7 @@ private struct TabShell: View {
                     .hidden(roomTabsHidden)
                 }
             }
+            .tabPlacement(.sidebarOnly)   // iPad portrait: the floating bar is the 4 tabs (iPadHome board)
             .sectionActions {
                 Button("Arrange Rooms", systemImage: "arrow.up.arrow.down") { arranging = true }
             }

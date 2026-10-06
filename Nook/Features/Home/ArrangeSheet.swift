@@ -26,6 +26,7 @@ struct ArrangeSheet<Row: PersistentModel>: View {
                     } icon: {
                         Image(systemName: symbol(row)).foregroundStyle(tint(row))
                     }
+                    .labelStyle(.adaptiveIcon)
                     .frame(minHeight: NookLayout.rowHeight)
                     .listRowBackground(NookColor.surface)
                     .accessibilityActions {
@@ -89,6 +90,23 @@ extension ArrangeSheet where Row == Spot {
              name: \.name, symbol: { _ in "square.stack" },
              tint: { _ in (RoomColor(rawValue: room.colorKey) ?? .stone).ink })
     }
+}
+
+/// The name alone at accessibility sizes, so it wraps at word breaks instead of beside the icon.
+private struct AdaptiveIconLabelStyle: LabelStyle {
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    func makeBody(configuration: Configuration) -> some View {
+        if typeSize.isAccessibilitySize {
+            configuration.title
+        } else {
+            Label(configuration)
+        }
+    }
+}
+
+extension LabelStyle where Self == AdaptiveIconLabelStyle {
+    fileprivate static var adaptiveIcon: Self { Self() }
 }
 
 #Preview { ArrangeSheet.rooms.modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta) }

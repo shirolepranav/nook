@@ -20,6 +20,7 @@ struct RoomEditor: View {
     @State private var confirmsDelete = false
     @State private var failure: String?
     @FocusState private var focus: Field?
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -103,7 +104,9 @@ struct RoomEditor: View {
     private var symbolPicker: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
             label("Symbol")
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: NookSpace.s1), count: 6),
+            // 3 columns at accessibility sizes: 6 can't hold the larger symbols.
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: NookSpace.s1),
+                                     count: typeSize.isAccessibilitySize ? 3 : 6),
                       spacing: NookSpace.s1) {
                 ForEach(Self.symbols, id: \.self) { candidate in
                     let isOn = candidate == symbol

@@ -11,6 +11,8 @@ final class ArrangeAndSidebarTests: XCTestCase {
         XCTAssertTrue(kitchen.waitForExistence(timeout: 10))
         if app.windows.firstMatch.frame.width < 600 {   // D35: room tabs stay out of the tab bar
             XCTAssertFalse(app.tabBars.buttons["Kitchen"].exists, "rooms are sidebar-only")
+        } else {   // iPad portrait: the floating bar has no Rooms group (iPadHome board)
+            XCTAssertFalse(app.buttons["Rooms"].exists, "rooms are sidebar-only")
         }
         kitchen.press(forDuration: 1)
         app.buttons["Arrange Rooms"].tap()
@@ -22,9 +24,14 @@ final class ArrangeAndSidebarTests: XCTestCase {
 
         let garage = app.buttons["Garage, Empty"]
         XCTAssertTrue(garage.waitForExistence(timeout: 5))
-        // Garage now comes first: above Kitchen, or level with it and to its left.
-        let g = garage.frame, k = kitchen.frame
-        XCTAssertTrue(g.minY < k.minY || (g.minY == k.minY && g.minX < k.minX), "Garage should lead")
+        // Garage now comes first: above Kitchen, or level with it and to its left. Polled, since
+        // the cards are still animating into place as the sheet closes.
+        let leads = NSPredicate { _, _ in
+            let g = garage.frame, k = kitchen.frame
+            return g.minY < k.minY || (g.minY == k.minY && g.minX < k.minX)
+        }
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: leads, object: nil)], timeout: 5),
+                       .completed, "Garage should lead")
     }
 
     /// H-02: drag Top drawer above Counter, Done, and the Room shows the new order.

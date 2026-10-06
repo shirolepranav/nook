@@ -35,16 +35,29 @@ Closing P2 turned up six iOS 27 problems that the earlier P2 PRs shipped with. A
 | S1 | iPhone SE (sim) | ✅ | `ShellTests`; the tab bar now shows only Home, Find, Reports and Settings (`testArrangeRooms` asserts no room tabs) |
 | S1 | iPhone 18 Pro Max (sim) | ✅ | Sidebar in landscape; tab bar in portrait |
 | S1 | 13-inch iPad (sim) | ✅ | Sidebar; ⌘1–⌘4 |
-| S1 | Resized iPad window | **Owner** | As in P1: narrow it in Stage Manager. It switches to the tab bar, keeps the tab, and a selected room falls back to Home (D35) |
+| S1 | Resized iPad window | **Owner** | Selecting a room from the iPad sidebar works (checked by hand in the simulator), but simulated touch couldn't drag the window's resize grip. Narrow it with a pointer in Stage Manager: it should switch to the tab bar, keep the tab, and a selected room should fall back to Home (D35) |
 | S2 | iPhone SE (sim) | ✅ | Room with 3 spots, under 30 s |
 | S2 | iPhone 18 Pro Max (sim) | ✅ | |
 | S2 | 13-inch iPad (sim) | ✅ | Container added in `testAddContainersOnTheFloorAndInsideASpot` |
 
 ## Accessibility (screens touched: O-01, O-02, H-01–H-05, H-07)
+- [x] iPad floating tab bar: Home, Find, Reports and Settings only, matching the `iPadHome` 13p board. Rooms live in the sidebar. The TabSection is `.sidebarOnly` too (it had shown as a "Rooms" group), and `testArrangeRooms` asserts it. When a room is picked from the sidebar, iOS adds that room to the bar as the selected tab, which is expected.
 - [x] Accessibility audit: `testRoomScreensPassTheAccessibilityAudit` runs `performAccessibilityAudit` on Welcome, Pick your rooms, Home with rooms, Room, Arrange Spots, Edit Room and Spot. It passes on the SE and the iPad. Two kinds of UIKit chrome are skipped, both commented in the test: the Dynamic Type check on a sheet's bar buttons, and element-less issues from the iPad floating bar's Rooms group.
 - [x] VoiceOver labels: the Name and Spot name fields now have labels (they read only the placeholder before, D35). Breadcrumbs read "Garage, Metal shelf". Room cards read "Kitchen, Empty".
 - [x] Move Up/Move Down actions on Arrange Rooms and Arrange Spots.
-- [ ] **Owner:** light, dark and AX5 screenshots of Home, Room, Spot and the Room editor on the SE and the iPad. The Simulator panel wasn't available to the agent.
+- [x] Screenshots in light, dark and AX5 (the largest accessibility size) on the SE and the iPad, captured by `ScreenshotTests` (opt-in, `TEST_RUNNER_RUN_SCREENSHOTS=1`) and reviewed one by one. Two AX5 bugs they caught are fixed: the Room editor's symbols overflowed and overlapped their tiles (now 3 columns at accessibility sizes), and Arrange rows broke names mid-word ("Counte / r"; the icon is dropped at accessibility sizes).
+
+| Screen | iPhone SE | 13-inch iPad (portrait) |
+|---|---|---|
+| O-01 Welcome | [light](p2/SE-O-01-light.jpg) · [dark](p2/SE-O-01-dark.jpg) · [ax5](p2/SE-O-01-ax5.jpg) | [light](p2/iPad-O-01-light.jpg) · [dark](p2/iPad-O-01-dark.jpg) · [ax5](p2/iPad-O-01-ax5.jpg) |
+| O-02 Pick your rooms | [light](p2/SE-O-02-light.jpg) · [dark](p2/SE-O-02-dark.jpg) · [ax5](p2/SE-O-02-ax5.jpg) | [light](p2/iPad-O-02-light.jpg) · [dark](p2/iPad-O-02-dark.jpg) · [ax5](p2/iPad-O-02-ax5.jpg) |
+| H-01 Home | [light](p2/SE-H-01-light.jpg) · [dark](p2/SE-H-01-dark.jpg) · [ax5](p2/SE-H-01-ax5.jpg) | [light](p2/iPad-H-01-light.jpg) · [dark](p2/iPad-H-01-dark.jpg) · [ax5](p2/iPad-H-01-ax5.jpg) |
+| H-02 Room | [light](p2/SE-H-02-light.jpg) · [dark](p2/SE-H-02-dark.jpg) · [ax5](p2/SE-H-02-ax5.jpg) | [light](p2/iPad-H-02-light.jpg) · [dark](p2/iPad-H-02-dark.jpg) · [ax5](p2/iPad-H-02-ax5.jpg) |
+| H-03 Spot | [light](p2/SE-H-03-light.jpg) · [dark](p2/SE-H-03-dark.jpg) · [ax5](p2/SE-H-03-ax5.jpg) | [light](p2/iPad-H-03-light.jpg) · [dark](p2/iPad-H-03-dark.jpg) · [ax5](p2/iPad-H-03-ax5.jpg) |
+| H-04 Room editor | [light](p2/SE-H-04-light.jpg) · [dark](p2/SE-H-04-dark.jpg) · [ax5](p2/SE-H-04-ax5.jpg) | [light](p2/iPad-H-04-light.jpg) · [dark](p2/iPad-H-04-dark.jpg) · [ax5](p2/iPad-H-04-ax5.jpg) |
+| H-05 Container editor | [light](p2/SE-H-05-light.jpg) · [dark](p2/SE-H-05-dark.jpg) · [ax5](p2/SE-H-05-ax5.jpg) | [light](p2/iPad-H-05-light.jpg) · [dark](p2/iPad-H-05-dark.jpg) · [ax5](p2/iPad-H-05-ax5.jpg) |
+| H-07 Arrange spots | [light](p2/SE-H-07-light.jpg) · [dark](p2/SE-H-07-dark.jpg) · [ax5](p2/SE-H-07-ax5.jpg) | [light](p2/iPad-H-07-light.jpg) · [dark](p2/iPad-H-07-dark.jpg) · [ax5](p2/iPad-H-07-ax5.jpg) |
+
 
 ## No-AI check
 n/a: the router isn't touched in P2.
@@ -52,6 +65,7 @@ n/a: the router isn't touched in P2.
 ## Open bugs
 | ID | Sev | Summary |
 |----|-----|---------|
-| — | P3 | The iPad floating tab bar shows a **Rooms** group, from the sidebar's `TabSection`. Check it against the iPad boards; hide it there if the boards keep rooms in the sidebar only. |
+| — | P3 | At AX5 the Room editor's symbol tiles differ slightly in height (each follows its symbol's shape). |
+| — | P3 | At AX5 the pinned "Continue with 4 rooms" button on O-02 takes about a third of the SE's screen; the list scrolls under it. |
 | — | P3 | A delete can be undone but not redone (D35). |
 | — | P3 | Narrowing with a room selected briefly shows the room tab in the tab bar for one frame before it hides (D35). |
