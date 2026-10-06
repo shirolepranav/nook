@@ -180,6 +180,9 @@ final class Item {
 ```
 
 - **Schema versioning:** `NookSchemaV1: VersionedSchema` plus `NookMigrationPlan`. Every model change uses the `data-model-change` skill and adds a new schema version and a migration test.
+  - The models are nested in their schema (`NookSchemaV1.Room`), and typealiases (`Room`) point at the current version, so a V2 can keep V1's classes for migration.
+  - `SchemaTests` walks the real schema and fails on any CloudKit-unsafe property, so a mistake shows up in CI rather than at sync time.
+  - **Deleting a room** deletes its spots and containers (cascade) but never its items (nullify). The caller rehomes the items or sends them to Recently Deleted first (D28; P3–P4).
 - **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
 - **Soft delete:** `deletedAt` is set on delete, and queries filter out deleted rows. Rows older than 30 days are purged on launch.
 - **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload.
