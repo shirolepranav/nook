@@ -110,6 +110,40 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P4 screens: the Move picker (I-04) and its room page, and location history (I-05).
+    @MainActor
+    func testMoveScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 15))
+        kitchen.tap()
+        let espresso = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Espresso machine,")).firstMatch
+        XCTAssertTrue(espresso.waitForExistence(timeout: 5))
+        espresso.tap()
+
+        app.buttons["Move"].tap()
+        XCTAssertTrue(app.navigationBars["Move Espresso machine"].waitForExistence(timeout: 5))
+        // Audited at full height: at medium height the sheet is drawn slightly scaled, and the
+        // auditor reads the List's own section header as clipped (D45).
+        app.buttons["Sheet Grabber"].swipeUp()
+        sleep(1)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        let garage = app.buttons.matching(NSPredicate(format: "label MATCHES %@", "Garage, \\d+ spots?")).firstMatch
+        for _ in 0..<6 where !(garage.exists && garage.isHittable) { app.collectionViews.firstMatch.swipeUp() }
+        garage.tap()
+        XCTAssertTrue(app.navigationBars["Garage"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Garage, Metal shelf"].tap()
+
+        let history = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Location history")).firstMatch
+        for _ in 0..<6 where !(history.exists && history.isHittable) { app.swipeUp() }
+        history.tap()
+        XCTAssertTrue(app.navigationBars["Location history"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
@@ -120,8 +154,9 @@ final class AccessibilityAuditTests: XCTestCase {
     /// SwiftUI, always has an element, and is still audited.
     @MainActor
     private func isInSystemTabBar(_ issue: XCUIAccessibilityAuditIssue, _ app: XCUIApplication) -> Bool {
-        // A one-line text field scrolls its text sideways rather than losing it.
-        if issue.auditType == .textClipped, issue.element?.elementType == .textField { return true }
+        // A one-line text or search field scrolls its text sideways rather than losing it.
+        if issue.auditType == .textClipped,
+           [.textField, .searchField].contains(issue.element?.elementType) { return true }
         guard let element = issue.element else {
             return [.dynamicType, .elementDetection, .textClipped].contains(issue.auditType) && app.buttons["ToggleSideBar"].exists
         }

@@ -90,6 +90,44 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP4Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 15))
+        kitchen.tap()
+        let espresso = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Espresso machine,")).firstMatch
+        XCTAssertTrue(espresso.waitForExistence(timeout: 5))
+
+        app.navigationBars["Kitchen"].buttons["More"].tap()
+        app.buttons["Select"].tap()
+        espresso.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Stand mixer,")).firstMatch.tap()
+        app.toolbars.buttons["Move"].tap()
+        XCTAssertTrue(app.navigationBars["Move 2 Items"].waitForExistence(timeout: 5))
+        snap("I-04 Move picker, 2 items")
+        app.buttons["Cancel"].tap()
+        app.buttons["Cancel"].tap()
+
+        espresso.tap()
+        XCTAssertTrue(app.buttons["Move"].waitForExistence(timeout: 5))
+        app.buttons["Move"].tap()
+        XCTAssertTrue(app.navigationBars["Move Espresso machine"].waitForExistence(timeout: 5))
+        snap("I-04 Move picker")
+        app.collectionViews.buttons.firstMatch.tap()
+        snap("I-04 Moved, with Undo")
+
+        let history = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Location history")).firstMatch
+        for _ in 0..<6 where !(history.exists && history.isHittable) { app.swipeUp() }
+        history.tap()
+        XCTAssertTrue(app.navigationBars["Location history"].waitForExistence(timeout: 5))
+        snap("I-05 Location history")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
