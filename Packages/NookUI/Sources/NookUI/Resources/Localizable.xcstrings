@@ -27,6 +27,9 @@
         }
       }
     },
+    "Answer": {
+      "comment": "VoiceOver name of the answer card on Find (F-03)."
+    },
     "Capture": {
       "comment": "VoiceOver label for the floating Capture button."
     },

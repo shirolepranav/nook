@@ -39,3 +39,19 @@ func toast(variant: SnapshotVariant) throws {
     }
     try assertSnapshot(of: view, named: "Toast", variant: variant)
 }
+
+@MainActor
+@Test(arguments: SnapshotVariant.all)
+func answerCard(variant: SnapshotVariant) throws {
+    let view = canvas {
+        AnswerCard {
+            Breadcrumb.text(["Office", "Desk", "Second drawer"], color: .sky, ending: ".")
+                .font(.nookSection)
+                .foregroundStyle(NookColor.textPrimary)
+            Text(verbatim: "Last confirmed Aug 3.").font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+            HStack(spacing: NookSpace.s1) { AnswerPhoto(nil); AnswerPhoto(nil) }
+            Button(String("Move")) {}.buttonStyle(.nookPrimary)
+        }
+    }
+    try assertSnapshot(of: view, named: "AnswerCard", variant: variant)
+}

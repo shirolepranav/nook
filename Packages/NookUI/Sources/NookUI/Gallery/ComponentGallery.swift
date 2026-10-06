@@ -72,6 +72,15 @@ public struct ComponentGallery: View {
                     }
                     StatusPill(.privateItem, Text(verbatim: "Private"))
                 }
+                section("Answer") {
+                    AnswerCard {
+                        Breadcrumb.text(["Office", "Desk", "Second drawer"], color: .sky, ending: ".")
+                            .font(.nookSection)
+                        Text(verbatim: "Last confirmed Aug 3.").font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+                        HStack(spacing: NookSpace.s1) { AnswerPhoto(nil); AnswerPhoto(nil) }
+                        Button(String("Move")) {}.buttonStyle(.nookPrimary)
+                    }
+                }
                 section("States") {
                     EmptyStateView(.shelfWaiting, title: Text(verbatim: "Let’s start with one room."),
                                    message: Text(verbatim: "Scan a shelf and tag what’s on it."))
