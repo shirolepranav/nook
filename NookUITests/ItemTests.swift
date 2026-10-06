@@ -26,6 +26,7 @@ final class ItemTests: XCTestCase {
         let app = launch("small")
         XCTAssertTrue(app.buttons["Capture"].waitForExistence(timeout: 10))
         app.buttons["Capture"].tap()
+        XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
         app.buttons["Add item"].tap()
 
         let shutter = app.buttons["Take Photo"]
@@ -68,11 +69,13 @@ final class ItemTests: XCTestCase {
         let app = launch("small")
         XCTAssertTrue(app.buttons["Capture"].waitForExistence(timeout: 10))
         app.buttons["Capture"].tap()
+        XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
         app.buttons["Add item"].tap()
         app.buttons["Cancel"].firstMatch.tap()                      // the fixture camera's Cancel
         XCTAssertTrue(app.buttons["Capture"].waitForExistence(timeout: 5))
 
         app.buttons["Capture"].tap()
+        XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
         app.buttons["Add item"].tap()
         app.buttons["Take Photo"].tap()
         let name = app.textFields["Name"]
@@ -112,7 +115,8 @@ final class ItemTests: XCTestCase {
         let app = launch("lived")
         let garage = app.buttons["Garage, 3 items"]
         XCTAssertTrue(garage.waitForExistence(timeout: 15))
-        garage.press(forDuration: 1)
+        sleep(1)   // let the cards' photos finish loading, or the long press lands as a tap
+        garage.press(forDuration: 1.5)
         app.buttons["Delete"].tap()
         app.buttons["Move Items to Recently Deleted"].tap()
         XCTAssertTrue(garage.waitForNonExistence(timeout: 5))

@@ -101,6 +101,7 @@ private struct ItemDetail: View {
         .background(NookColor.canvas)
         .captureButton(at: Location(of: item))   // D32: item screens show Capture
         .navigationTitle(Text(verbatim: item.name))
+        .toolbar(removing: .title)   // the mockup shows only the back button over the hero
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

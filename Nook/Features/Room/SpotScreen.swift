@@ -61,9 +61,9 @@ struct SpotScreen: View {
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
         .captureButton(isShown: selection == nil, at: location)   // D32
-        .navigationTitle(spot.name)
-        .toolbarTitleDisplayMode(.large)
         .itemSelection($selection, among: spotItems, toast: $toast)
+        .navigationTitle(spot.name)   // itemSelection's title, inside it, wins while selecting
+        .toolbarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Add Item Here", systemImage: "plus") { addsItem = true }

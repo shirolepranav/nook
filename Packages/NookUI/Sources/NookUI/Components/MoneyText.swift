@@ -24,6 +24,10 @@ public struct MoneyText: View {
                     .accessibilityLabel(Text("Value hidden", bundle: .module))  // VoiceOver skips the dots
             } else {
                 Text(amount, format: .currency(code: currencyCode))
+                    // "649 Indian rupees", not the symbol (03 §11). Set on a wrapping element: on
+                    // the Text itself, the audit reads the longer label as clipped text.
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(amount, format: .currency(code: currencyCode).presentation(.fullName)))
             }
         }
         .font(font)

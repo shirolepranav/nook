@@ -57,9 +57,9 @@ struct RoomScreen: View {
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
         .captureButton(isShown: selection == nil, at: Location(room: room))   // D32: Room shows Capture
-        .navigationTitle(room.name)
-        .toolbarTitleDisplayMode(.inline)
         .itemSelection($selection, among: shownItems, toast: $toast)
+        .navigationTitle(room.name)   // itemSelection's title, inside it, wins while selecting
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu("Add", systemImage: "plus") {

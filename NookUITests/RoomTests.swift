@@ -17,7 +17,7 @@ final class RoomTests: XCTestCase {
         let start = Date.now
         addRoom.tap()
         let name = app.textFields["Name"]
-        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        XCTAssertTrue(name.waitForExistence(timeout: 10))   // a freshly booted simulator's first keyboard is slow
         name.typeText("Office\n")                      // Return goes straight to the first spot
         let spot = app.textFields["Spot name"]
         XCTAssertTrue(spot.waitForExistence(timeout: 5))

@@ -47,7 +47,7 @@ public struct PhotoCard: View {
                 Text(verbatim: location)
                     .font(.nookMeta)
                     .foregroundStyle(NookColor.textSecondary)
-                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)   // 03 §8.4: wrap at large sizes
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 2)   // never cut off a place (03 §8.4)
             }
             .padding([.horizontal, .bottom], NookSpace.half)
         }

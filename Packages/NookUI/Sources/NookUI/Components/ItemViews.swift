@@ -91,6 +91,7 @@ public extension ItemRow where Trailing == EmptyView {
 public struct PhotoTile: View {
     let photo: Image?
     let isCover: Bool
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     public init(photo: Image?, isCover: Bool) {
         self.photo = photo
@@ -101,9 +102,10 @@ public struct PhotoTile: View {
         NookPhoto(photo)
             .frame(width: NookLayout.photoTileWidth, height: NookLayout.photoTileWidth * 5 / 4)
             .containerShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
-            .dynamicTypeSize(...DynamicTypeSize.large)
             .overlay(alignment: .bottomLeading) {
-                if isCover {
+                // At accessibility sizes the caption would cover the photo; VoiceOver still says
+                // "Cover" from the tile's value.
+                if isCover && !typeSize.isAccessibilitySize {
                     Text("Cover", bundle: .module)
                         .font(.nookCaption)
                         .foregroundStyle(NookColor.textPrimary)
@@ -111,7 +113,6 @@ public struct PhotoTile: View {
                         .padding(.vertical, NookSpace.half)
                         .background(NookColor.surfaceRaised, in: Capsule())
                         .padding(NookSpace.half)
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                 }
             }
     }
