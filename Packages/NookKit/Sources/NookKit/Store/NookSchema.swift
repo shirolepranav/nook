@@ -9,7 +9,8 @@ public enum NookSchemaV1: VersionedSchema {
     public static var versionIdentifier: Schema.Version { Schema.Version(1, 0, 0) }
 
     public static var models: [any PersistentModel.Type] {
-        [Room.self, Spot.self, Item.self, Photo.self, Receipt.self, Warranty.self, LocationEvent.self, Loan.self]
+        [Room.self, Spot.self, Item.self, Photo.self, Receipt.self, Warranty.self, LocationEvent.self, Loan.self,
+         SavedSearch.self]
     }
 }
 
@@ -27,3 +28,4 @@ public typealias Receipt = NookSchemaV1.Receipt
 public typealias Warranty = NookSchemaV1.Warranty
 public typealias LocationEvent = NookSchemaV1.LocationEvent
 public typealias Loan = NookSchemaV1.Loan
+public typealias SavedSearch = NookSchemaV1.SavedSearch

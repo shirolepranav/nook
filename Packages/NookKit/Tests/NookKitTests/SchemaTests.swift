@@ -25,7 +25,7 @@ func entityIsCloudKitSafe(name: String) throws {
 }
 
 @Test func schemaHasEveryEntity() {
-    // 04 §4 plus Warranty (D21).
+    // 04 §4 plus Warranty (D21) and SavedSearch (D46).
     #expect(Set(schema.entities.map(\.name)) ==
-            ["Room", "Spot", "Item", "Photo", "Receipt", "Warranty", "LocationEvent", "Loan"])
+            ["Room", "Spot", "Item", "Photo", "Receipt", "Warranty", "LocationEvent", "Loan", "SavedSearch"])
 }
