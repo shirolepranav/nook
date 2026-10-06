@@ -41,6 +41,8 @@ scripts/xcresult.py build "$OUT/results/build.xcresult"
 
 step "NookKit tests (swift test)"
 swift test --quiet --package-path Packages/NookKit
+# F5: the search budget is checked on an optimized build (SearchIndexTests).
+swift test --quiet --package-path Packages/NookKit -c release -Xswiftc -enable-testing --filter everyKeystroke
 
 for pkg in NookUI NookAI; do
     step "$pkg tests (iPhone SE)"
