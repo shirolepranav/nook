@@ -3,8 +3,8 @@ import SwiftData
 import NookKit
 import NookUI
 
-/// H-03 Spot / container: where it is, what's inside. The QR label (H-06) arrives in P10,
-/// "Move container" in P4.
+/// H-03 Spot / container: where it is, what's inside. A container moves with everything in
+/// it (Move Container). The QR label (H-06) arrives in P10.
 struct SpotScreen: View {
     let spot: Spot
     @State private var editing = false
@@ -13,7 +13,9 @@ struct SpotScreen: View {
     @State private var viewsPhoto = false
     @State private var selection: Set<UUID>?
     @State private var toast: ToastMessage?
+    @State private var moving = false
     @Environment(\.modelContext) private var context
+    @Environment(\.undoManager) private var undoManager
 
     private var rooms: RoomService { RoomService(context: context) }
     private var spotItems: [Item] { ItemService(context: context).items(in: spot) }
@@ -72,6 +74,13 @@ struct SpotScreen: View {
                 ToolbarItem(placement: .secondaryAction) {
                     Button("Edit", systemImage: "pencil") { editing = true }
                 }
+                if spot.isContainer {
+                    ToolbarItem(placement: .secondaryAction) {
+                        Button("Move Container", systemImage: "arrow.up.and.down.and.arrow.left.and.right") {
+                            moving = true
+                        }
+                    }
+                }
             }
         }
         .quickAdd(isPresented: $addsItem, at: location)
@@ -82,8 +91,30 @@ struct SpotScreen: View {
         .sheet(isPresented: $editing) {
             if let room = spot.room { SpotEditor(room: room, spot: spot) }
         }
+        .sheet(isPresented: $moving) {
+            MovePicker(title: Text("Move \(spot.name)"), current: spot.room.map { Location(room: $0, spot: spot.parent) },
+                       allowsContainers: false) { place in
+                if let place { move(to: place) }
+            }
+        }
         .sheet(isPresented: $addingContainer) {
             if let room = spot.room { SpotEditor(room: room, kind: .container, inside: spot) }
+        }
+    }
+
+    /// Moves the container and its items, as one Undo step (F6, D44).
+    private func move(to place: Location) {
+        do {
+            try LocationService(context: context).move(spot, to: place)
+            undoManager?.setActionName(String(localized: "Move"))
+            try context.save()
+            toast = ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right",
+                                 "Moved \(spot.name) to \(place.path).") { [undoManager, context] in
+                undoManager?.undo()
+                try? context.save()
+            }
+        } catch {
+            toast = ToastMessage(symbol: "exclamationmark.circle", "Couldn’t move \(spot.name). Your items are safe.")
         }
     }
 
