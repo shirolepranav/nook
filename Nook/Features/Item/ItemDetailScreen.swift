@@ -309,7 +309,7 @@ private struct ItemDetail: View {
                         .font(.nookBody)
                         .foregroundStyle(NookColor.textPrimary)
                     Spacer(minLength: 0)
-                    Text(count == 1 ? "1 place" : "\(count) places")
+                    Text("\(count) places")
                         .font(.nookMeta)
                         .foregroundStyle(NookColor.textSecondary)
                     Image(systemName: "chevron.right")

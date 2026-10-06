@@ -4,6 +4,9 @@
     "" : {
 
     },
+    " From %@." : {
+
+    },
     "%@ moved to position %lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -24,12 +27,34 @@
         }
       }
     },
-    "%@ → %@" : {
+    "%@ · %lld places since %@" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ · %2$lld place since %3$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ · %2$lld places since %3$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%@. %@.%@ %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ → %2$@"
+            "value" : "%1$@. %2$@.%3$@ %4$@."
           }
         }
       }
@@ -66,6 +91,28 @@
         }
       }
     },
+    "%lld places" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld place"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld places"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rooms, ready to fill" : {
       "localizations" : {
         "en" : {
@@ -89,7 +136,6 @@
       }
     },
     "%lld spots" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -195,6 +241,12 @@
     "Add your own" : {
 
     },
+    "Added" : {
+
+    },
+    "All rooms" : {
+
+    },
     "Anything worth remembering" : {
 
     },
@@ -238,6 +290,9 @@
 
     },
     "Choose File…" : {
+
+    },
+    "Choose a Room" : {
 
     },
     "Choose a room" : {
@@ -308,6 +363,9 @@
 
     },
     "Couldn’t duplicate it. Your items are safe." : {
+
+    },
+    "Couldn’t move %@. Your items are safe." : {
 
     },
     "Couldn’t save right now. Your items are safe on this device." : {
@@ -394,6 +452,9 @@
     "Duplicated %@." : {
 
     },
+    "Each time you move it, the place shows up here." : {
+
+    },
     "Edit" : {
 
     },
@@ -441,10 +502,22 @@
     "Find" : {
 
     },
+    "Found It Here Instead" : {
+
+    },
+    "Found here by you" : {
+
+    },
+    "Found in %@." : {
+
+    },
     "Get Started" : {
 
     },
     "Give it a name." : {
+
+    },
+    "Here now" : {
 
     },
     "Hidden from Spotlight, Siri and widgets. Needs Face ID to open." : {
@@ -501,6 +574,9 @@
     "Light" : {
 
     },
+    "Location history" : {
+
+    },
     "Mark Not Private" : {
 
     },
@@ -519,6 +595,15 @@
     "Move" : {
 
     },
+    "Move %@" : {
+
+    },
+    "Move %lld Items" : {
+
+    },
+    "Move Container" : {
+
+    },
     "Move Down" : {
 
     },
@@ -535,6 +620,38 @@
 
     },
     "Move Up" : {
+
+    },
+    "Moved %@ to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Moved %1$@ to %2$@."
+          }
+        }
+      }
+    },
+    "Moved %lld items to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Moved %1$lld items to %2$@."
+          }
+        }
+      }
+    },
+    "Moved by scanning a label" : {
+
+    },
+    "Moved by you" : {
+
+    },
+    "Moved to %@." : {
+
+    },
+    "Moved with Siri" : {
 
     },
     "Name" : {
@@ -567,7 +684,13 @@
     "No longer Private." : {
 
     },
+    "No moves yet." : {
+
+    },
     "No room yet" : {
+
+    },
+    "No rooms or spots match “%@”." : {
 
     },
     "Nook" : {
@@ -687,6 +810,9 @@
     "Receipt photo" : {
 
     },
+    "Recent" : {
+
+    },
     "Recently Deleted" : {
 
     },
@@ -751,6 +877,9 @@
 
     },
     "Search" : {
+
+    },
+    "Search rooms and spots" : {
 
     },
     "Search your things" : {
@@ -822,6 +951,9 @@
     "Studio" : {
 
     },
+    "Suggested move, confirmed by you" : {
+
+    },
     "Symbol" : {
 
     },
@@ -841,6 +973,9 @@
 
     },
     "Take Photo" : {
+
+    },
+    "Taken out of its room" : {
 
     },
     "Terracotta" : {
@@ -882,6 +1017,12 @@
     "Where" : {
 
     },
+    "Where did you find it?" : {
+
+    },
+    "Where is it?" : {
+
+    },
     "Where you bought it" : {
 
     },
@@ -898,6 +1039,9 @@
 
     },
     "Zoom" : {
+
+    },
+    "from %@" : {
 
     }
   },
