@@ -65,4 +65,8 @@ public enum NookLayout {
     public static let swatchSize: CGFloat = 48
     /// The floating Capture button (03 §8.1, D26).
     public static let captureButtonSize: CGFloat = 56
+    /// The room symbol circle on Move picker rows (I-04 mockup).
+    public static let placeIconSize: CGFloat = 32
+    /// A dot on the location history timeline (I-05 mockup).
+    public static let timelineDotSize: CGFloat = 10
 }
