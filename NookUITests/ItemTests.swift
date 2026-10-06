@@ -3,11 +3,11 @@ import XCTest
 final class ItemTests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
-        XCUIDevice.shared.orientation = .portrait
     }
 
     @MainActor
     private func launch(_ store: String) -> XCUIApplication {
+        XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: store)
         app.launchArguments += ["-uiTestingCameraFixture"]   // simulators have no camera (D37)
         app.launch()
@@ -71,12 +71,14 @@ final class ItemTests: XCTestCase {
         app.buttons["Capture"].tap()
         XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
         app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
         app.buttons["Cancel"].firstMatch.tap()                      // the fixture camera's Cancel
         XCTAssertTrue(app.buttons["Capture"].waitForExistence(timeout: 5))
 
         app.buttons["Capture"].tap()
         XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
         app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
         app.buttons["Take Photo"].tap()
         let name = app.textFields["Name"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))

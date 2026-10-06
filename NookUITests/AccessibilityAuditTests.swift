@@ -114,7 +114,7 @@ final class AccessibilityAuditTests: XCTestCase {
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
     /// element-detection issues the same way: room names UIKit draws itself, again with no
-    /// element. Only those are skipped, and only while the floating bar (its sidebar toggle) is
+    /// element. With items (P3), its room labels add element-less clipped-text issues too. Only those are skipped, and only while the floating bar (its sidebar toggle) is
     /// on screen, plus the Dynamic Type check on navigation bar buttons (a sheet's Cancel, Done
     /// and Save are UIKit bar buttons with the same fixed-size labels). Nook's own text is
     /// SwiftUI, always has an element, and is still audited.
@@ -123,7 +123,7 @@ final class AccessibilityAuditTests: XCTestCase {
         // A one-line text field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped, issue.element?.elementType == .textField { return true }
         guard let element = issue.element else {
-            return [.dynamicType, .elementDetection].contains(issue.auditType) && app.buttons["ToggleSideBar"].exists
+            return [.dynamicType, .elementDetection, .textClipped].contains(issue.auditType) && app.buttons["ToggleSideBar"].exists
         }
         guard issue.auditType == .dynamicType else { return false }
         return app.navigationBars.buttons.allElementsBoundByIndex.contains { $0.frame == element.frame }
