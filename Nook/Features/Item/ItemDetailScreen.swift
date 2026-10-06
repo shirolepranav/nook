@@ -6,8 +6,8 @@ import NookUI
 
 /// I-01 Item detail: the photos, then where it is, then the facts. Content is paper; glass
 /// stays on the toolbar (03 §1.6). On a wide window the items around it sit in a column
-/// beside it (iPadItem board). Move and "Found it here instead" join in P4, Lend in P7,
-/// warranty in P7 (D39), and the Private lock in P12.
+/// beside it (iPadItem board). Lend joins in P7, warranty in P7 (D39), and the Private lock
+/// in P12.
 struct ItemDetailScreen: View {
     let item: Item
     @State private var shown: Item?
@@ -73,6 +73,9 @@ private struct ItemDetail: View {
     @State private var confirmsDelete = false
     @State private var toast: ToastMessage?
     @State private var addsReceipt = false
+    @State private var moving: LocationEvent.Source?
+    @State private var moves = 0   // plays the success haptic (03 §10)
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
@@ -91,6 +94,7 @@ private struct ItemDetail: View {
                     detailsCard
                     receiptCard
                     if !item.notes.isEmpty { notesCard }
+                    historyRow
                 }
                 .padding(.horizontal, NookSpace.s2)
                 .frame(maxWidth: NookLayout.readableWidth)
@@ -129,7 +133,8 @@ private struct ItemDetail: View {
                 Button("Delete", systemImage: "trash", role: .destructive) { confirmsDelete = true }
             }
         }
-        .focusedSceneValue(\.itemCommands, ItemCommands(edit: { editing = true }, delete: { confirmsDelete = true }))
+        .focusedSceneValue(\.itemCommands, ItemCommands(edit: { editing = true }, move: { moving = .manual },
+                                                         delete: { confirmsDelete = true }))
         .confirmationDialog(Text("Delete \(item.name)?"), isPresented: $confirmsDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive, action: delete)
         } message: {
@@ -141,6 +146,19 @@ private struct ItemDetail: View {
         }
         .quickLookPreview($receiptURL)   // D42: Quick Look handles images and long PDFs
         .sheet(isPresented: $addsReceipt) { ItemEditor(item: item) }
+        .sheet(item: $moving) { source in
+            MovePicker(title: source == .found ? Text("Where did you find it?") : Text("Move \(item.name)"),
+                       current: Location(of: item)) { place in
+                guard let place else { return }
+                withNookAnimation(.settle, reduceMotion: reduceMotion) {
+                    if let message = actions.move([item], to: place, source: source) {
+                        toast = message
+                        moves += 1
+                    }
+                }
+            }
+        }
+        .nookHaptic(.saved, trigger: moves)
         .toast($toast)
     }
 
@@ -232,7 +250,28 @@ private struct ItemDetail: View {
     private var locationCard: some View {
         let location = Location(of: item)
         let color = location.flatMap { RoomColor(rawValue: $0.room.colorKey) } ?? .stone
-        return HStack(alignment: .top, spacing: NookSpace.s2) {
+        return VStack(alignment: .leading, spacing: NookSpace.s2) {
+            place(location)
+            // Side by side, stacked at accessibility sizes (03 §8.2: labels wrap, never truncate).
+            let buttons = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: NookSpace.s1)) : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            buttons {
+                Button("Move") { moving = .manual }
+                    .buttonStyle(.nookSecondary)
+                Button(location == nil ? "Choose a Room" : "Found It Here Instead") {
+                    moving = location == nil ? .manual : .found
+                }
+                .buttonStyle(.nookTertiary)
+            }
+        }
+        .padding(NookSpace.s2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(color.fill, in: RoundedRectangle(cornerRadius: NookRadius.card, style: .continuous))
+    }
+
+    /// Where it is and how fresh that is (01 §1.2).
+    private func place(_ location: Location?) -> some View {
+        HStack(alignment: .top, spacing: NookSpace.s2) {
             VStack(alignment: .leading, spacing: NookSpace.half) {
                 Text(verbatim: location?.path ?? String(localized: "No room yet"))
                     .font(.nookSection)
@@ -252,10 +291,39 @@ private struct ItemDetail: View {
                 .accessibilityLabel(Text("Spot photo: \(item.spot?.name ?? "")"))
             }
         }
-        .padding(NookSpace.s2)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(color.fill, in: RoundedRectangle(cornerRadius: NookRadius.card, style: .continuous))
         .accessibilityElement(children: .combine)
+    }
+
+    // MARK: History
+
+    /// "Location history · 4 moves" → I-05. Hidden until there's something to show.
+    @ViewBuilder
+    private var historyRow: some View {
+        let count = item.events?.count ?? 0
+        if count > 0 {
+            NavigationLink {
+                LocationHistoryScreen(item: item)
+            } label: {
+                HStack {
+                    Text("Location history")
+                        .font(.nookBody)
+                        .foregroundStyle(NookColor.textPrimary)
+                    Spacer(minLength: 0)
+                    Text(count == 1 ? "1 place" : "\(count) places")
+                        .font(.nookMeta)
+                        .foregroundStyle(NookColor.textSecondary)
+                    Image(systemName: "chevron.right")
+                        .font(.nookFootnote)
+                        .foregroundStyle(NookColor.textTertiary)
+                        .accessibilityHidden(true)
+                }
+                .padding(.horizontal, NookSpace.s2)
+                .frame(minHeight: NookLayout.rowHeight)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .nookCard(elevation: .flat)
+        }
     }
 
     // MARK: Details
