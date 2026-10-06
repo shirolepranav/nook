@@ -27,6 +27,30 @@ final class ArrangeAndSidebarTests: XCTestCase {
         XCTAssertTrue(g.minY < k.minY || (g.minY == k.minY && g.minX < k.minX), "Garage should lead")
     }
 
+    /// H-02: drag Top drawer above Counter, Done, and the Room shows the new order.
+    @MainActor
+    func testArrangeSpots() {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "small")
+        app.launch()
+        let kitchen = app.buttons["Kitchen, Empty"]
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 10))
+        kitchen.tap()
+        XCTAssertTrue(app.navigationBars["Kitchen"].waitForExistence(timeout: 5))
+        // Secondary actions sit behind More on compact width, in the bar on regular width.
+        if !app.buttons["Arrange Spots"].exists { app.navigationBars["Kitchen"].buttons["More"].tap() }
+        app.buttons["Arrange Spots"].tap()
+
+        let drawerHandle = app.buttons["Reorder Top drawer"]
+        XCTAssertTrue(drawerHandle.waitForExistence(timeout: 5))
+        drawerHandle.press(forDuration: 0.5, thenDragTo: app.buttons["Reorder Counter"])
+        app.buttons["Done"].tap()
+
+        let drawer = app.buttons["Top drawer"], counter = app.buttons["Counter"]
+        XCTAssertTrue(drawer.waitForExistence(timeout: 5))
+        XCTAssertLessThan(drawer.frame.minY, counter.frame.minY, "Top drawer should lead")
+    }
+
     /// 01 H-01 regular width: rooms in the sidebar, the room beside it; ⌘E edits it.
     @MainActor
     func testRoomsInTheSidebar() throws {

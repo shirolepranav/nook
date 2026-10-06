@@ -73,7 +73,7 @@ private struct TabShell: View {
         .sheet(isPresented: $editsSelectedRoom) {
             if let selectedRoom { RoomEditor(room: selectedRoom) }
         }
-        .sheet(isPresented: $arranging) { ArrangeRoomsSheet() }
+        .sheet(isPresented: $arranging) { ArrangeSheet.rooms }
         .onChange(of: rooms.map(\.id)) { _, ids in
             // A deleted room can't stay selected.
             if case .room(let id) = tab, !ids.contains(id) { tab = .home }

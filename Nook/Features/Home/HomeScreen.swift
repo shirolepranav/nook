@@ -54,7 +54,7 @@ struct HomeScreen: View {
         } message: {
             Text("Its spots and containers are deleted too. You can undo right after.")
         }
-        .sheet(isPresented: $arranging) { ArrangeRoomsSheet() }
+        .sheet(isPresented: $arranging) { ArrangeSheet.rooms }
         .toast($toast)
     }
 

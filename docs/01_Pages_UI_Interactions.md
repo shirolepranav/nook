@@ -190,7 +190,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Items grouped by **spot**, each spot a section with its optional photo; containers appear as stacked "box" cards inside their spot.
 - Photo grid: 2 columns compact, 3 on Pro Max landscape, 4–5 on regular width (PRD §4). Switches to a list at accessibility text sizes (PRD §3 accessibility).
 - **Toolbar:** Scan this room, Add spot, Select (I-08), overflow: Edit room, Room report.
-- **Interactions:** tap item → I-01 (zoom transition); tap spot header → H-03; drag to reorder spots [Inferred].
+- **Interactions:** tap item → I-01 (zoom transition); tap spot header → H-03; drag to reorder spots [Inferred]: overflow → Arrange Spots, the same sheet as H-07.
 - **Empty:** "Nothing here yet. Scan this room to fill it in 30 seconds." → Scan this room (PRD §3).
 
 ### H-03 Spot / container [PRD §5 F1, F8]

@@ -9,6 +9,7 @@ struct RoomScreen: View {
     let room: Room
     @State private var editing = false
     @State private var adding: Spot.Kind?
+    @State private var arranging = false
     @Environment(\.modelContext) private var context
 
     private var rooms: RoomService { RoomService(context: context) }
@@ -63,9 +64,16 @@ struct RoomScreen: View {
             ToolbarItem(placement: .secondaryAction) {
                 Button("Edit Room", systemImage: "pencil") { editing = true }
             }
+            if rooms.spots(in: room).count > 1 {
+                ToolbarItem(placement: .secondaryAction) {
+                    // H-02: drag to reorder spots
+                    Button("Arrange Spots", systemImage: "arrow.up.arrow.down") { arranging = true }
+                }
+            }
         }
         .sheet(isPresented: $editing) { RoomEditor(room: room) }
         .sheet(item: $adding) { SpotEditor(room: room, kind: $0) }
+        .sheet(isPresented: $arranging) { ArrangeSheet.spots(in: room) }
         .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
     }
 
