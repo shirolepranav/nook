@@ -288,3 +288,19 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - A bare closure in a `FocusedValues` `@Entry` warns that it may invalidate every update; ⌘N's action is wrapped in a struct.
 
 *Affects:* `ItemSupport.swift`, `QuickAdd.swift`, `ItemDetailScreen.swift`.
+
+**D44 · 2026-10-06 · Accepted (product owner)** — **Move picker recents, "Found it here instead" and Move Container (P4).**
+- **`LocationEvent.toRoomID` is added to schema V1 in place.** V1 is merged but not on any device or TestFlight, so the owner approved editing it instead of adding V2 (data-model-change skill §3). The field is optional, so it's CloudKit-safe.
+- **Recents** come from the move history: the newest 50 events, resolved to places that still exist, without duplicates or the item's current place, at most 5. They sync with the rest of the data in P11. Events from P3 without `toRoomID` resolve through their spot.
+- **`found`** is a new `LocationEvent.Source`. "Found it here instead" records it, and history reads "Found here by you". It's stored as a raw string, so there's no schema impact.
+- **Move Container** (H-03) moves a container to a room or a spot (never into a container, D34). Each item inside gets its own event, since its place changed too. The spot editor's "where it sits" uses the same path.
+
+*Why:* recents that live in the data need no extra store and follow the user to their other devices. A correction reads differently from a move in "Where did it used to be?". *Affects:* 04 §4, 01 I-04, I-05 and H-03.
+
+**D45 · 2026-10-06 · Accepted** — **iOS 27 SDK checks for P4 (D23).** Confirmed on the iOS 27.0 SDK and simulator:
+- **SwiftData's own undo takes back a saved move,** including deleting the inserted `LocationEvent` at the next save. This is unlike a saved delete (D35). Moves need no custom undo, and multi-item moves are one step. Proven by `undoTakesASavedMoveBackAndDropsItsEvent` (NookKit) and `MoveTests.testMoveInTwoTapsShowsInHistoryAndUndoes`.
+- **`.presentationDetents([.medium, .large])` together with `.presentationSizing(.form)`** gives a medium sheet on iPhone, and a form sheet on regular width.
+- **`.searchable(placement: .navigationBarDrawer(displayMode: .always))`** works inside a sheet's own `NavigationStack`.
+- **`performAccessibilityAudit` reports false clipping at medium height.** A medium-height sheet is drawn slightly scaled, and the audit then flags the List's own section header as clipped text. The audit runs with the picker at full height. The search field's clipping is exempt, like plain text fields.
+
+*Affects:* `LocationService.swift`, `MovePicker.swift`, `AccessibilityAuditTests.swift`.

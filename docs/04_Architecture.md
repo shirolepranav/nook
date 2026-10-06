@@ -148,7 +148,7 @@ The entities come from PRD §8, plus `Warranty` (D21).
 | `Photo` | id, fileName, width, height, boxX/Y/W/H? (normalized, from a scan), order | item: Item?, spot: Spot? |
 | `Receipt` | id, fileName, kind (image or pdf), extractedText | item: Item? |
 | `Warranty` | id, kind (manufacturer, extended or store), provider, startDate, endDate, lengthMonths?, policyNumber, cost?, reminderOffsetsDays = [30, 7], snoozedUntil? | item: Item? |
-| `LocationEvent` | id, fromPath: String, toPath: String, fromSpotID?, toSpotID?, date, source (manual, siri, ai, qr) | item: Item? |
+| `LocationEvent` | id, fromPath: String, toPath: String, fromSpotID?, toSpotID?, toRoomID? (D44), date, source (manual, found, siri, ai, qr; D44) | item: Item? |
 | `Loan` | id, personName, contactID?, lentAt, dueAt?, returnedAt?, remind = true | item: Item? |
 
 ### CloudKit-safe rules (from P2 onward, D8)
@@ -186,7 +186,7 @@ final class Item {
 - **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
 - **Soft delete:** `ItemService.delete` sets `deletedAt` (a property change, so the window's Undo works), and queries filter out deleted rows. `purgeExpired()` hard-deletes rows older than 30 days, and their files, after the first frame at launch. Delete Now and Delete All Now are final and confirm first (D40).
 - **`ItemService` (P3):** create and update from an `ItemDraft` (only the name is required, F2), duplicate, cover and photo removal (snapshot undo, D35), Private, tags, soft delete, restore, purge, and the queries screens use. Location changes go on to `LocationService`.
-- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload. P3 ships the minimal version (fields, event, date; D38); Spotlight and widget reloads join in P12.
+- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload (Spotlight and widget reloads join in P12). `LocationService` also moves a container with everything in it (`move(_:to:)`, one event per item inside; `RoomService.place` goes through it), lists the Move picker's recents (`recents(limit:excluding:)`: the last 5 live places moved to, from the newest 50 events) and an item's history (`history(of:)`). Moves undo through SwiftData's own undo, which keeps a saved move's undo, event included (D45).
 - **Container depth:** a container sits on its room or inside a spot, never inside another container; spots are always top-level (D3, D34). `RoomService` enforces this.
 - **Free limit:** `EntitlementStore.canAddItems(count:)` counts non-deleted items. It is checked in services, not views.
 

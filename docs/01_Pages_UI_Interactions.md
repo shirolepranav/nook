@@ -196,7 +196,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ### H-03 Spot / container [PRD §5 F1, F8]
 - Spot photo (tap → I-03), breadcrumb, items grid, nested containers (one level deep).
 - Container extras: **Print or share QR label** (H-06) and a "Packed on" date for moving (PRD §6).
-- **Toolbar:** Add item here, Move container [Inferred], Edit.
+- **Toolbar:** Add item here, Move Container (containers only; carries everything inside, and each item's history records it, D44), Edit.
 
 ### H-04 Room editor
 - Name, SF Symbol picker, soft color picker (room palette), the room's spots with "Add spot" (D28, for F1's 30-second target), optional cover photo, Delete room.
@@ -243,11 +243,21 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### I-04 Move picker [PRD §5 F6]
 - **Last 5 used locations** at the top as one-tap rows, then rooms → spots → containers, with search.
+  - Recents are the newest places moved to (adding an item counts) that still exist.
+  - The item's current place is left out of the recents.
+  - In the room list, the current place shows "Here now" and can't be picked (D44).
 - Acceptance: **moving one item takes 2 taps** (Move → location).
-- Works on one item or a multi-selection. Every move writes a LocationEvent (PRD §8). Confirmation toast with Undo.
+- Works on one item or a multi-selection. Every move writes a LocationEvent (PRD §8). Confirmation toast with Undo, and a success haptic.
+- **"Found it here instead"** opens the same picker titled "Where did you find it?" and records a `found` event (D44).
+- **The same picker is used for:**
+  - the item editor's Where row (it only fills the field, and Save moves)
+  - Move Container on H-03 (no containers offered, D34)
 
 ### I-05 Location history [PRD §6]
-- Timeline of moves: from → to, date, and source (Manual, Siri, AI). Answers "Where did the drill used to be?".
+- Timeline of moves: from → to, date, and source. Answers "Where did the drill used to be?".
+- Source copy (D44): "Moved by you", "Found here by you", "Moved with Siri", "Suggested move, confirmed by you", "Moved by scanning a label". An item's first entry reads "Added".
+- Paths are the names at the time of the move, so a deleted spot still reads in history.
+- Reached from I-01's "Location history · N places" row, hidden until there's an entry.
 
 ### I-06 Lend sheet [PRD §5 F7]
 - Person (system contact picker, or a typed name), date lent (default today), optional return date, optional reminder. Save adds the Lent badge and puts the item in the Lent out filter.
