@@ -17,6 +17,9 @@ step() { echo; echo "▶ $1"; }
 
 summarize() { scripts/xcresult.py tests "$1"; }
 
+step "Disk space"
+scripts/free-disk.sh
+
 step "Policy checks"
 scripts/policy-check.sh
 
