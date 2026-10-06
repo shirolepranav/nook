@@ -31,13 +31,61 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P2 screens: onboarding (O-01, O-02), Home with rooms, Room, Spot, the Room editor and
+    /// Arrange Spots (H-01 to H-04, H-07).
+    @MainActor
+    func testRoomScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let onboarding = XCUIApplication.nook(onboarded: false)
+        onboarding.launch()
+        XCTAssertTrue(onboarding.buttons["Get Started"].waitForExistence(timeout: 10))
+        try onboarding.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, onboarding) }
+        onboarding.buttons["Get Started"].tap()
+        XCTAssertTrue(onboarding.buttons["Continue with 4 rooms"].waitForExistence(timeout: 5))
+        try onboarding.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, onboarding) }
+        onboarding.terminate()
+
+        let app = XCUIApplication.nook(store: "small")
+        app.launch()
+        let kitchen = app.buttons["Kitchen, Empty"]
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        kitchen.tap()
+        XCTAssertTrue(app.navigationBars["Kitchen"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        if !app.buttons["Arrange Spots"].exists { app.navigationBars["Kitchen"].buttons["More"].tap() }
+        app.buttons["Arrange Spots"].tap()
+        XCTAssertTrue(app.navigationBars["Arrange Spots"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        if !app.buttons["Edit Room"].exists { app.navigationBars["Kitchen"].buttons["More"].tap() }
+        app.buttons["Edit Room"].tap()
+        XCTAssertTrue(app.navigationBars["Edit Room"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        app.buttons["Counter"].tap()
+        XCTAssertTrue(app.navigationBars["Counter"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
-    /// 3 per screen, with no element it can resolve. Only those are skipped: Dynamic Type issues
-    /// without an element while the floating bar (its sidebar toggle) is on screen. Nook's own
-    /// text is SwiftUI, always has an element, and is still audited.
+    /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
+    /// element-detection issues the same way: room names UIKit draws itself, again with no
+    /// element. Only those are skipped, and only while the floating bar (its sidebar toggle) is
+    /// on screen, plus the Dynamic Type check on navigation bar buttons (a sheet's Cancel, Done
+    /// and Save are UIKit bar buttons with the same fixed-size labels). Nook's own text is
+    /// SwiftUI, always has an element, and is still audited.
     @MainActor
     private func isInSystemTabBar(_ issue: XCUIAccessibilityAuditIssue, _ app: XCUIApplication) -> Bool {
-        issue.auditType == .dynamicType && issue.element == nil && app.buttons["ToggleSideBar"].exists
+        guard let element = issue.element else {
+            return [.dynamicType, .elementDetection].contains(issue.auditType) && app.buttons["ToggleSideBar"].exists
+        }
+        guard issue.auditType == .dynamicType else { return false }
+        return app.navigationBars.buttons.allElementsBoundByIndex.contains { $0.frame == element.frame }
     }
 }

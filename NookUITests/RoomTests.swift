@@ -34,6 +34,21 @@ final class RoomTests: XCTestCase {
         }
     }
 
+    /// P2 QA: 50+ rooms scroll on Home, and a very long room and spot name open and wrap.
+    @MainActor
+    func testManyRoomsAndLongNames() {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "many")
+        app.launch()
+        XCTAssertTrue(app.buttons["Room 1, Empty"].waitForExistence(timeout: 10))
+        let long = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "The spare bedroom")).firstMatch
+        for _ in 0..<30 where !(long.exists && long.isHittable) { app.swipeUp() }
+        XCTAssertTrue(long.isHittable)
+        long.tap()
+        XCTAssertTrue(app.buttons["The tall wardrobe with the sliding mirror doors on the left"]
+            .waitForExistence(timeout: 5))
+    }
+
     /// D14: deleting a room shows an Undo toast, and Undo brings it back.
     @MainActor
     func testDeleteARoomAndUndo() {
