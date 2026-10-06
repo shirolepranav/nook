@@ -19,6 +19,7 @@ struct MovePicker: View {
     @State private var query = ""
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.windowSizeClass) private var windowSizeClass
     @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
 
     var body: some View {
@@ -80,8 +81,10 @@ struct MovePicker: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])   // 03 §8.8: medium height for pickers
-        .presentationSizing(.form)                // a centered form sheet on regular width (D29)
+        // 03 §8.8: medium height for pickers on iPhone. On regular width a detent would turn the
+        // centered form sheet back into a bottom sheet, so it's left off there (D29, D45).
+        .presentationDetents(windowSizeClass == .regular ? [.large] : [.medium, .large])
+        .presentationSizing(.form)
     }
 
     private func pick(_ place: Location) {
@@ -108,6 +111,12 @@ struct MovePicker: View {
     private func label(for place: Location) -> Text {
         place.spot.map { Text(verbatim: $0.name) } ?? Text("In the room")
     }
+}
+
+extension EnvironmentValues {
+    /// The window's width class, set by RootView. A sheet's own content reads compact even in
+    /// a wide iPad window, so the picker asks this to choose its height (D45).
+    @Entry var windowSizeClass: UserInterfaceSizeClass?
 }
 
 /// A room in the picker's list: symbol, name and how many spots it has.
@@ -178,6 +187,7 @@ private struct PlaceIcon: View {
         let color = RoomColor(rawValue: room.colorKey) ?? .stone
         Image(systemName: container ? "shippingbox" : room.symbol)
             .font(.nookMeta)
+            .dynamicTypeSize(...DynamicTypeSize.xxLarge)   // the glyph stays inside its circle at AX sizes
             .foregroundStyle(color.ink)
             .frame(width: NookLayout.placeIconSize, height: NookLayout.placeIconSize)
             .background(color.fill, in: Circle())

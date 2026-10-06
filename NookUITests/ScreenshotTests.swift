@@ -109,8 +109,9 @@ final class ScreenshotTests: XCTestCase {
         app.toolbars.buttons["Move"].tap()
         XCTAssertTrue(app.navigationBars["Move 2 Items"].waitForExistence(timeout: 5))
         snap("I-04 Move picker, 2 items")
-        app.buttons["Cancel"].tap()
-        app.buttons["Cancel"].tap()
+        app.navigationBars["Move 2 Items"].buttons["Cancel"].tap()
+        XCTAssertTrue(app.navigationBars["Move 2 Items"].waitForNonExistence(timeout: 5))
+        app.buttons["Cancel"].tap()   // ends selection
 
         espresso.tap()
         XCTAssertTrue(app.buttons["Move"].waitForExistence(timeout: 5))

@@ -299,7 +299,9 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 
 **D45 · 2026-10-06 · Accepted** — **iOS 27 SDK checks for P4 (D23).** Confirmed on the iOS 27.0 SDK and simulator:
 - **SwiftData's own undo takes back a saved move,** including deleting the inserted `LocationEvent` at the next save. This is unlike a saved delete (D35). Moves need no custom undo, and multi-item moves are one step. Proven by `undoTakesASavedMoveBackAndDropsItsEvent` (NookKit) and `MoveTests.testMoveInTwoTapsShowsInHistoryAndUndoes`.
-- **`.presentationDetents([.medium, .large])` together with `.presentationSizing(.form)`** gives a medium sheet on iPhone, and a form sheet on regular width.
+- **A medium detent breaks the iPad form sheet.** With `.presentationDetents([.medium, .large])`, `.presentationSizing(.form)` is ignored on iPad, and the picker becomes a bottom sheet.
+  - A sheet's own content reads a compact `horizontalSizeClass` even in a wide window, so the sheet can't decide this itself.
+  - RootView passes the window's size class down as `windowSizeClass`, and the picker offers the medium detent only when the window isn't regular. On regular width it's a centered form sheet (D29), checked in the iPad screenshots.
 - **`.searchable(placement: .navigationBarDrawer(displayMode: .always))`** works inside a sheet's own `NavigationStack`.
 - **`performAccessibilityAudit` reports false clipping at medium height.** A medium-height sheet is drawn slightly scaled, and the audit then flags the List's own section header as clipped text. The audit runs with the picker at full height. The search field's clipping is exempt, like plain text fields.
 

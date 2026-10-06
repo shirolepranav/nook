@@ -68,6 +68,7 @@ private struct TabShell: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        .environment(\.windowSizeClass, sizeClass)   // read inside sheets (MovePicker, D45)
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
