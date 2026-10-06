@@ -106,7 +106,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — snapshot tests for each component in light and dark, default and largest text. Smoke — S1.
 
 ### P2 · Rooms, spots & containers
-**Status:** In QA (2026-10-06, PRs #25–#33). Automated checks pass; owner checks in `docs/qa/p2-qa-report.md`.
+**Status:** Done (2026-10-06, PRs #25–#33). The product owner finished the manual checks on 2026-10-06.
 **Scope:** NookKit SwiftData models from PRD §8 (Room, Spot, Item, Photo, Receipt, LocationEvent, Loan) created **sync-ready from the start** (every property optional or defaulted, relationships optional with inverses, no unique constraints), so CloudKit in P11 needs no migration; Home with room cards (H-01); Room (H-02), Spot and container (H-03), editors (H-04, H-05), arrange rooms (H-07); onboarding (O-01, O-02).
 **PRD acceptance:** create a room with 3 spots in under 30 seconds (F1).
 **QA:** nesting limit (containers one level deep), deleting rooms with content, 50+ rooms, long names, VoiceOver room reordering.
