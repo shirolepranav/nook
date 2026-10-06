@@ -159,11 +159,18 @@ struct RoomEditor: View {
                     Divider()
                 }
                 if isAddingSpot {
-                    TextField("Spot name", text: $draftSpot, prompt: Text("Top shelf"))
+                    // Vertical axis: Return types a newline instead of resigning the field, so
+                    // it stays open for the next spot (F1: 3 spots fast).
+                    TextField("Spot name", text: $draftSpot, prompt: Text("Top shelf"), axis: .vertical)
+                        .accessibilityLabel("Spot name")   // iOS 27 reads only the prompt otherwise
                         .font(.nookBody)
                         .focused($focus, equals: .spot)
                         .submitLabel(.next)
-                        .onSubmit(addDraftSpot)
+                        .onChange(of: draftSpot) { _, text in
+                            guard let newline = text.lastIndex(of: "\n") else { return }
+                            text[..<newline].split(separator: "\n").forEach { appendSpot(String($0)) }
+                            draftSpot = String(text[text.index(after: newline)...])
+                        }
                         .frame(minHeight: NookLayout.rowHeight)
                         .padding(.horizontal, NookSpace.s2)
                     Divider()
@@ -207,11 +214,14 @@ struct RoomEditor: View {
         focus = .spot
     }
 
-    /// Return in the spot field keeps the field open for the next one (F1: 3 spots fast).
     private func addDraftSpot() {
-        let spot = draftSpot.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !spot.isEmpty { newSpots.append(spot) }
+        appendSpot(draftSpot)
         draftSpot = ""
+    }
+
+    private func appendSpot(_ name: String) {
+        let spot = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !spot.isEmpty { newSpots.append(spot) }
     }
 
     private func save() {

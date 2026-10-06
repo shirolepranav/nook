@@ -10,7 +10,7 @@ enum PreferenceKey {
     static let theme = "themeChoice"
     static let hideValuesByDefault = "hideValuesByDefault"
     static let hideValues = MoneyText.hideValuesKey   // the current state, toggled on Home
-    /// Set once onboarding finishes (O-02); UI tests pass `-hasOnboarded YES` to skip it.
+    /// Set once onboarding finishes (O-02); UI tests pass `-uiTestingOnboarded YES` to skip it.
     static let hasOnboarded = "hasOnboarded"
 }
 

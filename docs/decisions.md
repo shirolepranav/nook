@@ -240,3 +240,12 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - The rules live in `RoomService` (`addContainer`, `place`, `setKind`), with tests.
 
 *Why:* a box on the garage floor is common, and forcing a "Floor" spot just to hold it is busywork. Nesting stays at one level, as PRD F1 says. *Affects:* 04 §4 (Spot gains `kindRaw`; schema V1 is unshipped, so no migration), 01 H-02, H-05.
+
+**D35 · 2026-10-05 · Accepted** — **iOS 27 SDK findings from closing P2 (D23).** Each was found by a UI test that failed on the iOS 27.0 simulator:
+- **SwiftData can't undo a saved delete.** `undo()` puts the rows back in the context, but the next `save()` drops them again. Undoing a saved rename works. So `RoomService.delete` turns off SwiftData's undo registration for the delete and registers its own undo, which rebuilds the room or spot from a snapshot (same `id` and `qrID`, nested containers, items relinked). D14's Undo toast, ⌘Z and shake all use it. There's no redo of a delete. P3 must keep spot photos in the snapshot once they exist, and use the same pattern for any other hard delete.
+- **`TextField(title, prompt:)` exposes only the prompt to VoiceOver.** Plain fields get an explicit `.accessibilityLabel` (`NookTextField` already has one).
+- **Return resigns a one-line `TextField`, and re-focusing in `onSubmit` loses fast typing.** H-04's spot field uses `axis: .vertical` and turns each newline into a spot, so the field stays open (F1).
+- **`.tabPlacement(.sidebarOnly)` still puts tabs in the compact tab bar** (as a room tab plus More). The Rooms `TabSection` is only added on regular width. Narrowing the window while a room is selected returns to Home.
+- **UI tests skip onboarding with `-uiTestingOnboarded`, not `-hasOnboarded`.** A launch argument named after the key shadows the App Group value, so finishing onboarding could never flip it.
+
+*Affects:* 04 §9 (undo), 01 H-01 and H-04, `NookUITests`.

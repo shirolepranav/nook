@@ -85,6 +85,6 @@ final class SpotTests: XCTestCase {
         // A container opens to its own screen.
         app.buttons["Box 14"].tap()
         XCTAssertTrue(app.navigationBars["Box 14"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["Garage → Metal shelf"].exists)
+        XCTAssertTrue(app.staticTexts["Garage, Metal shelf"].exists)   // the arrow reads as a comma
     }
 }

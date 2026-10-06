@@ -15,6 +15,14 @@ struct NookApp: App {
         // Home changes it for this session.
         let defaults = UserDefaults.nook
         defaults.set(defaults.bool(forKey: PreferenceKey.hideValuesByDefault), forKey: PreferenceKey.hideValues)
+        #if DEBUG
+        // UI tests: a plain `-hasOnboarded` launch argument would shadow the App Group value,
+        // so finishing onboarding could never flip it. Copy it in instead.
+        let arguments = ProcessInfo.processInfo.arguments
+        if let flag = arguments.firstIndex(of: "-uiTestingOnboarded"), flag + 1 < arguments.count {
+            defaults.set(arguments[flag + 1] == "YES", forKey: PreferenceKey.hasOnboarded)
+        }
+        #endif
     }
 
     var body: some Scene {

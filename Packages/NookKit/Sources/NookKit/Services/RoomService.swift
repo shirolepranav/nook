@@ -57,7 +57,8 @@ public struct RoomService {
     public func delete(_ room: Room) throws {
         let liveItems = (room.items ?? []) + (room.spots ?? []).flatMap(allItems)
         guard liveItems.allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
-        context.delete(room)
+        let snapshot = RoomSnapshot(room)
+        deleteWithUndo(room) { snapshot.restore(in: $0) }
     }
 
     // MARK: Spots and containers
@@ -133,7 +134,23 @@ public struct RoomService {
     /// Deletes a spot and the containers in it. Same rule as rooms for items.
     public func delete(_ spot: Spot) throws {
         guard allItems(in: spot).allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
-        context.delete(spot)
+        let snapshot = SpotSnapshot(spot)
+        let room = spot.room, parent = spot.parent
+        deleteWithUndo(spot) { snapshot.restore(room: room, parent: parent, in: $0) }
+    }
+
+    /// D35: SwiftData's own undo of a delete is lost at the next save (the restored rows
+    /// vanish), so deletes register an undo that rebuilds what they removed instead.
+    /// ponytail: no redo of a delete; add one if ⇧⌘Z ever needs it.
+    private func deleteWithUndo(_ model: some PersistentModel, restore: @escaping (ModelContext) -> Void) {
+        let undo = context.undoManager
+        undo?.disableUndoRegistration()
+        context.delete(model)
+        context.processPendingChanges()
+        undo?.enableUndoRegistration()
+        undo?.registerUndo(withTarget: context) { context in
+            MainActor.assumeIsolated { restore(context) }
+        }
     }
 
     // MARK: Helpers
@@ -150,5 +167,55 @@ public struct RoomService {
 
     private static func byOrder(_ a: Spot, _ b: Spot) -> Bool {
         (a.order, a.createdAt) < (b.order, b.createdAt)
+    }
+}
+
+/// A deleted room as it was, for Undo (D35). Items outlive the delete (nullify), so they're
+/// kept by reference and linked back.
+@MainActor
+private struct RoomSnapshot {
+    let id: UUID, name: String, symbol: String, colorKey: String, order: Int, createdAt: Date
+    let items: [Item]
+    let spots: [SpotSnapshot]   // spots and containers on the floor; containers in a spot nest
+
+    init(_ room: Room) {
+        (id, name, symbol, colorKey, order, createdAt) =
+            (room.id, room.name, room.symbol, room.colorKey, room.order, room.createdAt)
+        items = room.items ?? []
+        spots = (room.spots ?? []).filter { $0.parent == nil }.map(SpotSnapshot.init)
+    }
+
+    func restore(in context: ModelContext) {
+        let room = Room(name: name, symbol: symbol, colorKey: colorKey, order: order)
+        (room.id, room.createdAt) = (id, createdAt)
+        context.insert(room)
+        for item in items { item.room = room }
+        for spot in spots { spot.restore(room: room, parent: nil, in: context) }
+    }
+}
+
+/// A deleted spot or container and the containers in it, for Undo (D35).
+/// ponytail: spot photos (P3) aren't kept; P3 adds them when photos exist.
+@MainActor
+private struct SpotSnapshot {
+    let id: UUID, name: String, qrID: String, packedAt: Date?, order: Int, createdAt: Date
+    let kind: Spot.Kind
+    let items: [Item]
+    let children: [SpotSnapshot]
+
+    init(_ spot: Spot) {
+        (id, name, qrID, packedAt, order, createdAt, kind) =
+            (spot.id, spot.name, spot.qrID, spot.packedAt, spot.order, spot.createdAt, spot.kind)
+        items = spot.items ?? []
+        children = (spot.children ?? []).map(SpotSnapshot.init)
+    }
+
+    func restore(room: Room?, parent: Spot?, in context: ModelContext) {
+        let spot = Spot(name: name, kind: kind, order: order)
+        (spot.id, spot.qrID, spot.packedAt, spot.createdAt) = (id, qrID, packedAt, createdAt)
+        context.insert(spot)
+        (spot.room, spot.parent) = (room, parent)
+        for item in items { item.spot = spot }
+        for child in children { child.restore(room: room, parent: spot, in: context) }
     }
 }

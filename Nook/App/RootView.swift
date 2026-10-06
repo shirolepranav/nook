@@ -26,6 +26,7 @@ private struct TabShell: View {
     @State private var arranging = false
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var selectedRoom: Room? {
         guard case .room(let id) = tab else { return nil }
@@ -47,16 +48,19 @@ private struct TabShell: View {
                 SettingsScreen()
             }
             // Regular width: the rooms in the sidebar, the selected one beside it (01 H-01).
-            TabSection("Rooms") {
-                ForEach(rooms) { room in
-                    Tab(room.name, systemImage: room.symbol, value: AppTab.room(room.id)) {
-                        NavigationStack { RoomScreen(room: room) }
+            // Only there: iOS 27 puts `.sidebarOnly` tabs in the compact tab bar too (D35).
+            if sizeClass == .regular {
+                TabSection("Rooms") {
+                    ForEach(rooms) { room in
+                        Tab(room.name, systemImage: room.symbol, value: AppTab.room(room.id)) {
+                            NavigationStack { RoomScreen(room: room) }
+                        }
+                        .tabPlacement(.sidebarOnly)
                     }
-                    .tabPlacement(.sidebarOnly)
                 }
-            }
-            .sectionActions {
-                Button("Arrange Rooms", systemImage: "arrow.up.arrow.down") { arranging = true }
+                .sectionActions {
+                    Button("Arrange Rooms", systemImage: "arrow.up.arrow.down") { arranging = true }
+                }
             }
         }
         .tabViewStyle(.sidebarAdaptable)
@@ -71,6 +75,10 @@ private struct TabShell: View {
         .onChange(of: rooms.map(\.id)) { _, ids in
             // A deleted room can't stay selected.
             if case .room(let id) = tab, !ids.contains(id) { tab = .home }
+        }
+        .onChange(of: sizeClass) { _, size in
+            // Narrowing the window hides the room tabs; keep the room on screen from Home.
+            if size == .compact, case .room = tab { tab = .home }
         }
         // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
         .onAppear { context.undoManager = undoManager }

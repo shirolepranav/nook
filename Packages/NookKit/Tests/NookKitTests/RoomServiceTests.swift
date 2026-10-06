@@ -126,3 +126,31 @@ private func service() throws -> (RoomService, ModelContext) {
     #expect(box.parent == nil)
     #expect(rooms.spots(in: garage).map(\.name) == ["Shelf", "Box"])
 }
+
+/// D35: a saved delete undoes, and the room, its spots and nested containers survive the
+/// next save (SwiftData's own undo loses them there).
+@MainActor @Test func undoingASavedDeleteBringsTheRoomBack() throws {
+    let container = try NookStore.makeContainer(inMemory: true)   // keep it alive
+    let context = container.mainContext
+    let rooms = RoomService(context: context)
+    let garage = try rooms.addRoom(named: "Garage")
+    let shelf = try rooms.addSpot(named: "Metal shelf", in: garage)
+    let box = try rooms.addContainer(named: "Box 14", in: garage, inside: shelf)
+    let (garageID, qrID) = (garage.id, box.qrID)
+    try context.save()
+    let undo = UndoManager()
+    context.undoManager = undo
+
+    try rooms.delete(garage)
+    try context.save()
+    RunLoop.main.run(until: .now + 0.1)   // closes the undo group, as the app's run loop does
+    #expect(try rooms.rooms().isEmpty)
+
+    undo.undo()
+    try context.save()
+    let restored = try #require(try rooms.rooms().first)
+    #expect(restored.id == garageID)
+    let spot = try #require(rooms.spots(in: restored).first)
+    #expect(spot.name == "Metal shelf")
+    #expect(rooms.containers(in: spot).map(\.qrID) == [qrID])   // QR labels keep working
+}

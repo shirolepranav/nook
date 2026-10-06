@@ -49,6 +49,7 @@ struct SpotEditor: View {
                     .disabled(holdsContainers)   // D34: it holds containers, so it stays a spot
                     .nookHaptic(.selected, trigger: kind)
                     TextField("Name", text: $name, prompt: Text(kind == .spot ? "Top shelf" : "Blue bin"))
+                        .accessibilityLabel("Name")   // iOS 27 reads only the prompt otherwise
                         .focused($nameFocused)
                         .submitLabel(.done)
                         .onSubmit(save)

@@ -5,7 +5,7 @@ extension XCUIApplication {
     @MainActor
     static func nook(store: String = "empty", onboarded: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTestingStore", store, "-hasOnboarded", onboarded ? "YES" : "NO"]
+        app.launchArguments = ["-uiTestingStore", store, "-uiTestingOnboarded", onboarded ? "YES" : "NO"]
         return app
     }
 

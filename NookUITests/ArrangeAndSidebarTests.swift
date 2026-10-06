@@ -9,6 +9,9 @@ final class ArrangeAndSidebarTests: XCTestCase {
         app.launch()
         let kitchen = app.buttons["Kitchen, Empty"]
         XCTAssertTrue(kitchen.waitForExistence(timeout: 10))
+        if app.windows.firstMatch.frame.width < 600 {   // D35: room tabs stay out of the tab bar
+            XCTAssertFalse(app.tabBars.buttons["Kitchen"].exists, "rooms are sidebar-only")
+        }
         kitchen.press(forDuration: 1)
         app.buttons["Arrange Rooms"].tap()
 
