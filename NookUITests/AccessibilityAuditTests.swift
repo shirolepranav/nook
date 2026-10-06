@@ -18,16 +18,26 @@ final class AccessibilityAuditTests: XCTestCase {
         app.launch()
 
         XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 10))
-        try app.performAccessibilityAudit(for: audits)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         app.tab("Reports").tap()
-        try app.performAccessibilityAudit(for: audits)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         app.tab("Settings").tap()
-        try app.performAccessibilityAudit(for: audits)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         app.buttons["Appearance"].tap()
         XCTAssertTrue(app.navigationBars["Appearance"].waitForExistence(timeout: 5))
-        try app.performAccessibilityAudit(for: audits)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
+    /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
+    /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
+    /// 3 per screen, with no element it can resolve. Only those are skipped: Dynamic Type issues
+    /// without an element while the floating bar (its sidebar toggle) is on screen. Nook's own
+    /// text is SwiftUI, always has an element, and is still audited.
+    @MainActor
+    private func isInSystemTabBar(_ issue: XCUIAccessibilityAuditIssue, _ app: XCUIApplication) -> Bool {
+        issue.auditType == .dynamicType && issue.element == nil && app.buttons["ToggleSideBar"].exists
     }
 }
