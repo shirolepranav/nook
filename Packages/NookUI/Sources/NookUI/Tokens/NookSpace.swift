@@ -43,6 +43,8 @@ public enum NookLayout {
     public static let badgeSize: CGFloat = 24
     /// Empty-state illustrations: 140–180 pt in 03 §8.9; the mockups draw 160.
     public static let illustrationHeight: CGFloat = 160
+    /// The welcome illustration (O-01).
+    public static let heroIllustrationHeight: CGFloat = 240
     /// The soft circle behind an error or "camera off" symbol (03 §7).
     public static let stateIconSize: CGFloat = 64
     /// Room cards and the dashed add card (03 §8.3): shelf-like, wider than tall.

@@ -2,9 +2,22 @@ import SwiftUI
 import SwiftData
 import NookUI
 
+/// First run shows onboarding (O-01, O-02); after that, the tabs.
+struct RootView: View {
+    @AppStorage(PreferenceKey.hasOnboarded) private var hasOnboarded = false
+
+    var body: some View {
+        if hasOnboarded {
+            TabShell()
+        } else {
+            OnboardingFlow { hasOnboarded = true }
+        }
+    }
+}
+
 /// The adaptive shell (01 §1.1): a Liquid Glass tab bar on compact width, a sidebar on
 /// regular width (Pro Max landscape, iPad). Size classes only, via the system (D29).
-struct RootView: View {
+private struct TabShell: View {
     // Survives relaunch, and resizing an iPad window between compact and regular (S1).
     @SceneStorage("tab") private var tab: AppTab = .home
     @Environment(\.modelContext) private var context

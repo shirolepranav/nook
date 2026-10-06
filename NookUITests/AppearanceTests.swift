@@ -4,7 +4,7 @@ import XCTest
 final class AppearanceTests: XCTestCase {
     @MainActor
     func testAccentAndThemePersist() {
-        let app = XCUIApplication()
+        let app = XCUIApplication.nook()
         app.launch()
         openAppearance(app)
         app.buttons["Sage"].tap()

@@ -12,7 +12,7 @@ final class ShellTests: XCTestCase {
     @MainActor
     private func launch() {
         XCUIDevice.shared.orientation = .portrait   // a landscape test may have left it rotated
-        app = XCUIApplication()
+        app = XCUIApplication.nook()
         app.launch()
     }
 

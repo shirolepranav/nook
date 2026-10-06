@@ -8,7 +8,7 @@ final class LaunchPerfTests: XCTestCase {
     func testLaunchPerformance() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_PERF"] == "1", "set TEST_RUNNER_RUN_PERF=1")
         measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
+            XCUIApplication.nook().launch()
         }
     }
 }

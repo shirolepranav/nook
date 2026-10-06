@@ -13,6 +13,9 @@
     "Add item" : {
 
     },
+    "Add your own" : {
+
+    },
     "Appearance" : {
 
     },
@@ -20,6 +23,31 @@
 
     },
     "Components" : {
+
+    },
+    "Continue with %lld rooms" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue with %lld room"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue with %lld rooms"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Continue without rooms" : {
 
     },
     "Dark" : {
@@ -31,13 +59,42 @@
     "Edit" : {
 
     },
+    "Everything stays on your device. No account." : {
+      "comment" : "O-01. Names the device (01 §1.3, D29).",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Everything stays on your iPad. No account."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Everything stays on your iPhone. No account."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Find" : {
+
+    },
+    "Get Started" : {
 
     },
     "Hide values by default" : {
 
     },
     "Home" : {
+
+    },
+    "Know what you own and where it is." : {
 
     },
     "Let’s start with one room." : {
@@ -52,10 +109,19 @@
     "Nook" : {
 
     },
+    "Nook couldn’t open your items" : {
+
+    },
+    "Nothing has been deleted. Free up some storage or update Nook, then try again." : {
+
+    },
     "Nothing to find yet." : {
 
     },
     "Ocean" : {
+
+    },
+    "Pick a few to start. You can change them any time." : {
 
     },
     "Plum" : {
@@ -68,6 +134,12 @@
 
     },
     "Reports live here." : {
+
+    },
+    "Room name" : {
+
+    },
+    "Rooms" : {
 
     },
     "Rose" : {
@@ -103,6 +175,12 @@
     "Slate" : {
 
     },
+    "Snap a room, tag what’s on the shelves, and ask where anything is, any time." : {
+
+    },
+    "Studio" : {
+
+    },
     "System" : {
 
     },
@@ -113,6 +191,9 @@
 
     },
     "Warranties, lent things and your insurance report will appear as you add items." : {
+
+    },
+    "Which rooms do you have?" : {
 
     },
     "Your rooms and everything in them will show up here." : {

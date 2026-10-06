@@ -14,7 +14,7 @@ final class AccessibilityAuditTests: XCTestCase {
     @MainActor
     func testScreensPassTheAccessibilityAudit() throws {
         XCUIDevice.shared.orientation = .portrait
-        let app = XCUIApplication()
+        let app = XCUIApplication.nook()
         app.launch()
 
         XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 10))
