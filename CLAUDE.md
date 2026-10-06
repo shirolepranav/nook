@@ -42,7 +42,7 @@ Nook is a native iPhone and iPad app (Swift 6, SwiftUI, iOS/iPadOS 27.0+) that c
 
 ## Working in phases
 - Work **only inside the current phase's scope** (`docs/02_Development_Roadmap.md`). Scope that belongs to a later phase goes into an issue, not the code. Use the `phase-work` skill.
-- Branch as `p<N>/<short-task>`, open a PR into `main`, and keep PRs small (about 400 lines of diff or less, excluding fixtures and snapshots).
+- **One phase, one PR (D36).** Build the whole phase on one branch, `p<N>/<phase-name>`, with a commit per task, then open a single PR into `main` that carries the QA report.
 - Every PR follows the checklist in `.github/pull_request_template.md`.
 - When behavior changes, update the relevant doc in the same PR. When you make a new product or technical choice, add a `D#` entry.
 - A phase closes with its QA report and the cumulative smoke suite (`qa-regression` skill). Update the phase's **Status** line in the roadmap.

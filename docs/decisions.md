@@ -249,3 +249,7 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **UI tests skip onboarding with `-uiTestingOnboarded`, not `-hasOnboarded`.** A launch argument named after the key shadows the App Group value, so finishing onboarding could never flip it.
 
 *Affects:* 04 §9 (undo), 01 H-01 and H-04, `NookUITests`.
+
+**D36 · 2026-10-06 · Accepted (product owner)** — **One PR per phase.** P1 and P2 shipped as 18 stacked PRs (#16–#33), each with its own CI run and review. That was slow to test and to merge. From P3, each phase is built on one branch, `p<N>/<phase-name>`, with a commit per task, and ships as a single PR into `main` that carries the phase's QA report. The ~400-line PR limit is dropped. Tasks still stay small, as commits.
+
+*Why:* the owner reviews and merges per phase anyway, and per-PR test runs cost hours and disk. *Affects:* CLAUDE.md (Working in phases), `phase-work` skill.
