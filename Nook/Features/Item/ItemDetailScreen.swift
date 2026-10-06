@@ -73,6 +73,7 @@ private struct ItemDetail: View {
     @State private var confirmsDelete = false
     @State private var toast: ToastMessage?
     @State private var addsReceipt = false
+    @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
     @Environment(\.dismiss) private var dismiss
@@ -194,11 +195,15 @@ private struct ItemDetail: View {
                 .foregroundStyle(NookColor.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
-            HStack(alignment: .firstTextBaseline) {
+            // Side by side, or stacked at accessibility sizes so neither word breaks.
+            let row = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+                : AnyLayout(HStackLayout(alignment: .firstTextBaseline))
+            row {
                 if !item.category.isEmpty {
                     Text(verbatim: item.category).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
                 }
-                Spacer(minLength: 0)
+                if !typeSize.isAccessibilitySize { Spacer(minLength: 0) }
                 if let value = item.value {
                     MoneyText(value.amount, currencyCode: value.currencyCode, font: .nookTitle)
                         .foregroundStyle(NookColor.textPrimary)

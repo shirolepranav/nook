@@ -35,7 +35,8 @@ final class ItemTests: XCTestCase {
         let name = app.textFields["Name"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))
         XCTAssertTrue(app.otherElements["Photo 1"].waitForExistence(timeout: 5) || app.images.count > 0)
-        name.typeText("Mug")                                        // the field is focused
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))   // the field focuses itself
+        name.typeText("Mug")
         app.buttons["Save"].tap()                                   // tap 2
         let mug = card(app, "Mug")
         XCTAssertTrue(mug.waitForExistence(timeout: 5))

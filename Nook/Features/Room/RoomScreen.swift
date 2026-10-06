@@ -61,20 +61,22 @@ struct RoomScreen: View {
         .navigationTitle(room.name)   // itemSelection's title, inside it, wins while selecting
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Menu("Add", systemImage: "plus") {
-                    Button("Add Item", systemImage: "plus.square") { addsItem = true }
-                    Button("Add Spot", systemImage: "square.stack") { adding = .spot }
-                    Button("Add Container", systemImage: "shippingbox") { adding = .container }
+            if selection == nil {   // I-08 has its own bar while selecting
+                ToolbarItem(placement: .primaryAction) {
+                    Menu("Add", systemImage: "plus") {
+                        Button("Add Item", systemImage: "plus.square") { addsItem = true }
+                        Button("Add Spot", systemImage: "square.stack") { adding = .spot }
+                        Button("Add Container", systemImage: "shippingbox") { adding = .container }
+                    }
                 }
-            }
-            ToolbarItem(placement: .secondaryAction) {
-                Button("Edit Room", systemImage: "pencil") { editing = true }
-            }
-            if rooms.spots(in: room).count > 1 {
                 ToolbarItem(placement: .secondaryAction) {
-                    // H-02: drag to reorder spots
-                    Button("Arrange Spots", systemImage: "arrow.up.arrow.down") { arranging = true }
+                    Button("Edit Room", systemImage: "pencil") { editing = true }
+                }
+                if rooms.spots(in: room).count > 1 {
+                    ToolbarItem(placement: .secondaryAction) {
+                        // H-02: drag to reorder spots
+                        Button("Arrange Spots", systemImage: "arrow.up.arrow.down") { arranging = true }
+                    }
                 }
             }
         }

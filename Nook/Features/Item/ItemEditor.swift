@@ -244,6 +244,7 @@ struct ItemEditor: View {
             } label: {
                 HStack {
                     Text(verbatim: draft.location?.path ?? String(localized: "Choose a room"))
+                        .multilineTextAlignment(.leading)
                         .foregroundStyle(draft.location == nil ? NookColor.textSecondary : NookColor.textPrimary)
                     Spacer(minLength: 0)
                     Image(systemName: "chevron.up.chevron.down")
@@ -270,6 +271,7 @@ struct ItemEditor: View {
                 } label: {
                     HStack {
                         Text(verbatim: draft.category.isEmpty ? String(localized: "Choose") : draft.category)
+                            .multilineTextAlignment(.leading)
                             .foregroundStyle(draft.category.isEmpty ? NookColor.textSecondary : NookColor.textPrimary)
                         Spacer(minLength: 0)
                         Image(systemName: "chevron.up.chevron.down")

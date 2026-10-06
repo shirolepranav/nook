@@ -65,11 +65,13 @@ struct SpotScreen: View {
         .navigationTitle(spot.name)   // itemSelection's title, inside it, wins while selecting
         .toolbarTitleDisplayMode(.large)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Add Item Here", systemImage: "plus") { addsItem = true }
-            }
-            ToolbarItem(placement: .secondaryAction) {
-                Button("Edit", systemImage: "pencil") { editing = true }
+            if selection == nil {   // I-08 has its own bar while selecting
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Add Item Here", systemImage: "plus") { addsItem = true }
+                }
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Edit", systemImage: "pencil") { editing = true }
+                }
             }
         }
         .quickAdd(isPresented: $addsItem, at: location)
