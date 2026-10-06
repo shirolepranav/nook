@@ -39,6 +39,7 @@ public struct NookTextField: View {
                 .font(.nookBody)
                 .foregroundStyle(NookColor.textPrimary)
                 .focused($isFocused)
+                .accessibilityLabel(label)   // VoiceOver and Voice Control use the visible label
                 .padding(.horizontal, NookSpace.s2)
                 .padding(.vertical, NookSpace.s1)
                 .frame(minHeight: NookLayout.fieldHeight)

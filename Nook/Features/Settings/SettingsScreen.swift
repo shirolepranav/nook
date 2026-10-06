@@ -21,6 +21,7 @@ struct SettingsScreen: View {
                         .listRowBackground(NookColor.surface)
                 } footer: {
                     Text(verbatim: "Debug builds only: every NookUI component, for design QA.")
+                        .foregroundStyle(NookColor.textSecondary)
                 }
                 #endif
             }
