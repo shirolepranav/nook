@@ -221,3 +221,13 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Titles:** SwiftUI has no modifier for the navigation-bar title font. `NookAppearance.configure()` sets the rounded `display`/`headline` styles and `textPrimary` through the UIKit appearance proxy once at launch (03 §8.8).
 
 *Affects:* `Nook/App`, `Nook/Features/Capture`, 01 §1.5.
+
+**D33 · 2026-10-05 · Accepted (2026-10-05, product owner)** — **How P1's manual checks were settled.** The owner chose not to run the hands-on checks now, so each is replaced by an automated check or waived:
+- **Accessibility Inspector audit → automated.** `AccessibilityAuditTests` runs XCUITest's `performAccessibilityAudit()` (contrast, labels, hit regions, Dynamic Type clipping, traits) on Home, Reports, Settings and Appearance in CI on every PR. Later phases add their screens to it.
+- **⌘⌫ with a hardware keyboard → D30's fallback.** It was never confirmed (XCUITest can't fire it). Delete keeps its menu item, disabled until P3, and P3 adds the swipe and context-menu actions. The debug toast probe is removed. If ⌘⌫ later proves to work on a real iPad, nothing needs to change.
+- **iPad menu-bar screenshot → waived.** The command menu is covered by D30's menu-system read and the ⌘1–⌘4 UI test.
+- **Cold launch under 400 ms on a real iPhone 15 → deferred to P13**, where every PRD §9 budget is measured on devices. `LaunchPerfTests` tracks the trend on the simulator.
+- **Reduce Transparency and the Liquid Glass slider → deferred to P13's accessibility audit.** The snapshots already cover Increase Contrast.
+- **Stage Manager resize → waived.** The tab is kept in `@SceneStorage`, and the iPad mini and both orientations are covered by UI tests.
+
+*Why:* keep the phases moving without the owner's hands-on time; each check either runs automatically from now on or has a named later phase. *Risk accepted:* nobody has used a hardware keyboard with Nook yet. *Affects:* the P1 QA report, the roadmap P1 status, P13's audit list.

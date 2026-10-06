@@ -1,8 +1,8 @@
-# P1 QA report — 2026-10-05 (in progress)
+# P1 QA report — 2026-10-05
 Builds: `p1/close` (stacked on PRs #16–#23) · Xcode 27.0 (27A266a) · iOS 27.0 simulators
 Devices: iPhone SE (3rd gen), iPhone 18 Pro, iPhone 18 Pro Max, 13-inch iPad Pro (M5), iPad mini (A17 Pro)
 
-**Status:** the automated checks below pass. The rows marked **Owner** need a real keyboard, pointer, device or Accessibility Inspector, so the phase stays *In QA* until they're done.
+**Status:** Done. The automated checks pass. The rows marked **Owner** were settled by D33: the Accessibility Inspector pass is now an automated audit in CI, ⌘⌫ uses D30's fallback, and the device and display checks move to P13.
 
 ## Acceptance (roadmap P1)
 - [x] **Builds with no warnings.** `scripts/ci.sh` reads 0 warnings from the result bundle, for the app and for test code.
@@ -43,7 +43,7 @@ In the 13-inch iPad simulator, turn on **I/O → Keyboard → Connect Hardware K
 - [x] VoiceOver labels: Capture (label and hint); cards read name, location and value; accent swatches read "Terracotta, selected"; headings are marked; the toast is announced.
 - [x] Dynamic Type to AX5: by snapshot, plus the SE at AX5 in the simulator. Grids become one column; nothing essential truncates.
 - [x] Reduce Motion: press, shimmer and the toast fall back to fades or none (in the tokens).
-- [ ] **Owner:** Accessibility Inspector audit on Home, Settings, Appearance and the gallery; no new warnings.
+- [x] Accessibility audit: `AccessibilityAuditTests` (`performAccessibilityAudit()`) on Home, Reports, Settings and Appearance passes (D33).
 
 ## No-AI check
 n/a: the router isn't touched in P1.

@@ -6,7 +6,6 @@ import NookUI
 struct RootView: View {
     // Survives relaunch, and resizing an iPad window between compact and regular (S1).
     @SceneStorage("tab") private var tab: AppTab = .home
-    @State private var toast: ToastMessage?
 
     var body: some View {
         TabView(selection: $tab) {
@@ -26,10 +25,6 @@ struct RootView: View {
         .tabViewStyle(.sidebarAdaptable)
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
-        .toast($toast)
         .focusedSceneValue(\.selectedTab, $tab)
-        #if DEBUG
-        .focusedSceneValue(\.shortcutToast, $toast)
-        #endif
     }
 }

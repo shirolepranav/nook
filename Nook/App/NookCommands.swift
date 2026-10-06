@@ -1,13 +1,9 @@
 import SwiftUI
-import NookUI
 
 /// Keyboard shortcuts (01 §1.5, D29). In a CommandMenu they also appear in the iPad menu
 /// bar (D30). The system adds File, Edit (Undo, Redo, Cut, Copy, Paste), View, Window and Help.
 struct NookCommands: Commands {
     @FocusedValue(\.selectedTab) private var selectedTab
-    #if DEBUG
-    @FocusedValue(\.shortcutToast) private var shortcutToast
-    #endif
 
     private func show(_ tab: AppTab) { selectedTab?.wrappedValue = tab }
 
@@ -33,15 +29,7 @@ struct NookCommands: Commands {
             // ⇧⌘M, not ⌘M: iPadOS keeps ⌘M for minimizing a window (D30).
             Button("Move") {}.keyboardShortcut("m", modifiers: [.command, .shift])         // I-04, P4
                 .disabled(true)
-            #if DEBUG
-            Button("Delete") {                                                             // P3
-                shortcutToast?.wrappedValue = ToastMessage(symbol: "keyboard", "Delete shortcut received.")
-            }
-            .keyboardShortcut(.delete)
-            .disabled(shortcutToast == nil)
-            #else
             Button("Delete") {}.keyboardShortcut(.delete).disabled(true)                   // P3
-            #endif
         }
     }
 }
