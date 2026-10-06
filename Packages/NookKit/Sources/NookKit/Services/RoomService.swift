@@ -58,7 +58,7 @@ public struct RoomService {
         let liveItems = (room.items ?? []) + (room.spots ?? []).flatMap(allItems)
         guard liveItems.allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
         let snapshot = RoomSnapshot(room)
-        deleteWithUndo(room) { snapshot.restore(in: $0) }
+        context.deleteWithUndo(room) { snapshot.restore(in: $0) }
     }
 
     // MARK: Spots and containers
@@ -136,21 +136,7 @@ public struct RoomService {
         guard allItems(in: spot).allSatisfy({ $0.deletedAt != nil }) else { throw Failure.hasItems }
         let snapshot = SpotSnapshot(spot)
         let room = spot.room, parent = spot.parent
-        deleteWithUndo(spot) { snapshot.restore(room: room, parent: parent, in: $0) }
-    }
-
-    /// D35: SwiftData's own undo of a delete is lost at the next save (the restored rows
-    /// vanish), so deletes register an undo that rebuilds what they removed instead.
-    /// ponytail: no redo of a delete; add one if ⇧⌘Z ever needs it.
-    private func deleteWithUndo(_ model: some PersistentModel, restore: @escaping (ModelContext) -> Void) {
-        let undo = context.undoManager
-        undo?.disableUndoRegistration()
-        context.delete(model)
-        context.processPendingChanges()
-        undo?.enableUndoRegistration()
-        undo?.registerUndo(withTarget: context) { context in
-            MainActor.assumeIsolated { restore(context) }
-        }
+        context.deleteWithUndo(spot) { snapshot.restore(room: room, parent: parent, in: $0) }
     }
 
     // MARK: Helpers
@@ -195,18 +181,20 @@ private struct RoomSnapshot {
 }
 
 /// A deleted spot or container and the containers in it, for Undo (D35).
-/// ponytail: spot photos (P3) aren't kept; P3 adds them when photos exist.
+/// The spot photo's file stays on disk until the sweep (D40), so Undo brings it back too.
 @MainActor
 private struct SpotSnapshot {
     let id: UUID, name: String, qrID: String, packedAt: Date?, order: Int, createdAt: Date
     let kind: Spot.Kind
     let items: [Item]
+    let photo: (fileName: String, width: Int, height: Int)?
     let children: [SpotSnapshot]
 
     init(_ spot: Spot) {
         (id, name, qrID, packedAt, order, createdAt, kind) =
             (spot.id, spot.name, spot.qrID, spot.packedAt, spot.order, spot.createdAt, spot.kind)
         items = spot.items ?? []
+        photo = spot.photo.map { ($0.fileName, $0.width, $0.height) }
         children = (spot.children ?? []).map(SpotSnapshot.init)
     }
 
@@ -216,6 +204,12 @@ private struct SpotSnapshot {
         context.insert(spot)
         (spot.room, spot.parent) = (room, parent)
         for item in items { item.spot = spot }
+        if let photo {
+            let restored = Photo(fileName: photo.fileName)
+            (restored.width, restored.height) = (photo.width, photo.height)
+            context.insert(restored)
+            spot.photo = restored
+        }
         for child in children { child.restore(room: room, parent: spot, in: context) }
     }
 }
