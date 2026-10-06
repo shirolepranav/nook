@@ -128,6 +128,18 @@ final class MoveTests: XCTestCase {
         button(app, startingWith: "Camping tent,").tap()
         XCTAssertTrue(app.staticTexts["Kitchen, Pantry, Box 14"].waitForExistence(timeout: 5))
     }
+
+    /// 01 §1.5: ⇧⌘M opens Move for the item on screen. Menu shortcuts only fire on iPad in
+    /// XCUITest (P2 notes), so the iPhone runs skip it.
+    @MainActor
+    func testShiftCommandMOpensMove() throws {
+        let app = launch()
+        try XCTSkipUnless(app.windows.firstMatch.horizontalSizeClass == .regular,
+                          "hardware-keyboard shortcuts are checked on iPad (D29)")
+        openEspressoMachine(app)
+        app.typeKey("m", modifierFlags: [.command, .shift])
+        XCTAssertTrue(app.navigationBars["Move Espresso machine"].waitForExistence(timeout: 5))
+    }
 }
 
 extension XCUIElement {
