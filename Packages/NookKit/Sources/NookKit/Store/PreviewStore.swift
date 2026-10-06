@@ -103,7 +103,8 @@ public enum PreviewStore {
         try context.save()
     }
 
-    /// A warm two-tone photo stand-in, different for each index.
+    /// A warm two-tone photo stand-in, different for each index. Pixel data for a fake photo,
+    /// not a UI color, so no token applies.
     private static func swatch(_ index: Int) -> Data {
         let hues: [(CGFloat, CGFloat, CGFloat)] = [(0.85, 0.62, 0.45), (0.55, 0.68, 0.55), (0.52, 0.64, 0.78),
                                                   (0.72, 0.60, 0.78), (0.90, 0.80, 0.50), (0.80, 0.55, 0.60)]
@@ -111,9 +112,9 @@ public enum PreviewStore {
         let context = CGContext(data: nil, width: 400, height: 500, bitsPerComponent: 8, bytesPerRow: 0,
                                 space: CGColorSpace(name: CGColorSpace.sRGB)!,
                                 bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
-        context.setFillColor(CGColor(red: r, green: g, blue: b, alpha: 1))
+        context.setFillColor(CGColor(srgbRed: r, green: g, blue: b, alpha: 1))
         context.fill(CGRect(x: 0, y: 0, width: 400, height: 500))
-        context.setFillColor(CGColor(red: r * 0.8, green: g * 0.8, blue: b * 0.8, alpha: 1))
+        context.setFillColor(CGColor(srgbRed: r * 0.8, green: g * 0.8, blue: b * 0.8, alpha: 1))
         context.fillEllipse(in: CGRect(x: 80 + index % 5 * 10, y: 120, width: 240, height: 240))
         let data = NSMutableData()
         let destination = CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil)!

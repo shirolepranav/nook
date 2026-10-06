@@ -60,6 +60,7 @@ public struct ItemRow<Trailing: View>: View {
                 NookPhoto(photo)
                     .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
                     .containerShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
+                    .dynamicTypeSize(...DynamicTypeSize.large)   // a fixed-size thumbnail's glyph
             }
             VStack(alignment: .leading, spacing: 0) {
                 Text(verbatim: name)
@@ -100,6 +101,7 @@ public struct PhotoTile: View {
         NookPhoto(photo)
             .frame(width: NookLayout.photoTileWidth, height: NookLayout.photoTileWidth * 5 / 4)
             .containerShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
+            .dynamicTypeSize(...DynamicTypeSize.large)
             .overlay(alignment: .bottomLeading) {
                 if isCover {
                     Text("Cover", bundle: .module)
@@ -125,6 +127,7 @@ public struct AddPhotoTile: View {
         let shape = RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
         Image(systemName: "camera.fill")
             .font(.nookSection)
+            .dynamicTypeSize(...DynamicTypeSize.large)
             .foregroundStyle(accent.color)
             .frame(width: NookLayout.photoTileWidth, height: NookLayout.photoTileWidth * 5 / 4)
             .overlay { shape.strokeBorder(NookColor.hairlineStrong, style: StrokeStyle(lineWidth: 1.5, dash: [6, 4])) }

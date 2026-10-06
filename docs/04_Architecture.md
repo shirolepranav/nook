@@ -182,10 +182,11 @@ final class Item {
 - **Schema versioning:** `NookSchemaV1: VersionedSchema` plus `NookMigrationPlan`. Every model change uses the `data-model-change` skill and adds a new schema version and a migration test.
   - The models are nested in their schema (`NookSchemaV1.Room`), and typealiases (`Room`) point at the current version, so a V2 can keep V1's classes for migration.
   - `SchemaTests` walks the real schema and fails on any CloudKit-unsafe property, so a mistake shows up in CI rather than at sync time.
-  - **Deleting a room** deletes its spots and containers (cascade) but never its items (nullify). The caller rehomes the items or sends them to Recently Deleted first (D28; P3–P4).
+  - **Deleting a room** deletes its spots and containers (cascade) but never its items (nullify). `RoomService.delete(_:rehoming:)` moves the items to another room or sends them to Recently Deleted in the same step, and one Undo puts everything back (D28, D35).
 - **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
-- **Soft delete:** `deletedAt` is set on delete, and queries filter out deleted rows. Rows older than 30 days are purged on launch.
-- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload.
+- **Soft delete:** `ItemService.delete` sets `deletedAt` (a property change, so the window's Undo works), and queries filter out deleted rows. `purgeExpired()` hard-deletes rows older than 30 days, and their files, after the first frame at launch. Delete Now and Delete All Now are final and confirm first (D40).
+- **`ItemService` (P3):** create and update from an `ItemDraft` (only the name is required, F2), duplicate, cover and photo removal (snapshot undo, D35), Private, tags, soft delete, restore, purge, and the queries screens use. Location changes go on to `LocationService`.
+- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload. P3 ships the minimal version (fields, event, date; D38); Spotlight and widget reloads join in P12.
 - **Container depth:** a container sits on its room or inside a spot, never inside another container; spots are always top-level (D3, D34). `RoomService` enforces this.
 - **Free limit:** `EntitlementStore.canAddItems(count:)` counts non-deleted items. It is checked in services, not views.
 
@@ -193,8 +194,9 @@ final class Item {
 
 ## 5. Storage & files
 
-- **Photos:** HEIC files in `AppGroup/Photos/<uuid>.heic`, with 400-px thumbnails in `AppGroup/Thumbs/`. Loading downsamples (ImageIO) into an in-memory `NSCache`.
-- **Receipts:** stored in `AppGroup/Receipts/<uuid>.(heic|pdf)`.
+- **Photos:** HEIC files in `AppGroup/Photos/<uuid>.heic` (upright, at most 4032 px), with 400-px thumbnails under the same base name in `AppGroup/Thumbs/`. Loading downsamples (ImageIO) into an in-memory `NSCache`. `BlobStore` owns all of it.
+- **Receipts:** stored in `AppGroup/Receipts/<uuid>.(heic|pdf)`, each with a thumbnail (a PDF's first page).
+- **File lifecycle (D40):** files are written when picked, before Save. Soft-deleted items keep theirs; the purge removes them. At launch, `BlobStore.sweepOrphans` removes files no row references that are over an hour old (cancelled or killed edits).
 - **iCloud sync (Pro)** syncs files as `CKAsset`s through a small sync companion [design in P11]. Alternatively, files move to external storage attributes if CloudKit sync of `@Attribute(.externalStorage)` proves reliable. The choice is made in P11 and logged in decisions.md.
 - **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9).
 - **Backup (`.nookbackup`, D12):** a zip containing `manifest.json` (with `schemaVersion`, `appVersion` and `createdAt`), `data.json` (all entities keyed by UUID) and `files/`. Restore offers **Replace** or **Merge**, where Merge upserts by UUID.

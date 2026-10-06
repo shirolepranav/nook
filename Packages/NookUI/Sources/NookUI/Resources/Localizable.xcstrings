@@ -30,6 +30,9 @@
     "Capture": {
       "comment": "VoiceOver label for the floating Capture button."
     },
+    "Cover": {
+      "comment": "Caption on the first photo in the item editor (I-02): the cover photo."
+    },
     "Empty": {
       "comment": "Item count on a room card with no items."
     },
@@ -56,6 +59,12 @@
     },
     "Warranty ending soon": {
       "comment": "VoiceOver label for the clock badge on an item whose warranty ends within 30 days."
+    },
+    "not selected": {
+      "comment": "VoiceOver: an unselected item card in multi-select (I-08)."
+    },
+    "selected": {
+      "comment": "VoiceOver: a selected item card in multi-select (I-08)."
     }
   },
   "version": "1.0"

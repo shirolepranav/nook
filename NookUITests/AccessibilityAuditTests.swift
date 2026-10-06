@@ -72,6 +72,44 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P3 screens: items on Home and Room, item detail (I-01), the editor (I-02), selection
+    /// (I-08) and Recently Deleted (S-08).
+    @MainActor
+    func testItemScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 15))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        kitchen.tap()
+        let espresso = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Espresso machine,")).firstMatch
+        XCTAssertTrue(espresso.waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.navigationBars["Kitchen"].buttons["More"].tap()
+        app.buttons["Select"].tap()
+        espresso.tap()
+        XCTAssertTrue(app.navigationBars["1 Selected"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        espresso.tap()
+        XCTAssertTrue(app.buttons["Edit"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.buttons["Edit"].tap()
+        XCTAssertTrue(app.navigationBars["Edit Item"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        app.tab("Settings").tap()
+        app.buttons["Recently Deleted"].tap()
+        XCTAssertTrue(app.staticTexts["Nothing deleted."].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds

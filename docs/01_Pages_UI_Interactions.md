@@ -228,6 +228,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Lending card:** "Jordan has it since Sep 12 · due Oct 1". Actions: Mark returned, Edit (I-06).
 - **Notes**, then **Location history** row → I-05.
 - **Toolbar:** Edit (I-02), Share, overflow: Lend, Mark Private, Duplicate [Inferred], Delete.
+- **Phasing:** actions appear with their feature, never as dead ends: Move and "Found it here instead" (P4), Location history (P4), Lend and the lending card (P7), the warranty card (P7, D39), value estimate (P9), the locked state (P12).
 
 ### I-02 Item editor (add and edit) [PRD §5 F2]
 - **Only Name is required.** An item with a photo and name saves in 2 taps (PRD §5 F2 acceptance).
@@ -252,7 +253,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Person (system contact picker, or a typed name), date lent (default today), optional return date, optional reminder. Save adds the Lent badge and puts the item in the Lent out filter.
 
 ### I-07 Receipt viewer
-- Quick Look for an image or PDF. On Classic-scanned receipts, recognized text is selectable.
+- Quick Look for an image or PDF (D42). On Classic-scanned receipts, recognized text is selectable (P6).
 
 ### I-08 Multi-select
 - Select in Room and in Find results. Bottom toolbar: Move, Tag, Mark Private, Delete. The count appears in the title.
@@ -286,6 +287,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ### C-05 Quick add item [PRD §5]
 - Camera → photo → I-02. AI fills name, category, brand and condition; Classic leaves fields blank with autocomplete.
 - Also offers "Choose from Photos" and "Skip photo".
+- **P3 (D37):** the system camera stands in until P6. With the camera off or missing, I-02 opens directly and offers Photos.
 
 ### C-06 Receipt scan [PRD §5, F4]
 - Document camera, or import a photo or PDF from Files or the share sheet. Share-sheet import needs a Share Extension or an "Open in Nook" document type. [Inferred]

@@ -14,6 +14,58 @@
         }
       }
     },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ → %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ → %2$@"
+          }
+        }
+      }
+    },
+    "%lld Selected" : {
+
+    },
+    "%lld days left" : {
+
+    },
+    "%lld items" : {
+
+    },
+    "%lld items · %lld spots" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld items · %2$lld spots"
+          }
+        }
+      }
+    },
+    "%lld items · Mixed currencies" : {
+
+    },
+    "%lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld"
+          }
+        }
+      }
+    },
     "%lld rooms, ready to fill" : {
       "localizations" : {
         "en" : {
@@ -37,6 +89,7 @@
       }
     },
     "%lld spots" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -58,10 +111,16 @@
         }
       }
     },
+    "0.00" : {
+
+    },
     "A container sits in a room or a spot. It can’t go inside another container." : {
 
     },
     "Accent color" : {
+
+    },
+    "Actions for %lld items" : {
 
     },
     "Add" : {
@@ -71,6 +130,12 @@
 
     },
     "Add Item" : {
+
+    },
+    "Add Item Here" : {
+
+    },
+    "Add Receipt" : {
 
     },
     "Add Spot" : {
@@ -85,13 +150,37 @@
     "Add a few things and Nook will tell you where they are." : {
 
     },
+    "Add a tag" : {
+
+    },
+    "Add a tag to %lld items" : {
+
+    },
+    "Add barcode" : {
+
+    },
+    "Add brand" : {
+
+    },
     "Add container" : {
+
+    },
+    "Add date" : {
 
     },
     "Add item" : {
 
     },
+    "Add model" : {
+
+    },
+    "Add photo" : {
+
+    },
     "Add room" : {
+
+    },
+    "Add serial" : {
 
     },
     "Add spot" : {
@@ -106,6 +195,9 @@
     "Add your own" : {
 
     },
+    "Anything worth remembering" : {
+
+    },
     "Appearance" : {
 
     },
@@ -115,10 +207,19 @@
     "Arrange Spots" : {
 
     },
+    "Barcode" : {
+
+    },
     "Blue bin" : {
 
     },
+    "Brand" : {
+
+    },
     "Butter" : {
+
+    },
+    "Camera is off. Turn it on in Settings." : {
 
     },
     "Cancel" : {
@@ -127,10 +228,34 @@
     "Capture" : {
 
     },
+    "Category" : {
+
+    },
     "Change Color and Symbol" : {
 
     },
+    "Choose" : {
+
+    },
+    "Choose File…" : {
+
+    },
+    "Choose a room" : {
+
+    },
+    "Choose from Photos" : {
+
+    },
     "Clay" : {
+
+    },
+    "Clear" : {
+
+    },
+    "Clear purchase date" : {
+
+    },
+    "Close" : {
 
     },
     "Color" : {
@@ -170,10 +295,34 @@
     "Continue without rooms" : {
 
     },
+    "Copies it" : {
+
+    },
+    "Couldn’t delete %@. Your items are safe." : {
+
+    },
+    "Couldn’t delete this room. Your items are safe." : {
+
+    },
+    "Couldn’t delete this. Your items are safe." : {
+
+    },
+    "Couldn’t duplicate it. Your items are safe." : {
+
+    },
+    "Couldn’t save right now. Your items are safe on this device." : {
+
+    },
     "Couldn’t save this room. Try again." : {
 
     },
     "Couldn’t save this. Try again." : {
+
+    },
+    "Cover" : {
+
+    },
+    "Currency" : {
 
     },
     "Dark" : {
@@ -182,10 +331,31 @@
     "Delete" : {
 
     },
+    "Delete %@ now?" : {
+
+    },
     "Delete %@?" : {
 
     },
+    "Delete %lld Items" : {
+
+    },
+    "Delete %lld items now?" : {
+
+    },
+    "Delete %lld items?" : {
+
+    },
+    "Delete All Now" : {
+
+    },
     "Delete Container" : {
+
+    },
+    "Delete Now" : {
+
+    },
+    "Delete Photo" : {
 
     },
     "Delete Room" : {
@@ -197,13 +367,40 @@
     "Deleted %@." : {
 
     },
+    "Deleted %@. You can restore it for 30 days." : {
+
+    },
+    "Deleted %lld items. You can restore them for 30 days." : {
+
+    },
+    "Deleted items stay here for 30 days, then they’re gone for good." : {
+
+    },
+    "Deselect All" : {
+
+    },
+    "Discard Changes" : {
+
+    },
+    "Discard changes to this item?" : {
+
+    },
     "Done" : {
+
+    },
+    "Duplicate" : {
+
+    },
+    "Duplicated %@." : {
 
     },
     "Edit" : {
 
     },
     "Edit Container" : {
+
+    },
+    "Edit Item" : {
 
     },
     "Edit Room" : {
@@ -213,6 +410,9 @@
 
     },
     "Empty" : {
+
+    },
+    "Espresso machine" : {
 
     },
     "Everything stays on your device. No account." : {
@@ -244,25 +444,52 @@
     "Get Started" : {
 
     },
+    "Give it a name." : {
+
+    },
+    "Hidden from Spotlight, Siri and widgets. Needs Face ID to open." : {
+
+    },
+    "Hide Values" : {
+
+    },
     "Hide values by default" : {
 
     },
     "Home" : {
 
     },
+    "In the room" : {
+
+    },
+    "In this room" : {
+
+    },
     "Inside" : {
+
+    },
+    "It holds %lld items. Where should they go? You can undo right after." : {
 
     },
     "It holds containers, so it stays a spot." : {
 
     },
+    "Items you delete wait here for 30 days, in case you change your mind." : {
+
+    },
     "Its spots and containers are deleted too. You can undo right after." : {
+
+    },
+    "Keep Editing" : {
 
     },
     "Kitchen" : {
 
     },
     "Know what you own and where it is." : {
+
+    },
+    "Last confirmed %@" : {
 
     },
     "Lavender" : {
@@ -274,7 +501,19 @@
     "Light" : {
 
     },
+    "Mark Not Private" : {
+
+    },
+    "Mark Private" : {
+
+    },
+    "Marked Private." : {
+
+    },
     "Mint" : {
+
+    },
+    "Model" : {
 
     },
     "Move" : {
@@ -283,22 +522,34 @@
     "Move Down" : {
 
     },
+    "Move Items to %@" : {
+
+    },
+    "Move Items to Recently Deleted" : {
+
+    },
+    "Move Left" : {
+
+    },
+    "Move Right" : {
+
+    },
     "Move Up" : {
-
-    },
-    "Move the things in %@ somewhere else first." : {
-
-    },
-    "Move the things in it somewhere else first." : {
-
-    },
-    "Move the things in this room somewhere else first." : {
 
     },
     "Name" : {
 
     },
+    "Name suggestions" : {
+
+    },
+    "New Category…" : {
+
+    },
     "New Container" : {
+
+    },
+    "New Item" : {
 
     },
     "New Room" : {
@@ -307,10 +558,31 @@
     "New Spot" : {
 
     },
+    "New category" : {
+
+    },
+    "No Room Yet" : {
+
+    },
+    "No longer Private." : {
+
+    },
+    "No room yet" : {
+
+    },
     "Nook" : {
 
     },
     "Nook couldn’t open your items" : {
+
+    },
+    "Not Private" : {
+
+    },
+    "Notes" : {
+
+    },
+    "Nothing deleted." : {
 
     },
     "Nothing has been deleted. Free up some storage or update Nook, then try again." : {
@@ -328,6 +600,15 @@
     "Ocean" : {
 
     },
+    "Opens the receipt" : {
+
+    },
+    "PDF" : {
+
+    },
+    "PDF receipt" : {
+
+    },
     "Packed" : {
 
     },
@@ -337,13 +618,85 @@
     "Packed on %@" : {
 
     },
+    "Photo" : {
+
+    },
+    "Photo %lld" : {
+
+    },
+    "Photo %lld of %lld. Open photo viewer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Photo %1$lld of %2$lld. Open photo viewer"
+          }
+        }
+      }
+    },
+    "Photo %lld of %lld: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Photo %1$lld of %2$lld: %3$@"
+          }
+        }
+      }
+    },
+    "Photo deleted." : {
+
+    },
+    "Photos, %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Photos, %1$lld of %2$lld"
+          }
+        }
+      }
+    },
     "Pick a few to start. You can change them any time." : {
 
     },
     "Plum" : {
 
     },
+    "Press Return to add each tag." : {
+
+    },
+    "Price" : {
+
+    },
     "Prices show as •••• until you tap the eye on Home." : {
+
+    },
+    "Private" : {
+
+    },
+    "Purchased" : {
+
+    },
+    "Quantity" : {
+
+    },
+    "Receipt" : {
+
+    },
+    "Receipt photo" : {
+
+    },
+    "Recently Deleted" : {
+
+    },
+    "Recently added" : {
+
+    },
+    "Remove" : {
+
+    },
+    "Remove tag %@" : {
 
     },
     "Rename" : {
@@ -353,6 +706,15 @@
 
     },
     "Reports live here." : {
+
+    },
+    "Restore" : {
+
+    },
+    "Restored to %@." : {
+
+    },
+    "Restored." : {
 
     },
     "Room name" : {
@@ -368,6 +730,12 @@
 
     },
     "Save" : {
+
+    },
+    "Saved to %@." : {
+
+    },
+    "Saved." : {
 
     },
     "Scan Room" : {
@@ -388,10 +756,37 @@
     "Search your things" : {
 
     },
+    "Select" : {
+
+    },
+    "Select All" : {
+
+    },
+    "Serial" : {
+
+    },
+    "Serial %@" : {
+
+    },
+    "Serial copied." : {
+
+    },
+    "Serial number" : {
+
+    },
+    "Set as Cover" : {
+
+    },
+    "Set as cover." : {
+
+    },
     "Settings" : {
 
     },
     "Settings…" : {
+
+    },
+    "Show Values" : {
 
     },
     "Sky" : {
@@ -403,16 +798,25 @@
     "Snap a room, tag what’s on the shelves, and ask where anything is, any time." : {
 
     },
+    "Some photos couldn’t be added. Try again." : {
+
+    },
     "Spot" : {
 
     },
     "Spot name" : {
 
     },
+    "Spot photo: %@" : {
+
+    },
     "Spots" : {
 
     },
     "Stone" : {
+
+    },
+    "Store" : {
 
     },
     "Studio" : {
@@ -424,7 +828,28 @@
     "System" : {
 
     },
+    "Tag" : {
+
+    },
+    "Tagged %lld items." : {
+
+    },
+    "Tags" : {
+
+    },
+    "Tags: %@" : {
+
+    },
+    "Take Photo" : {
+
+    },
     "Terracotta" : {
+
+    },
+    "That file can’t be added as a receipt. Try a photo or a PDF." : {
+
+    },
+    "That photo can’t be added as a receipt." : {
 
     },
     "The containers in it are deleted too." : {
@@ -439,6 +864,12 @@
     "Things you put on this spot will show up here." : {
 
     },
+    "This can’t be undone." : {
+
+    },
+    "This date is in the future. You can still save." : {
+
+    },
     "Top shelf" : {
 
     },
@@ -448,10 +879,25 @@
     "Warranties, lent things and your insurance report will appear as you add items." : {
 
     },
+    "Where" : {
+
+    },
+    "Where you bought it" : {
+
+    },
     "Which rooms do you have?" : {
 
     },
+    "You can restore it from Recently Deleted for 30 days." : {
+
+    },
+    "You can restore them from Recently Deleted for 30 days." : {
+
+    },
     "You can undo right after." : {
+
+    },
+    "Zoom" : {
 
     }
   },

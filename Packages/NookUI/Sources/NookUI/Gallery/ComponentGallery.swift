@@ -57,6 +57,21 @@ public struct ComponentGallery: View {
                         AddCard(Text(verbatim: "Add room"))
                     }
                 }
+                section("Items") {
+                    NookGrid {
+                        PhotoCard(name: "Blender", location: "Kitchen → Counter", isSelected: true)
+                        PhotoCard(name: "Toaster", location: "Kitchen → Counter", isSelected: false)
+                    }
+                    ItemRow(name: "Espresso machine", detail: Text(verbatim: "28 days left")) {
+                        Button(String("Restore")) {}.buttonStyle(.nookTertiary)
+                    }
+                    HStack(spacing: NookSpace.s1) {
+                        AddPhotoTile()
+                        PhotoTile(photo: nil, isCover: true)
+                        PhotoTile(photo: nil, isCover: false)
+                    }
+                    StatusPill(.privateItem, Text(verbatim: "Private"))
+                }
                 section("States") {
                     EmptyStateView(.shelfWaiting, title: Text(verbatim: "Let’s start with one room."),
                                    message: Text(verbatim: "Scan a shelf and tag what’s on it."))

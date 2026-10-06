@@ -562,7 +562,7 @@ Each state is a designed screen: **illustration, one sentence, one action** (PRD
 | Empty | 140–180 pt illustration, `section` title, one sentence, primary button. Example: "Nothing here yet. Scan this room to fill it in 30 seconds." |
 | Loading | Skeleton photo cards in `surfaceSunken` with a slow warm shimmer (static under Reduce Motion) |
 | Error | Calm icon, plain reason, reassurance ("Your items are safe on this iPhone"), Retry |
-| Success | Toast at the bottom on `surfaceRaised`: icon, message, Undo; 4 seconds; announced to VoiceOver |
+| Success | Toast at the bottom on `surfaceRaised`: icon, message, Undo; 5 seconds (D14); announced to VoiceOver |
 | AI fallback | No visible state: the Classic screen appears with the photo already loaded |
 
 ### 8.10 Paywall (PRD §7)

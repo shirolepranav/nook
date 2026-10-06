@@ -50,6 +50,46 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP3Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launchArguments += ["-uiTestingCameraFixture"]
+        app.launch()
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 15))
+        snap("H-01 Home with items")
+
+        kitchen.tap()
+        let espresso = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Espresso machine,")).firstMatch
+        XCTAssertTrue(espresso.waitForExistence(timeout: 5))
+        snap("H-02 Room with items")
+
+        app.navigationBars["Kitchen"].buttons["More"].tap()
+        app.buttons["Select"].tap()
+        espresso.tap()
+        snap("I-08 Multi-select")
+        app.buttons["Cancel"].tap()
+
+        espresso.tap()
+        XCTAssertTrue(app.buttons["Edit"].waitForExistence(timeout: 5))
+        snap("I-01 Item detail")
+        app.buttons["Edit"].tap()
+        XCTAssertTrue(app.navigationBars["Edit Item"].waitForExistence(timeout: 5))
+        snap("I-02 Item editor")
+        app.buttons["Cancel"].tap()
+
+        app.buttons["Photo 1 of 1. Open photo viewer"].tap()
+        snap("I-03 Photo viewer")
+        app.buttons["Close"].tap()
+
+        app.tab("Settings").tap()
+        app.buttons["Recently Deleted"].tap()
+        snap("S-08 Recently Deleted (empty)")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

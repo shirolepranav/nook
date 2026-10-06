@@ -253,3 +253,38 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 **D36 · 2026-10-06 · Accepted (product owner)** — **One PR per phase.** P1 and P2 shipped as 18 stacked PRs (#16–#33), each with its own CI run and review. That was slow to test and to merge. From P3, each phase is built on one branch, `p<N>/<phase-name>`, with a commit per task, and ships as a single PR into `main` that carries the phase's QA report. The ~400-line PR limit is dropped. Tasks still stay small, as commits.
 
 *Why:* the owner reviews and merges per phase anyway, and per-PR test runs cost hours and disk. *Affects:* CLAUDE.md (Working in phases), `phase-work` skill.
+
+**D37 · 2026-10-06 · Accepted (product owner)** — **A minimal quick add (C-05) ships in P3.** F2's "a photo and a name in 2 taps" needs a camera, and C-05 was a P6 screen. Capture → Add Item opens the system camera (`UIImagePickerController`); the shutter returns the photo and the editor opens with it and the name field focused, so the shutter and Save are the 2 taps. The camera permission is asked when the camera first opens (D15). With the camera denied, restricted or missing (simulators, some iPads), the editor opens straight away with "Choose from Photos" and a link to Settings. ⌘N, "Add Item Here" (H-03) and Room's Add menu use the same flow, with the room or spot pre-filled (C-01). P6 replaces the system camera with Nook's own, which also brings C-05's "Skip photo" and "Choose from Photos" buttons; in P3, Cancel in the camera closes it. UI tests pass `-uiTestingCameraFixture` (DEBUG) for a stand-in camera.
+
+*Affects:* 01 C-05, P6 scope.
+
+**D38 · 2026-10-06 · Accepted (product owner)** — **A minimal `LocationService.move` ships in P3.** The editor sets an item's place, and the hard rule says only `LocationService.move(items:to:source:)` writes locations. P3 ships it with the fields, one `LocationEvent` per item that actually moves, and `lastConfirmedAt`. P4 adds the Move picker (I-04), recents and history (I-05) on top; Spotlight and widget reloads join in P12. Until P4, the editor's "Where" row is a native nested menu (rooms, then spots and containers).
+
+*Affects:* 04 §4, P4 scope.
+
+**D39 · 2026-10-06 · Accepted (product owner)** — **The warranty field waits for P7.** I-02 lists "warranty length or end date", but warranties are their own records (D21) and the roadmap gives warranty math and reminders to P7. In P3, I-02 and I-01 have no warranty row; P7 adds the field, the card and the reminders together. The 25-item free limit also stays out of P3: `ItemService.create` marks where P11 adds `EntitlementStore.canAddItems` (D9).
+
+*Affects:* 01 I-01 and I-02 (until P7).
+
+**D40 · 2026-10-06 · Accepted** — **Photo and receipt files.** Files are written to the App Group as soon as they're picked, so encoding never delays Save and a killed edit loses nothing that was saved. Soft-deleted items keep their files, so Restore is complete. The 30-day purge, Delete Now and Delete All Now remove rows and files; they are final, so they confirm first ("This can't be undone.") and register no undo. Photos removed in the photo viewer undo through a snapshot (D35); their files stay. At launch, after the first frame, `BlobStore.sweepOrphans` deletes files no row references that are more than an hour old, which also cleans up after a cancelled or killed edit. Every file uses `completeUntilFirstUserAuthentication` (PRD §9). Photos are re-encoded as upright HEIC at most 4032 px on the long edge; HEIC encoding works on the iOS 27.0 simulator and macOS, so there's no JPEG fallback.
+
+*Affects:* 04 §5.
+
+**D41 · 2026-10-06 · Accepted** — **Home currency, for now.** D20 refers to a home currency set in Settings, which doesn't exist yet. Until it does (P10, with Reports), the home currency is the region's (`Locale.current.currency`). New items start in it; the editor's currency menu offers every ISO currency. Home's total adds only items in the home currency and says "Mixed currencies" when others exist. Nothing is converted.
+
+*Affects:* H-01, I-02, P10.
+
+**D42 · 2026-10-06 · Accepted** — **Receipts open in Quick Look (I-07).** `.quickLookPreview` shows images and PDFs of any length with zoom, search, share and text selection, which the mockup's custom paper view would have to rebuild. The paper look stays on I-01's receipt card thumbnail. Selectable text from Classic-scanned receipts arrives with the scanner in P6.
+
+*Affects:* 01 I-07.
+
+**D43 · 2026-10-06 · Accepted** — **iOS 27 SDK checks for P3 (D23).** Confirmed by building against the iOS 27.0 SDK and running on the iOS 27.0 simulator:
+- `.navigationTransition(.zoom(sourceID:in:))` with `.matchedTransitionSource` gives the card-to-detail zoom, and cross-fades under Reduce Motion. The namespace is shared through the environment from each NavigationStack root (`itemNavigation()`).
+- `PhotosPicker(selection:maxSelectionCount:matching:)` works inside a `Menu`, needs no permission prompt (D15), and caps the picks at the photos left out of 10.
+- `.quickLookPreview(_:)` needs `import QuickLook` in the file.
+- ImageIO encodes HEIC on the simulator and on macOS (`swift test`).
+- `UIImagePickerController` with `.camera` still works on iOS 27; `isSourceTypeAvailable(.camera)` is false on simulators.
+- Swipe actions are used only inside `List` (Recently Deleted), so D11's open question about swipe actions in other scroll views doesn't arise yet. Grid cards use context menus, which also open with a secondary click (D29).
+- A bare closure in a `FocusedValues` `@Entry` warns that it may invalidate every update; ⌘N's action is wrapped in a struct.
+
+*Affects:* `ItemSupport.swift`, `QuickAdd.swift`, `ItemDetailScreen.swift`.
