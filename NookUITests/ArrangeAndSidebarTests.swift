@@ -43,6 +43,9 @@ final class ArrangeAndSidebarTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Bedroom"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Wardrobe"].exists)
 
+        // Hardware-keyboard shortcuts are checked on iPad only (D29), as in ShellTests.
+        let size = app.windows.firstMatch.frame.size
+        try XCTSkipUnless(min(size.width, size.height) >= 700, "⌘E is checked on iPad (D29)")
         app.typeKey("e", modifierFlags: .command)
         XCTAssertTrue(app.navigationBars["Edit Room"].waitForExistence(timeout: 5))
     }

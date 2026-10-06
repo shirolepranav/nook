@@ -160,13 +160,18 @@ struct RoomEditor: View {
                 }
                 if isAddingSpot {
                     // Vertical axis: Return types a newline instead of resigning the field, so
-                    // it stays open for the next spot (F1: 3 spots fast).
+                    // it stays open for the next spot (F1: 3 spots fast). Finished lines become
+                    // rows once typing pauses: rewriting the text mid-typing drops or reorders
+                    // keystrokes (D35).
                     TextField("Spot name", text: $draftSpot, prompt: Text("Top shelf"), axis: .vertical)
                         .accessibilityLabel("Spot name")   // iOS 27 reads only the prompt otherwise
                         .font(.nookBody)
                         .focused($focus, equals: .spot)
                         .submitLabel(.next)
-                        .onChange(of: draftSpot) { _, text in
+                        .task(id: draftSpot) {
+                            guard draftSpot.contains("\n"),
+                                  (try? await Task.sleep(for: .seconds(0.5))) != nil else { return }
+                            let text = draftSpot
                             guard let newline = text.lastIndex(of: "\n") else { return }
                             text[..<newline].split(separator: "\n").forEach { appendSpot(String($0)) }
                             draftSpot = String(text[text.index(after: newline)...])
@@ -215,7 +220,7 @@ struct RoomEditor: View {
     }
 
     private func addDraftSpot() {
-        appendSpot(draftSpot)
+        draftSpot.split(separator: "\n").forEach { appendSpot(String($0)) }   // lines not split yet
         draftSpot = ""
     }
 
