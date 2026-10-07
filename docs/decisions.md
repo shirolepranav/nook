@@ -333,3 +333,17 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Open, not pursued (owner's choice):** once the `lived` seed gave the audited item a tag, the audit reports "Potentially inaccessible text", with no element, on I-01's tag chips (P3, `NookFlowLayout`). Giving each tag its own label ("Tag: Coffee") didn't clear it. Find's footer, "Also searched receipts, serials and notes.", is flagged "Dynamic Type partially unsupported" as a List row and as a section footer, with or without `.fixedSize(horizontal: false, vertical: true)`.
 
 *Affects:* `FindSections.swift`, `FindScreen.swift`, `SearchLibrary.swift`, `ItemDetailScreen.swift`.
+
+### P6 (2026-10-07)
+
+**D49 · 2026-10-07 · Accepted** — **iOS 27 SDK checks for P6 (D23, D11).** Confirmed on the iOS 27.0 SDK (Xcode 27.0, 27A266a) and the iOS 27.0 iPhone SE simulator:
+- **`RecognizeTextRequest`** (the Swift Vision API) works as documented: `recognitionLevel = .accurate`, `usesLanguageCorrection`, `perform(on: CGImage)`. Each `RecognizedTextObservation` gives `topCandidates(1).first?.string`, `confidence`, and `boundingBox.cgRect`, normalized with a **lower-left** origin. It runs on the simulator (a rendered "TOTAL 708.00" came back exactly, confidence 1.0), so receipt fixture tests run in CI.
+- **`VNDocumentCameraViewController.isSupported` is `true` on the simulator, which has no camera.** So it can't decide alone: the document camera is offered only when `isSupported` and a video `AVCaptureDevice` exists.
+- **`DataScannerViewController.isSupported` is `false` on the simulator** (`isAvailable` is `true`). C-07 shows manual entry there.
+- **`DataScannerViewController` has no torch API.** The torch button sets `AVCaptureDevice.torchMode` on the default video device while the scanner runs; whether the two coexist is an owner device check.
+- **`AVCaptureSession.wasInterruptedNotification` / `interruptionEndedNotification`** and `AVCaptureSessionInterruptionReasonKey` are there, so the camera shows "Camera paused" and resumes by itself. Low light is read from `AVCaptureDevice.iso` against `activeFormat.maxISO`.
+- **Quick Look Live Text:** `ImageAnalyzer.isSupported` is `true`, and Quick Look runs the same analysis on images (and on image-only PDF pages since iOS 17), so scanned receipts are selectable in I-07 with no text layer of our own (D42). Owner device check.
+- **"Open in Nook"** uses `CFBundleDocumentTypes` (`public.image`, `com.adobe.pdf`, rank Alternate) with `LSSupportsOpeningDocumentsInPlace` = NO, so the system copies the file into the inbox and `.onOpenURL` receives it. Owner device check from Photos and Files.
+- **`AVCaptureDevice.default(for: .video)` is `nil` on the simulator**, while `UIImagePickerController.isSourceTypeAvailable(.camera)` says `true` (P5 notes). `NookCamera.isUsable` now checks for a device, so the simulator takes the Photos path without the fixture flag.
+
+*Affects:* `NookAI/Scanners`, `NookAI/ClassicEngine`, `Nook/Features/Capture`, `Info.plist`.
