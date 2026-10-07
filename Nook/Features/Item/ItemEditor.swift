@@ -7,8 +7,7 @@ import NookUI
 
 /// I-02 Item editor, for a new item or an existing one. Only the name is required, so a
 /// photo and a name save in 2 taps (F2). Photos and receipts go to disk as they're picked
-/// (D40); the item itself is written only on Save. Warranty joins in P7 (D39), the barcode
-/// and sticker readers in P6.
+/// (D40); the item itself is written only on Save. Warranty joins in P7 (D39).
 struct ItemEditor: View {
     let item: Item?
     var cameraOff = false
@@ -21,8 +20,7 @@ struct ItemEditor: View {
     @State private var nameError = false
     @State private var suggestions: [String] = []
     @State private var pickedPhotos: [PhotosPickerItem] = []
-    @State private var pickedReceipt: PhotosPickerItem?
-    @State private var importsReceipt = false
+    @State private var receiptSource: ReceiptSource?
     @State private var takesPhoto = false
     @State private var confirmsDiscard = false
     @State private var namesCategory = false
@@ -106,18 +104,16 @@ struct ItemEditor: View {
                 takesPhoto = false
             }
         }
-        .fileImporter(isPresented: $importsReceipt, allowedContentTypes: [.pdf, .image]) { result in
-            if case .success(let url) = result { addReceipt(from: url) }
+        // C-06: every receipt goes through the review, so its text is searchable (F5) and its
+        // numbers can be tapped into the fields.
+        .receiptScan($receiptSource) { result in
+            result.apply(to: &draft)
+            if let price = draft.price { priceText = price.formatted(.number.grouping(.never)) }
         }
         .onChange(of: pickedPhotos) { _, items in
             guard !items.isEmpty else { return }
             pickedPhotos = []
             Task { add(photoData: await load(items)) }
-        }
-        .onChange(of: pickedReceipt) { _, picked in
-            guard let picked else { return }
-            pickedReceipt = nil
-            Task { if let data = await load([picked]).first { addReceipt(data: data) } }
         }
         .onAppear { if item == nil { focus = .name } }
     }
@@ -385,7 +381,7 @@ struct ItemEditor: View {
         return try? Decimal(trimmed, format: .number)
     }
 
-    // MARK: Receipt (I-07; scanning arrives in P6)
+    // MARK: Receipt (I-07, C-06)
 
     private var receiptSection: some View {
         FieldWell(Text("Receipt")) {
@@ -401,10 +397,11 @@ struct ItemEditor: View {
                     }
                 }
                 Menu {
-                    Button("Choose File…", systemImage: "folder") { importsReceipt = true }
-                    PhotosPicker(selection: $pickedReceipt, matching: .images) {
-                        Label("Choose from Photos", systemImage: "photo.on.rectangle")
+                    if ReceiptScanAvailability.camera {
+                        Button("Scan Receipt", systemImage: "doc.viewfinder") { receiptSource = .camera }
                     }
+                    Button("Choose File…", systemImage: "folder") { receiptSource = .files }
+                    Button("Choose from Photos", systemImage: "photo.on.rectangle") { receiptSource = .photos }
                 } label: {
                     Label("Add Receipt", systemImage: "plus").frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -449,23 +446,6 @@ struct ItemEditor: View {
             if added.count < min(photoData.count, space) { failure = "Some photos couldn’t be added. Try again." }
             draft.photos += added
             if item == nil, draft.name.isEmpty { focus = .name }
-        }
-    }
-
-    private func addReceipt(from url: URL) {
-        do {
-            let saved = try BlobStore.shared.saveReceipt(from: url)
-            draft.receipts.append(.init(fileName: saved.fileName, kind: saved.isPDF ? .pdf : .image))
-        } catch {
-            failure = "That file can’t be added as a receipt. Try a photo or a PDF."
-        }
-    }
-
-    private func addReceipt(data: Data) {
-        if let fileName = try? BlobStore.shared.saveReceipt(data) {
-            draft.receipts.append(.init(fileName: fileName, kind: .image))
-        } else {
-            failure = "That photo can’t be added as a receipt."
         }
     }
 

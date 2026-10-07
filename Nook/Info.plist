@@ -8,7 +8,28 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
-	<!-- C-05: asked the first time Add Item opens the camera (D15, D37). -->
+	<!-- C-06 "Open in Nook" (D48, D49): images and PDFs from the share sheet and Files open the
+	     receipt review. Alternate rank, so Nook never becomes the default viewer; the file is
+	     copied in, not edited in place. -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Receipt</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.image</string>
+				<string>com.adobe.pdf</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
+	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
 	<key>NSCameraUsageDescription</key>
 	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
 	<!-- L-01: warm canvas with the Nook mark. LaunchBackground is generated from 03 (export_colorsets.py). -->

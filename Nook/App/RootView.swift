@@ -30,6 +30,8 @@ private struct TabShell: View {
     @State private var roomTabsHidden = true
     @State private var addsItem = false
     @State private var scansRoom = false
+    @State private var openedReceipt: ReceiptSource?
+    @State private var openedItem: ItemDraft?
     @State private var library: SearchLibrary?
 
     private var selectedRoom: Room? {
@@ -79,6 +81,24 @@ private struct TabShell: View {
         .focusedSceneValue(\.scanRoom, MenuAction { scansRoom = true })
         .quickAdd(isPresented: $addsItem, at: selectedRoom.map { Location(room: $0) })
         .roomScan(isPresented: $scansRoom, at: selectedRoom.map { Location(room: $0) })
+        // "Open in Nook" from the share sheet or Files (D48): the receipt review, then a new item.
+        .onOpenURL { url in openedReceipt = .file(url) }
+        .receiptScan($openedReceipt) { result in
+            var draft = ItemDraft(currencyCode: HomeCurrency.code, location: selectedRoom.map { Location(room: $0) })
+            result.apply(to: &draft)
+            openedItem = draft
+        }
+        .newItemEditor($openedItem)
+        #if DEBUG
+        .task {
+            // UI tests: open the fixture receipt as if another app had shared it.
+            guard ProcessInfo.processInfo.arguments.contains("-uiTestingOpenReceipt"),
+                  let data = CaptureFixtures.receipt?.jpegData(compressionQuality: 0.9) else { return }
+            let url = FileManager.default.temporaryDirectory.appending(path: "Shared receipt.jpg")
+            try? data.write(to: url)
+            openedReceipt = .file(url)
+        }
+        #endif
         .focusedSceneValue(\.editsSelectedRoom, selectedRoom == nil ? nil : $editsSelectedRoom)
         .sheet(isPresented: $editsSelectedRoom) {
             if let selectedRoom { RoomEditor(room: selectedRoom) }

@@ -21,6 +21,8 @@ private struct CaptureOverlay: ViewModifier {
     @State private var chosen: CaptureMenu.Choice?
     @State private var addsItem = false
     @State private var scansRoom = false
+    @State private var receiptSource: ReceiptSource?
+    @State private var newItem: ItemDraft?
 
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottomTrailing) {
@@ -30,6 +32,13 @@ private struct CaptureOverlay: ViewModifier {
         }
         .quickAdd(isPresented: $addsItem, at: location)
         .roomScan(isPresented: $scansRoom, at: location)
+        // C-06 from C-01: the review, then I-02 for a new item with the receipt attached.
+        .receiptScan($receiptSource) { result in
+            var draft = ItemDraft(currencyCode: HomeCurrency.code, location: location)
+            result.apply(to: &draft)
+            newItem = draft
+        }
+        .newItemEditor($newItem)
         .onChange(of: showsMenu) { _, shows in
             guard !shows, let choice = chosen else { return }
             chosen = nil
@@ -40,6 +49,7 @@ private struct CaptureOverlay: ViewModifier {
                 switch choice {
                 case .scanRoom: scansRoom = true
                 case .addItem: addsItem = true
+                case .scanReceipt: receiptSource = ReceiptScanAvailability.camera ? .camera : .files
                 }
             }
         }
@@ -63,7 +73,7 @@ private struct CaptureOverlay: ViewModifier {
 
 /// C-01's four choices. A plain stack, not a List, so the popover sizes to fit all four rows.
 struct CaptureMenu: View {
-    enum Choice { case scanRoom, addItem }
+    enum Choice { case scanRoom, addItem, scanReceipt }
 
     var choose: (Choice) -> Void = { _ in }
 
@@ -79,7 +89,7 @@ struct CaptureMenu: View {
             Divider()
             row("Add item", "plus") { choose(.addItem) }
             Divider()
-            row("Scan receipt", "receipt").disabled(true)          // P6
+            row("Scan receipt", "receipt") { choose(.scanReceipt) }
             Divider()
             row("Scan barcode", "barcode.viewfinder").disabled(true)   // P6
         }
@@ -98,3 +108,37 @@ struct CaptureMenu: View {
 }
 
 #Preview { CaptureMenu() }
+
+extension View {
+    /// I-02 for a new item that starts filled in (C-06, C-07, Open in Nook), then the
+    /// "Saved to Kitchen." toast.
+    func newItemEditor(_ draft: Binding<ItemDraft?>) -> some View {
+        modifier(NewItemEditor(draft: draft))
+    }
+}
+
+private struct NewItemEditor: ViewModifier {
+    @Binding var draft: ItemDraft?
+    @State private var start: Start?
+    @State private var toast: ToastMessage?
+
+    private struct Start: Identifiable {
+        let id = UUID()
+        let draft: ItemDraft
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: draft) { _, new in
+                guard let new else { return }
+                draft = nil
+                start = Start(draft: new)
+            }
+            .sheet(item: $start) { start in
+                ItemEditor(draft: start.draft) { item in
+                    toast = item.room.map { ToastMessage("Saved to \($0.name).") } ?? ToastMessage("Saved.")
+                }
+            }
+            .toast($toast)
+    }
+}
