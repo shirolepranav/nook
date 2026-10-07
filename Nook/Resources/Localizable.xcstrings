@@ -7,6 +7,16 @@
     " From %@." : {
 
     },
+    "%@ has your %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ has your %2$@."
+          }
+        }
+      }
+    },
     "%@ moved to position %lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -23,6 +33,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ · %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$lld"
           }
         }
       }
@@ -49,6 +69,16 @@
         }
       }
     },
+    "%@, packed %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, packed %2$@."
+          }
+        }
+      }
+    },
     "%@. %@.%@ %@." : {
       "localizations" : {
         "en" : {
@@ -58,6 +88,9 @@
           }
         }
       }
+    },
+    "%lld" : {
+
     },
     "%lld Selected" : {
 
@@ -90,6 +123,9 @@
           }
         }
       }
+    },
+    "%lld on" : {
+
     },
     "%lld places" : {
       "localizations" : {
@@ -157,7 +193,26 @@
         }
       }
     },
+    "%lld things in %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld things in %2$@."
+          }
+        }
+      }
+    },
+    "+%lld more" : {
+
+    },
     "0.00" : {
+
+    },
+    "1 yr+" : {
+
+    },
+    "2 yrs+" : {
 
     },
     "A container sits in a room or a spot. It can’t go inside another container." : {
@@ -166,10 +221,25 @@
     "Accent color" : {
 
     },
+    "Accept" : {
+
+    },
+    "Accept All" : {
+
+    },
+    "Accepted" : {
+
+    },
     "Actions for %lld items" : {
 
     },
+    "Active" : {
+
+    },
     "Add" : {
+
+    },
+    "Add Another" : {
 
     },
     "Add Container" : {
@@ -179,6 +249,9 @@
 
     },
     "Add Item Here" : {
+
+    },
+    "Add Item by Name" : {
 
     },
     "Add Receipt" : {
@@ -241,10 +314,28 @@
     "Add your own" : {
 
     },
+    "Add “%@” as an Item" : {
+
+    },
     "Added" : {
 
     },
     "All rooms" : {
+
+    },
+    "Also matching" : {
+
+    },
+    "Also searched receipts, serials and notes." : {
+
+    },
+    "Amount %@" : {
+
+    },
+    "Any" : {
+
+    },
+    "Any Time" : {
 
     },
     "Anything worth remembering" : {
@@ -271,7 +362,13 @@
     "Butter" : {
 
     },
+    "Camera is off for Nook" : {
+
+    },
     "Camera is off. Turn it on in Settings." : {
+
+    },
+    "Camera paused. It picks up where you left off." : {
 
     },
     "Cancel" : {
@@ -284,6 +381,9 @@
 
     },
     "Change Color and Symbol" : {
+
+    },
+    "Check the spelling, or add it now." : {
 
     },
     "Choose" : {
@@ -307,6 +407,12 @@
     "Clear" : {
 
     },
+    "Clear Filters" : {
+
+    },
+    "Clear date" : {
+
+    },
     "Clear purchase date" : {
 
     },
@@ -323,6 +429,9 @@
 
     },
     "Containers" : {
+
+    },
+    "Continue" : {
 
     },
     "Continue with %lld rooms" : {
@@ -371,6 +480,9 @@
     "Couldn’t save right now. Your items are safe on this device." : {
 
     },
+    "Couldn’t save right now. Your photos are still here." : {
+
+    },
     "Couldn’t save this room. Try again." : {
 
     },
@@ -384,6 +496,12 @@
 
     },
     "Dark" : {
+
+    },
+    "Date" : {
+
+    },
+    "Date %@" : {
 
     },
     "Delete" : {
@@ -437,13 +555,28 @@
     "Deselect All" : {
 
     },
+    "Discard" : {
+
+    },
     "Discard Changes" : {
+
+    },
+    "Discard Photos" : {
+
+    },
+    "Discard ^[%lld photo](inflect: true)?" : {
+
+    },
+    "Discard ^[%lld tagged item](inflect: true)?" : {
 
     },
     "Discard changes to this item?" : {
 
     },
     "Done" : {
+
+    },
+    "Don’t Accept" : {
 
     },
     "Duplicate" : {
@@ -473,6 +606,12 @@
     "Empty" : {
 
     },
+    "Ending" : {
+
+    },
+    "Enter it myself" : {
+
+    },
     "Espresso machine" : {
 
     },
@@ -499,6 +638,15 @@
         }
       }
     },
+    "Expired" : {
+
+    },
+    "Fill the frame with the sticker." : {
+
+    },
+    "Filters" : {
+
+    },
     "Find" : {
 
     },
@@ -509,6 +657,9 @@
 
     },
     "Found in %@." : {
+
+    },
+    "From %@" : {
 
     },
     "Get Started" : {
@@ -547,13 +698,28 @@
     "It holds containers, so it stays a spot." : {
 
     },
+    "Items" : {
+
+    },
     "Items you delete wait here for 30 days, in case you change your mind." : {
 
     },
     "Its spots and containers are deleted too. You can undo right after." : {
 
     },
+    "It’s a little dark. Turn on more lights or the torch." : {
+
+    },
     "Keep Editing" : {
+
+    },
+    "Keep Scanning" : {
+
+    },
+    "Keep Tagging" : {
+
+    },
+    "Kettle" : {
 
     },
     "Kitchen" : {
@@ -562,16 +728,37 @@
     "Know what you own and where it is." : {
 
     },
+    "Labeled as the model" : {
+
+    },
+    "Labeled as the serial" : {
+
+    },
     "Last confirmed %@" : {
 
     },
+    "Last confirmed %@." : {
+
+    },
+    "Last seen" : {
+
+    },
     "Lavender" : {
+
+    },
+    "Lent out" : {
+
+    },
+    "Lent out only" : {
 
     },
     "Let’s start with one room." : {
 
     },
     "Light" : {
+
+    },
+    "Line up the barcode inside the frame." : {
 
     },
     "Location history" : {
@@ -590,6 +777,9 @@
 
     },
     "Model" : {
+
+    },
+    "More for %@" : {
 
     },
     "Move" : {
@@ -678,7 +868,16 @@
     "New category" : {
 
     },
+    "Next Page" : {
+
+    },
+    "Next Photo" : {
+
+    },
     "No Room Yet" : {
+
+    },
+    "No camera here" : {
 
     },
     "No longer Private." : {
@@ -687,10 +886,19 @@
     "No moves yet." : {
 
     },
+    "No numbers found. You can type them in." : {
+
+    },
     "No room yet" : {
 
     },
     "No rooms or spots match “%@”." : {
+
+    },
+    "No text found on this photo." : {
+
+    },
+    "None" : {
 
     },
     "Nook" : {
@@ -699,10 +907,31 @@
     "Nook couldn’t open your items" : {
 
     },
+    "Nook uses the camera to take photos of your things. They stay on this device." : {
+
+    },
+    "Not Now" : {
+
+    },
     "Not Private" : {
 
     },
+    "Not accepted" : {
+
+    },
+    "Not in a spot" : {
+
+    },
+    "Not seen in 1 year" : {
+
+    },
+    "Not seen in 2 years" : {
+
+    },
     "Notes" : {
+
+    },
+    "Nothing called “%@” yet." : {
 
     },
     "Nothing deleted." : {
@@ -714,6 +943,9 @@
     "Nothing here yet." : {
 
     },
+    "Nothing matches these filters." : {
+
+    },
     "Nothing to find yet." : {
 
     },
@@ -721,6 +953,15 @@
 
     },
     "Ocean" : {
+
+    },
+    "Only items priced in %@." : {
+
+    },
+    "Open %@" : {
+
+    },
+    "Open Settings" : {
 
     },
     "Opens the receipt" : {
@@ -741,11 +982,31 @@
     "Packed on %@" : {
 
     },
+    "Page %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Page %1$lld of %2$lld"
+          }
+        }
+      }
+    },
     "Photo" : {
 
     },
     "Photo %lld" : {
 
+    },
+    "Photo %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Photo %1$lld of %2$lld"
+          }
+        }
+      }
     },
     "Photo %lld of %lld. Open photo viewer" : {
       "localizations" : {
@@ -770,6 +1031,15 @@
     "Photo deleted." : {
 
     },
+    "Photograph the sticker" : {
+
+    },
+    "Photograph your shelves" : {
+
+    },
+    "Photograph your things" : {
+
+    },
     "Photos, %lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -783,10 +1053,22 @@
     "Pick a few to start. You can change them any time." : {
 
     },
+    "Pick from Photos" : {
+
+    },
+    "Pick photos you already have instead." : {
+
+    },
     "Plum" : {
 
     },
     "Press Return to add each tag." : {
+
+    },
+    "Previous Page" : {
+
+    },
+    "Previous Photo" : {
 
     },
     "Price" : {
@@ -798,16 +1080,37 @@
     "Private" : {
 
     },
+    "Private item" : {
+
+    },
+    "Private item. Unlock to see it" : {
+
+    },
     "Purchased" : {
 
     },
     "Quantity" : {
 
     },
+    "Quick filters" : {
+
+    },
+    "Read from Sticker" : {
+
+    },
+    "Reading the receipt…" : {
+
+    },
+    "Reading the sticker…" : {
+
+    },
     "Receipt" : {
 
     },
     "Receipt photo" : {
+
+    },
+    "Receipt, page %lld" : {
 
     },
     "Recent" : {
@@ -822,10 +1125,16 @@
     "Remove" : {
 
     },
+    "Remove filter: %@" : {
+
+    },
     "Remove tag %@" : {
 
     },
     "Rename" : {
+
+    },
+    "Rename search" : {
 
     },
     "Reports" : {
@@ -843,10 +1152,19 @@
     "Restored." : {
 
     },
+    "Retake" : {
+
+    },
+    "Room" : {
+
+    },
     "Room name" : {
 
     },
     "Rooms" : {
+
+    },
+    "Rooms and spots" : {
 
     },
     "Rose" : {
@@ -858,13 +1176,49 @@
     "Save" : {
 
     },
+    "Save Receipt" : {
+
+    },
+    "Save Search" : {
+
+    },
+    "Save ^[%lld Item](inflect: true)" : {
+
+    },
+    "Save this search" : {
+
+    },
+    "Saved searches" : {
+
+    },
     "Saved to %@." : {
+
+    },
+    "Saved to Find." : {
 
     },
     "Saved." : {
 
     },
+    "Saving to" : {
+
+    },
+    "Scan Barcode" : {
+
+    },
+    "Scan Receipt" : {
+
+    },
     "Scan Room" : {
+
+    },
+    "Scan This Container" : {
+
+    },
+    "Scan This Room" : {
+
+    },
+    "Scan This Spot" : {
 
     },
     "Scan barcode" : {
@@ -879,10 +1233,10 @@
     "Search" : {
 
     },
-    "Search rooms and spots" : {
+    "Search or ask: Where are the passports?" : {
 
     },
-    "Search your things" : {
+    "Search rooms and spots" : {
 
     },
     "Select" : {
@@ -895,6 +1249,9 @@
 
     },
     "Serial %@" : {
+
+    },
+    "Serial Number" : {
 
     },
     "Serial copied." : {
@@ -915,7 +1272,29 @@
     "Settings…" : {
 
     },
+    "Show %lld Items" : {
+
+    },
     "Show Values" : {
+
+    },
+    "Since %@ · due back %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Since %1$@ · due back %2$@."
+          }
+        }
+      }
+    },
+    "Since %@." : {
+
+    },
+    "Skip" : {
+
+    },
+    "Skip photo" : {
 
     },
     "Sky" : {
@@ -942,6 +1321,12 @@
     "Spots" : {
 
     },
+    "Step back a little so the whole shelf fits. Take a photo of each shelf, then tap Done." : {
+
+    },
+    "Sticker photo" : {
+
+    },
     "Stone" : {
 
     },
@@ -963,13 +1348,19 @@
     "Tag" : {
 
     },
+    "Tag Items" : {
+
+    },
+    "Tag as many as you like, then save." : {
+
+    },
+    "Tag: %@" : {
+
+    },
     "Tagged %lld items." : {
 
     },
     "Tags" : {
-
-    },
-    "Tags: %@" : {
 
     },
     "Take Photo" : {
@@ -978,19 +1369,49 @@
     "Taken out of its room" : {
 
     },
+    "Tap a date" : {
+
+    },
+    "Tap a highlighted number to fill the field." : {
+
+    },
+    "Tap a number" : {
+
+    },
+    "Tap an item, or draw a box around it." : {
+
+    },
+    "Tap it to fill the Serial field." : {
+
+    },
+    "Tap the name, or type it" : {
+
+    },
+    "Tap the store’s name, or type it." : {
+
+    },
     "Terracotta" : {
 
     },
     "That file can’t be added as a receipt. Try a photo or a PDF." : {
 
     },
-    "That photo can’t be added as a receipt." : {
+    "That receipt couldn’t be read. You can type the numbers in." : {
 
     },
     "The containers in it are deleted too." : {
 
     },
+    "The numbers under the bars" : {
+
+    },
+    "The scanner isn’t available here, so type the numbers in." : {
+
+    },
     "Theme" : {
+
+    },
+    "Things you haven’t moved or confirmed in that long." : {
 
     },
     "Things you put in this container will show up here." : {
@@ -1005,16 +1426,76 @@
     "This date is in the future. You can still save." : {
 
     },
+    "Those numbers don’t add up. Check them against the label." : {
+
+    },
+    "Tips" : {
+
+    },
     "Top shelf" : {
+
+    },
+    "Torch" : {
+
+    },
+    "Try asking" : {
+
+    },
+    "Try removing one." : {
+
+    },
+    "Turn it on in Settings, or pick photos you already have." : {
 
     },
     "Type" : {
 
     },
+    "Type It Instead" : {
+
+    },
+    "Unlock to see it" : {
+
+    },
+    "Up to %@" : {
+
+    },
+    "Use as Model Number" : {
+
+    },
+    "Use as Serial Number" : {
+
+    },
+    "Value" : {
+
+    },
+    "Value from" : {
+
+    },
+    "Value to" : {
+
+    },
     "Warranties, lent things and your insurance report will appear as you add items." : {
 
     },
+    "Warranty" : {
+
+    },
+    "Warranty active" : {
+
+    },
+    "Warranty ending" : {
+
+    },
+    "Warranty expired" : {
+
+    },
+    "What is it?" : {
+
+    },
     "Where" : {
+
+    },
+    "Where are these?" : {
 
     },
     "Where did you find it?" : {
@@ -1026,7 +1507,16 @@
     "Where you bought it" : {
 
     },
+    "Where’s my %@?" : {
+
+    },
+    "Which line is the serial?" : {
+
+    },
     "Which rooms do you have?" : {
+
+    },
+    "Yes, you have %lld." : {
 
     },
     "You can restore it from Recently Deleted for 30 days." : {
@@ -1038,7 +1528,26 @@
     "You can undo right after." : {
 
     },
+    "You have this" : {
+
+    },
     "Zoom" : {
+
+    },
+    "^[%lld item](inflect: true) saved to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "^[%1$lld item](inflect: true) saved to %2$@."
+          }
+        }
+      }
+    },
+    "^[%lld item](inflect: true) saved." : {
+
+    },
+    "^[%lld item](inflect: true) tagged" : {
 
     },
     "from %@" : {

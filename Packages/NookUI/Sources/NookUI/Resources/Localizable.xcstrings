@@ -1,25 +1,25 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@, %@": {
-      "comment": "Joins parts of a card's VoiceOver label: name, location, value."
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@, %@" : {
+      "comment" : "Joins parts of a card's VoiceOver label: name, location, value."
     },
-    "%lld items": {
-      "comment": "Item count on a room card.",
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld item"
+    "%lld items" : {
+      "comment" : "Item count on a room card.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld item"
                 }
               },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld items"
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld items"
                 }
               }
             }
@@ -27,48 +27,88 @@
         }
       }
     },
-    "Answer": {
-      "comment": "VoiceOver name of the answer card on Find (F-03)."
+    "Add spot" : {
+
     },
-    "Capture": {
-      "comment": "VoiceOver label for the floating Capture button."
+    "Answer" : {
+      "comment" : "VoiceOver name of the answer card on Find (F-03)."
     },
-    "Cover": {
-      "comment": "Caption on the first photo in the item editor (I-02): the cover photo."
+    "Box %lld, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Box %1$lld, %2$@"
+          }
+        }
+      }
     },
-    "Empty": {
-      "comment": "Item count on a room card with no items."
+    "Cancel" : {
+
     },
-    "Lent": {
-      "comment": "VoiceOver label for the badge on a lent item's card."
+    "Capture" : {
+      "comment" : "VoiceOver label for the floating Capture button."
     },
-    "Loading": {
-      "comment": "VoiceOver label for a loading placeholder card."
+    "Cover" : {
+      "comment" : "Caption on the first photo in the item editor (I-02): the cover photo."
     },
-    "Private": {
-      "comment": "VoiceOver label for the lock badge on a Private item's card."
+    "Delete" : {
+
     },
-    "Scan a room, add an item, or scan a receipt or barcode": {
-      "comment": "VoiceOver hint for the Capture button."
+    "Empty" : {
+      "comment" : "Item count on a room card with no items."
     },
-    "Try Again": {
-      "comment": "Button on an error state."
+    "Fills the selected field" : {
+
     },
-    "Undo": {
-      "comment": "Button on a toast that reverses the last action."
+    "Lent" : {
+      "comment" : "VoiceOver label for the badge on a lent item's card."
     },
-    "Value hidden": {
-      "comment": "VoiceOver label for a price masked by Hide values (F11)."
+    "Loading" : {
+      "comment" : "VoiceOver label for a loading placeholder card."
     },
-    "Warranty ending soon": {
-      "comment": "VoiceOver label for the clock badge on an item whose warranty ends within 30 days."
+    "Moved to Kitchen → Pantry." : {
+
     },
-    "not selected": {
-      "comment": "VoiceOver: an unselected item card in multi-select (I-08)."
+    "Private" : {
+      "comment" : "VoiceOver label for the lock badge on a Private item's card."
     },
-    "selected": {
-      "comment": "VoiceOver: a selected item card in multi-select (I-08)."
+    "Save" : {
+
+    },
+    "Save All" : {
+
+    },
+    "Scan a room, add an item, or scan a receipt or barcode" : {
+      "comment" : "VoiceOver hint for the Capture button."
+    },
+    "Take Photo" : {
+
+    },
+    "Try Again" : {
+      "comment" : "Button on an error state."
+    },
+    "Undo" : {
+      "comment" : "Button on a toast that reverses the last action."
+    },
+    "Unlock Pro" : {
+
+    },
+    "Value hidden" : {
+      "comment" : "VoiceOver label for a price masked by Hide values (F11)."
+    },
+    "Warranty ending soon" : {
+      "comment" : "VoiceOver label for the clock badge on an item whose warranty ends within 30 days."
+    },
+    "^[%lld photo](inflect: true) taken" : {
+
+    },
+    "not selected" : {
+      "comment" : "VoiceOver: an unselected item card in multi-select (I-08)."
+    },
+    "selected" : {
+      "comment" : "VoiceOver: a selected item card in multi-select (I-08)."
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
