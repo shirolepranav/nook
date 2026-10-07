@@ -127,7 +127,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — LocationEvent unit tests (from, to, source); move UI tests. Smoke — S1–S4.
 
 ### P5 · Find, Classic search
-**Status:** In progress (branch `p5/find`)
+**Status:** In QA: pushed to `main` on 2026-10-06 (QA report `docs/qa/p5-qa-report.md`). A reduced close at the owner's request: no full `ci.sh`, light screenshots only, and two accessibility audits left failing. The owner's device checks are open: the search budget on an iPhone 15, S5 with VoiceOver, and the move haptic.
 **Scope:** Find tab (F-01) using the system search role; instant results (F-02) with typo tolerance and the synonym list ("fob" → "key"); answer cards (F-03) for location, lent, packed, room contents and quantity; filters (F-05) including last seen date; saved searches (F-06); receipt text included in search.
 **PRD acceptance:** results under 100 ms for 5,000 items (F5).
 **QA:** misspellings, partial words, serial numbers, accents and diacritics, no results, Private items appearing as hidden.

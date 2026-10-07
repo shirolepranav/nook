@@ -159,6 +159,7 @@ final class ScreenshotTests: XCTestCase {
             field.tap()
             if let current = field.value as? String, !current.isEmpty, field.buttons["Clear text"].exists {
                 field.buttons["Clear text"].tap()
+                field.tap()   // clearing drops the field's focus on iPad
             }
             field.typeText(text)
             sleep(1)
