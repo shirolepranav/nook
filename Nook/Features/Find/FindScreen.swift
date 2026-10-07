@@ -21,6 +21,7 @@ struct FindScreen: View {
     @State private var found = Found()
     @State private var path = NavigationPath()
     @State private var editsFilters = false
+    @State private var savesAfterFilters = false
     @State private var moving: Moving?
     @State private var addsItem = false
     @State private var naming: Naming?
@@ -62,8 +63,14 @@ struct FindScreen: View {
                     prompt: Text("Search or ask: Where are the passports?"))
         .onSubmit(of: .search) { RecentSearches.add(query, to: &recentText) }
         .task(id: SearchKey(query: query, filter: filter, version: library?.version ?? 0)) { await search() }
-        .sheet(isPresented: $editsFilters) {
-            FiltersSheet(filter: $filter) { naming = .save; name = query }
+        // The name prompt waits until the sheet has gone: an alert asked for while the sheet
+        // is still closing is dropped, and Save Search would silently do nothing.
+        .sheet(isPresented: $editsFilters, onDismiss: {
+            guard savesAfterFilters else { return }
+            savesAfterFilters = false
+            (naming, name) = (.save, query)
+        }) {
+            FiltersSheet(filter: $filter) { savesAfterFilters = true }
         }
         .sheet(item: $moving) { moving in
             MovePicker(title: moving.source == .found ? Text("Where did you find it?") : Text("Move \(moving.item.name)"),

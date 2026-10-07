@@ -130,8 +130,8 @@ struct FiltersSheet: View {
         return HStack(spacing: NookSpace.s1) {
             Button("Save Search") {
                 filter = draft
-                dismiss()
                 save()
+                dismiss()
             }
             .buttonStyle(.nookSecondary)
             .disabled(draft.isEmpty)
