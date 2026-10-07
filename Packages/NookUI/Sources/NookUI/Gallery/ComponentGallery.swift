@@ -8,6 +8,8 @@ public struct ComponentGallery: View {
     @State private var room = false
     @State private var name = ""
     @State private var toast: ToastMessage?
+    @State private var outline: Int?
+    @State private var torch = false
 
     public init() {}
 
@@ -98,6 +100,19 @@ public struct ComponentGallery: View {
                         CaptureButton(showsGlow: true) {}
                     }
                     .padding(NookSpace.s1)
+                    DetectionOverlay(boxes: [CGRect(x: 0.05, y: 0.1, width: 0.4, height: 0.7),
+                                             CGRect(x: 0.55, y: 0.25, width: 0.38, height: 0.5)],
+                                     names: ["Toaster", "Blender"], selected: outline) { outline = $0 }
+                        .frame(height: NookLayout.illustrationHeight)
+                        .background(NookColor.surfaceSunken)
+                    ScanHighlight(Text(verbatim: "$766.41"), size: CGSize(width: 70, height: 18), isBest: true) {}
+                    HStack(spacing: NookSpace.s3) {
+                        PhotoCounter(count: 3, thumbnail: nil)
+                        ShutterButton {}
+                        CameraControl(Text(verbatim: "Torch"), systemImage: "flashlight.on.fill", isOn: torch) { torch.toggle() }
+                    }
+                    .padding(NookSpace.s2)
+                    .background(NookColor.textPrimary, in: RoundedRectangle(cornerRadius: NookRadius.card, style: .continuous))
                 }
             }
             .foregroundStyle(NookColor.textPrimary)

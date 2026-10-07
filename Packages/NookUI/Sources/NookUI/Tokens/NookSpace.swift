@@ -69,4 +69,11 @@ public enum NookLayout {
     public static let placeIconSize: CGFloat = 32
     /// A dot on the location history timeline (I-05 mockup).
     public static let timelineDotSize: CGFloat = 10
+    /// The camera shutter (C-02 mockup).
+    public static let shutterSize: CGFloat = 72
+    /// Floating glass camera controls: torch, tips, close (C-02 mockup).
+    public static let cameraControlSize: CGFloat = 48
+    /// A detection outline's stroke (03 §8.5); thicker when selected.
+    public static let outlineWidth: CGFloat = 2
+    public static let outlineSelectedWidth: CGFloat = 3
 }
