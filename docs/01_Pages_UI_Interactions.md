@@ -232,7 +232,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### I-02 Item editor (add and edit) [PRD §5 F2]
 - **Only Name is required.** An item with a photo and name saves in 2 taps (PRD §5 F2 acceptance).
-- **Fields:** photos (up to 10), name (autocompletes from the 500 common items list and the user's past items), room and spot, category, tags, quantity, brand, model, serial (with "Read from sticker" → C-08), barcode (→ C-07), purchase date, price and currency, store, receipt (→ C-06 or Files), warranty length or end date (end computed from purchase date plus length, PRD §5 F4), notes, Private toggle.
+- **Fields:** photos (up to 10), name (autocompletes from the 500 common items list and the user's past items), room and spot, category, tags, quantity, brand, model, serial (with "Read from sticker" → C-08), barcode (→ C-07), purchase date, price and currency, store, receipt (Scan Receipt, Choose File… or Choose from Photos, each through the C-06 review, so its text is searchable; P6), warranty length or end date (end computed from purchase date plus length, PRD §5 F4), notes, Private toggle.
 - **AI prefill:** when created from a photo, the name, category, brand and condition are filled with a soft "Suggested" tint until edited or accepted (PRD §5).
 - **Validation** inline under the field. A warranty end date before the purchase date shows a warning but doesn't block saving. [Inferred]
 - Cancel with changes asks "Discard changes?". Save gives a success haptic, and the card settles into place.
@@ -263,7 +263,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Person (system contact picker, or a typed name), date lent (default today), optional return date, optional reminder. Save adds the Lent badge and puts the item in the Lent out filter.
 
 ### I-07 Receipt viewer
-- Quick Look for an image or PDF (D42). On Classic-scanned receipts, recognized text is selectable (P6).
+- Quick Look for an image or PDF (D42). Scanned receipts are selectable through Quick Look's own Live Text; Nook adds no text layer (D49).
 
 ### I-08 Multi-select
 - Select in Room and in Find results. Bottom toolbar: Move, Tag, Mark Private, Delete. The count appears in the title.
@@ -275,11 +275,13 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ### C-01 Capture menu [PRD §3 Navigation]
 - Four large tiles: **Scan room**, **Add item**, **Scan receipt**, **Scan barcode**. One tap each.
 - Context-aware: opened from inside a room or spot, new items default to that location. [Inferred]
+- **P6:** Scan room also opens from ⇧⌘N and the empty Room and Spot states ("Scan This Room/Spot"). Scan receipt opens the document camera, or Files where there's no camera. Scan barcode with a barcode an item already has says "You have this" with Open and Add Another; otherwise a new item opens with the barcode filled (no lookup, D48).
 
 ### C-02 Room scan camera [PRD §5 F3, §3]
 - Live camera, coach overlay (first scan and when framing is poor), shutter, multi-photo counter, done button, current destination ("Saving to: Garage → Shelf").
 - **[v1.1 Duo] iPhone Duo half-folded:** live camera on the top half, detected items on the bottom half, nothing over the hinge (PRD §4 rule 3).
 - **First use:** a one-line soft ask, then the system camera prompt (PRD §3 onboarding). **If denied:** "Camera is off for Nook" with Open Settings, and the alternative "Pick from Photos".
+- **As built (P6, D48):** Nook's own camera (AVFoundation), full screen on every width. Cancel, the "Saving to" pill (opens the Move picker to change it), Torch and Tips at the top; the counter with the last photo, the shutter and Done at the bottom. Each photo is written to disk at the shutter (D40). The coach hint shows on the first scan, from Tips, and whenever the room is too dark ("It's a little dark…"). A phone call or another app pauses the camera ("Camera paused") and it resumes by itself, keeping the photos. Up to 10 photos per scan. With no camera at all, the photo picker opens straight into C-04.
 
 ### C-03 Scan review, AI path [PRD §5 F3, §3 motion]
 - The photo shows each detected item with a **soft outline drawn one after another, each with a light haptic tap**, so detection feels alive.
@@ -293,24 +295,29 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - The user **taps or draws a box** around an item, then types a name, with suggestions from the 500 common items list. Each tagged item appears as a card below.
 - Same Accept / Edit / Remove and Save all as C-03, so both paths look alike.
 - Acceptance: 8 items saved in under 2 minutes.
+- **As built (P6, D48):** a tap places a square box (a quarter of the photo's short side), a drag draws one. The name field focuses with suggestions and fills the category; Return adds the card, already accepted. Cards: crop, name, category, an accept check, and a menu with Edit (I-02 with the draft, saved from there) and Remove. Tapping an outline selects its card and the other way round; each box is a VoiceOver button ("Box 2, Lamp"). **Add Item by Name** tags without drawing (VoiceOver, Voice Control) and uses the whole photo. Save all crops each item with 8% padding, keeps the box on its `Photo`, and saves through `ItemService`; the toast "3 items saved to Garage." has Undo. The scan photos themselves aren't kept. Compact: photo above, cards below; regular: photo left, cards right; accessibility sizes: one column. Several photos: "Photo 1 of 3" with Previous and Next. Cancel with tags asks "Discard N tagged items?".
 
 ### C-05 Quick add item [PRD §5]
 - Camera → photo → I-02. AI fills name, category, brand and condition; Classic leaves fields blank with autocomplete.
 - Also offers "Choose from Photos" and "Skip photo".
-- **P3 (D37):** the system camera stands in until P6. With the camera off or missing, I-02 opens directly and offers Photos.
+- **P3 (D37):** the system camera stood in until P6. With the camera off or missing, I-02 opens directly and offers Photos.
+- **P6:** Nook's own camera, with Choose from Photos left of the shutter and Skip right of it. The editor's Take Photo uses the same camera without Skip.
 
 ### C-06 Receipt scan [PRD §5, F4]
 - Document camera, or import a photo or PDF from Files or the share sheet. Share-sheet import needs a Share Extension or an "Open in Nook" document type. [Inferred]
 - **AI:** store, date, price and warranty length are extracted into fields, each marked "Suggested", for review.
 - **Classic:** Vision text recognition highlights prices and dates on the receipt; **the user taps a number to drop it into the focused field**.
 - The receipt is attached to the item; extracted text is stored for search (PRD §8 Receipt.extractedText).
+- **As built (P6, D48):** several pages become one PDF; one page is a photo. "Open in Nook" (a document type, not a Share Extension) opens images and PDFs from the share sheet and Files into the same review, then a new item. The review starts on Date; every amount and date is highlighted (the best guess strongest), and nothing is filled until tapped. A tap drops the value into its field and selects the next empty one; with Store selected, the receipt's lines are tappable too. One tap layer picks the nearest highlight, because printed lines sit closer than 44 pt. If nothing can be read: "That receipt couldn't be read. You can type the numbers in." Regular width: receipt left, fields right.
 
 ### C-07 Barcode scanner [PRD §5]
 - System barcode scanner (UPC/EAN) on every iPhone. Reticle, guidance text, torch. A successful read gives a haptic and fills the barcode field. Manual entry is the fallback.
+- **As built (P6):** EAN-8, EAN-13, UPC-E and Code 128; a retail code counts only when its check digit matches. "Type It Instead" is always there, and typing is the whole screen without the scanner or camera (simulator, denied). A typed retail code with a wrong check digit gets a warning but still saves.
 
 ### C-08 Serial sticker reader [PRD §5]
 - **AI:** the serial and model numbers are found and labeled on the sticker photo.
 - **Classic:** all recognized lines are listed; the user taps the right line.
+- **As built (P6):** "Read from Sticker" beside I-02's Serial field. The photo, then the lines, labeled serials first ("Labeled as the serial"), then models, then code-like lines. A tap fills Serial; each row's menu has Use as Model Number. "Enter it myself" closes and focuses Serial. Without a camera, Photos opens first.
 
 ---
 

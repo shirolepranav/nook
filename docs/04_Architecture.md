@@ -108,6 +108,8 @@ public actor CapabilityRouter {
 6. **Image preparation:** before model input, resize to 1,536 px on the long side (PRD pipeline).
 7. **Tests:** every engine method has a test against a fake availability, for `.ai`, `.classic`, and AI throwing or timing out.
 
+**Before the router (P6, D48):** the `ClassicEngine` ships first. NookAI has `ClassicEngine` (`readReceipt`, `readSerial`), the shared types in `Types/` (`TextLine`, `PhotoInput`, `DocumentInput`, `ReceiptReading`, `SerialReading`), and the VisionKit wrappers in `Scanners/` (`DocumentScanner`, `BarcodeScanner`). NookKit can't depend on NookAI, so there's no `CaptureService` in NookKit yet: the app calls `NookAI.classic` from exactly one place per capability (`ReceiptScanScreen`, `SerialScanScreen`), and P8 swaps each for `router.engine()`. Room-scan tagging (C-04) has no engine call; it's all user input.
+
 The shared result types live in NookAI: `DetectedItem` (`@Generable`, see PRD §8), `ItemSuggestion`, `ReceiptReading` (fields with a confidence level), `SerialReading`, `FindAnswer` (items, breadcrumb, lastConfirmed, proposedMove?). AI-only extras (the value estimate, the room summary) are **optional fields**, and the classic engine leaves them `nil`.
 
 ---
