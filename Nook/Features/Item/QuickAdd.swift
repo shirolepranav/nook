@@ -7,14 +7,16 @@ extension View {
     /// C-05 Quick add (D37): the camera first, then the editor with the photo in place, so
     /// shutter and Save are the 2 taps (F2). With the camera off or missing, the editor opens
     /// straight away and offers Photos. P6 replaces the system camera with Nook's own.
-    func quickAdd(isPresented: Binding<Bool>, at location: Location? = nil) -> some View {
-        modifier(QuickAdd(isPresented: isPresented, location: location))
+    /// `name` pre-fills the editor (Find's "Add “x” as an Item", F-02).
+    func quickAdd(isPresented: Binding<Bool>, at location: Location? = nil, name: String = "") -> some View {
+        modifier(QuickAdd(isPresented: isPresented, location: location, name: name))
     }
 }
 
 private struct QuickAdd: ViewModifier {
     @Binding var isPresented: Bool
     let location: Location?
+    let name: String
 
     @State private var showsCamera = false
     @State private var editor: EditorStart?
@@ -53,6 +55,7 @@ private struct QuickAdd: ViewModifier {
     private func openEditor(cameraOff: Bool) {
         var draft = ItemDraft(currencyCode: HomeCurrency.code, location: location)
         draft.photos = photo.map { [$0] } ?? []
+        draft.name = name
         editor = EditorStart(draft: draft, cameraOff: cameraOff)
     }
 }

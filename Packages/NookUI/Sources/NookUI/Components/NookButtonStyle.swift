@@ -16,14 +16,17 @@ public struct NookButtonStyle: ButtonStyle {
 
     let kind: Kind
     let isLoading: Bool
+    /// 44 pt tall with tight sides, for an icon button inside a row (Find's Move, F-02).
+    let isCompact: Bool
 
-    public init(_ kind: Kind, isLoading: Bool = false) {
+    public init(_ kind: Kind, isLoading: Bool = false, isCompact: Bool = false) {
         self.kind = kind
         self.isLoading = isLoading
+        self.isCompact = isCompact
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        StyledButton(configuration: configuration, kind: kind, isLoading: isLoading)
+        StyledButton(configuration: configuration, kind: kind, isLoading: isLoading, isCompact: isCompact)
     }
 }
 
@@ -38,6 +41,7 @@ private struct StyledButton: View {
     let configuration: ButtonStyleConfiguration
     let kind: NookButtonStyle.Kind
     let isLoading: Bool
+    let isCompact: Bool
 
     @Environment(\.nookAccent) private var accent
     @Environment(\.isEnabled) private var isEnabled
@@ -76,9 +80,9 @@ private struct StyledButton: View {
             // Loading keeps the label's width so the button doesn't jump (03 §8.2).
             .opacity(isLoading ? 0 : 1)
             .overlay { if isLoading { ProgressView().tint(foreground) } }
-            .padding(.horizontal, isFilled ? NookSpace.s3 : NookSpace.s1)
+            .padding(.horizontal, isCompact ? NookSpace.s1 + NookSpace.half : isFilled ? NookSpace.s3 : NookSpace.s1)
             .padding(.vertical, NookSpace.s1)
-            .frame(minHeight: isFilled ? NookLayout.buttonHeight : NookLayout.minTapTarget)
+            .frame(minHeight: isFilled && !isCompact ? NookLayout.buttonHeight : NookLayout.minTapTarget)
             .background(fill, in: Self.shape)
             .contentShape(Self.shape)
             // The button always takes the height its label needs, so a crowded parent can't

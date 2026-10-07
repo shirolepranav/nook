@@ -144,6 +144,32 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P5 screens: Find before typing (F-01, F-06), results with the answer card (F-02,
+    /// F-03), and Filters (F-05) at full height (D45).
+    @MainActor
+    func testFindScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        app.tab("Find").tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Quick filters"].waitForExistence(timeout: 10))   // the index is built
+        app.collectionViews.firstMatch.swipeDown()   // choosing Find raises the keyboard (D32)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        field.tap()
+        field.typeText("drill\n")   // Search hides the keyboard
+        XCTAssertTrue(app.otherElements["Answer"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.buttons["Filters"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Filters"].waitForExistence(timeout: 5))
+        let grabber = app.buttons["Sheet Grabber"]
+        if grabber.exists { grabber.swipeUp(); sleep(1) }
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
@@ -154,6 +180,9 @@ final class AccessibilityAuditTests: XCTestCase {
     /// SwiftUI, always has an element, and is still audited.
     @MainActor
     private func isInSystemTabBar(_ issue: XCUIAccessibilityAuditIssue, _ app: XCUIApplication) -> Bool {
+        // The keyboard's own keys and suggestions are system chrome.
+        let keyboard = app.keyboards.firstMatch
+        if let element = issue.element, keyboard.exists, keyboard.frame.contains(element.frame) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }

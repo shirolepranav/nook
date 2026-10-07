@@ -129,6 +129,44 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP5Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        app.tab("Find").tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Quick filters"].waitForExistence(timeout: 10))
+        // Save a search first, so the start screen shows every section.
+        app.buttons["Filters"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Filters"].waitForExistence(timeout: 5))
+        app.buttons["Garage"].tap()
+        snap("F-05 Filters")
+        app.buttons["Save Search"].tap()
+        app.alerts.textFields.firstMatch.typeText("Garage stuff")
+        app.alerts.buttons["Save"].tap()
+        XCTAssertTrue(app.buttons["Remove filter: Garage"].waitForExistence(timeout: 5))
+        snap("F-02 Filtered results")
+        app.buttons["Remove filter: Garage"].tap()
+        snap("F-01 Find")
+
+        let questions = [("pasport", "F-02 Results, private masked"), ("skilet", "F-03 Answer, typo"),
+                         ("Who has my drill?", "F-03 Lent"), ("Where’s the camping tent?", "F-03 Packed"),
+                         ("What’s in the garage?", "F-03 Contents"), ("Do I have any AA batteries?", "F-03 Quantity"),
+                         ("skis", "F-02 No results")]
+        for (text, name) in questions {
+            field.tap()
+            if let current = field.value as? String, !current.isEmpty, field.buttons["Clear text"].exists {
+                field.buttons["Clear text"].tap()
+            }
+            field.typeText(text)
+            sleep(1)
+            snap(name)
+        }
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

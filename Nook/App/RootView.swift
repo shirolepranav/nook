@@ -29,6 +29,7 @@ private struct TabShell: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var roomTabsHidden = true
     @State private var addsItem = false
+    @State private var library: SearchLibrary?
 
     private var selectedRoom: Room? {
         guard case .room(let id) = tab else { return nil }
@@ -69,6 +70,7 @@ private struct TabShell: View {
         }
         .tabViewStyle(.sidebarAdaptable)
         .environment(\.windowSizeClass, sizeClass)   // read inside sheets (MovePicker, D45)
+        .environment(\.searchLibrary, library)
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
@@ -91,6 +93,12 @@ private struct TabShell: View {
         // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
         .onAppear { context.undoManager = undoManager }
         .task { await tidyUp() }
+        .task {
+            // Find's index: built after the first frame, then kept current on every save (04 §6).
+            let library = SearchLibrary(container: context.container)
+            self.library = library
+            await library.keepCurrent()
+        }
     }
 
     /// D14, D40: after the first frame, purge what's been in Recently Deleted 30 days, then

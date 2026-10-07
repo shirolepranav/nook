@@ -6,12 +6,13 @@ import SwiftData
 import UniformTypeIdentifiers
 
 /// In-memory stores for previews and UI tests (04 §11). `small` is four rooms with spots and
-/// containers; `lived` adds a dozen items with photos; `items1k` is 1,000 items for the grid
-/// scrolling budget (PRD §9).
+/// containers; `lived` adds a dozen items with photos, plus what Find's answers need (a loan,
+/// warranties, a packed box, a receipt, tags and a serial); `items1k` is 1,000 items for the
+/// grid scrolling budget, and `items5k` 5,000 named items for the search budget (PRD §9).
 @MainActor
 public enum PreviewStore {
     public enum Size: String, Sendable {
-        case empty, small, many, lived, items1k
+        case empty, small, many, lived, items1k, items5k
     }
 
     public static func seeded(_ size: Size) -> ModelContainer {
@@ -25,6 +26,7 @@ public enum PreviewStore {
                 try seedSmall(container.mainContext)
                 try seedItems(container.mainContext)
             case .items1k: try seedThousand(container.mainContext)
+            case .items5k: try seedFiveThousand(container.mainContext)
             }
             return container
         } catch {
@@ -69,6 +71,8 @@ public enum PreviewStore {
             ("Cordless drill", "Tools", 159, spot("Garage", "Metal shelf"), false),
             ("Camping tent", "Sports", 320, spot("Garage", "Box 14"), false),
             ("Bike pump", "Sports", 35, byName["Garage"].map { Location(room: $0) }, false),
+            ("Spare car key", "Other", nil, spot("Kitchen", "Top drawer"), false),
+            ("AA batteries", "Other", nil, spot("Kitchen", "Top drawer"), false),
         ]
         let items = ItemService(context: context)
         for (index, entry) in entries.enumerated() {
@@ -78,6 +82,54 @@ public enum PreviewStore {
                 draft.photos = [.init(fileName: saved.fileName, width: saved.width, height: saved.height)]
             }
             try items.create(draft)
+        }
+        try addFindDetails(context)
+        try context.save()
+    }
+
+    /// F-03's other answers: lent, packed, quantity; and receipts, serials and tags to search.
+    private static func addFindDetails(_ context: ModelContext) throws {
+        let all = try context.fetch(FetchDescriptor<Item>())
+        func item(_ name: String) -> Item? { all.first { $0.name == name } }
+        let day = 86_400.0
+        if let drill = item("Cordless drill") {
+            (drill.serial, drill.tags, drill.brand) = ("DCD771-4471", ["Power tools"], "DeWalt")
+            let loan = Loan(personName: "Jordan")
+            context.insert(loan)
+            loan.item = drill
+            (loan.lentAt, loan.dueAt) = (.now.addingTimeInterval(-24 * day), .now.addingTimeInterval(5 * day))
+            let warranty = Warranty(kind: .manufacturer)
+            context.insert(warranty)
+            warranty.item = drill
+            warranty.endDate = .now.addingTimeInterval(20 * day)
+        }
+        if let espresso = item("Espresso machine"), let file = try? BlobStore.shared.saveReceipt(swatch(2)) {
+            let receipt = Receipt(fileName: file, kind: .image)
+            context.insert(receipt)
+            receipt.item = espresso
+            receipt.extractedText = "Harbor Home Goods\nEspresso machine 649.00\nOrder 7781"
+            espresso.tags = ["Coffee"]
+        }
+        item("Stand mixer")?.tags = ["Baking"]
+        item("AA batteries")?.quantity = 2
+        item("Board games")?.lastConfirmedAt = .now.addingTimeInterval(-800 * day)   // "Not seen in 2 years"
+        let boxes = try context.fetch(FetchDescriptor<Spot>()).filter { $0.name == "Box 14" }
+        boxes.first?.packedAt = .now.addingTimeInterval(-120 * day)
+    }
+
+    /// 5,000 items named after the common items list, across 6 rooms, for Find's budget.
+    private static func seedFiveThousand(_ context: ModelContext) throws {
+        let rooms = RoomService(context: context)
+        let places = try ["Kitchen", "Garage", "Office", "Bedroom", "Living room", "Attic"].map { name in
+            let room = try rooms.addRoom(named: name)
+            return Location(room: room, spot: try rooms.addSpot(named: "Shelf", in: room))
+        }
+        let names = ["Passport", "Drill", "Blender", "Charger", "Lamp", "Kettle", "Tent", "Camera", "Skates", "Mug"]
+        for number in 0..<5_000 {
+            let item = Item(name: "\(names[number % names.count]) \(number / names.count + 1)")
+            context.insert(item)
+            let place = places[number % places.count]
+            (item.room, item.spot, item.serial) = (place.room, place.spot, "SN-\(number)")
         }
         try context.save()
     }

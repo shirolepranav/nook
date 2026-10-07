@@ -722,6 +722,6 @@ struct SaveItemButton: View {
 - [x] Font tokens and `MoneyText` (P1)
 - [x] Spacing, radius and layout tokens (`cardMinWidth`, `maxGridColumns`, `readableWidth`; Swift name `NookLayout`, since SwiftUI has a `Layout` protocol) (P1)
 - [x] Warm shadow modifier, with the low, lifted and floating levels (P1)
-- [ ] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view (P1 done: Capture button, buttons, photo card, room card, add card, chips, pills, badges, fields, toast, skeletons, empty and error states, `NookGrid`; the answer card and breadcrumb come with Find in P4–P5)
+- [x] Capture button, buttons, photo card, room card, answer card, breadcrumb, chips, pills, fields, toasts, skeletons, empty-state view (P1 done: Capture button, buttons, photo card, room card, add card, chips, pills, badges, fields, toast, skeletons, empty and error states, `NookGrid`; the answer card and breadcrumb arrived with Find in P5)
 - [x] Motion and haptic helpers with Reduce Motion handling (`NookMotion`, `NookHaptic`) (P1)
 - [x] Debug gallery showing every component in every state, light and dark, default and largest text (`ComponentGallery`, P1)

@@ -306,3 +306,31 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **`performAccessibilityAudit` reports false clipping at medium height.** A medium-height sheet is drawn slightly scaled, and the audit then flags the List's own section header as clipped text. The audit runs with the picker at full height. The search field's clipping is exempt, like plain text fields.
 
 *Affects:* `LocationService.swift`, `MovePicker.swift`, `AccessibilityAuditTests.swift`.
+
+### P5 (2026-10-06)
+
+**D46 · 2026-10-06 · Accepted (product owner, the three choices marked)** — **Find, Classic search (P5).**
+- **The search index lives in memory; there's no stored `searchText` field.** 04 §6 asked for a precomputed `searchText` on Item. Storing it would be a schema change, and every room or spot rename would rewrite every item inside to keep paths current. Instead `SearchSnapshot.docs(in:)` reads the store on a background context into value snapshots (`SearchDoc`), and `SearchIndex`, an immutable `Sendable` struct, is rebuilt from them 300 ms after each save (`SearchLibrary`). Queries run in a detached task. At 5,000 items an optimized build takes about 70 ms to rebuild and under 5 ms per keystroke on a Mac (F5's budget is 100 ms on an iPhone 15), checked in `ci.sh` with `swift test -c release`.
+- **Matching:** exact, prefix, then typos (Damerau-Levenshtein 1 from 4 letters, 2 from 8; against the start of longer words only from 5 letters, because "skis" matched "skil(let)"), simple English plurals, and synonyms from `synonyms.json`. Every word must match; if nothing matches every word, the best partial matches come back, so a Classic "I put the passports in the safe" still lists Passports (01 F-04). Ranking follows 04 §6, plus +100 for an exact name, +20 for a name that starts with the query, and up to +5 for an item confirmed in the last year.
+- **Classic questions:** `FindQuestion` drops English stop words and reads four intents: where (any plain search), "Who has…", "What's in…", and "Do I have…". The answer comes from `FindService` and records only: location, lent (an active `Loan`), packed (a container with `packedAt`), quantity, or a room's or spot's contents grouped by spot. With no record, there's no card. A place at the top of the results answers with its contents.
+- **`FindAnswer` lives in NookKit**, not NookAI (04 §2). The app needs it before the router exists, and NookAI depends on NookKit, so P9's AI engine returns the same type. The `FindQuerying` protocol waits until P9 needs it as a tool; `FindService` already uses its method names.
+- **The answer card says "Last confirmed Aug 3."** rather than the board's "You put them there on Aug 3.", which needs "it" or "them" for each name, and doesn't fit a correction ("Found here"). It shows the item's name above the place, because a typo search may answer with a differently spelled item.
+- **"Last seen" is `lastConfirmedAt`** (set on add, move and "Found it here instead"). `Item.lastSeenAt` stays unused.
+- **The value filter** matches only items priced in the home currency, with nothing converted (D41). The filters sheet says so.
+- **Saved searches are a `SavedSearch` model** in schema V1, edited in place because V1 hasn't shipped (as in D44), so they sync with everything else in P11. Filters are stored as JSON. *(Product owner.)* Recent searches (the last 5) stay on the device, in App Group defaults.
+- **Private items** show in results as "Private item · Unlock to see it", with no name or photo, and never answer. Until P12 adds Face ID, tapping the row opens the item; P12 puts the lock in front of that tap. *(Product owner.)*
+- **Lending and warranty pieces before P7:** the lent answer card (read-only; Mark Returned arrives in P7), the Lent out and Warranty filters, and their quick-filter chips are built now. Each chip or filter row shows only when matching records exist, so nothing is a dead end. *(Product owner.)*
+- **"Try asking"** uses the user's most recently confirmed non-private item ("Where's my Espresso machine?"), so trying it always gets an answer.
+- **Rooms and spots open from any stack.** `itemNavigation()` now registers the `Room` and `Spot` destinations at each stack's root; Home and Room no longer register them. A second registration in the same stack would be ignored with a runtime warning once Find pushes rooms and spots.
+
+*Affects:* 04 §4 (SavedSearch), §6; 01 F-01, F-02, F-03, F-05; `Nook/Features/Find`, `NookKit/Search`, `FindService`.
+
+**D47 · 2026-10-06 · Accepted** — **iOS 27 SDK checks for P5 (D23).** Confirmed on the iOS 27.0 SDK and the iPhone SE simulator:
+- **The search tab hides the navigation bar while its field is focused** on compact width, so a toolbar button on Find (Filters) can't be reached while typing. Since `.tabViewSearchActivation(.searchTabSelection)` focuses the field whenever Find opens (D32), Filters is also a chip inside the list: first among the quick filters before typing, and in front of the active filter chips in results. The toolbar button stays for regular width, where the bar remains.
+- **`List` + `.searchable` in the search tab, with swipe actions and `onMove`,** works for saved searches (D28, D43).
+- **`ModelContext.didSave`** fires for the main context's saves and drives the index rebuild; a fresh `ModelContext(container)` on a detached task reads the in-memory UI-test stores too.
+
+- **A combined accessibility element over a custom `Layout` (`NookFlowLayout`) loses the text's frame.** I-01's tags (P3) were one "Tags: …" element; once the `lived` seed gave the audited item a tag, the audit reported "Potentially inaccessible text" with no element. Each tag is now its own element, "Tag: Coffee".
+- **A `List` row or section footer with plain text** was flagged "Dynamic Type partially unsupported" until the text could grow vertically (`.fixedSize(horizontal: false, vertical: true)`).
+
+*Affects:* `FindSections.swift`, `FindScreen.swift`, `SearchLibrary.swift`, `ItemDetailScreen.swift`.

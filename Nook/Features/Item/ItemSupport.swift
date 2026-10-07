@@ -130,7 +130,9 @@ extension EnvironmentValues {
 }
 
 extension View {
-    /// Put inside each NavigationStack root: items open their detail with a zoom from the card.
+    /// Put inside each NavigationStack root: items open their detail with a zoom from the card,
+    /// and rooms and spots open from anywhere in the stack (Home, a sidebar room, Find's
+    /// answers). One registration per type, at the root, so pushed screens never repeat it.
     func itemNavigation() -> some View {
         modifier(ItemNavigation())
     }
@@ -151,6 +153,8 @@ private struct ItemNavigation: ViewModifier {
                 ItemDetailScreen(item: item)
                     .navigationTransition(.zoom(sourceID: item.id, in: zoom))   // cross-fades under Reduce Motion
             }
+            .navigationDestination(for: Room.self) { RoomScreen(room: $0) }
+            .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
     }
 }
 

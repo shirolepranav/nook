@@ -130,7 +130,6 @@ struct HomeScreen: View {
                     .buttonStyle(.nookCard)
             }
         }
-        .navigationDestination(for: Room.self) { RoomScreen(room: $0) }
     }
 
     private func itemCount(_ room: Room) -> Int {

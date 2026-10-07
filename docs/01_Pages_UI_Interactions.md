@@ -318,20 +318,22 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### F-01 Find
 - **One field** for both search and questions: placeholder "Search or ask: Where are the passports?".
-- **Before typing:** saved searches (F-06), recent searches, quick filters (Lent out, Warranty ending, Not seen in 2 years).
+- **Before typing:** "Try asking" with a question about the user's own latest item, saved searches (F-06), quick filters (Lent out, Warranty ending, Not seen in 2 years), and the last 5 searches. A quick filter with nothing behind it is hidden (D46).
 - **AI iPhones:** questions are understood (item, room, time, action) and answered from the user's own database (PRD §6).
 - **Every iPhone:** instant results with typo tolerance and synonyms ("fob" → "key").
 
 ### F-02 Results
 - Instant results as you type, in under 100 ms for 5,000 items (PRD §5 F5).
 - Sections: Items, Rooms and spots, Containers. Each item row shows a photo, name, breadcrumb, and a Move button.
-- Private items show as "Private item" until the user unlocks with biometrics. [Inferred from PRD §6]
+- Private items show as "Private item" until the user unlocks with biometrics. [Inferred from PRD §6] Until P12 adds Face ID, tapping the row opens the item (D46).
+- A footer says "Also searched receipts, serials and notes." Each item row's Move opens I-04; Select (I-08) works on results.
 - **No results:** "Nothing called 'x' yet." with "Add 'x' as an item".
 
 ### F-03 Answer card [PRD §6]
 - "**Office → Desk → Second drawer.** You put them there on Aug 3." Shows the item photo, spot photo, last confirmed date, and **Move** and **Found it here instead**.
 - Variants: lent ("Jordan has it since Sep 12"); packed ("Box 14, packed Jun 2"); room contents ("What's in the garage?" → items grouped by spot); quantity ("Do I have AA batteries?" → "Yes, 2 packs in Kitchen → Drawer").
 - Answers come only from saved data, so a location can never be invented (PRD §6).
+- **Classic (P5, D46):** the card names the item and reads "Last confirmed Aug 3." under the place. Private items never answer. The lent card is read-only until P7 adds Mark Returned. On regular width the card sits beside the results.
 
 ### F-04 Move confirmation card [PRD §6]
 - After typing or saying "I put the passports in the safe", on AI iPhones: "Move Passports to Bedroom → Safe?" with **Move** and **Not now**. **Nothing moves without that tap.**
@@ -339,6 +341,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### F-05 Filters [PRD §5 F5]
 - Room, category, tag, value range, warranty status, lent out, last seen date (for decluttering, PRD §2). Active filters show as removable chips. "Save this search" → F-06.
+- Value is in the home currency only (D41). Warranty and Lent out appear once there are warranties or loans to filter (D46). A form sheet on regular width (D45).
 
 ### F-06 Saved searches
 - Named searches pinned on F-01. Rename, reorder and delete with swipe. [Inferred]

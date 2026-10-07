@@ -42,8 +42,9 @@ private let repoRoot = URL(filePath: #filePath).deletingLastPathComponent().dele
     let index = SearchIndex(docs: docs)
     #expect(names(index.search("pasport"), in: docs) == ["Passport"])
     #expect(names(index.search("pssport"), in: docs) == ["Passport"])
-    #expect(names(index.search("pasp"), in: docs) == ["Passport"])   // a typo in a partial word
+    #expect(names(index.search("paspo"), in: docs) == ["Passport"])  // a typo in a partial word
     #expect(index.search("drl").isEmpty)                             // 3 letters must be exact
+    #expect(SearchIndex(docs: [item("Cast iron skillet")]).search("skis").isEmpty)   // 4: whole words only
 }
 
 @Test func partialWordsAccentsAndPluralsMatch() {

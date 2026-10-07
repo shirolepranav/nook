@@ -84,7 +84,6 @@ struct RoomScreen: View {
         .sheet(item: $adding) { SpotEditor(room: room, kind: $0) }
         .sheet(isPresented: $arranging) { ArrangeSheet.spots(in: room) }
         .quickAdd(isPresented: $addsItem, at: Location(room: room))
-        .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
         .toast($toast)
     }
 

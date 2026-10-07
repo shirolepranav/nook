@@ -144,12 +144,13 @@ The entities come from PRD §8, plus `Warranty` (D21).
 |---|---|---|
 | `Room` | id: UUID, name, symbol, colorKey, order, createdAt | spots [Spot], items [Item] (items placed directly in the room) |
 | `Spot` | id, name, qrID: String, packedAt?, order, createdAt, kindRaw (spot or container, D34) | room: Room?, parent: Spot?, children [Spot], items [Item], photo: Photo? |
-| `Item` | id, name, category, tags [String], quantity = 1, brand, model, serial, barcode, price: Decimal?, currencyCode, purchaseDate, store, notes, isPrivate = false, valueEstimateLow/High?, createdAt, lastConfirmedAt, lastSeenAt, deletedAt? | room: Room?, spot: Spot?, photos [Photo], receipts [Receipt], warranties [Warranty], events [LocationEvent], loans [Loan] |
+| `Item` | id, name, category, tags [String], quantity = 1, brand, model, serial, barcode, price: Decimal?, currencyCode, purchaseDate, store, notes, isPrivate = false, valueEstimateLow/High?, createdAt, lastConfirmedAt (also "last seen", D46), lastSeenAt (unused), deletedAt? | room: Room?, spot: Spot?, photos [Photo], receipts [Receipt], warranties [Warranty], events [LocationEvent], loans [Loan] |
 | `Photo` | id, fileName, width, height, boxX/Y/W/H? (normalized, from a scan), order | item: Item?, spot: Spot? |
 | `Receipt` | id, fileName, kind (image or pdf), extractedText | item: Item? |
 | `Warranty` | id, kind (manufacturer, extended or store), provider, startDate, endDate, lengthMonths?, policyNumber, cost?, reminderOffsetsDays = [30, 7], snoozedUntil? | item: Item? |
 | `LocationEvent` | id, fromPath: String, toPath: String, fromSpotID?, toSpotID?, toRoomID? (D44), date, source (manual, found, siri, ai, qr; D44) | item: Item? |
 | `Loan` | id, personName, contactID?, lentAt, dueAt?, returnedAt?, remind = true | item: Item? |
+| `SavedSearch` | id, name, query, filterData: Data? (JSON `SearchFilter`), order, createdAt (F-06, D46) | none |
 
 ### CloudKit-safe rules (from P2 onward, D8)
 SwiftData + CloudKit fails at runtime unless all of these hold:
@@ -207,13 +208,15 @@ final class Item {
 ## 6. Find (search) design
 
 **Budget:** under 100 ms per keystroke at 5,000 items (F5).
-- Each item has a precomputed `searchText` field: its name, tags, brand, model, serial, room name, spot path and receipt text, all lowercased and stripped of diacritics.
-- The `SearchIndex` actor in NookKit keeps an in-memory token index, built at launch in the background and updated incrementally on save. It matches on:
-  - prefix
-  - typo tolerance: Damerau-Levenshtein ≤ 1 for tokens of 4 characters or more, ≤ 2 for 8 or more
+- **No stored search field (D46).** `SearchSnapshot.docs(in:)` reads the store on a background context into `SearchDoc` values: name, tags, category, brand, notes, model/serial/barcode (also without separators), receipt text, the place's path, and the fields filters need. Text is folded (case, accents, width).
+- `SearchIndex` (NookKit) is an immutable `Sendable` word index built from those snapshots. The app's `SearchLibrary` builds it after launch and rebuilds it 300 ms after each save; queries run in a detached task. It matches on:
+  - exact words and prefixes, and simple English plurals
+  - typo tolerance: Damerau-Levenshtein ≤ 1 for words of 4 characters or more, ≤ 2 for 8 or more; against the start of longer words from 5 characters
   - the synonym expansion list from `synonyms.json` ("fob" → "key")
-- **Ranking:** exact name > name prefix > tag > synonym > room/spot > receipt text. Boost recently confirmed items.
-- **Answers:** `FindQuerying` exposes `items(matching:)`, `contents(of:)`, `history(of:)` and `loans()`. The AI engine calls these as Foundation Models tools. The classic engine calls them directly.
+  - every word must match; with no such result, the best partial matches
+- **Ranking:** exact name > name prefix > tag > synonym > room/spot > brand, model, serial, notes > receipt text. Boost recently confirmed items.
+- **Filters (F-05):** `SearchFilter` (Codable, saved with a search): rooms, category, tags, value range in the home currency, warranty status, lent out, last seen (`lastConfirmedAt`).
+- **Questions and answers:** `FindQuestion` reads the Classic intents (where, who has, what's in, do I have). `FindService.answer` builds a `FindAnswer` (NookKit, D46) from records only: location, lent, packed, quantity or contents. It has the `FindQuerying` names, `items(matching:)` and `contents(of:)`; P9 adds the protocol with `history(of:)` and `loans()` for the AI engine's tools.
 - **Spotlight:** Core Spotlight indexes items, rooms and spots, **excluding `isPrivate`**. Changes are pushed from `LocationService` and `ItemService`.
 
 ---
@@ -300,7 +303,7 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 |---|---|---|
 | Cold launch to Home | < 400 ms (iPhone 15) | Instruments App Launch; `XCTApplicationLaunchMetric` |
 | 1,000-item grid scroll | 120 fps, no drops | Instruments Hitches; `XCTOSSignpostMetric.scrollingAndDecelerationMetric` |
-| Search keystroke | < 100 ms @ 5k | `measure {}` on `SearchIndex` with the 5k fixture |
+| Search keystroke | < 100 ms @ 5k | `everyKeystrokeIsUnder100msAt5000Items` (optimized build in `ci.sh`); `-uiTestingStore items5k` on a device |
 | First AI card | < 2 s | signpost from shutter to first stream element |
 | Room scan (~10 items) | < 8 s | signpost around `detectItems` |
 | 500-item PDF | < 20 s | `measure {}` on `ReportService` with fixture |

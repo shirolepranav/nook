@@ -13,7 +13,7 @@ public struct SearchHit: Sendable, Hashable {
 /// the main actor (D46). Budget: under 100 ms per keystroke at 5,000 items.
 ///
 /// Matching, per word: exact, prefix ("pass" → "Passport"), a typo (one from 4 letters, two
-/// from 8, also against the start of longer words), then synonyms ("fob" → "key"). Every
+/// from 8; against the start of longer words from 5), then synonyms ("fob" → "key"). Every
 /// word must match; if none do together, the best partial matches come back instead.
 /// Ranking: exact name > name prefix > tag > synonym > room/spot > details > receipt text,
 /// with a small boost for recently confirmed items.
@@ -145,22 +145,27 @@ public struct SearchIndex: Sendable {
                 if score > best[posting.doc, default: 0] { best[posting.doc] = score }
             }
         }
-        // Exact and prefix, for the word and its singular ("passports" → "passport").
-        for variant in Set([term, SearchText.singular(term)]) {
-            var index = lowerBound(variant)
-            while index < vocabulary.count, vocabulary[index].hasPrefix(variant) {
-                add(vocabulary[index], vocabulary[index] == variant ? Match.exact : Match.prefix)
-                index += 1
-            }
+        // Exact and prefix; the singular only as a whole word ("passports" → "passport"),
+        // or "skis" → "ski" would find "skillet".
+        var index = lowerBound(term)
+        while index < vocabulary.count, vocabulary[index].hasPrefix(term) {
+            add(vocabulary[index], vocabulary[index] == term ? Match.exact : Match.prefix)
+            index += 1
         }
-        // Typos, against whole words and against the start of longer ones ("pasp" → "passport").
+        let singular = SearchText.singular(term)
+        if singular != term { add(singular, Match.exact) }
+        // Typos, against whole words, and from 5 letters against the start of longer ones
+        // ("paspo" → "passport"); at 4, "skis" would match the start of "skillet".
         let limit = SearchText.allowedTypos(term.count)
         if limit > 0 {
             let query = Array(term.unicodeScalars)
             for (index, word) in scalars.enumerated() where word.count + limit >= query.count {
                 var distance = SearchText.distance(query, word[...], limit: limit)
-                if distance > limit, word.count > query.count {
-                    distance = SearchText.distance(query, word.prefix(query.count), limit: limit)
+                // A missing or extra letter shifts the length, so try starts one shorter and longer.
+                if distance > limit, query.count >= 5, word.count > query.count {
+                    for length in (query.count - 1)...min(query.count + 1, word.count - 1) {
+                        distance = min(distance, SearchText.distance(query, word.prefix(length), limit: limit))
+                    }
                 }
                 if distance > 0, distance <= limit { add(vocabulary[index], Match.typo) }
             }
