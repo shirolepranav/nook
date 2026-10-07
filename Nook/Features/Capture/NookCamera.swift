@@ -96,6 +96,14 @@ nonisolated final class CaptureSession: NSObject, @unchecked Sendable, AVCapture
         }
     }
 
+    /// The torch while another camera view owns the session, like the barcode scanner.
+    static func setDefaultTorch(_ on: Bool) {
+        guard let device = AVCaptureDevice.default(for: .video), device.hasTorch,
+              (try? device.lockForConfiguration()) != nil else { return }
+        device.torchMode = on ? .on : .off
+        device.unlockForConfiguration()
+    }
+
     /// Dim enough that photos come out grainy: the sensor is near its highest ISO (D49).
     func isLowLight() async -> Bool {
         await withCheckedContinuation { continuation in
@@ -356,27 +364,29 @@ struct CameraStage<Controls: View>: View {
 /// shutter, with Choose from Photos and Skip photo beside it (D37). Returns the photo's data,
 /// or nil for Skip; `cancel` closes without a choice.
 struct SinglePhotoCamera: View {
-    var askTitle: LocalizedStringKey = "Photograph your things"
+    var askTitle: LocalizedStringKey
     var hint: LocalizedStringKey?
-    var offersSkip = true
-    var fixture: UIImage?
+    var offersSkip: Bool
     let completion: (Data?) -> Void
     let cancel: () -> Void
 
-    @State private var camera: CameraModel?
+    @State private var camera: CameraModel
     @State private var picked: PhotosPickerItem?
     @State private var busy = false
 
+    init(askTitle: LocalizedStringKey = "Photograph your things", hint: LocalizedStringKey? = nil,
+         offersSkip: Bool = true, fixture: @autoclosure () -> UIImage? = CaptureFixtures.shelf,
+         completion: @escaping (Data?) -> Void, cancel: @escaping () -> Void) {
+        (self.askTitle, self.hint, self.offersSkip) = (askTitle, hint, offersSkip)
+        (self.completion, self.cancel) = (completion, cancel)
+        _camera = State(initialValue: CameraModel(fixture: fixture()))
+    }
+
     var body: some View {
-        Group {
-            if let camera {
-                CameraStage(camera: camera, askTitle: askTitle, maxPhotos: 1,
-                            pickedPhotos: { if let first = $0.first { completion(first) } }, close: cancel) {
-                    controls(camera)
-                }
-            }
+        CameraStage(camera: camera, askTitle: askTitle, maxPhotos: 1,
+                    pickedPhotos: { if let first = $0.first { completion(first) } }, close: cancel) {
+            controls(camera)
         }
-        .onAppear { if camera == nil { camera = CameraModel(fixture: fixture ?? CaptureFixtures.shelf) } }
         .onChange(of: picked) { _, item in
             guard let item else { return }
             Task { if let data = try? await item.loadTransferable(type: Data.self) { completion(data) } }

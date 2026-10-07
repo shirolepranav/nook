@@ -22,6 +22,7 @@ private struct CaptureOverlay: ViewModifier {
     @State private var addsItem = false
     @State private var scansRoom = false
     @State private var receiptSource: ReceiptSource?
+    @State private var scansBarcode = false
     @State private var newItem: ItemDraft?
 
     func body(content: Content) -> some View {
@@ -39,6 +40,7 @@ private struct CaptureOverlay: ViewModifier {
             newItem = draft
         }
         .newItemEditor($newItem)
+        .barcodeScan(isPresented: $scansBarcode, at: location)
         .onChange(of: showsMenu) { _, shows in
             guard !shows, let choice = chosen else { return }
             chosen = nil
@@ -50,6 +52,7 @@ private struct CaptureOverlay: ViewModifier {
                 case .scanRoom: scansRoom = true
                 case .addItem: addsItem = true
                 case .scanReceipt: receiptSource = ReceiptScanAvailability.camera ? .camera : .files
+                case .scanBarcode: scansBarcode = true
                 }
             }
         }
@@ -73,7 +76,7 @@ private struct CaptureOverlay: ViewModifier {
 
 /// C-01's four choices. A plain stack, not a List, so the popover sizes to fit all four rows.
 struct CaptureMenu: View {
-    enum Choice { case scanRoom, addItem, scanReceipt }
+    enum Choice { case scanRoom, addItem, scanReceipt, scanBarcode }
 
     var choose: (Choice) -> Void = { _ in }
 
@@ -91,7 +94,7 @@ struct CaptureMenu: View {
             Divider()
             row("Scan receipt", "receipt") { choose(.scanReceipt) }
             Divider()
-            row("Scan barcode", "barcode.viewfinder").disabled(true)   // P6
+            row("Scan barcode", "barcode.viewfinder") { choose(.scanBarcode) }
         }
         .padding([.horizontal, .bottom], NookSpace.s2)
         .frame(minWidth: NookLayout.readableWidth / 2)

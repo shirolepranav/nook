@@ -21,6 +21,8 @@ struct ItemEditor: View {
     @State private var suggestions: [String] = []
     @State private var pickedPhotos: [PhotosPickerItem] = []
     @State private var receiptSource: ReceiptSource?
+    @State private var scansBarcode = false
+    @State private var readsSticker = false
     @State private var takesPhoto = false
     @State private var confirmsDiscard = false
     @State private var namesCategory = false
@@ -34,7 +36,7 @@ struct ItemEditor: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    private enum Field { case name, price, tag }
+    private enum Field { case name, price, tag, serial }
 
     init(item: Item? = nil, draft: ItemDraft? = nil, cameraOff: Bool = false, onSave: ((Item) -> Void)? = nil) {
         self.item = item
@@ -102,6 +104,23 @@ struct ItemEditor: View {
                 takesPhoto = false
             } cancel: {
                 takesPhoto = false
+            }
+        }
+        .fullScreenCover(isPresented: $scansBarcode) {
+            BarcodeScanScreen { code in
+                if let code { draft.barcode = code }
+                scansBarcode = false
+            }
+        }
+        .fullScreenCover(isPresented: $readsSticker) {
+            SerialScanScreen { pick in
+                readsSticker = false
+                switch pick {
+                case .serial(let serial): draft.serial = serial
+                case .model(let model): draft.model = model
+                case .typeIt: Task { focus = .serial }   // after the cover closes
+                case nil: break
+                }
             }
         }
         // C-06: every receipt goes through the review, so its text is searchable (F5) and its
@@ -278,13 +297,33 @@ struct ItemEditor: View {
             }
             NookTextField(Text("Brand"), text: $draft.brand, prompt: Text("Add brand"))
             NookTextField(Text("Model"), text: $draft.model, prompt: Text("Add model"))
-            NookTextField(Text("Serial number"), text: $draft.serial, prompt: Text("Add serial"))
-                .fontDesign(.monospaced)
-                .textInputAutocapitalization(.characters)
-                .autocorrectionDisabled()
-            NookTextField(Text("Barcode"), text: $draft.barcode, prompt: Text("Add barcode"))
-                .keyboardType(.numberPad)
+            HStack(alignment: .bottom, spacing: NookSpace.s1) {
+                NookTextField(Text("Serial number"), text: $draft.serial, prompt: Text("Add serial"))
+                    .fontDesign(.monospaced)
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                    .focused($focus, equals: .serial)
+                scanButton("Read from Sticker", systemImage: "text.viewfinder") { readsSticker = true }   // C-08
+            }
+            HStack(alignment: .bottom, spacing: NookSpace.s1) {
+                NookTextField(Text("Barcode"), text: $draft.barcode, prompt: Text("Add barcode"))
+                    .keyboardType(.numberPad)
+                scanButton("Scan Barcode", systemImage: "barcode.viewfinder") { scansBarcode = true }   // C-07
+            }
         }
+    }
+
+    /// A scanner beside its field, as tall as the field.
+    private func scanButton(_ title: LocalizedStringKey, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.nookHeadline)
+                .frame(width: NookLayout.fieldHeight, height: NookLayout.fieldHeight)
+                .background(NookColor.surfaceSunken, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.tint)
+        .accessibilityLabel(Text(title))
     }
 
     private var categoryChoices: [String] {

@@ -119,5 +119,7 @@ public struct SerialReading: Sendable, Equatable {
 
     public var lines: [Line]
     public var serial: String? { lines.first { $0.kind == .serial }?.value }
+
+    public init(lines: [Line]) { self.lines = lines }
     public var model: String? { lines.first { $0.kind == .model }?.value }
 }
