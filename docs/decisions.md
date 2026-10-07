@@ -330,7 +330,6 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **`List` + `.searchable` in the search tab, with swipe actions and `onMove`,** works for saved searches (D28, D43).
 - **`ModelContext.didSave`** fires for the main context's saves and drives the index rebuild; a fresh `ModelContext(container)` on a detached task reads the in-memory UI-test stores too.
 
-- **A combined accessibility element over a custom `Layout` (`NookFlowLayout`) loses the text's frame.** I-01's tags (P3) were one "Tags: …" element; once the `lived` seed gave the audited item a tag, the audit reported "Potentially inaccessible text" with no element. Each tag is now its own element, "Tag: Coffee".
-- **A `List` row or section footer with plain text** was flagged "Dynamic Type partially unsupported" until the text could grow vertically (`.fixedSize(horizontal: false, vertical: true)`).
+- **Open, not pursued (owner's choice):** once the `lived` seed gave the audited item a tag, the audit reports "Potentially inaccessible text", with no element, on I-01's tag chips (P3, `NookFlowLayout`). Giving each tag its own label ("Tag: Coffee") didn't clear it. Find's footer, "Also searched receipts, serials and notes.", is flagged "Dynamic Type partially unsupported" as a List row and as a section footer, with or without `.fixedSize(horizontal: false, vertical: true)`.
 
 *Affects:* `FindSections.swift`, `FindScreen.swift`, `SearchLibrary.swift`, `ItemDetailScreen.swift`.
