@@ -171,3 +171,38 @@ private final class Fixture {
     try f.context.save()
     #expect(f.rooms.spots(in: garage).first?.photo?.fileName == "shelf.heic")
 }
+
+// MARK: P6 capture
+
+@MainActor @Test func scannedReceiptTextIsSavedAndFindable() throws {
+    let f = try Fixture()
+    var draft = try f.draft("Espresso machine")
+    let receipt = try f.blobs.saveReceipt(jpeg(width: 64, height: 48))
+    draft.receipts = [.init(fileName: receipt, kind: .image, extractedText: "HOME GOODS CO.\nTOTAL 766.41")]
+    let item = try f.items.create(draft)
+    try f.context.save()
+    #expect(item.receipts?.first?.extractedText.contains("766.41") == true)
+    #expect(ItemDraft(item).receipts.first?.extractedText == draft.receipts.first?.extractedText)
+    let index = SearchIndex(docs: SearchSnapshot.docs(in: ModelContext(f.container)))
+    #expect(index.search("home goods").first?.id == item.id)
+}
+
+@MainActor @Test func roomScanPhotoKeepsItsBox() throws {
+    let f = try Fixture()
+    var draft = try f.draft("Lamp", photos: 1)
+    draft.photos[0].box = .init(x: 0.1, y: 0.2, width: 0.3, height: 0.4)
+    let lamp = try f.items.create(draft)
+    #expect(lamp.cover?.boxX == 0.1 && lamp.cover?.boxH == 0.4)
+    #expect(ItemDraft(lamp).photos.first?.box == draft.photos[0].box)
+}
+
+@MainActor @Test func findsALiveItemByBarcode() throws {
+    let f = try Fixture()
+    var kettle = try f.draft("Kettle")
+    kettle.barcode = "4006381333931"
+    let item = try f.items.create(kettle)
+    #expect(try f.items.item(withBarcode: " 4006381333931 ") === item)
+    #expect(try f.items.item(withBarcode: "96385074") == nil)
+    f.items.delete([item])
+    #expect(try f.items.item(withBarcode: "4006381333931") == nil)
+}

@@ -8,18 +8,31 @@ public struct ItemDraft: Equatable {
         public var fileName: String
         public var width: Int
         public var height: Int
+        /// Where it was cropped from, when it came from a room scan.
+        public var box: Box?
 
-        public init(fileName: String, width: Int, height: Int) {
-            (self.fileName, self.width, self.height) = (fileName, width, height)
+        public init(fileName: String, width: Int, height: Int, box: Box? = nil) {
+            (self.fileName, self.width, self.height, self.box) = (fileName, width, height, box)
         }
     }
 
     public struct DraftReceipt: Equatable, Sendable {
         public var fileName: String
         public var kind: Receipt.Kind
+        /// Text read from a scanned receipt, kept for search (F5, C-06).
+        public var extractedText: String
 
-        public init(fileName: String, kind: Receipt.Kind) {
-            (self.fileName, self.kind) = (fileName, kind)
+        public init(fileName: String, kind: Receipt.Kind, extractedText: String = "") {
+            (self.fileName, self.kind, self.extractedText) = (fileName, kind, extractedText)
+        }
+    }
+
+    /// A photo's box in a room-scan photo, normalized 0–1 (F3, C-04).
+    public struct Box: Equatable, Sendable {
+        public var x, y, width, height: Double
+
+        public init(x: Double, y: Double, width: Double, height: Double) {
+            (self.x, self.y, self.width, self.height) = (x, y, width, height)
         }
     }
 
@@ -52,8 +65,12 @@ public struct ItemDraft: Equatable {
             (item.name, item.category, item.tags, item.quantity, item.brand, item.model, item.serial, item.barcode)
         (price, currencyCode, purchaseDate, store, notes, isPrivate) =
             (item.price, item.currencyCode, item.purchaseDate, item.store, item.notes, item.isPrivate)
-        photos = item.orderedPhotos.map { DraftPhoto(fileName: $0.fileName, width: $0.width, height: $0.height) }
-        receipts = (item.receipts ?? []).map { DraftReceipt(fileName: $0.fileName, kind: $0.kind) }
+        photos = item.orderedPhotos.map { photo in
+            DraftPhoto(fileName: photo.fileName, width: photo.width, height: photo.height, box: photo.boxX.map { x in
+                Box(x: x, y: photo.boxY ?? 0, width: photo.boxW ?? 0, height: photo.boxH ?? 0)
+            })
+        }
+        receipts = (item.receipts ?? []).map { DraftReceipt(fileName: $0.fileName, kind: $0.kind, extractedText: $0.extractedText) }
         location = Location(of: item)
     }
 }
@@ -117,10 +134,10 @@ public struct ItemService {
     public func duplicate(_ item: Item) throws -> Item {
         var draft = ItemDraft(item)
         draft.photos = try draft.photos.map {
-            .init(fileName: try blobs.copy($0.fileName, in: .photos), width: $0.width, height: $0.height)
+            .init(fileName: try blobs.copy($0.fileName, in: .photos), width: $0.width, height: $0.height, box: $0.box)
         }
         draft.receipts = try draft.receipts.map {
-            .init(fileName: try blobs.copy($0.fileName, in: .receipts), kind: $0.kind)
+            .init(fileName: try blobs.copy($0.fileName, in: .receipts), kind: $0.kind, extractedText: $0.extractedText)
         }
         return try create(draft)
     }
@@ -220,6 +237,16 @@ public struct ItemService {
         return try context.fetch(descriptor)
     }
 
+    /// A live item with this barcode, for "You have this" (C-07).
+    public func item(withBarcode barcode: String) throws -> Item? {
+        let code = barcode.trimmingCharacters(in: .whitespaces)
+        guard !code.isEmpty else { return nil }
+        var descriptor = FetchDescriptor<Item>(predicate: #Predicate { $0.barcode == code && $0.deletedAt == nil },
+                                               sortBy: [SortDescriptor(\.createdAt)])
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
+    }
+
     public func deleted() throws -> [Item] {
         try context.fetch(FetchDescriptor<Item>(predicate: #Predicate { $0.deletedAt != nil },
                                                 sortBy: [SortDescriptor(\.deletedAt, order: .reverse)]))
@@ -289,6 +316,9 @@ public struct ItemService {
             } else {
                 let photo = Photo(fileName: draftPhoto.fileName)
                 (photo.width, photo.height, photo.order) = (draftPhoto.width, draftPhoto.height, index)
+                if let box = draftPhoto.box {
+                    (photo.boxX, photo.boxY, photo.boxW, photo.boxH) = (box.x, box.y, box.width, box.height)
+                }
                 context.insert(photo)
                 photo.item = item
             }
@@ -298,6 +328,7 @@ public struct ItemService {
         for receipt in item.receipts ?? [] where !keptReceipts.contains(receipt.fileName) { remove(receipt) }
         for draftReceipt in draft.receipts where !receiptNames.contains(draftReceipt.fileName) {
             let receipt = Receipt(fileName: draftReceipt.fileName, kind: draftReceipt.kind)
+            receipt.extractedText = draftReceipt.extractedText
             context.insert(receipt)
             receipt.item = item
         }
