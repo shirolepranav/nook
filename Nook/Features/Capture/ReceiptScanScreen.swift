@@ -263,14 +263,17 @@ struct ReceiptScanScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.updatesFrequently)
             let image = pages.pages[page]
+            // The photo reads its recognized text to VoiceOver; the highlights are buttons on top.
             Image(decorative: image, scale: 1)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .accessibilityHidden(false)
+                .accessibilityLabel(Text("Receipt, page \(page + 1)"))
+                .accessibilityValue(Text(verbatim: reading?.lines.filter { $0.page == page }.map(\.text)
+                    .joined(separator: ", ") ?? ""))
                 .overlay { highlights }
                 .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
                 .warmShadow(.low)
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel(Text("Receipt, page \(page + 1)"))
             if pages.pages.count > 1 {
                 HStack {
                     Button("Previous Page", systemImage: "chevron.left") { page -= 1 }.disabled(page == 0)

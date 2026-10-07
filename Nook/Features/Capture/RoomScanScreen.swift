@@ -160,8 +160,11 @@ private struct RoomScanCamera: View {
                 if let hint { coach(hint) }
                 Spacer()
                 HStack {
-                    PhotoCounter(count: photos.count, thumbnail: lastThumb)
-                        .opacity(photos.isEmpty ? 0 : 1)
+                    if photos.isEmpty {
+                        Color.clear.frame(width: NookLayout.cameraControlSize, height: NookLayout.cameraControlSize)
+                    } else {
+                        PhotoCounter(count: photos.count, thumbnail: lastThumb)
+                    }
                     Spacer()
                     ShutterButton(action: shoot)
                         .disabled(camera.state != .running || photos.count + saving >= RoomScanScreen.maxPhotos)
@@ -193,9 +196,9 @@ private struct RoomScanCamera: View {
                 Text("Saving to").font(.nookCaption)
                 Text(verbatim: location?.path ?? String(localized: "Choose a room"))
                     .font(.nookMeta.weight(.semibold))
-                    .lineLimit(2)
                     .multilineTextAlignment(.center)
             }
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, NookSpace.s2)
             .frame(minHeight: NookLayout.cameraControlSize)
         }

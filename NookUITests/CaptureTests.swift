@@ -39,8 +39,8 @@ final class CaptureTests: XCTestCase {
         shutter.tap()
         let done = app.buttons["Done"]
         XCTAssertTrue(done.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.otherElements["1 photo taken"].waitForExistence(timeout: 5)
-                      || NSPredicate(format: "isEnabled == true").evaluate(with: done))
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
+                                                                        object: done)], timeout: 10) == .completed)
         done.tap()
         let photo = app.otherElements["Photo 1"]
         XCTAssertTrue(photo.waitForExistence(timeout: 5))

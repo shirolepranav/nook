@@ -168,6 +168,72 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP6Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        let app = XCUIApplication.nook(store: "small")
+        app.launchArguments += ["-uiTestingCameraFixture"]
+        app.launch()
+        let capture = app.buttons["Capture"]
+        XCTAssertTrue(capture.waitForExistence(timeout: 10))
+        app.buttons["Kitchen, Empty"].tap()
+        capture.tap()
+        XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
+        snap("C-01 Capture menu")
+        app.buttons["Scan room"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        snap("C-02 Room scan")
+        app.buttons["Done"].tap()
+        let photo = app.otherElements["Photo 1"]
+        XCTAssertTrue(photo.waitForExistence(timeout: 5))
+        for (index, name) in ["Toaster", "Blender", "Kettle"].enumerated() {
+            photo.coordinate(withNormalizedOffset: CGVector(dx: 0.2 + 0.3 * Double(index), dy: 0.5)).tap()
+            XCTAssertTrue(app.textFields["What is it?"].waitForExistence(timeout: 10))
+            if index == 2 { app.textFields["What is it?"].typeText("Ket"); snap("C-04 Naming") }
+            app.textFields["What is it?"].typeText(index == 2 ? "tle\n" : name + "\n")
+        }
+        snap("C-04 Manual tagging")
+        app.buttons["Save 3 Items"].tap()
+        snap("C-04 Saved toast")
+
+        capture.tap()
+        app.buttons["Scan receipt"].tap()
+        XCTAssertTrue(app.buttons["Date 09/14/2026"].waitForExistence(timeout: 20))
+        snap("C-06 Receipt review")
+        app.buttons["Date 09/14/2026"].tap()
+        app.buttons["Amount $766.41"].tap()
+        snap("C-06 Receipt filled")
+        app.buttons["Cancel"].tap()
+
+        capture.tap()
+        app.buttons["Add item"].tap()
+        app.buttons["Take Photo"].tap()
+        XCTAssertTrue(app.textFields["Name"].waitForExistence(timeout: 5))
+        app.buttons["Read from Sticker"].tap()
+        app.buttons["Take Photo"].tap()
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'S/N'")).firstMatch
+            .waitForExistence(timeout: 20))
+        snap("C-08 Sticker lines")
+        app.navigationBars["Serial Number"].buttons["Cancel"].tap()
+        app.terminate()
+
+        let off = XCUIApplication.nook(store: "small")
+        off.launchArguments += ["-uiTestingCameraDenied"]
+        off.launch()
+        XCTAssertTrue(off.buttons["Capture"].waitForExistence(timeout: 10))
+        off.buttons["Capture"].tap()
+        off.buttons["Scan room"].tap()
+        XCTAssertTrue(off.staticTexts["Camera is off for Nook"].waitForExistence(timeout: 5))
+        snap("C-02 Camera off")
+        off.buttons["Cancel"].tap()
+        off.buttons["Capture"].tap()
+        off.buttons["Scan barcode"].tap()
+        XCTAssertTrue(off.textFields["Barcode"].waitForExistence(timeout: 5))
+        snap("C-07 Type it")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

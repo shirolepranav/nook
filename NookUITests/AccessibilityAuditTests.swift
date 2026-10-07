@@ -170,6 +170,81 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P6 screens: the Capture menu (C-01), room scan (C-02), manual tagging with a tag
+    /// (C-04), the receipt review (C-06), barcode entry (C-07), the sticker lines (C-08) and the
+    /// camera-off notice.
+    @MainActor
+    func testCaptureScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "small")
+        app.launchArguments += ["-uiTestingCameraFixture"]
+        app.launch()
+        let capture = app.buttons["Capture"]
+        XCTAssertTrue(capture.waitForExistence(timeout: 10))
+        capture.tap()
+        // C-01 isn't audited: a medium-only sheet is drawn scaled, and the audit then calls its
+        // rows clipped (D45). The Capture tests use every row.
+        XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
+        app.buttons["Scan room"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Take Photo"].tap()
+        let done = app.buttons["Done"]
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
+                                                                        object: done)], timeout: 10) == .completed)
+        done.tap()
+        let photo = app.otherElements["Photo 1"]
+        XCTAssertTrue(photo.waitForExistence(timeout: 5))
+        photo.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5)).tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
+        app.textFields["What is it?"].typeText("Toaster\n")
+        XCTAssertTrue(app.buttons["Box 1, Toaster"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+        app.buttons["Discard"].tap()
+
+        XCTAssertTrue(capture.waitForExistence(timeout: 5))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Scan receipt"].waitForExistence(timeout: 5))
+        app.buttons["Scan receipt"].tap()
+        XCTAssertTrue(app.buttons["Date 09/14/2026"].waitForExistence(timeout: 20))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        XCTAssertTrue(capture.waitForExistence(timeout: 5))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
+        app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        XCTAssertTrue(app.textFields["Name"].waitForExistence(timeout: 5))
+        app.buttons["Read from Sticker"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        let serial = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'S/N'")).firstMatch
+        XCTAssertTrue(serial.waitForExistence(timeout: 20))   // a lazy List: rows below the fold aren't there
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.navigationBars["Serial Number"].buttons["Cancel"].tap()
+        app.terminate()
+
+        let off = XCUIApplication.nook(store: "small")
+        off.launchArguments += ["-uiTestingCameraDenied"]
+        off.launch()
+        XCTAssertTrue(off.buttons["Capture"].waitForExistence(timeout: 10))
+        off.buttons["Capture"].tap()
+        XCTAssertTrue(off.buttons["Scan room"].waitForExistence(timeout: 5))
+        off.buttons["Scan room"].tap()
+        XCTAssertTrue(off.staticTexts["Camera is off for Nook"].waitForExistence(timeout: 5))
+        try off.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, off) }
+        off.buttons["Cancel"].tap()
+        XCTAssertTrue(off.buttons["Capture"].waitForExistence(timeout: 5))
+        off.buttons["Capture"].tap()
+        XCTAssertTrue(off.buttons["Scan barcode"].waitForExistence(timeout: 5))
+        off.buttons["Scan barcode"].tap()
+        XCTAssertTrue(off.textFields["Barcode"].waitForExistence(timeout: 5))
+        try off.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, off) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
