@@ -29,6 +29,7 @@ private struct TabShell: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var roomTabsHidden = true
     @State private var addsItem = false
+    @State private var scansRoom = false
     @State private var library: SearchLibrary?
 
     private var selectedRoom: Room? {
@@ -74,8 +75,10 @@ private struct TabShell: View {
         .defaultTabBarPlacement(.sidebar)               // D32: sidebar when there's room
         .tabViewSearchActivation(.searchTabSelection)   // choosing Find (or ⌘F) focuses the field
         .focusedSceneValue(\.selectedTab, $tab)
-        .focusedSceneValue(\.addItem, AddItemAction { addsItem = true })
+        .focusedSceneValue(\.addItem, MenuAction { addsItem = true })
+        .focusedSceneValue(\.scanRoom, MenuAction { scansRoom = true })
         .quickAdd(isPresented: $addsItem, at: selectedRoom.map { Location(room: $0) })
+        .roomScan(isPresented: $scansRoom, at: selectedRoom.map { Location(room: $0) })
         .focusedSceneValue(\.editsSelectedRoom, selectedRoom == nil ? nil : $editsSelectedRoom)
         .sheet(isPresented: $editsSelectedRoom) {
             if let selectedRoom { RoomEditor(room: selectedRoom) }

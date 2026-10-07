@@ -4,13 +4,14 @@ import NookKit
 import NookUI
 
 /// H-02 Room: a header in the room's color, the items placed straight in the room, then each
-/// spot as a section with its items and containers. "Scan this room" arrives in P6.
+/// spot as a section with its items and containers. The empty state offers "Scan This Room" (C-02).
 struct RoomScreen: View {
     let room: Room
     @State private var editing = false
     @State private var adding: Spot.Kind?
     @State private var arranging = false
     @State private var addsItem = false
+    @State private var scansRoom = false
     @State private var selection: Set<UUID>?
     @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
@@ -34,6 +35,10 @@ struct RoomScreen: View {
                             Label("Add Spots", systemImage: "plus").frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.nookPrimary)
+                        Button { scansRoom = true } label: {
+                            Label("Scan This Room", systemImage: "viewfinder").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.nookSecondary)
                     }
                 } else {
                     ForEach(spots) { spot in
@@ -57,6 +62,7 @@ struct RoomScreen: View {
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
         .captureButton(isShown: selection == nil, at: Location(room: room))   // D32: Room shows Capture
+        .roomScan(isPresented: $scansRoom, at: Location(room: room))
         .itemSelection($selection, among: shownItems, toast: $toast)
         .navigationTitle(room.name)   // itemSelection's title, inside it, wins while selecting
         .toolbarTitleDisplayMode(.inline)

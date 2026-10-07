@@ -10,6 +10,7 @@ struct SpotScreen: View {
     @State private var editing = false
     @State private var addingContainer = false
     @State private var addsItem = false
+    @State private var scansRoom = false
     @State private var viewsPhoto = false
     @State private var selection: Set<UUID>?
     @State private var toast: ToastMessage?
@@ -48,6 +49,11 @@ struct SpotScreen: View {
                             Label("Add Item Here", systemImage: "plus").frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.nookPrimary)
+                        Button { scansRoom = true } label: {
+                            Label(spot.isContainer ? "Scan This Container" : "Scan This Spot", systemImage: "viewfinder")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.nookSecondary)
                     }
                 } else {
                     ItemGrid(items: items, selection: $selection, toast: $toast)
@@ -63,6 +69,7 @@ struct SpotScreen: View {
         .contentMargins(.bottom, NookLayout.captureButtonSize + NookSpace.s2, for: .scrollContent)
         .background(NookColor.canvas)
         .captureButton(isShown: selection == nil, at: location)   // D32
+        .roomScan(isPresented: $scansRoom, at: location)
         .itemSelection($selection, among: spotItems, toast: $toast)
         .navigationTitle(spot.name)   // itemSelection's title, inside it, wins while selecting
         .toolbarTitleDisplayMode(.large)

@@ -7,6 +7,7 @@ struct NookCommands: Commands {
     @FocusedValue(\.editsSelectedRoom) private var editsSelectedRoom
     @FocusedValue(\.itemCommands) private var itemCommands
     @FocusedValue(\.addItem) private var addItem
+    @FocusedValue(\.scanRoom) private var scanRoom
 
     private func show(_ tab: AppTab) { selectedTab?.wrappedValue = tab }
 
@@ -26,8 +27,8 @@ struct NookCommands: Commands {
             Divider()
             // Each command turns on with its feature.
             Button("Add Item") { addItem?.run() }.keyboardShortcut("n").disabled(addItem == nil)   // C-05
-            Button("Scan Room") {}.keyboardShortcut("n", modifiers: [.command, .shift])    // C-02, P6
-                .disabled(true)
+            Button("Scan Room") { scanRoom?.run() }.keyboardShortcut("n", modifiers: [.command, .shift])   // C-02
+                .disabled(scanRoom == nil)
             // The item on screen first, else the room selected in the sidebar.
             Button("Edit") {
                 if let edit = itemCommands?.edit { edit() } else { editsSelectedRoom?.wrappedValue = true }

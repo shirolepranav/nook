@@ -18,8 +18,9 @@ private struct CaptureOverlay: ViewModifier {
     let isShown: Bool
     let location: Location?
     @State private var showsMenu = false
-    @State private var choseAddItem = false
+    @State private var chosen: CaptureMenu.Choice?
     @State private var addsItem = false
+    @State private var scansRoom = false
 
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottomTrailing) {
@@ -28,14 +29,18 @@ private struct CaptureOverlay: ViewModifier {
             }
         }
         .quickAdd(isPresented: $addsItem, at: location)
+        .roomScan(isPresented: $scansRoom, at: location)
         .onChange(of: showsMenu) { _, shows in
-            guard !shows, choseAddItem else { return }
-            choseAddItem = false
+            guard !shows, let choice = chosen else { return }
+            chosen = nil
             // ponytail: waits out the menu's dismissal before the camera presents; use an
             // onDismiss if popovers ever get one.
             Task {
                 try? await Task.sleep(for: .milliseconds(400))
-                addsItem = true
+                switch choice {
+                case .scanRoom: scansRoom = true
+                case .addItem: addsItem = true
+                }
             }
         }
     }
@@ -46,8 +51,8 @@ private struct CaptureOverlay: ViewModifier {
             // C-01: a popover anchored to the button on regular width, a medium sheet on
             // compact (01 §1.5, D29).
             .popover(isPresented: $showsMenu) {
-                CaptureMenu {
-                    choseAddItem = true
+                CaptureMenu { choice in
+                    chosen = choice
                     showsMenu = false
                 }
                     .presentationCompactAdaptation(.sheet)
@@ -56,11 +61,11 @@ private struct CaptureOverlay: ViewModifier {
     }
 }
 
-/// C-01's four choices. Add item works from P3 (C-05, D37); the scanners arrive in P6, so
-/// their rows show what's coming but can't be chosen yet. A plain stack, not a List, so the
-/// popover sizes to fit all four rows.
+/// C-01's four choices. A plain stack, not a List, so the popover sizes to fit all four rows.
 struct CaptureMenu: View {
-    var addItem: () -> Void = {}
+    enum Choice { case scanRoom, addItem }
+
+    var choose: (Choice) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -70,9 +75,9 @@ struct CaptureMenu: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, NookSpace.s2)
                 .accessibilityAddTraits(.isHeader)
-            row("Scan room", "viewfinder").disabled(true)          // P6
+            row("Scan room", "viewfinder") { choose(.scanRoom) }
             Divider()
-            row("Add item", "plus", action: addItem)
+            row("Add item", "plus") { choose(.addItem) }
             Divider()
             row("Scan receipt", "receipt").disabled(true)          // P6
             Divider()

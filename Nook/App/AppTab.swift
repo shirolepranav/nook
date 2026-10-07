@@ -40,11 +40,14 @@ extension FocusedValues {
     /// The item on screen, or the items selected (I-01, I-08): ⌘E edits, ⇧⌘M moves, ⌘⌫ deletes.
     @Entry var itemCommands: ItemCommands?
     /// ⌘N: Add Item (C-05).
-    @Entry var addItem: AddItemAction?
+    @Entry var addItem: MenuAction?
+    /// ⇧⌘N: Scan Room (C-02).
+    @Entry var scanRoom: MenuAction?
 }
 
-/// ⌘N's action. A struct, since a bare closure in a FocusedValue invalidates every update.
-struct AddItemAction {
+/// A menu command's action. A struct, since a bare closure in a FocusedValue invalidates
+/// every update.
+struct MenuAction {
     let run: () -> Void
 }
 

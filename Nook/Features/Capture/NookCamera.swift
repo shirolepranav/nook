@@ -277,7 +277,8 @@ struct CameraStage<Controls: View>: View {
                     Button("Cancel", action: close).buttonStyle(.nookTertiary)
                 }
             case .starting, .running, .paused:
-                feed.ignoresSafeArea()
+                // Fills the screen without widening it: scaledToFill would size the stage.
+                Color.clear.overlay { feed }.clipped().ignoresSafeArea()
                 controls()
                 if camera.state == .paused {
                     Label("Camera paused. It picks up where you left off.", systemImage: "pause.circle")
