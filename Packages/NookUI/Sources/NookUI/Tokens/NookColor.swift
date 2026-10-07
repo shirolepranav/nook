@@ -20,6 +20,9 @@ public enum NookColor {
     public static let warning = named("warning")
     public static let danger = named("danger")
     public static let info = named("info")
+    /// Behind a live camera feed, in both modes (C-02, C-05, C-08): the feed is the content,
+    /// and glass controls float on it (03 §6.3).
+    public static let cameraFeed = Color.black
 
     static func named(_ name: String) -> Color { Color(name, bundle: .module) }
 }

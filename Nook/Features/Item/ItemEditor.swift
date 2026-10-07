@@ -99,8 +99,12 @@ struct ItemEditor: View {
         .nookHaptic(.saved, trigger: saved)
         .nookHaptic(.failed, trigger: failed)
         .fullScreenCover(isPresented: $takesPhoto) {
-            CameraSheet { data in if let data { add(photoData: [data]) } }
-                .ignoresSafeArea()
+            SinglePhotoCamera(offersSkip: false) { data in
+                if let data { add(photoData: [data]) }
+                takesPhoto = false
+            } cancel: {
+                takesPhoto = false
+            }
         }
         .fileImporter(isPresented: $importsReceipt, allowedContentTypes: [.pdf, .image]) { result in
             if case .success(let url) = result { addReceipt(from: url) }
@@ -126,7 +130,7 @@ struct ItemEditor: View {
                 HStack(spacing: NookSpace.s1) {
                     if draft.photos.count < ItemService.maxPhotos {
                         Menu {
-                            if !cameraOff {
+                            if !cameraOff && Camera.isUsable {
                                 Button("Take Photo", systemImage: "camera") { takesPhoto = true }
                             }
                             PhotosPicker(selection: $pickedPhotos,
