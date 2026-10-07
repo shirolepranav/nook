@@ -152,7 +152,7 @@ final class CaptureTests: XCTestCase {
         capture(app, "Scan barcode")
         let field = app.textFields["Barcode"]
         XCTAssertTrue(field.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
+        field.tap()   // the iPad simulator shows no keyboard to wait for
         field.typeText("96385074")
         app.buttons["Done"].tap()
         XCTAssertTrue(app.navigationBars["New Item"].waitForExistence(timeout: 10))

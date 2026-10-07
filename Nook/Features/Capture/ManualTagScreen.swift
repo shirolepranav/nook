@@ -172,7 +172,8 @@ struct ManualTagScreen: View {
                                  ? Text("Photo \(model.current + 1) of \(model.photos.count)") : Text("Tag Items"))
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar { toolbar }
-                .safeAreaInset(edge: .bottom) { saveBar }
+                // Naming takes Save's place, so the field sits right above the keyboard.
+                .safeAreaInset(edge: .bottom) { model.naming == nil ? AnyView(saveBar) : AnyView(namingBar) }
         }
         .task(id: model.current) { await model.load(model.current) }
         .sheet(isPresented: $choosesPlace) {
@@ -215,34 +216,31 @@ struct ManualTagScreen: View {
                     .frame(width: NookLayout.itemColumnWidth)
             }
         } else {
-            VStack(spacing: 0) {
-                photoPane
-                    .padding([.horizontal, .top], NookSpace.s2)
-                    .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
-                cardsScroll { cardsContent.padding(NookSpace.s2) }
+            // The photo takes 45% of the room left, so it shrinks when the keyboard is up.
+            GeometryReader { proxy in
+                VStack(spacing: 0) {
+                    photoPane
+                        .padding([.horizontal, .top], NookSpace.s2)
+                        .frame(height: proxy.size.height * 0.45)
+                    cardsScroll { cardsContent.padding(NookSpace.s2) }
+                        .clipped()   // cards scroll under the photo's edge, not over it
+                }
             }
         }
     }
 
-    /// Keeps the name field, then each new card, in view: on a small phone they sit below
-    /// the photo.
+    /// Keeps each new card in view: on a small phone the cards sit below the photo.
     private func cardsScroll(@ViewBuilder _ content: () -> some View) -> some View {
         let content = content()
         return ScrollViewReader { proxy in
             ScrollView { content }
                 .scrollDismissesKeyboard(.interactively)
-                .onChange(of: model.naming) { _, naming in
-                    guard naming != nil else { return }
-                    withNookAnimation(.settle, reduceMotion: reduceMotion) { proxy.scrollTo(Self.namingID, anchor: .bottom) }
-                }
                 .onChange(of: model.tags.count) { old, new in
                     guard new > old, let last = model.tags.last else { return }
                     withNookAnimation(.settle, reduceMotion: reduceMotion) { proxy.scrollTo(last.id, anchor: .bottom) }
                 }
         }
     }
-
-    private static let namingID = "naming"
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
@@ -332,17 +330,14 @@ struct ManualTagScreen: View {
             .accessibilityLabel(Text("Saving to"))
             .accessibilityValue(Text(verbatim: location?.names.joined(separator: ", ") ?? String(localized: "Choose a room")))
 
-            if model.naming != nil {
-                namingPanel.id(Self.namingID)
-            } else {
-                Text("Tap an item, or draw a box around it.")
-                    .font(.nookMeta)
-                    .foregroundStyle(NookColor.textSecondary)
-                Button { model.startNaming(nil); nameFocused = true } label: {
-                    Label("Add Item by Name", systemImage: "text.badge.plus").frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.nookSecondary)
+            Text("Tap an item, or draw a box around it.")
+                .font(.nookMeta)
+                .foregroundStyle(NookColor.textSecondary)
+            Button { model.startNaming(nil); nameFocused = true } label: {
+                Label("Add Item by Name", systemImage: "text.badge.plus").frame(maxWidth: .infinity)
             }
+            .buttonStyle(.nookSecondary)
+            .disabled(model.naming != nil)
 
             if !model.tags.isEmpty {
                 VStack(alignment: .leading, spacing: NookSpace.half) {
@@ -365,6 +360,14 @@ struct ManualTagScreen: View {
             }
         }
         .frame(maxWidth: NookLayout.readableWidth, alignment: .leading)
+    }
+
+    private var namingBar: some View {
+        namingPanel
+            .padding([.horizontal, .bottom], NookSpace.s2)
+            .frame(maxWidth: NookLayout.readableWidth)
+            .frame(maxWidth: .infinity)
+            .background(NookColor.canvas)
     }
 
     private var namingPanel: some View {
@@ -391,11 +394,16 @@ struct ManualTagScreen: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel(Text("Name suggestions"))
             }
-            Button("Cancel") { model.naming = nil; nameFocused = false }
-                .buttonStyle(.nookTertiary)
         }
         .padding(NookSpace.s2)
         .nookCard(elevation: .flat)
+        .overlay(alignment: .topTrailing) {
+            Button("Cancel", systemImage: "xmark") { model.naming = nil; nameFocused = false }
+                .labelStyle(.iconOnly)
+                .foregroundStyle(NookColor.textSecondary)
+                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                .accessibilityLabel(Text("Cancel naming"))
+        }
         .onAppear { nameFocused = true }
         // D35: suggestions follow the name after a pause, never rewriting the field.
         .task(id: model.name) {
