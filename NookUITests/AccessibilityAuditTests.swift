@@ -10,6 +10,7 @@ import XCTest
 /// (4.5:1, 7:1 in High Contrast) in CI instead.
 final class AccessibilityAuditTests: XCTestCase {
     private let audits = XCUIAccessibilityAuditType.all.subtracting(.contrast)
+    private let suggestionBarHeight: CGFloat = 48
 
     @MainActor
     func testScreensPassTheAccessibilityAudit() throws {
@@ -187,6 +188,8 @@ final class AccessibilityAuditTests: XCTestCase {
         XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
         app.buttons["Scan room"].tap()
         XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        // The coach hint shows only on a simulator's first scan; turn it on so it's always audited.
+        if !app.buttons["Tips"].isSelected { app.buttons["Tips"].tap() }
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.buttons["Take Photo"].tap()
         let done = app.buttons["Done"]
@@ -255,9 +258,12 @@ final class AccessibilityAuditTests: XCTestCase {
     /// SwiftUI, always has an element, and is still audited.
     @MainActor
     private func isInSystemTabBar(_ issue: XCUIAccessibilityAuditIssue, _ app: XCUIApplication) -> Bool {
-        // The keyboard's own keys and suggestions are system chrome.
+        // The keyboard's own keys and suggestions are system chrome. Its suggestion bar sits just
+        // above the keys, outside the keyboard's frame (the iOS 27 simulator's default keyboards).
         let keyboard = app.keyboards.firstMatch
-        if let element = issue.element, keyboard.exists, keyboard.frame.contains(element.frame) { return true }
+        if let element = issue.element, keyboard.exists,
+           keyboard.frame.insetBy(dx: 0, dy: -suggestionBarHeight).offsetBy(dx: 0, dy: -suggestionBarHeight / 2)
+               .union(keyboard.frame).contains(element.frame) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }

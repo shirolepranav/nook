@@ -218,9 +218,11 @@ private struct RoomScanCamera: View {
         Text(text)
             .font(.nookBody)
             .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)   // wraps, never clips, on a small phone
             .padding(NookSpace.s2)
             .frame(maxWidth: NookLayout.readableWidth / 1.5)
             .glassEffect(.regular, in: .rect(cornerRadius: NookRadius.toast))   // a floating camera control (03 §6.3)
+            .layoutPriority(1)
             .onTapGesture { showsTips = false }
             .accessibilityAddTraits(.isStaticText)
             .onAppear { AccessibilityNotification.Announcement(String(localized: text)).post() }

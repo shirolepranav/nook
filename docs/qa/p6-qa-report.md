@@ -11,6 +11,12 @@ Runs (a reduced close, like P5: no full `scripts/ci.sh`, light-mode screenshots 
 - **App, 13-inch iPad:** `CaptureTests` (8) and `ShellTests` (6) ✔. The manual barcode test first failed only because the iPad simulator shows no software keyboard; the test now taps the field.
 - **Load note:** most runs happened while the Mac was at a load average of 100–200 (`ReportCrashService` handling simulator crash reports), so UI-test times are pessimistic.
 
+- **CI (2026-10-08, `ci.sh` on the self-hosted runner):** build, policy, tokens, color sets, NookKit, NookUI (21) and NookAI (19) ✔; the app suite on the SE had 37 passed, 4 failed. The runner had been offline since 2026-10-06 (it exited on a network error and isn't installed as a service), so this was P6's first CI run. Each failure was explained and fixed, except P5's known pair:
+  - **C-02's coach hint clipped** on a simulator's first scan (my local runs had scanned before). It now wraps, and the audit turns Tips on so the hint is always checked.
+  - **The keyboard's suggestion bar** (arrows with no labels) failed the Find audit after the SE simulator was erased. It sits just above the keyboard's frame, and the audit filter now covers it.
+  - **`testArrangeRooms`** is intermittent: the CI recording shows the drag only lifted the row before Done. It's untouched by P6 and passes on `main`; the drag is now slow with a hold.
+  - Find's Dynamic Type finding now also names the "Recent" section header (it shows once the simulator has recent searches). It's the same List-text issue as P5's footer.
+
 **Status:** In QA. The **Owner** rows need a real device: the camera, document scanner, barcode scanner and share sheet don't exist on the simulator.
 
 Closing P6 turned up these problems, all fixed:

@@ -19,7 +19,9 @@ final class ArrangeAndSidebarTests: XCTestCase {
 
         let garageHandle = app.buttons["Reorder Garage"]
         XCTAssertTrue(garageHandle.waitForExistence(timeout: 5))
-        garageHandle.press(forDuration: 0.5, thenDragTo: app.buttons["Reorder Kitchen"])
+        // Slow, with a hold at the end: a fast drag on a busy Mac only lifts the row (P6 CI).
+        garageHandle.press(forDuration: 0.5, thenDragTo: app.buttons["Reorder Kitchen"],
+                           withVelocity: .slow, thenHoldForDuration: 0.5)
         app.buttons["Done"].tap()
 
         let garage = app.buttons["Garage, Empty"]

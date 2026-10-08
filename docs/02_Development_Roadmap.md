@@ -134,7 +134,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — search ranking unit tests (PRD §9); performance test with 5,000 seeded items. Smoke — S1–S5.
 
 ### P6 · Classic capture
-**Status:** In QA: on `p6/classic-capture` (QA report `docs/qa/p6-qa-report.md`). A reduced close like P5: no full `ci.sh`, light screenshots, no Pro Max run. The owner's device checks are open: low light, a call during a scan, the document camera, the share sheet, a real barcode and sticker.
+**Status:** In QA: pushed to `main` on 2026-10-08 (PR #35, QA report `docs/qa/p6-qa-report.md`). A reduced close like P5: no full `ci.sh`, light screenshots, no Pro Max run. The owner's device checks are open: low light, a call during a scan, the document camera, the share sheet, a real barcode and sticker.
 **Scope:** Capture menu (C-01); room scan camera (C-02) with coach overlay; manual tagging (C-04) with tap or draw boxes and name suggestions; quick add (C-05); receipt scan (C-06) with Vision text recognition and tap-to-drop; barcode scanner (C-07); serial sticker reader (C-08) listing recognized lines; just-in-time camera permission; receipt import from Files and the share sheet.
 **PRD acceptance:** manual path saves 8 items in under 2 minutes (F3).
 **QA:** low light, blurry photos, crumpled and faded receipts, several currencies and date formats, camera denied, interruptions (a phone call during capture).
