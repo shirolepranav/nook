@@ -122,7 +122,10 @@ extension NookSchemaV1 {
         public var lentAt: Date = Date.now
         public var dueAt: Date?
         public var returnedAt: Date?
+        /// Reminds the morning it's due, so only with a due date (D50).
         public var remind: Bool = true
+        /// Set by the loan reminder's Snooze (04 §7).
+        public var snoozedUntil: Date?
 
         public var item: Item?
 

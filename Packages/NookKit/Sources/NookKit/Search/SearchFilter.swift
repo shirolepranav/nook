@@ -51,7 +51,7 @@ public struct SearchFilter: Codable, Hashable, Sendable {
         switch warranty {
         case .any: break
         case .active, .ending, .expired:
-            guard let end = doc.warrantyEnd, status(of: end, now: now, calendar: calendar) == warranty else { return false }
+            guard let end = doc.warrantyEnd, Self.status(of: end, now: now, calendar: calendar) == warranty else { return false }
         }
         switch lastSeen {
         case .any: break
@@ -63,8 +63,9 @@ public struct SearchFilter: Codable, Hashable, Sendable {
         return true
     }
 
-    /// Active, ending within 30 days, or expired (R-04's groups).
-    public func status(of end: Date, now: Date, calendar: Calendar = .current) -> WarrantyStatus {
+    /// Active, ending within 30 days, or expired (R-04's groups). One rule for R-04, Home,
+    /// I-01 and Find.
+    public static func status(of end: Date, now: Date, calendar: Calendar = .current) -> WarrantyStatus {
         if end < now { return .expired }
         let soon = calendar.date(byAdding: .day, value: Self.endingDays, to: now) ?? now
         return end <= soon ? .ending : .active

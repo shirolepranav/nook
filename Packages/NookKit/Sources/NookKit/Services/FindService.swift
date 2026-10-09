@@ -55,7 +55,7 @@ public struct FindService {
         if top.kind != .item { return contents(of: top.id) }
         guard let item = item(top.id) else { return nil }
 
-        if let loan = activeLoan(of: item) {
+        if let loan = item.activeLoan {
             return .lent(item: item.id, person: loan.personName, since: loan.lentAt, due: loan.dueAt)
         }
         if question.intent == .who { return nil }   // asked who has it, and nobody does
@@ -106,10 +106,6 @@ public struct FindService {
                           itemNames: items.filter { !$0.isPrivate }.map(\.name))
         }
         return .contents(place: placeID, total: groups.map(\.count).reduce(0, +), groups: groups)
-    }
-
-    public func activeLoan(of item: Item) -> Loan? {
-        (item.loans ?? []).filter { $0.returnedAt == nil }.max { $0.lentAt < $1.lentAt }
     }
 
     // MARK: Saved searches (F-06)

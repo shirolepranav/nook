@@ -36,6 +36,24 @@ public struct ItemDraft: Equatable {
         }
     }
 
+    /// The warranty the editor shows (I-02): a length counted from the purchase date, or an
+    /// end date. Nil when there's none.
+    public struct WarrantyDraft: Equatable, Sendable {
+        public var lengthMonths: Int?
+        public var endDate: Date?
+        public var remindersOn = true
+
+        public init(lengthMonths: Int? = nil, endDate: Date? = nil, remindersOn: Bool = true) {
+            (self.lengthMonths, self.endDate, self.remindersOn) = (lengthMonths, endDate, remindersOn)
+        }
+
+        /// The end it gives for this purchase date; a length needs one.
+        public func end(purchasedOn purchaseDate: Date?, calendar: Calendar = .current) -> Date? {
+            guard let lengthMonths else { return endDate }
+            return purchaseDate.flatMap { Warranties.endDate(start: $0, lengthMonths: lengthMonths, calendar: calendar) }
+        }
+    }
+
     public var name = ""
     public var category = ""
     public var tags: [String] = []
@@ -54,6 +72,7 @@ public struct ItemDraft: Equatable {
     public var photos: [DraftPhoto] = []
     public var receipts: [DraftReceipt] = []
     public var location: Location?
+    public var warranty: WarrantyDraft?
 
     public init(currencyCode: String = "", location: Location? = nil) {
         self.currencyCode = currencyCode
@@ -72,6 +91,9 @@ public struct ItemDraft: Equatable {
         }
         receipts = (item.receipts ?? []).map { DraftReceipt(fileName: $0.fileName, kind: $0.kind, extractedText: $0.extractedText) }
         location = Location(of: item)
+        warranty = item.primaryWarranty.map {
+            WarrantyDraft(lengthMonths: $0.lengthMonths, endDate: $0.endDate, remindersOn: $0.remindersOn)
+        }
     }
 }
 
@@ -91,6 +113,7 @@ public struct ItemService {
     public enum Failure: Error, Equatable {
         case emptyName
         case tooManyPhotos
+        case noPerson
     }
 
     /// D7.
@@ -173,6 +196,47 @@ public struct ItemService {
             item.tags.append(tag)
         }
     }
+
+    // MARK: Lending (F7, I-06)
+
+    /// Lends an item, or edits the loan that's already out, so an item is never lent twice.
+    /// A reminder needs a due date: it comes the morning the item is due (D50).
+    @discardableResult
+    public func lend(_ item: Item, to person: String, contactID: String? = nil, lentAt: Date,
+                     dueAt: Date?, remind: Bool) throws -> Loan {
+        let person = person.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !person.isEmpty else { throw Failure.noPerson }
+        let loan = item.activeLoan ?? {
+            let loan = Loan(personName: person)
+            context.insert(loan)
+            loan.item = item
+            return loan
+        }()
+        if loan.personName != person { loan.personName = person }
+        if loan.contactID != contactID { loan.contactID = contactID }
+        if loan.lentAt != lentAt { loan.lentAt = lentAt }
+        if loan.dueAt != dueAt { loan.dueAt = dueAt; loan.snoozedUntil = nil }
+        let remind = remind && dueAt != nil
+        if loan.remind != remind { loan.remind = remind }
+        return loan
+    }
+
+    /// A property change, so the window's Undo brings the loan back (D45).
+    public func markReturned(_ loan: Loan) {
+        if loan.returnedAt == nil { loan.returnedAt = now() }
+    }
+
+    /// Snooze from a reminder (04 §7): it comes back a week from now.
+    public func snooze(_ warranty: Warranty) {
+        warranty.snoozedUntil = now().addingTimeInterval(Self.snoozeDays * 86_400)
+    }
+
+    public func snooze(_ loan: Loan) {
+        loan.snoozedUntil = now().addingTimeInterval(Self.snoozeDays * 86_400)
+    }
+
+    /// "Snooze 1 Week" (04 §7).
+    public static let snoozeDays = 7.0
 
     // MARK: Delete and Recently Deleted (D14)
 
@@ -332,6 +396,31 @@ public struct ItemService {
             context.insert(receipt)
             receipt.item = item
         }
+        writeWarranty(draft.warranty, into: item)
         LocationService(context: context, now: now).move([item], to: draft.location)
+    }
+
+    /// The editor shows one warranty, the one that ends last (D50); others stay as they are.
+    private func writeWarranty(_ draft: ItemDraft.WarrantyDraft?, into item: Item) {
+        let current = item.primaryWarranty
+        guard let draft, let end = draft.end(purchasedOn: item.purchaseDate) else {
+            if let current {
+                current.item = nil
+                context.delete(current)
+            }
+            return
+        }
+        // P11: a new warranty with reminders on checks EntitlementStore.canAddReminder here (D9).
+        let warranty = current ?? {
+            let warranty = Warranty(kind: .manufacturer)
+            context.insert(warranty)
+            warranty.item = item
+            return warranty
+        }()
+        let start = draft.lengthMonths == nil ? warranty.startDate : item.purchaseDate
+        if warranty.startDate != start { warranty.startDate = start }
+        if warranty.lengthMonths != draft.lengthMonths { warranty.lengthMonths = draft.lengthMonths }
+        if warranty.endDate != end { warranty.endDate = end; warranty.snoozedUntil = nil }
+        if warranty.remindersOn != draft.remindersOn { warranty.remindersOn = draft.remindersOn }
     }
 }
