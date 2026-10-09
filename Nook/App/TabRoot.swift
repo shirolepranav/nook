@@ -8,15 +8,20 @@ struct TabRoot<Content: View>: View {
     let title: LocalizedStringKey
     let showsCapture: Bool
     let content: Content
+    /// Set by tabs that something outside can push onto (a notification tap, Home's "See all").
+    let path: Binding<NavigationPath>?
+    @State private var ownPath = NavigationPath()
 
-    init(_ title: LocalizedStringKey, showsCapture: Bool = true, @ViewBuilder content: () -> Content) {
+    init(_ title: LocalizedStringKey, showsCapture: Bool = true, path: Binding<NavigationPath>? = nil,
+         @ViewBuilder content: () -> Content) {
         self.title = title
         self.showsCapture = showsCapture
+        self.path = path
         self.content = content()
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: path ?? $ownPath) {
             ScrollView {
                 VStack(alignment: .leading, spacing: NookSpace.s3) { content }
                     .padding(NookSpace.s2)

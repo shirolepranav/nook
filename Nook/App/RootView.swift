@@ -33,6 +33,9 @@ private struct TabShell: View {
     @State private var openedReceipt: ReceiptSource?
     @State private var openedItem: ItemDraft?
     @State private var library: SearchLibrary?
+    @Environment(AppRouter.self) private var router
+    @Environment(\.reminders) private var reminders
+    @Environment(\.scenePhase) private var scenePhase
 
     private var selectedRoom: Room? {
         guard case .room(let id) = tab else { return nil }
@@ -116,6 +119,17 @@ private struct TabShell: View {
         // Saves, moves and deletes undo with ⌘Z, the shake gesture and the Undo toast (04 §9).
         .onAppear { context.undoManager = undoManager }
         .task { await tidyUp() }
+        // Reminders follow every save, and are checked again whenever the app comes back,
+        // since notification permission can change in Settings (04 §7).
+        .task { await reminders?.keepCurrent() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await reminders?.reconcile() } }
+        }
+        .onChange(of: router.requestedTab, initial: true) { _, requested in
+            guard let requested else { return }
+            tab = requested
+            router.requestedTab = nil
+        }
         .task {
             // Find's index: built after the first frame, then kept current on every save (04 §6).
             let library = SearchLibrary(container: context.container)

@@ -32,6 +32,15 @@
 	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
 	<key>NSCameraUsageDescription</key>
 	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
+	<!-- D13, 04 §7: background refresh tops up the rolling reminder list when the app isn't opened. -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>pranav.nook.reminders</string>
+	</array>
 	<!-- L-01: warm canvas with the Nook mark. LaunchBackground is generated from 03 (export_colorsets.py). -->
 	<key>UILaunchScreen</key>
 	<dict>

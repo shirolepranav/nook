@@ -12,6 +12,10 @@ enum PreferenceKey {
     static let hideValues = MoneyText.hideValuesKey   // the current state, toggled on Home
     /// Set once onboarding finishes (O-02); UI tests pass `-uiTestingOnboarded YES` to skip it.
     static let hasOnboarded = "hasOnboarded"
+    /// S-07: reminder switches and the time of day, in minutes after midnight (9:00 AM).
+    static let warrantyReminders = "warrantyReminders"
+    static let loanReminders = "loanReminders"
+    static let reminderMinutes = "reminderMinutes"
 }
 
 extension UserDefaults {

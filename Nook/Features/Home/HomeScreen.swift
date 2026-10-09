@@ -16,6 +16,7 @@ struct HomeScreen: View {
     @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
+    @Environment(AppRouter.self) private var router: AppRouter?
 
     private enum EditTarget: Identifiable {
         case new, room(Room)
@@ -28,7 +29,7 @@ struct HomeScreen: View {
     }
 
     var body: some View {
-        TabRoot("Home") {
+        TabRoot("Home", path: router.map { Bindable($0).homePath }) {
             if rooms.isEmpty {
                 EmptyStateView(.shelfWaiting, title: Text("Let’s start with one room."),
                                message: Text("Add the rooms you have, then fill them in.")) {

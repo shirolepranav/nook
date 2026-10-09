@@ -7,7 +7,7 @@ import NookUI
 struct NookApp: App {
     @AppStorage(PreferenceKey.accent, store: .nook) private var accent: AccentChoice = .terracotta
     @AppStorage(PreferenceKey.theme, store: .nook) private var theme: ThemeChoice = .system
-    @State private var container = Self.openStore()
+    @UIApplicationDelegateAdaptor private var app: AppDelegate
 
     init() {
         NookAppearance.configure()
@@ -28,10 +28,13 @@ struct NookApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if let container {
-                    RootView().modelContainer(container)
+                if let container = app.container {
+                    RootView()
+                        .modelContainer(container)
+                        .environment(app.router)
+                        .environment(\.reminders, app.reminders)
                 } else {
-                    StoreErrorView { container = Self.openStore() }
+                    StoreErrorView { app.openStore() }
                 }
             }
             .nookAccent(accent)
@@ -39,11 +42,14 @@ struct NookApp: App {
             .defaultAppStorage(.nook)   // every @AppStorage, NookUI's too, uses the App Group
         }
         .commands { NookCommands() }
+        .backgroundTask(.appRefresh(Reminders.refreshTask)) {
+            await app.reminders?.reconcile()
+        }
     }
 
     /// The App Group store. UI tests launch with `-uiTestingStore <empty|small>` for a fresh
     /// in-memory store instead.
-    private static func openStore() -> ModelContainer? {
+    static func openStore() -> ModelContainer? {
         #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
         if let flag = arguments.firstIndex(of: "-uiTestingStore"), flag + 1 < arguments.count {
