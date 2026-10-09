@@ -7,6 +7,26 @@
     " From %@." : {
 
     },
+    "%@ has had your %@ since %@. It was due back %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ has had your %2$@ since %3$@. It was due back %4$@."
+          }
+        }
+      }
+    },
+    "%@ has had your %@ since %@. It's due back today." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ has had your %2$@ since %3$@. It's due back today."
+          }
+        }
+      }
+    },
     "%@ has your %@." : {
       "localizations" : {
         "en" : {
@@ -16,6 +36,9 @@
           }
         }
       }
+    },
+    "%@ is back." : {
+
     },
     "%@ moved to position %lld of %lld" : {
       "localizations" : {
@@ -69,6 +92,16 @@
         }
       }
     },
+    "%@ · since %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · since %2$@"
+          }
+        }
+      }
+    },
     "%@, packed %@." : {
       "localizations" : {
         "en" : {
@@ -78,6 +111,31 @@
           }
         }
       }
+    },
+    "%@, warranty ends in %lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, warranty ends in %lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, warranty ends in %lld days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%@, warranty ends today" : {
+
     },
     "%@. %@.%@ %@." : {
       "localizations" : {
@@ -95,10 +153,79 @@
     "%lld Selected" : {
 
     },
+    "%lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld days late" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day late"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days late"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld days left" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days left"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld ending in the next 30 days" : {
 
     },
     "%lld items" : {
+
+    },
+    "%lld items lent" : {
 
     },
     "%lld items · %lld spots" : {
@@ -203,19 +330,101 @@
         }
       }
     },
+    "%lld warranties" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld warranty"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld warranties"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "**%@** has it since %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "**%1$@** has it since %2$@"
+          }
+        }
+      }
+    },
+    "**%@** has it since %@ · due %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "**%1$@** has it since %2$@ · due %3$@"
+          }
+        }
+      }
+    },
     "+%lld more" : {
 
     },
     "0.00" : {
 
     },
+    "1 day late" : {
+
+    },
+    "1 item with %@" : {
+
+    },
+    "1 yr" : {
+
+    },
     "1 yr+" : {
+
+    },
+    "2 yrs" : {
 
     },
     "2 yrs+" : {
 
     },
+    "30 and 7 days before a warranty ends" : {
+
+    },
     "A container sits in a room or a spot. It can’t go inside another container." : {
+
+    },
+    "A private item's warranty ends in %lld days." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A private item's warranty ends in %lld day."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A private item's warranty ends in %lld days."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "A private item's warranty ends today." : {
 
     },
     "Accent color" : {
@@ -235,6 +444,28 @@
     },
     "Active" : {
 
+    },
+    "Active · %lld days left" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Active · %lld day left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Active · %lld days left"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Add" : {
 
@@ -266,6 +497,9 @@
     "Add a Room" : {
 
     },
+    "Add a Warranty" : {
+
+    },
     "Add a few things and Nook will tell you where they are." : {
 
     },
@@ -293,7 +527,13 @@
     "Add model" : {
 
     },
+    "Add one to any item and we’ll remind you before it ends." : {
+
+    },
     "Add photo" : {
+
+    },
+    "Add return date" : {
 
     },
     "Add room" : {
@@ -309,6 +549,9 @@
 
     },
     "Add the spots in this room, like shelves, drawers and cupboards." : {
+
+    },
+    "Add who has it." : {
 
     },
     "Add your own" : {
@@ -350,6 +593,9 @@
     "Arrange Spots" : {
 
     },
+    "Back by" : {
+
+    },
     "Barcode" : {
 
     },
@@ -372,6 +618,9 @@
 
     },
     "Cancel" : {
+
+    },
+    "Cancel naming" : {
 
     },
     "Capture" : {
@@ -398,6 +647,9 @@
     "Choose a room" : {
 
     },
+    "Choose from Contacts" : {
+
+    },
     "Choose from Photos" : {
 
     },
@@ -416,6 +668,9 @@
     "Clear purchase date" : {
 
     },
+    "Clear return date" : {
+
+    },
     "Close" : {
 
     },
@@ -423,6 +678,9 @@
 
     },
     "Components" : {
+
+    },
+    "Contacts" : {
 
     },
     "Container" : {
@@ -579,6 +837,9 @@
     "Don’t Accept" : {
 
     },
+    "Due %@" : {
+
+    },
     "Duplicate" : {
 
     },
@@ -597,16 +858,96 @@
     "Edit Item" : {
 
     },
+    "Edit Loan" : {
+
+    },
     "Edit Room" : {
 
     },
     "Edit Spot" : {
 
     },
+    "Edit loan" : {
+
+    },
     "Empty" : {
 
     },
+    "Ended %@" : {
+
+    },
+    "Ended %@." : {
+
+    },
     "Ending" : {
+
+    },
+    "Ending in 30 days" : {
+
+    },
+    "Ending · %lld days left" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ending · %lld day left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ending · %lld days left"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Ends %@" : {
+
+    },
+    "Ends %@ · Reminders 30 and 7 days before" : {
+
+    },
+    "Ends %@ · Reminders off" : {
+
+    },
+    "Ends %@. Reminders 30 and 7 days before." : {
+
+    },
+    "Ends %@. Reminders are off for Nook." : {
+
+    },
+    "Ends %@. Reminders are off." : {
+
+    },
+    "Ends in %lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ends in %lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ends in %lld days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Ends today" : {
 
     },
     "Enter it myself" : {
@@ -746,10 +1087,28 @@
     "Lavender" : {
 
     },
+    "Lend" : {
+
+    },
+    "Lend %@" : {
+
+    },
+    "Lend Something" : {
+
+    },
+    "Lent" : {
+
+    },
+    "Lent on" : {
+
+    },
     "Lent out" : {
 
     },
     "Lent out only" : {
+
+    },
+    "Lent to %@." : {
 
     },
     "Let’s start with one room." : {
@@ -761,6 +1120,9 @@
     "Line up the barcode inside the frame." : {
 
     },
+    "Loan reminders" : {
+
+    },
     "Location history" : {
 
     },
@@ -768,6 +1130,9 @@
 
     },
     "Mark Private" : {
+
+    },
+    "Mark Returned" : {
 
     },
     "Marked Private." : {
@@ -883,6 +1248,9 @@
     "No longer Private." : {
 
     },
+    "No matches." : {
+
+    },
     "No moves yet." : {
 
     },
@@ -898,6 +1266,12 @@
     "No text found on this photo." : {
 
     },
+    "No warranties yet" : {
+
+    },
+    "No warranties yet." : {
+
+    },
     "None" : {
 
     },
@@ -905,6 +1279,9 @@
 
     },
     "Nook couldn’t open your items" : {
+
+    },
+    "Nook only sends reminders you asked for." : {
 
     },
     "Nook uses the camera to take photos of your things. They stay on this device." : {
@@ -946,7 +1323,19 @@
     "Nothing matches these filters." : {
 
     },
+    "Nothing to choose yet." : {
+
+    },
     "Nothing to find yet." : {
+
+    },
+    "Nothing’s out right now" : {
+
+    },
+    "Nothing’s out right now." : {
+
+    },
+    "Notifications" : {
 
     },
     "OK" : {
@@ -965,6 +1354,9 @@
 
     },
     "Opens the receipt" : {
+
+    },
+    "Other" : {
 
     },
     "PDF" : {
@@ -1122,6 +1514,33 @@
     "Recently added" : {
 
     },
+    "Remind me" : {
+
+    },
+    "Reminders" : {
+
+    },
+    "Reminders Off" : {
+
+    },
+    "Reminders On" : {
+
+    },
+    "Reminders are off for Nook" : {
+
+    },
+    "Reminders are off for Nook." : {
+
+    },
+    "Reminders off" : {
+
+    },
+    "Reminders off." : {
+
+    },
+    "Reminders on." : {
+
+    },
     "Remove" : {
 
     },
@@ -1138,9 +1557,6 @@
 
     },
     "Reports" : {
-
-    },
-    "Reports live here." : {
 
     },
     "Restore" : {
@@ -1233,10 +1649,19 @@
     "Search" : {
 
     },
+    "Search items" : {
+
+    },
     "Search or ask: Where are the passports?" : {
 
     },
     "Search rooms and spots" : {
+
+    },
+    "See All" : {
+
+    },
+    "See all warranties" : {
 
     },
     "Select" : {
@@ -1306,7 +1731,16 @@
     "Snap a room, tag what’s on the shelves, and ask where anything is, any time." : {
 
     },
+    "Snooze 1 Week" : {
+
+    },
     "Some photos couldn’t be added. Try again." : {
+
+    },
+    "Something you lent %@ is due back today." : {
+
+    },
+    "Something you lent %@ is overdue." : {
 
     },
     "Spot" : {
@@ -1402,6 +1836,12 @@
     "The containers in it are deleted too." : {
 
     },
+    "The morning it’s due" : {
+
+    },
+    "The morning something is due back" : {
+
+    },
     "The numbers under the bars" : {
 
     },
@@ -1426,10 +1866,19 @@
     "This date is in the future. You can still save." : {
 
     },
+    "This is before the purchase date. You can still save." : {
+
+    },
     "Those numbers don’t add up. Check them against the label." : {
 
     },
+    "Time of day" : {
+
+    },
     "Tips" : {
+
+    },
+    "Today" : {
 
     },
     "Top shelf" : {
@@ -1444,7 +1893,16 @@
     "Try removing one." : {
 
     },
+    "Turn Reminders Off" : {
+
+    },
+    "Turn Reminders On" : {
+
+    },
     "Turn it on in Settings, or pick photos you already have." : {
+
+    },
+    "Turn on notifications in the Settings app so warranty and loan reminders can reach you." : {
 
     },
     "Type" : {
@@ -1474,7 +1932,13 @@
     "Value to" : {
 
     },
-    "Warranties, lent things and your insurance report will appear as you add items." : {
+    "View" : {
+
+    },
+    "Warranties" : {
+
+    },
+    "Warranties ending soon" : {
 
     },
     "Warranty" : {
@@ -1486,10 +1950,22 @@
     "Warranty ending" : {
 
     },
+    "Warranty ends" : {
+
+    },
     "Warranty expired" : {
 
     },
+    "Warranty length" : {
+
+    },
+    "Warranty reminders" : {
+
+    },
     "What is it?" : {
+
+    },
+    "When you lend something, it shows up here with a due date." : {
 
     },
     "Where" : {
@@ -1516,6 +1992,9 @@
     "Which rooms do you have?" : {
 
     },
+    "Who has it?" : {
+
+    },
     "Yes, you have %lld." : {
 
     },
@@ -1529,6 +2008,31 @@
 
     },
     "You have this" : {
+
+    },
+    "Your %@ warranty ends in %lld days." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your %@ warranty ends in %lld day."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your %@ warranty ends in %lld days."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Your %@ warranty ends today." : {
 
     },
     "Zoom" : {

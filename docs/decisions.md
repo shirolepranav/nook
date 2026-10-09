@@ -396,5 +396,9 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **`UNCalendarNotificationTrigger(dateMatching:repeats:)` with no time zone in the components** is a floating date, as documented. `ReminderTests` checks that the components carry none. Firing at 9:00 after a time-zone change is an owner device check.
 - **`Button(role: .confirm)` and `.cancel` in a sheet's toolbar** draw the checkmark and the X from the I-06 board.
 - **`UIApplication.openNotificationSettingsURLString`** opens Nook's notification settings.
+- **The accessibility audit (`performAccessibilityAudit`) enlarges text without scrolling.** So List content it pushes past the fold is reported as "Text clipped" or "Dynamic Type font sizes are partially unsupported": Settings' lower rows, R-04's last header, S-07's last row, and Find's "Recent" header and footer (P5's open finding, D47). The P7 AX5 screenshots show all of it growing, and `policy-check.sh` already rejects fixed font sizes. So the audit now skips those two checks for elements inside a List.
+- **A compact `DatePicker` draws its own date text,** which the audit reports as "Potentially inaccessible text", either on the picker or with no element. The audit skips it while a date picker is on screen.
+- **Two layout fixes from the AX5 screenshots:** a date with its Clear button didn't fit across an SE (`ClearableDate` now stacks them), and the system segmented control doesn't grow with text size (I-02's warranty length becomes a menu at accessibility sizes).
+- **Still open (P5's other finding, D47):** I-01's tag chips report "Potentially inaccessible text" with no element. Two more attempts failed: one labeled element over the flow layout, and that element on a wrapping VStack. The tags are read by VoiceOver ("Tag: Coffee").
 
-*Affects:* `Nook/App/Reminders.swift`, `Info.plist`, `LendSheet.swift`.
+*Affects:* `Nook/App/Reminders.swift`, `Info.plist`, `LendSheet.swift`, `ItemEditor.swift` (`ClearableDate`), `AccessibilityAuditTests.swift`.
