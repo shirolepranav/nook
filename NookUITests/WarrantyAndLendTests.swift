@@ -129,6 +129,6 @@ final class WarrantyAndLendTests: XCTestCase {
         app.tab("Settings").tap()
         app.buttons["Notifications"].tap()
         XCTAssertTrue(app.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.switches["Warranty reminders"].exists)
+        XCTAssertTrue(app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Warranty reminders'")).firstMatch.exists)
     }
 }

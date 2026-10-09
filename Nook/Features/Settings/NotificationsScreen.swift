@@ -9,6 +9,7 @@ struct NotificationsScreen: View {
     @AppStorage(PreferenceKey.loanReminders) private var loans = true
     @AppStorage(PreferenceKey.reminderMinutes) private var minutes = 9 * 60
     @Environment(\.reminders) private var reminders
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         List {
@@ -23,18 +24,30 @@ struct NotificationsScreen: View {
                 Toggle(isOn: $loans) {
                     row(Text("Loan reminders"), Text("The morning something is due back"))
                 }
-                DatePicker(selection: time, displayedComponents: .hourAndMinute) {
+                // A plain label beside the picker, stacked at accessibility sizes so it can grow;
+                // the picker's own label and a section footer don't (the audit flags both).
+                let row = typeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.s1)) : AnyLayout(HStackLayout())
+                row {
                     Text("Time of day").font(.nookBody).foregroundStyle(NookColor.textPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    DatePicker(selection: time, displayedComponents: .hourAndMinute) { Text("Time of day") }
+                        .labelsHidden()
                 }
                 .frame(minHeight: NookLayout.minTapTarget)
             } header: {
                 Text("Reminders").font(.nookMeta).foregroundStyle(NookColor.textSecondary).textCase(nil)
-            } footer: {
+            }
+            .listRowBackground(NookColor.surface)
+            Section {
                 Text("Nook only sends reminders you asked for.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 0, leading: NookSpace.s2, bottom: 0, trailing: NookSpace.s2))
             }
-            .listRowBackground(NookColor.surface)
         }
         .scrollContentBackground(.hidden)
         .background(NookColor.canvas)

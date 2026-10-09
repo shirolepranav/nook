@@ -245,6 +245,71 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP7Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launchArguments += ["-uiTestingNotifications", "granted"]
+        app.launch()
+        let garage = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Garage,")).firstMatch
+        XCTAssertTrue(garage.waitForExistence(timeout: 15))
+        app.swipeUp()
+        snap("H-01 Warranties ending soon")
+        app.swipeDown()
+
+        garage.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Cordless drill,")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["Mark Returned"].waitForExistence(timeout: 5))
+        snap("I-01 Lent out")
+        app.swipeUp()
+        snap("I-01 Warranty")
+        app.buttons["Edit loan"].tap()
+        XCTAssertTrue(app.textFields["Who has it?"].waitForExistence(timeout: 5))
+        snap("I-06 Lend")
+        app.buttons["Cancel"].tap()
+        app.buttons["Edit"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Edit Item"].waitForExistence(timeout: 5))
+        let other = app.buttons["Other"]
+        for _ in 0..<6 where !other.isHittable { app.swipeUp() }
+        snap("I-02 Warranty")
+        app.buttons["Cancel"].tap()
+
+        app.tab("Reports").tap()
+        let warranties = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Warranties'")).firstMatch
+        XCTAssertTrue(warranties.waitForExistence(timeout: 5))
+        snap("R-01 Reports")
+        warranties.tap()
+        XCTAssertTrue(app.navigationBars["Warranties"].waitForExistence(timeout: 5))
+        snap("R-04 Warranties")
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Lent out'")).firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Lent out"].waitForExistence(timeout: 5))
+        snap("R-05 Lent out")
+        app.tab("Settings").tap()
+        app.buttons["Notifications"].tap()
+        XCTAssertTrue(app.navigationBars["Notifications"].waitForExistence(timeout: 5))
+        snap("S-07 Notifications")
+        app.terminate()
+
+        let empty = XCUIApplication.nook(store: "small")
+        empty.launchArguments += ["-uiTestingNotifications", "denied"]
+        empty.launch()
+        empty.tab("Reports").tap()
+        empty.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Warranties'")).firstMatch.tap()
+        XCTAssertTrue(empty.staticTexts["No warranties yet."].waitForExistence(timeout: 5))
+        snap("R-04 Empty")
+        empty.navigationBars.buttons.firstMatch.tap()
+        empty.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Lent out'")).firstMatch.tap()
+        XCTAssertTrue(empty.staticTexts["Nothing’s out right now."].waitForExistence(timeout: 5))
+        snap("R-05 Empty")
+        empty.tab("Settings").tap()
+        empty.buttons["Notifications"].tap()
+        XCTAssertTrue(empty.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
+        snap("S-07 Denied")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

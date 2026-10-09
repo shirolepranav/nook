@@ -361,6 +361,7 @@ struct FindHeader: View {
             .font(.nookSection)
             .foregroundStyle(NookColor.textPrimary)
             .textCase(nil)
+            .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
     }
 }

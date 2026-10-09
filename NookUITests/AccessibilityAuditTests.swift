@@ -248,6 +248,56 @@ final class AccessibilityAuditTests: XCTestCase {
         try off.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, off) }
     }
 
+    /// P7 screens: Home's warranty row, I-01's Lent out and Warranty cards, I-06, R-01, R-04,
+    /// R-05 and S-07.
+    @MainActor
+    func testWarrantyAndLendingScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launchArguments += ["-uiTestingNotifications", "granted"]
+        app.launch()
+        let garage = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Garage,")).firstMatch
+        XCTAssertTrue(garage.waitForExistence(timeout: 15))
+        app.swipeUp()
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.swipeDown()
+        garage.tap()
+        let drill = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Cordless drill,")).firstMatch
+        XCTAssertTrue(drill.waitForExistence(timeout: 5))
+        drill.tap()
+        XCTAssertTrue(app.buttons["Mark Returned"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.swipeUp()
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.buttons["Edit loan"].tap()
+        XCTAssertTrue(app.textFields["Who has it?"].waitForExistence(timeout: 5))
+        // At the medium detent the audit draws the sheet scaled and calls it clipped (D45).
+        let grabber = app.buttons["Sheet Grabber"]
+        if grabber.exists { grabber.swipeUp(); sleep(1) }
+        if app.keyboards.firstMatch.exists { app.swipeDown() }
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        app.tab("Reports").tap()
+        let warranties = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Warranties'")).firstMatch
+        XCTAssertTrue(warranties.waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        warranties.tap()
+        XCTAssertTrue(app.navigationBars["Warranties"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Lent out'")).firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Lent out"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.tab("Settings").tap()
+        app.buttons["Notifications"].tap()
+        XCTAssertTrue(app.navigationBars["Notifications"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// iPad's floating tab bar is UIKit chrome with fixed-size labels (it offers the Large
     /// Content Viewer instead of growing), so the audit's Dynamic Type check flags its labels,
     /// 3 per screen, with no element it can resolve. Once rooms exist (P2), its Rooms group adds
@@ -264,6 +314,10 @@ final class AccessibilityAuditTests: XCTestCase {
         if let element = issue.element, keyboard.exists,
            keyboard.frame.insetBy(dx: 0, dy: -suggestionBarHeight).offsetBy(dx: 0, dy: -suggestionBarHeight / 2)
                .union(keyboard.frame).contains(element.frame) { return true }
+        // A compact date picker is a system control that draws its own date text (P7: I-02,
+        // I-06, S-07); the audit can't see that text and calls it inaccessible.
+        if let element = issue.element,
+           app.datePickers.allElementsBoundByIndex.contains(where: { $0.frame.intersects(element.frame) }) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }

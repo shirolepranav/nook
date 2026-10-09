@@ -66,6 +66,7 @@ struct WarrantiesScreen: View {
                             }
                         } header: {
                             title.font(.nookSection).foregroundStyle(NookColor.textPrimary).textCase(nil)
+                                .fixedSize(horizontal: false, vertical: true)
                                 .accessibilityAddTraits(.isHeader)
                         }
                         .listRowBackground(NookColor.surface)
