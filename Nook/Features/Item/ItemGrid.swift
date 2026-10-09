@@ -5,7 +5,7 @@ import NookUI
 
 /// Items as photo cards (03 §8.3), or rows at accessibility sizes (03 §4). Tapping opens
 /// the item with a zoom (I-01); while selecting, tapping toggles it (I-08). The context menu
-/// also opens with a secondary click (D29). Lend joins the menu in P7.
+/// also opens with a secondary click (D29).
 struct ItemGrid: View {
     let items: [Item]
     var selection: Binding<Set<UUID>?> = .constant(nil)
@@ -15,6 +15,7 @@ struct ItemGrid: View {
     @Environment(\.undoManager) private var undoManager
     @State private var editing: Item?
     @State private var moving: Item?
+    @State private var lending: Item?
 
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
 
@@ -25,6 +26,7 @@ struct ItemGrid: View {
             }
         }
         .sheet(item: $editing) { ItemEditor(item: $0) }
+        .sheet(item: $lending) { LendSheet(item: $0) { toast = $0 } }
         .sheet(item: $moving) { item in
             MovePicker(title: Text("Move \(item.name)"), current: Location(of: item)) { place in
                 if let place, let message = actions.move([item], to: place) { toast = message }
@@ -52,6 +54,7 @@ struct ItemGrid: View {
             .contextMenu {
                 Button("Edit", systemImage: "pencil") { editing = item }
                 Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { moving = item }
+                Button(item.activeLoan == nil ? "Lend" : "Edit Loan", systemImage: "person.badge.plus") { lending = item }
                 Button(item.isPrivate ? "Mark Not Private" : "Mark Private",
                        systemImage: item.isPrivate ? "lock.open" : "lock") {
                     toast = actions.setPrivate([item], !item.isPrivate)

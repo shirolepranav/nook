@@ -68,6 +68,28 @@ struct ItemActions {
         return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, undo: undo)
     }
 
+    // MARK: Lending and warranties (F4, F7)
+
+    func lend(_ item: Item, to person: String, contactID: String?, lentAt: Date, dueAt: Date?, remind: Bool) throws -> ToastMessage {
+        let wasOut = item.activeLoan != nil
+        let loan = try service.lend(item, to: person, contactID: contactID, lentAt: lentAt, dueAt: dueAt, remind: remind)
+        try context.save()
+        return ToastMessage(symbol: "person.fill", wasOut ? "Saved." : "Lent to \(loan.personName).", undo: undo)
+    }
+
+    func markReturned(_ loan: Loan) -> ToastMessage {
+        service.markReturned(loan)
+        try? context.save()
+        let name = loan.item?.name ?? ""
+        return ToastMessage(symbol: "checkmark", "\(name) is back.", undo: undo)
+    }
+
+    func setReminders(_ warranty: Warranty, on: Bool) -> ToastMessage {
+        warranty.remindersOn = on
+        try? context.save()
+        return ToastMessage(symbol: on ? "bell" : "bell.slash", on ? "Reminders on." : "Reminders off.", undo: undo)
+    }
+
     func restore(_ items: [Item]) -> ToastMessage {
         service.restore(items)
         try? context.save()
@@ -90,7 +112,8 @@ extension Item {
     }
 
     var badges: [CardBadge.Kind] {
-        isPrivate ? [.privateItem] : []   // Lent in P7, warranty ending in P7
+        // The boards show no warranty badge on cards; Home and R-04 carry that (D50).
+        (isPrivate ? [.privateItem] : []) + (activeLoan == nil ? [] : [.lent])
     }
 
     var value: (amount: Decimal, currencyCode: String)? {

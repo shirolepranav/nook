@@ -7,7 +7,7 @@ import NookUI
 
 /// I-02 Item editor, for a new item or an existing one. Only the name is required, so a
 /// photo and a name save in 2 taps (F2). Photos and receipts go to disk as they're picked
-/// (D40); the item itself is written only on Save. Warranty joins in P7 (D39).
+/// (D40); the item itself is written only on Save. One warranty, by length or end date (F4, D50).
 struct ItemEditor: View {
     let item: Item?
     var cameraOff = false
@@ -35,6 +35,7 @@ struct ItemEditor: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.reminders) private var reminders
 
     private enum Field { case name, price, tag, serial }
 
@@ -60,6 +61,7 @@ struct ItemEditor: View {
                     whereRow
                     detailsSection
                     purchaseSection
+                    warrantySection
                     receiptSection
                     NookTextField(Text("Notes"), text: $draft.notes, prompt: Text("Anything worth remembering"))
                     privateToggle
@@ -420,6 +422,103 @@ struct ItemEditor: View {
         return try? Decimal(trimmed, format: .number)
     }
 
+    // MARK: Warranty (F4, I-02)
+
+    private enum WarrantyChoice: Hashable, CaseIterable {
+        case none, oneYear, twoYears, other
+
+        var months: Int? {
+            switch self {
+            case .oneYear: 12
+            case .twoYears: 24
+            case .none, .other: nil
+            }
+        }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .none: "None"
+            case .oneYear: "1 yr"
+            case .twoYears: "2 yrs"
+            case .other: "Other"
+            }
+        }
+    }
+
+    private var warrantyChoice: Binding<WarrantyChoice> {
+        Binding {
+            guard let warranty = draft.warranty else { return .none }
+            return WarrantyChoice.allCases.first { $0.months != nil && $0.months == warranty.lengthMonths } ?? .other
+        } set: { choice in
+            let remindersOn = draft.warranty?.remindersOn ?? true
+            switch choice {
+            case .none:
+                draft.warranty = nil
+            case .oneYear, .twoYears:
+                // A length counts from the purchase date; most warranties are added the day
+                // something's bought, so an empty one becomes today, shown above.
+                if draft.purchaseDate == nil { draft.purchaseDate = Calendar.current.startOfDay(for: .now) }
+                draft.warranty = .init(lengthMonths: choice.months, remindersOn: remindersOn)
+            case .other:
+                let end = warrantyEnd ?? Calendar.current.date(byAdding: .year, value: 1, to: draft.purchaseDate ?? .now)
+                draft.warranty = .init(endDate: end.map { Calendar.current.startOfDay(for: $0) }, remindersOn: remindersOn)
+            }
+        }
+    }
+
+    private var warrantyEnd: Date? { draft.warranty?.end(purchasedOn: draft.purchaseDate) }
+
+    private var warrantySection: some View {
+        VStack(alignment: .leading, spacing: NookSpace.s1) {
+            Text("Warranty")
+                .font(.nookFootnote.weight(.semibold))
+                .foregroundStyle(NookColor.textSecondary)
+                .accessibilityHidden(true)
+            // Segments don't fit at the largest text sizes; a menu does.
+            ViewThatFits(in: .horizontal) {
+                warrantyPicker.pickerStyle(.segmented)
+                FieldWell(Text("Warranty")) { warrantyPicker.pickerStyle(.menu) }
+            }
+            if warrantyChoice.wrappedValue == .other, let end = draft.warranty?.endDate {
+                FieldWell(Text("Warranty ends"),
+                          helper: isBeforePurchase ? Text("This is before the purchase date. You can still save.") : nil) {
+                    DatePicker(selection: Binding { end } set: { draft.warranty?.endDate = $0 },
+                               displayedComponents: .date) { Text("Warranty ends") }
+                        .labelsHidden()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            if let warrantyEnd {
+                Text(warrantySummary(warrantyEnd))
+                    .font(.nookFootnote)
+                    .foregroundStyle(NookColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private var warrantyPicker: some View {
+        Picker(selection: warrantyChoice) {
+            ForEach(WarrantyChoice.allCases, id: \.self) { Text($0.title).tag($0) }
+        } label: {
+            Text("Warranty length")
+        }
+    }
+
+    private var isBeforePurchase: Bool {
+        guard let end = warrantyEnd, let bought = draft.purchaseDate else { return false }
+        return end < Calendar.current.startOfDay(for: bought)
+    }
+
+    private func warrantySummary(_ end: Date) -> String {
+        let date = end.formatted(date: .abbreviated, time: .omitted)
+        if end < .now { return String(localized: "Ended \(date).") }
+        if reminders?.isDenied == true { return String(localized: "Ends \(date). Reminders are off for Nook.") }
+        return draft.warranty?.remindersOn == false
+            ? String(localized: "Ends \(date). Reminders are off.")
+            : String(localized: "Ends \(date). Reminders 30 and 7 days before.")
+    }
+
     // MARK: Receipt (I-07, C-06)
 
     private var receiptSection: some View {
@@ -502,6 +601,8 @@ struct ItemEditor: View {
             }
             try context.save()
             saved += 1
+            // D15: the first warranty with reminders asks for notifications.
+            if result.primaryWarranty?.remindersOn == true { Task { [reminders] in await reminders?.askIfNeeded() } }
             onSave?(result)
             dismiss()
         } catch ItemService.Failure.emptyName {

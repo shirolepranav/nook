@@ -6,8 +6,8 @@ import NookUI
 
 /// I-01 Item detail: the photos, then where it is, then the facts. Content is paper; glass
 /// stays on the toolbar (03 §1.6). On a wide window the items around it sit in a column
-/// beside it (iPadItem board). Lend joins in P7, warranty in P7 (D39), and the Private lock
-/// in P12.
+/// beside it (iPadItem board). Lent and warranty cards arrive with P7 (F4, F7); the
+/// Private lock in P12.
 struct ItemDetailScreen: View {
     let item: Item
     @State private var shown: Item?
@@ -75,6 +75,8 @@ private struct ItemDetail: View {
     @State private var addsReceipt = false
     @State private var moving: LocationEvent.Source?
     @State private var moves = 0   // plays the success haptic (03 §10)
+    @State private var lending = false
+    @Environment(\.reminders) private var reminders
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.modelContext) private var context
@@ -91,7 +93,9 @@ private struct ItemDetail: View {
                 VStack(alignment: .leading, spacing: NookSpace.s3) {
                     titleBlock
                     locationCard
+                    if let loan = item.activeLoan { lentCard(loan) }
                     detailsCard
+                    if let warranty = item.primaryWarranty { warrantyCard(warranty) }
                     receiptCard
                     if !item.notes.isEmpty { notesCard }
                     historyRow
@@ -121,6 +125,9 @@ private struct ItemDetail: View {
                 }
             }
             ToolbarItem(placement: .secondaryAction) {
+                Button(item.activeLoan == nil ? "Lend" : "Edit Loan", systemImage: "person.badge.plus") { lending = true }
+            }
+            ToolbarItem(placement: .secondaryAction) {
                 Button(item.isPrivate ? "Mark Not Private" : "Mark Private",
                        systemImage: item.isPrivate ? "lock.open" : "lock") {
                     toast = actions.setPrivate([item], !item.isPrivate)
@@ -146,6 +153,7 @@ private struct ItemDetail: View {
         }
         .quickLookPreview($receiptURL)   // D42: Quick Look handles images and long PDFs
         .sheet(isPresented: $addsReceipt) { ItemEditor(item: item) }
+        .sheet(isPresented: $lending) { LendSheet(item: item) { toast = $0 } }
         .sheet(item: $moving) { source in
             MovePicker(title: source == .found ? Text("Where did you find it?") : Text("Move \(item.name)"),
                        current: Location(of: item)) { place in
@@ -205,8 +213,11 @@ private struct ItemDetail: View {
 
     private var titleBlock: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
-            if item.isPrivate {
-                StatusPill(.privateItem, Text("Private"))
+            if item.isPrivate || item.activeLoan != nil {
+                HStack(spacing: NookSpace.s1) {
+                    if item.isPrivate { StatusPill(.privateItem, Text("Private")) }
+                    if item.activeLoan != nil { StatusPill(.lent, Text("Lent")) }
+                }
             }
             Text(verbatim: item.name)
                 .font(.nookDisplay)
@@ -293,6 +304,84 @@ private struct ItemDetail: View {
             }
         }
         .accessibilityElement(children: .combine)
+    }
+
+    // MARK: Lent out and warranty (F7, F4)
+
+    /// "Jordan has it since Sep 12 · due Oct 1", with Mark Returned and Edit (I-01 lent board).
+    private func lentCard(_ loan: Loan) -> some View {
+        let since = loan.lentAt.formatted(.dateTime.month(.abbreviated).day())
+        let line: Text = if let due = loan.dueAt {
+            Text("**\(loan.personName)** has it since \(since) · due \(due.formatted(.dateTime.month(.abbreviated).day()))")
+        } else {
+            Text("**\(loan.personName)** has it since \(since)")
+        }
+        return VStack(alignment: .leading, spacing: NookSpace.s2) {
+            VStack(alignment: .leading, spacing: NookSpace.half) {
+                Label("Lent out", systemImage: "person")
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(NookColor.textSecondary)
+                    .accessibilityAddTraits(.isHeader)
+                line.font(.nookBody).foregroundStyle(NookColor.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .accessibilityElement(children: .combine)
+            let buttons = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: NookSpace.s1)) : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            buttons {
+                Button("Mark Returned") { toast = actions.markReturned(loan) }
+                    .buttonStyle(.nookSecondary)
+                Button("Edit") { lending = true }
+                    .buttonStyle(.nookSecondary)
+                    .accessibilityLabel(Text("Edit loan"))
+            }
+        }
+        .padding(NookSpace.s2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .nookCard(elevation: .flat)
+    }
+
+    /// "Active · 162 days left" over "Ends Mar 14, 2027 · Reminders 30 and 7 days before".
+    private func warrantyCard(_ warranty: Warranty) -> some View {
+        let end = warranty.endDate ?? .now
+        let days = Warranties.daysLeft(until: end, now: .now)
+        let date = end.formatted(.dateTime.month(.abbreviated).day().year())
+        let status: (StatusPill.Status, Text) = switch SearchFilter.status(of: end, now: .now) {
+        case .expired: (.expired, Text("Expired"))
+        case .ending: (.endingSoon, days == 0 ? Text("Ends today") : Text("Ending · \(days) days left"))
+        default: (.active, Text("Active · \(days) days left"))
+        }
+        let reminderText: Text = if days < 0 {
+            Text("Ended \(date)")
+        } else if !warranty.remindersOn {
+            Text("Ends \(date) · Reminders off")
+        } else {
+            Text("Ends \(date) · Reminders 30 and 7 days before")
+        }
+        return VStack(alignment: .leading, spacing: NookSpace.half) {
+            VStack(alignment: .leading, spacing: NookSpace.half) {
+                Text("Warranty")
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(NookColor.textSecondary)
+                    .accessibilityAddTraits(.isHeader)
+                Label { status.1 } icon: { Image(systemName: status.0 == .expired ? "exclamationmark.circle" : "checkmark.shield") }
+                    .font(.nookBody.weight(.semibold))
+                    .foregroundStyle(status.0 == .expired ? NookColor.danger
+                                     : status.0 == .endingSoon ? NookColor.warning : NookColor.success)
+                reminderText.font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .accessibilityElement(children: .combine)
+            if days >= 0, warranty.remindersOn, reminders?.isDenied == true {
+                RemindersOffNote().padding(.top, NookSpace.s1)
+            }
+        }
+        .padding(NookSpace.s2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .nookCard(elevation: .flat)
+        .accessibilityAction(named: warranty.remindersOn ? Text("Turn Reminders Off") : Text("Turn Reminders On")) {
+            toast = actions.setReminders(warranty, on: !warranty.remindersOn)
+        }
     }
 
     // MARK: History
