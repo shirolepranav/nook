@@ -178,6 +178,12 @@ private struct ItemNavigation: ViewModifier {
             }
             .navigationDestination(for: Room.self) { RoomScreen(room: $0) }
             .navigationDestination(for: Spot.self) { SpotScreen(spot: $0) }
+            .navigationDestination(for: ReportsRoute.self) { route in   // R-04, R-05 (P7)
+                switch route {
+                case .warranties: WarrantiesScreen()
+                case .lentOut: LentOutScreen()
+                }
+            }
     }
 }
 

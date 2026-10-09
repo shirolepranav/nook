@@ -17,7 +17,6 @@ struct HomeScreen: View {
     @State private var toast: ToastMessage?
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
-    @Environment(AppRouter.self) private var router: AppRouter?
     @Environment(\.dynamicTypeSize) private var typeSize
 
     private enum EditTarget: Identifiable {
@@ -31,7 +30,7 @@ struct HomeScreen: View {
     }
 
     var body: some View {
-        TabRoot("Home", tab: .home) {
+        TabRoot("Home") {
             if rooms.isEmpty {
                 EmptyStateView(.shelfWaiting, title: Text("Let’s start with one room."),
                                message: Text("Add the rooms you have, then fill them in.")) {
@@ -157,7 +156,7 @@ struct HomeScreen: View {
                         .foregroundStyle(NookColor.textPrimary)
                         .accessibilityAddTraits(.isHeader)
                     if !typeSize.isAccessibilitySize { Spacer(minLength: NookSpace.s1) }
-                    Button { router?.show(.warranties) } label: {
+                    NavigationLink(value: ReportsRoute.warranties) {
                         Text("See All")
                             .font(.nookMeta)
                             .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)

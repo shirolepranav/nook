@@ -8,21 +8,15 @@ struct TabRoot<Content: View>: View {
     let title: LocalizedStringKey
     let showsCapture: Bool
     let content: Content
-    /// The tab this root belongs to, so `AppRouter` requests for it land on this stack.
-    let tab: AppTab?
-    @State private var path = NavigationPath()
-    @Environment(AppRouter.self) private var router: AppRouter?
 
-    init(_ title: LocalizedStringKey, showsCapture: Bool = true, tab: AppTab? = nil,
-         @ViewBuilder content: () -> Content) {
+    init(_ title: LocalizedStringKey, showsCapture: Bool = true, @ViewBuilder content: () -> Content) {
         self.title = title
         self.showsCapture = showsCapture
-        self.tab = tab
         self.content = content()
     }
 
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: NookSpace.s3) { content }
                     .padding(NookSpace.s2)
@@ -36,15 +30,6 @@ struct TabRoot<Content: View>: View {
             .navigationTitle(title)
             .toolbarTitleDisplayMode(.large)
             .itemNavigation()   // I-01 opens with a zoom from any item card in this tab
-        }
-        .onChange(of: router?.request?.id, initial: true) {
-            guard let request = router?.request, request.tab == tab else { return }
-            path = NavigationPath()
-            switch request.destination {
-            case .item(let item): path.append(item)
-            case .report(let route): path.append(route)
-            }
-            router?.request = nil
         }
     }
 }

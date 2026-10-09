@@ -8,8 +8,9 @@ struct ReportsScreen: View {
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
 
     var body: some View {
-        TabRoot("Reports", tab: .reports) {
-            VStack(spacing: NookSpace.s3) {   // not a Group: that would register the destination twice
+        TabRoot("Reports") {
+            // Destinations come from `itemNavigation()`, so Home's See All can push R-04 too.
+            Group {
                 NavigationLink(value: ReportsRoute.warranties) {
                     ReportCard(symbol: "checkmark.shield", color: NookColor.warning, title: Text("Warranties"),
                                detail: warrantiesDetail)
@@ -19,12 +20,6 @@ struct ReportsScreen: View {
                 }
             }
             .buttonStyle(.nookCard)
-            .navigationDestination(for: ReportsRoute.self) { route in   // inside the tab's stack
-                switch route {
-                case .warranties: WarrantiesScreen()
-                case .lentOut: LentOutScreen()
-                }
-            }
         }
     }
 

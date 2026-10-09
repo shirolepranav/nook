@@ -184,7 +184,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **[v1.1 Duo] Duo outer screen:** compact "Quick find" bar at the top plus 2 rows of cards; nothing important below the fold (PRD §4 rule 4).
 - **Regular width:** sidebar shows rooms; the detail column shows the selected room's grid.
 - **Empty:** illustration, "Let's start with one room.", button Scan a room.
-- **As built (P7, D50):** "Warranties ending soon" shows only when a warranty ends within 30 days. Cards are 240 pt wide (`NookLayout.warrantyCardWidth`), become a list at accessibility sizes, and name Private items only as "Private item". See All switches to Reports and opens R-04.
+- **As built (P7, D50):** "Warranties ending soon" shows only when a warranty ends within 30 days. Cards are 240 pt wide (`NookLayout.warrantyCardWidth`), become a list at accessibility sizes, and name Private items only as "Private item". See All opens R-04 on Home's own stack.
 
 ### H-02 Room [PRD §3 pillar 1, §5 F1]
 - Looks like a **well-lit shelf**: header in the room's color, with item count and room value.
