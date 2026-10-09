@@ -148,12 +148,15 @@ struct HomeScreen: View {
         .sorted { $0.1 < $1.1 }
         if !ending.isEmpty {
             VStack(alignment: .leading, spacing: NookSpace.s1) {
-                HStack(alignment: .firstTextBaseline) {
+                // Side by side, stacked at accessibility sizes so the title doesn't break.
+                let header = typeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 0)) : AnyLayout(HStackLayout(alignment: .firstTextBaseline))
+                header {
                     Text("Warranties ending soon")
                         .font(.nookSection)
                         .foregroundStyle(NookColor.textPrimary)
                         .accessibilityAddTraits(.isHeader)
-                    Spacer(minLength: NookSpace.s1)
+                    if !typeSize.isAccessibilitySize { Spacer(minLength: NookSpace.s1) }
                     Button("See All") { router?.show(.warranties) }
                         .font(.nookMeta)
                         .frame(minHeight: NookLayout.minTapTarget)

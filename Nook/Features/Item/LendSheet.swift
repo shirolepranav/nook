@@ -109,18 +109,8 @@ struct LendSheet: View {
             }
             FieldWell(Text("Back by")) {
                 if let due = dueAt {
-                    HStack {
-                        DatePicker(selection: Binding { due } set: { dueAt = $0 }, in: lentAt..., displayedComponents: .date) {
-                            Text("Back by")
-                        }
-                        .labelsHidden()
-                        Spacer(minLength: 0)
-                        Button("Clear", systemImage: "xmark.circle.fill") { dueAt = nil }
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(NookColor.textSecondary)
-                            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-                            .accessibilityLabel(Text("Clear return date"))
-                    }
+                    ClearableDate(Text("Back by"), date: Binding { due } set: { dueAt = $0 }, range: lentAt...,
+                                  clearLabel: Text("Clear return date")) { dueAt = nil }
                 } else {
                     Button("Add date") {
                         dueAt = Calendar.current.date(byAdding: .day, value: 14, to: Calendar.current.startOfDay(for: .now))

@@ -318,6 +318,11 @@ final class AccessibilityAuditTests: XCTestCase {
         // I-06, S-07); the audit can't see that text and calls it inaccessible.
         if let element = issue.element,
            app.datePickers.allElementsBoundByIndex.contains(where: { $0.frame.intersects(element.frame) }) { return true }
+        // Static text in a system List (headers, footers, rows) is flagged "partially
+        // unsupported" although it grows to AX5 (P7 screenshots: R-04, S-07, Find). Fixed font
+        // sizes can't reach these screens anyway: policy-check.sh rejects them (D51).
+        if issue.auditType == .dynamicType, let element = issue.element, element.elementType == .staticText,
+           app.collectionViews.allElementsBoundByIndex.contains(where: { $0.frame.contains(element.frame) }) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }

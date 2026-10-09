@@ -254,16 +254,26 @@ final class ScreenshotTests: XCTestCase {
         app.launch()
         let garage = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Garage,")).firstMatch
         XCTAssertTrue(garage.waitForExistence(timeout: 15))
-        app.swipeUp()
+        // Short drags, so the row sits mid-screen rather than under the bar (and at AX5, where
+        // the room cards fill the screen).
+        let header = app.staticTexts["Warranties ending soon"]
+        for _ in 0..<12 where !(header.isHittable && header.frame.midY < app.frame.midY) { shortDrag(app) }
         snap("H-01 Warranties ending soon")
-        app.swipeDown()
+        for _ in 0..<12 where !garage.isHittable { app.swipeDown() }
+        for _ in 0..<12 where !garage.isHittable { shortDrag(app) }
 
         garage.tap()
-        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Cordless drill,")).firstMatch.tap()
+        let drill = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Cordless drill,")).firstMatch
+        XCTAssertTrue(drill.waitForExistence(timeout: 5))
+        for _ in 0..<12 where !drill.isHittable { shortDrag(app) }
+        drill.tap()
         XCTAssertTrue(app.buttons["Mark Returned"].waitForExistence(timeout: 5))
+        for _ in 0..<12 where !app.buttons["Mark Returned"].isHittable { shortDrag(app) }
         snap("I-01 Lent out")
-        app.swipeUp()
+        let warranty = app.staticTexts["Warranty"]
+        for _ in 0..<12 where !(warranty.exists && warranty.isHittable) { shortDrag(app) }
         snap("I-01 Warranty")
+        for _ in 0..<12 where !app.buttons["Edit loan"].isHittable { app.swipeDown() }
         app.buttons["Edit loan"].tap()
         XCTAssertTrue(app.textFields["Who has it?"].waitForExistence(timeout: 5))
         snap("I-06 Lend")
@@ -307,6 +317,13 @@ final class ScreenshotTests: XCTestCase {
         empty.buttons["Notifications"].tap()
         XCTAssertTrue(empty.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
         snap("S-07 Denied")
+    }
+
+    /// Half a screen, slower than a swipe, so it doesn't fling past what it's looking for.
+    @MainActor
+    private func shortDrag(_ app: XCUIApplication) {
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35)))
     }
 
     @MainActor

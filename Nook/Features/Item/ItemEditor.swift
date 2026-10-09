@@ -38,6 +38,7 @@ struct ItemEditor: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(\.reminders) private var reminders
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     private enum Field { case name, price, tag, serial }
 
@@ -378,17 +379,8 @@ struct ItemEditor: View {
         VStack(alignment: .leading, spacing: NookSpace.s2) {
             FieldWell(Text("Purchased"), helper: isFuture ? Text("This date is in the future. You can still save.") : nil) {
                 if let date = draft.purchaseDate {
-                    HStack {
-                        DatePicker(selection: Binding { date } set: { draft.purchaseDate = $0 },
-                                   displayedComponents: .date) { Text("Purchased") }
-                            .labelsHidden()
-                        Spacer(minLength: 0)
-                        Button("Clear", systemImage: "xmark.circle.fill") { draft.purchaseDate = nil }
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(NookColor.textSecondary)
-                            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-                            .accessibilityLabel(Text("Clear purchase date"))
-                    }
+                    ClearableDate(Text("Purchased"), date: Binding { date } set: { draft.purchaseDate = $0 },
+                                  clearLabel: Text("Clear purchase date")) { draft.purchaseDate = nil }
                 } else {
                     Button("Add date") { draft.purchaseDate = Calendar.current.startOfDay(for: .now) }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -483,10 +475,11 @@ struct ItemEditor: View {
                 .font(.nookFootnote.weight(.semibold))
                 .foregroundStyle(NookColor.textSecondary)
                 .accessibilityHidden(true)
-            // Segments don't fit at the largest text sizes; a menu does.
-            ViewThatFits(in: .horizontal) {
-                warrantyPicker.pickerStyle(.segmented)
+            // The system's segments don't grow with the text size; at accessibility sizes, a menu.
+            if typeSize.isAccessibilitySize {
                 FieldWell(Text("Warranty")) { warrantyPicker.pickerStyle(.menu) }
+            } else {
+                warrantyPicker.pickerStyle(.segmented)
             }
             if warrantyChoice.wrappedValue == .other, let end = draft.warranty?.endDate {
                 FieldWell(Text("Warranty ends"),
@@ -668,6 +661,45 @@ struct FieldWell<Content: View>: View {
                     .foregroundStyle(NookColor.warning)
             }
         }
+    }
+}
+
+/// A date with a Clear button beside it, or below it when the two don't fit (AX5 dates are
+/// wider than an SE). Used for Purchased (I-02) and Back by (I-06).
+struct ClearableDate: View {
+    let label: Text
+    @Binding var date: Date
+    var range: PartialRangeFrom<Date>?
+    let clearLabel: Text
+    let clear: () -> Void
+
+    init(_ label: Text, date: Binding<Date>, range: PartialRangeFrom<Date>? = nil, clearLabel: Text,
+         clear: @escaping () -> Void) {
+        (self.label, _date, self.range, self.clearLabel, self.clear) = (label, date, range, clearLabel, clear)
+    }
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack { picker; Spacer(minLength: 0); clearButton }
+            VStack(alignment: .leading, spacing: 0) { picker; clearButton }
+        }
+    }
+
+    @ViewBuilder
+    private var picker: some View {
+        if let range {
+            DatePicker(selection: $date, in: range, displayedComponents: .date) { label }.labelsHidden()
+        } else {
+            DatePicker(selection: $date, displayedComponents: .date) { label }.labelsHidden()
+        }
+    }
+
+    private var clearButton: some View {
+        Button("Clear", systemImage: "xmark.circle.fill", action: clear)
+            .labelStyle(.iconOnly)
+            .foregroundStyle(NookColor.textSecondary)
+            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+            .accessibilityLabel(clearLabel)
     }
 }
 
