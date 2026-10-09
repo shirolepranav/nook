@@ -70,7 +70,8 @@ Accessibility audits on the SE and iPad: all pass except I-01's tags (below).
 - VoiceOver: R-04 and R-05 rows read name, date and status, with Reminders Off/On and Mark Returned as custom actions. Cards combine their text. Headers are marked.
 - Dynamic Type to AX5: checked in screenshots (`docs/qa/p7/SE-ax5-*`).
 - `AccessibilityAuditTests.testWarrantyAndLendingScreensPassTheAccessibilityAudit` covers Home's row, I-01's cards, I-06 (large detent), R-01, R-04, R-05 and S-07.
-- **Open (P3, since P5, D47/D51):** I-01's tag chips report "Potentially inaccessible text" with no element; VoiceOver reads them.
+- **I-01's tag chips (P3, since P5, D47/D51):** the audit skips their element-less "Potentially inaccessible text" (owner's call); VoiceOver reads them.
+- **CI on PR #36 (SE):** 45 passed and 1 failed (the tags), before the skip. The skip was then confirmed locally (`testItemScreensPassTheAccessibilityAudit` ✔).
 
 ## No-AI check
 P7 doesn't touch the router; every P7 flow is Classic. No user-facing string mentions AI (catalog checked). **Owner, for Gate 2:** run US1–US6 and S3–S7 on a real iPhone without Apple Intelligence.
@@ -78,7 +79,7 @@ P7 doesn't touch the router; every P7 flow is Classic. No user-facing string men
 ## Open bugs
 | ID | Sev | Summary |
 |----|-----|---------|
-| — | P3 | I-01 tag chips: the audit reports element-less "Potentially inaccessible text" (P5 carry-over) |
+| — | P3 | I-01 tag chips: element-less "Potentially inaccessible text" (P5 carry-over). The audit skips it at the owner's call (D51); VoiceOver reads the tags |
 | — | P2 | `testEightItemsTaggedUnderTwoMinutes` fails on `main` and on this branch on every simulator (F3's timing test). Not caused by P7; needs its own look |
 
 ## Gate 2 — Works with AI off (for the team's go/no-go)

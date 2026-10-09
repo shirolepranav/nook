@@ -335,6 +335,10 @@ final class AccessibilityAuditTests: XCTestCase {
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }
+        // I-01's tag chips: element-less "Potentially inaccessible text" since P5 (D47, D51),
+        // though VoiceOver reads each one ("Tag: Coffee"). Skipped only while tags are shown.
+        if issue.element == nil, issue.auditType == .elementDetection,
+           app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Tag: '")).count > 0 { return true }
         if app.buttons["ToggleSideBar"].exists { hasFloatingTabBar = true }
         guard let element = issue.element else {
             return [.dynamicType, .elementDetection, .textClipped].contains(issue.auditType) && hasFloatingTabBar
