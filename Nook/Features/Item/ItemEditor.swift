@@ -11,6 +11,8 @@ import NookUI
 struct ItemEditor: View {
     let item: Item?
     var cameraOff = false
+    /// R-04's Add a Warranty opens the editor at the warranty.
+    var startsAtWarranty = false
     var onSave: ((Item) -> Void)?
 
     @State private var draft: ItemDraft
@@ -39,9 +41,11 @@ struct ItemEditor: View {
 
     private enum Field { case name, price, tag, serial }
 
-    init(item: Item? = nil, draft: ItemDraft? = nil, cameraOff: Bool = false, onSave: ((Item) -> Void)? = nil) {
+    init(item: Item? = nil, draft: ItemDraft? = nil, cameraOff: Bool = false, startsAtWarranty: Bool = false,
+         onSave: ((Item) -> Void)? = nil) {
         self.item = item
         self.cameraOff = cameraOff
+        self.startsAtWarranty = startsAtWarranty
         self.onSave = onSave
         let start = draft ?? item.map(ItemDraft.init) ?? ItemDraft(currencyCode: HomeCurrency.code)
         initial = item.map(ItemDraft.init) ?? ItemDraft(currencyCode: start.currencyCode, location: start.location)
@@ -54,23 +58,26 @@ struct ItemEditor: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: NookSpace.s3) {
-                    photoStrip
-                    nameField
-                    whereRow
-                    detailsSection
-                    purchaseSection
-                    warrantySection
-                    receiptSection
-                    NookTextField(Text("Notes"), text: $draft.notes, prompt: Text("Anything worth remembering"))
-                    privateToggle
+            ScrollViewReader { scroller in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: NookSpace.s3) {
+                        photoStrip
+                        nameField
+                        whereRow
+                        detailsSection
+                        purchaseSection
+                        warrantySection
+                        receiptSection
+                        NookTextField(Text("Notes"), text: $draft.notes, prompt: Text("Anything worth remembering"))
+                        privateToggle
+                    }
+                    .padding(NookSpace.s2)
+                    .frame(maxWidth: NookLayout.readableWidth)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(NookSpace.s2)
-                .frame(maxWidth: NookLayout.readableWidth)
-                .frame(maxWidth: .infinity)
+                .scrollDismissesKeyboard(.interactively)
+                .onAppear { if startsAtWarranty { scroller.scrollTo(Self.warrantyID, anchor: .center) } }
             }
-            .scrollDismissesKeyboard(.interactively)
             .background(NookColor.canvas)
             .navigationTitle(item == nil ? "New Item" : "Edit Item")
             .toolbarTitleDisplayMode(.inline)
@@ -136,7 +143,7 @@ struct ItemEditor: View {
             pickedPhotos = []
             Task { add(photoData: await load(items)) }
         }
-        .onAppear { if item == nil { focus = .name } }
+        .onAppear { if item == nil && !startsAtWarranty { focus = .name } }
     }
 
     // MARK: Photos (up to 10, D7)
@@ -466,6 +473,8 @@ struct ItemEditor: View {
         }
     }
 
+    private static let warrantyID = "warranty"
+
     private var warrantyEnd: Date? { draft.warranty?.end(purchasedOn: draft.purchaseDate) }
 
     private var warrantySection: some View {
@@ -495,6 +504,7 @@ struct ItemEditor: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
+        .id(Self.warrantyID)
     }
 
     private var warrantyPicker: some View {
