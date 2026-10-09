@@ -31,7 +31,7 @@ struct HomeScreen: View {
     }
 
     var body: some View {
-        TabRoot("Home", path: router.map { Bindable($0).homePath }) {
+        TabRoot("Home", tab: .home) {
             if rooms.isEmpty {
                 EmptyStateView(.shelfWaiting, title: Text("Let’s start with one room."),
                                message: Text("Add the rooms you have, then fill them in.")) {
@@ -157,10 +157,13 @@ struct HomeScreen: View {
                         .foregroundStyle(NookColor.textPrimary)
                         .accessibilityAddTraits(.isHeader)
                     if !typeSize.isAccessibilitySize { Spacer(minLength: NookSpace.s1) }
-                    Button("See All") { router?.show(.warranties) }
-                        .font(.nookMeta)
-                        .frame(minHeight: NookLayout.minTapTarget)
-                        .accessibilityLabel(Text("See all warranties"))
+                    Button { router?.show(.warranties) } label: {
+                        Text("See All")
+                            .font(.nookMeta)
+                            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                            .contentShape(Rectangle())   // the whole 44 pt target, not just the text
+                    }
+                    .accessibilityLabel(Text("See all warranties"))
                 }
                 // A row of cards; a list at accessibility sizes, where they'd be too narrow.
                 if typeSize.isAccessibilitySize {

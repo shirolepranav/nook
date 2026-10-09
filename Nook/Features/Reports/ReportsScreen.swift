@@ -6,10 +6,9 @@ import NookUI
 /// R-01. Warranties and Lent out (P7); the insurance report and CSV arrive in P10.
 struct ReportsScreen: View {
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
-    @Environment(AppRouter.self) private var router: AppRouter?
 
     var body: some View {
-        TabRoot("Reports", path: router.map { Bindable($0).reportsPath }) {
+        TabRoot("Reports", tab: .reports) {
             VStack(spacing: NookSpace.s3) {   // not a Group: that would register the destination twice
                 NavigationLink(value: ReportsRoute.warranties) {
                     ReportCard(symbol: "checkmark.shield", color: NookColor.warning, title: Text("Warranties"),

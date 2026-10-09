@@ -11,6 +11,9 @@ import XCTest
 final class AccessibilityAuditTests: XCTestCase {
     private let audits = XCUIAccessibilityAuditType.all.subtracting(.contrast)
     private let suggestionBarHeight: CGFloat = 48
+    /// Set once the iPad's floating tab bar has been seen: a form sheet hides its sidebar
+    /// toggle, but the bar's element-less issues still come through.
+    private var hasFloatingTabBar = false
 
     @MainActor
     func testScreensPassTheAccessibilityAudit() throws {
@@ -332,8 +335,9 @@ final class AccessibilityAuditTests: XCTestCase {
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }
+        if app.buttons["ToggleSideBar"].exists { hasFloatingTabBar = true }
         guard let element = issue.element else {
-            return [.dynamicType, .elementDetection, .textClipped].contains(issue.auditType) && app.buttons["ToggleSideBar"].exists
+            return [.dynamicType, .elementDetection, .textClipped].contains(issue.auditType) && hasFloatingTabBar
         }
         guard issue.auditType == .dynamicType else { return false }
         return app.navigationBars.buttons.allElementsBoundByIndex.contains { $0.frame == element.frame }

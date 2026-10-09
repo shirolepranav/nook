@@ -125,10 +125,8 @@ private struct TabShell: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await reminders?.reconcile() } }
         }
-        .onChange(of: router.requestedTab, initial: true) { _, requested in
-            guard let requested else { return }
-            tab = requested
-            router.requestedTab = nil
+        .onChange(of: router.request?.id, initial: true) {
+            if let request = router.request { tab = request.tab }   // its tab root pushes and clears it
         }
         .task {
             // Find's index: built after the first frame, then kept current on every save (04 §6).
