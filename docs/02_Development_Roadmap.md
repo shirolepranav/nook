@@ -141,7 +141,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — receipt number and date detection tests on a fixture set; manual tagging UI test. Smoke — S1–S6.
 
 ### P7 · Warranties, reminders & lending
-**Status:** Not started
+**Status:** In QA: on `p7/warranties-lending` (QA report `docs/qa/p7-qa-report.md`, D50, D51). A full close for Gate 2, apart from a lean rerun after the last fix. Two known findings: the I-01 tags audit (P5) and F3's timing test, which also fails on `main`. The owner's device checks are open: a reminder firing offline, a notification tap from a cold start, Mark Returned and Snooze from a notification, the contact picker, and background refresh.
 **Scope:** warranty end date computed from purchase date plus length (F4); reminders 30 and 7 days before; a rolling scheduler that keeps the soonest reminders within iOS's 64 pending notification limit and reschedules on launch and after changes; notification permission asked when the first reminder is set; Warranties list (R-04); lending (I-06) with contact picker, return date and reminder; Lent out list (R-05).
 **PRD acceptance:** the reminder fires on schedule on a device with no network (F4); lent items show a badge and appear in the Lent out filter (F7).
 **QA:** time zones and daylight saving changes, leap days, warranty already expired, notifications denied, tapping a notification from a cold start.
