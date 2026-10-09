@@ -4,7 +4,8 @@ import NookKit
 import NookUI
 
 /// H-01 Home: the total value with the Hide values eye (F11), the rooms as cards with the
-/// dashed Add room card at the end, then Recently added. "Warranties ending soon" joins in P7.
+/// dashed Add room card at the end, warranties ending in the next 30 days (D4), then
+/// Recently added.
 struct HomeScreen: View {
     @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }, sort: \Item.createdAt, order: .reverse)
@@ -17,6 +18,7 @@ struct HomeScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
     @Environment(AppRouter.self) private var router: AppRouter?
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     private enum EditTarget: Identifiable {
         case new, room(Room)
@@ -47,6 +49,7 @@ struct HomeScreen: View {
                     totalValue
                 }
                 roomsSection
+                warrantiesSection
                 ItemSection(items: Array(items.prefix(Self.recentCount)), toast: $toast) {
                     Text("Recently added")
                         .font(.nookSection)
@@ -131,6 +134,77 @@ struct HomeScreen: View {
                     .buttonStyle(.nookCard)
             }
         }
+    }
+
+    // MARK: Warranties ending soon (H-01, D4)
+
+    @ViewBuilder
+    private var warrantiesSection: some View {
+        let now = Date.now
+        let ending = items.compactMap { item -> (Item, Date)? in
+            guard let end = item.primaryWarranty?.endDate, SearchFilter.status(of: end, now: now) == .ending else { return nil }
+            return (item, end)
+        }
+        .sorted { $0.1 < $1.1 }
+        if !ending.isEmpty {
+            VStack(alignment: .leading, spacing: NookSpace.s1) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Warranties ending soon")
+                        .font(.nookSection)
+                        .foregroundStyle(NookColor.textPrimary)
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer(minLength: NookSpace.s1)
+                    Button("See All") { router?.show(.warranties) }
+                        .font(.nookMeta)
+                        .frame(minHeight: NookLayout.minTapTarget)
+                        .accessibilityLabel(Text("See all warranties"))
+                }
+                // A row of cards; a list at accessibility sizes, where they'd be too narrow.
+                if typeSize.isAccessibilitySize {
+                    VStack(spacing: NookSpace.s1) {
+                        ForEach(ending, id: \.0.id) { warrantyCard($0.0, end: $0.1) }
+                    }
+                } else {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: NookSpace.s2) {
+                            ForEach(ending, id: \.0.id) {
+                                warrantyCard($0.0, end: $0.1).frame(width: NookLayout.warrantyCardWidth)
+                            }
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .scrollClipDisabled()   // card shadows aren't cut off
+                }
+            }
+        }
+    }
+
+    /// "Dishwasher" over "Ends in 12 days". Private items stay unnamed (D46).
+    private func warrantyCard(_ item: Item, end: Date) -> some View {
+        let days = Warranties.daysLeft(until: end, now: .now)
+        let name = item.isPrivate ? String(localized: "Private item") : item.name
+        let when = days == 0 ? Text("Ends today") : Text("Ends in \(days) days")
+        return NavigationLink(value: item) {
+            HStack(spacing: NookSpace.s2) {
+                StoredImage(fileName: item.isPrivate ? nil : item.cover?.fileName) { NookPhotoThumb(image: $0) }
+                VStack(alignment: .leading, spacing: NookSpace.half) {
+                    Text(verbatim: name)
+                        .font(.nookHeadline)
+                        .foregroundStyle(NookColor.textPrimary)
+                        .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                    Label { when } icon: { Image(systemName: "clock") }
+                        .font(.nookMeta)
+                        .foregroundStyle(NookColor.warning)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(NookSpace.s1)
+            .nookCard(elevation: .flat)
+        }
+        .buttonStyle(.nookCard)
+        .itemZoomSource(item)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(days == 0 ? Text("\(name), warranty ends today") : Text("\(name), warranty ends in \(days) days"))
     }
 
     private func itemCount(_ room: Room) -> Int {

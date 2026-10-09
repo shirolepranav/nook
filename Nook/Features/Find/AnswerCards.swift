@@ -7,6 +7,8 @@ import NookUI
 struct AnswerActions {
     let move: (Item, LocationEvent.Source) -> Void
     let open: (any Hashable) -> Void
+    /// The lent card's Mark Returned (F7).
+    let returned: (Item) -> Void
 }
 
 /// F-03: one answer, built from records only (PRD §6). The screen resolves the models; an
@@ -27,7 +29,7 @@ struct AnswerView: View {
                                headline: Text("Yes, you have \(count)."))
             }
         case .lent(_, let person, let since, let due):
-            if let item { LentAnswer(item: item, person: person, since: since, due: due) }
+            if let item { LentAnswer(item: item, person: person, since: since, due: due, actions: actions) }
         case .packed(_, _, let date):
             if let item, let location = Location(of: item), let box = location.spot {
                 PackedAnswer(item: item, location: location, box: box, date: date, actions: actions)
@@ -80,13 +82,13 @@ private struct LocationAnswer: View {
     }
 }
 
-/// "Jordan has your cordless drill. Since Sep 12 · due back Oct 1." Read-only until lending
-/// arrives in P7, which adds Mark Returned (D46).
+/// "Jordan has your cordless drill. Since Sep 12 · due back Oct 1." with Mark Returned (F7).
 private struct LentAnswer: View {
     let item: Item
     let person: String
     let since: Date
     let due: Date?
+    let actions: AnswerActions
 
     var body: some View {
         AnswerCard {
@@ -107,6 +109,8 @@ private struct LentAnswer: View {
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityElement(children: .combine)
             StatusPill(.lent, Text("Lent out"))
+            Button("Mark Returned") { actions.returned(item) }
+                .buttonStyle(.nookPrimary)
         }
     }
 }

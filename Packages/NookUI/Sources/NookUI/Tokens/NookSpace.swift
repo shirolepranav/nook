@@ -55,6 +55,8 @@ public enum NookLayout {
     public static let selectionMarkSize: CGFloat = 28
     /// Thumbnails in item rows (S-08 mockup).
     public static let rowThumbnailSize: CGFloat = 56
+    /// A card in Home's "Warranties ending soon" row (H-01, P7).
+    public static let warrantyCardWidth: CGFloat = 240
     /// Photo tiles in the editor's strip, 4:5 (I-02 mockup: 88 × 110).
     public static let photoTileWidth: CGFloat = 88
     /// The photo hero on item detail (I-01 mockup).

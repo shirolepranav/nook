@@ -19,6 +19,16 @@ struct SettingsScreen: View {
                 .listRowBackground(NookColor.surface)
                 Section {
                     NavigationLink {
+                        NotificationsScreen()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                            .font(.nookBody)
+                            .frame(minHeight: NookLayout.minTapTarget)
+                    }
+                }
+                .listRowBackground(NookColor.surface)
+                Section {
+                    NavigationLink {
                         RecentlyDeletedScreen()
                     } label: {
                         Label("Recently Deleted", systemImage: "trash")

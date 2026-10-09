@@ -148,10 +148,15 @@ struct FindScreen: View {
         }
         guard item != nil || place != nil else { return nil }
         return AnswerView(answer: answer, item: item, place: place,
-                          actions: AnswerActions(move: { moving = Moving(item: $0, source: $1) }, open: open))
+                          actions: AnswerActions(move: { moving = Moving(item: $0, source: $1) }, open: open,
+                                                 returned: markReturned))
     }
 
     // MARK: Actions
+
+    private func markReturned(_ item: Item) {
+        if let loan = item.activeLoan { toast = actions.markReturned(loan) }
+    }
 
     private func open(_ value: any Hashable) {
         RecentSearches.add(query, to: &recentText)
