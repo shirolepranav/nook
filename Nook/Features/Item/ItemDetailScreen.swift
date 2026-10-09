@@ -248,12 +248,11 @@ private struct ItemDetail: View {
                             .frame(minHeight: NookLayout.minTapTarget)
                             .background(NookColor.surface, in: Capsule())
                             .overlay { Capsule().strokeBorder(NookColor.hairline, lineWidth: 1) }
+                            .accessibilityLabel(Text("Tag: \(tag)"))
                     }
                 }
-                // One element for the row, labeled by hand: per-tag elements and a combined
-                // one both left the chips' text without a frame the audit could match (D47).
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text("Tags: \(item.tags.joined(separator: ", "))"))
+                // One element per tag: an element combined over the flow layout had no frame
+                // on the text, and the audit flagged the tags as inaccessible text (D47).
             }
         }
     }

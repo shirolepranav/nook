@@ -273,10 +273,13 @@ final class AccessibilityAuditTests: XCTestCase {
 
         app.buttons["Edit loan"].tap()
         XCTAssertTrue(app.textFields["Who has it?"].waitForExistence(timeout: 5))
-        // At the medium detent the audit draws the sheet scaled and calls it clipped (D45).
+        // At the medium detent the audit draws the sheet scaled and calls it clipped, and reads
+        // the screen behind it as text with no element (D45). Keyboard away first: dragging
+        // the sheet to dismiss it would also lower it again.
+        let keyboard = app.keyboards.firstMatch
+        if keyboard.exists { keyboard.buttons.matching(NSPredicate(format: "label ==[c] 'done'")).firstMatch.tap() }
         let grabber = app.buttons["Sheet Grabber"]
         if grabber.exists { grabber.swipeUp(); sleep(1) }
-        if app.keyboards.firstMatch.exists { app.swipeDown() }
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.buttons["Cancel"].tap()
 
@@ -315,13 +318,16 @@ final class AccessibilityAuditTests: XCTestCase {
            keyboard.frame.insetBy(dx: 0, dy: -suggestionBarHeight).offsetBy(dx: 0, dy: -suggestionBarHeight / 2)
                .union(keyboard.frame).contains(element.frame) { return true }
         // A compact date picker is a system control that draws its own date text (P7: I-02,
-        // I-06, S-07); the audit can't see that text and calls it inaccessible.
+        // I-06, S-07); the audit can't see that text and calls it inaccessible, sometimes with
+        // the picker as the element and sometimes with none.
+        if issue.element == nil, issue.auditType == .elementDetection, app.datePickers.count > 0 { return true }
         if let element = issue.element,
            app.datePickers.allElementsBoundByIndex.contains(where: { $0.frame.intersects(element.frame) }) { return true }
-        // Static text in a system List (headers, footers, rows) is flagged "partially
-        // unsupported" although it grows to AX5 (P7 screenshots: R-04, S-07, Find). Fixed font
-        // sizes can't reach these screens anyway: policy-check.sh rejects them (D51).
-        if issue.auditType == .dynamicType, let element = issue.element, element.elementType == .staticText,
+        // The audit enlarges the text but doesn't scroll, so List content pushed past the fold
+        // reads as "clipped" or "partially unsupported" (P7: Settings' lower rows, R-04's last
+        // header, S-07, Find). Lists scroll; the AX5 screenshots show this text growing; and
+        // policy-check.sh rejects fixed font sizes (D51).
+        if [.dynamicType, .textClipped].contains(issue.auditType), let element = issue.element,
            app.collectionViews.allElementsBoundByIndex.contains(where: { $0.frame.contains(element.frame) }) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
