@@ -111,6 +111,20 @@ public enum PreviewStore {
             espresso.tags = ["Coffee"]
         }
         item("Stand mixer")?.tags = ["Baking"]
+        // R-04 and R-05 (P7): an active and an expired warranty, and an overdue loan.
+        for (name, days) in [("Espresso machine", 162.0), ("Record player", -68.0)] {
+            guard let owner = item(name) else { continue }
+            let warranty = Warranty(kind: .manufacturer)
+            context.insert(warranty)
+            warranty.item = owner
+            warranty.endDate = .now.addingTimeInterval(days * day)
+        }
+        if let mixer = item("Stand mixer") {
+            let loan = Loan(personName: "Sam")
+            context.insert(loan)
+            loan.item = mixer
+            (loan.lentAt, loan.dueAt) = (.now.addingTimeInterval(-40 * day), .now.addingTimeInterval(-3 * day))
+        }
         item("AA batteries")?.quantity = 2
         item("Board games")?.lastConfirmedAt = .now.addingTimeInterval(-800 * day)   // "Not seen in 2 years"
         let boxes = try context.fetch(FetchDescriptor<Spot>()).filter { $0.name == "Box 14" }

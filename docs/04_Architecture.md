@@ -151,7 +151,7 @@ The entities come from PRD §8, plus `Warranty` (D21).
 | `Receipt` | id, fileName, kind (image or pdf), extractedText | item: Item? |
 | `Warranty` | id, kind (manufacturer, extended or store), provider, startDate, endDate, lengthMonths?, policyNumber, cost?, reminderOffsetsDays = [30, 7], snoozedUntil? | item: Item? |
 | `LocationEvent` | id, fromPath: String, toPath: String, fromSpotID?, toSpotID?, toRoomID? (D44), date, source (manual, found, siri, ai, qr; D44) | item: Item? |
-| `Loan` | id, personName, contactID?, lentAt, dueAt?, returnedAt?, remind = true | item: Item? |
+| `Loan` | id, personName, contactID?, lentAt, dueAt?, returnedAt?, remind = true (only with a due date, D50), snoozedUntil? | item: Item? |
 | `SavedSearch` | id, name, query, filterData: Data? (JSON `SearchFilter`), order, createdAt (F-06, D46) | none |
 
 ### CloudKit-safe rules (from P2 onward, D8)
@@ -234,10 +234,13 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 ```
 
 - The reconciler diffs `desiredReminders` against `UNUserNotificationCenter.pendingNotificationRequests`, removing and adding only what changed. It runs on launch, on any warranty or loan change, and on background refresh (`BGAppRefreshTask`).
-- Each fire date is `endDate − offsetDays` at the user's chosen time of day, **in the current time zone** (`Calendar.current`). Past dates are skipped.
-- The Free tier limits active reminders to 3 (D9). Enforcement lives in `EntitlementStore`, not in the scheduler.
-- Categories: `WARRANTY` (View, Snooze 1 week) and `LOAN` (Mark returned, Snooze).
-- Tests inject `now`, the `calendar` and a fake notification center.
+- Each fire date is `endDate − offsetDays` at the user's chosen time of day (S-07, default 9:00), as **floating `DateComponents`** with no time zone, so it fires at that local time wherever the phone is (D50). Past dates are skipped. A loan reminds the morning `dueAt` falls on, and only if `remind` is on.
+- IDs are stable (`w.<warranty>.<offset>`, `w.<warranty>.snooze`, `l.<loan>`), and each request carries a fingerprint (date and text) in `userInfo`. The reconciler adds what's new or changed and removes IDs no longer wanted (D50).
+- Snooze sets `snoozedUntil` (on `Warranty` or `Loan`) to a week from now; the planner adds one request then and skips earlier offsets.
+- Private items get neutral copy. The text is written by the app (`Reminders.text(for:)`) so it lives in the string catalog; NookKit's `ReminderPlanner` and `ReminderScheduler` stay pure and testable.
+- The Free tier limits active reminders to 3 (D9). Enforcement lives in `EntitlementStore` (P11), not in the scheduler.
+- Categories: `WARRANTY` (View, Snooze 1 Week) and `LOAN` (Mark Returned, Snooze 1 Week). `AppDelegate` owns the store, so the actions work when iOS wakes the app in the background.
+- Tests inject `now`, the `calendar` and a fake notification center (`NotificationScheduling`).
 
 ---
 

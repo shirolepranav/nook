@@ -363,3 +363,38 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **`AVCaptureDevice.default(for: .video)` is `nil` on the simulator**, while `UIImagePickerController.isSourceTypeAvailable(.camera)` says `true` (P5 notes). `NookCamera.isUsable` now checks for a device, so the simulator takes the Photos path without the fixture flag.
 
 *Affects:* `NookAI/Scanners`, `NookAI/ClassicEngine`, `Nook/Features/Capture`, `Info.plist`.
+
+### P7 (2026-10-09)
+
+**D50 · 2026-10-09 · Accepted (product owner, the four choices marked)** — **Warranties, reminders and lending (P7).**
+- **The Free tier's 3-reminder limit waits for P11.** *(Product owner.)* Like the 25-item limit (D39): `ItemService.writeWarranty` marks where `EntitlementStore.canAddReminder` goes. No "Unlock Pro" row appears without a paywall behind it, so S-07's and R-04's free-tier lines wait too.
+- **S-07 Notifications and Home's "Warranties ending soon" ship in P7.** *(Product owner.)* The Home row is D4's promise in place of a Warranties tab. It shows when a warranty ends within 30 days, with See All → R-04, and becomes a list at accessibility sizes.
+- **The screens show one warranty per item:** the one that ends last (`Item.primaryWarranty`, D21). *(Product owner.)* The model still allows several, so a later version needs no migration. Each item is one row in R-04.
+- **P7 closes in full, for Gate 2.** *(Product owner.)*
+- **I-02's warranty is a segmented None | 1 yr | 2 yrs | Other.** A length counts from the purchase date and is recomputed on save. Picking a length with no purchase date fills Purchased with today, which is shown just above, because warranties are mostly added the day something is bought. Other is an end date. An end before the purchase date warns and still saves (01 I-02). At the largest text sizes the segments become a menu.
+- **Reminders fire at a floating local time.** Each request is a `UNCalendarNotificationTrigger` whose `DateComponents` have no time zone, so a 9:00 reminder fires at 9:00 wherever the phone is, through daylight saving, with no rescheduling.
+  - IDs are stable: `w.<warranty>.<offset>`, `w.<warranty>.snooze`, `l.<loan>`.
+  - Each request carries a fingerprint (its date and text) in `userInfo`. Reconciling adds only what changed, since adding a pending ID replaces it, and removes only IDs no longer wanted.
+  - The 60 soonest across warranties and loans are pending (D13).
+  - Reconciling runs on launch, 300 ms after each save, when the app becomes active, after S-07 changes, and in background refresh.
+  - Nothing is scheduled until permission is granted, and nothing is ever badged.
+- **A loan reminds only when it has a due date,** the morning it's due ("quiet by default"; the I-06 and S-07 boards). 01 §12's "Jordan's had your drill for 3 weeks" becomes "Jordan has had your Cordless drill since Sep 12. It's due back today." "Remind me" shows only once "Back by" is set.
+- **Snooze 1 Week** sets `snoozedUntil` to a week from now. The reminder comes back at that moment, and offsets earlier than it are skipped. **`Loan.snoozedUntil` is added to schema V1 in place**, because V1 hasn't shipped (as D44 and D46 did).
+- **Private items are never named in a notification:** "A private item's warranty ends in 7 days." and "Something you lent Jordan is due back today." Notifications show on the Lock Screen (PRD §9).
+- **Notification actions work without a window.** `AppDelegate` owns the store, the reminders and the router, so Mark Returned and Snooze run when iOS wakes the app in the background. A tap or View from a cold start opens the item on Home's stack (`AppRouter`, with a `NavigationPath` per tab root).
+- **Empty states keep their action (01 §1.3).** R-04's Add a Warranty and R-05's Lend Something open `ItemChooser`, a searchable list of items, and then the item's editor (scrolled to the warranty) or the Lend sheet. Add a Warranty also offers New Item. Private items aren't offered; R-04, R-05 and the Home row show them as "Private item" with no photo (D46).
+- **Badges:** photo cards get the Lent badge. The boards have no warranty badge on cards, so `CardBadge.endingSoon` stays unused.
+- **R-01 always shows the Warranties and Lent out cards,** with counts ("2 ending in the next 30 days", "1 item with Jordan"). Each leads to a list or to its empty state with an action.
+- **Lending an item that's already out edits its loan**, so an item is never lent twice. Mark Returned is a property change, so the toast's Undo and ⌘Z bring the loan back.
+- **The contact picker is `CNContactPickerViewController`, presented from a host view controller**, since it doesn't work embedded in a SwiftUI sheet. It shares only the chosen contact, so there's no Contacts permission. Typing over the picked name drops the contact.
+- **UI tests** pass `-uiTestingNotifications granted|denied` (DEBUG) in place of the system prompt.
+
+*Affects:* 01 H-01, I-01, I-02, I-06, R-01, R-04, R-05, S-07, §12; 04 §4, §7; `NookKit/Reminders`, `Warranties.swift`, `ItemService`; `Nook/App` (`AppDelegate`, `AppRouter`, `Reminders`), `Features/Item`, `Features/Reports`, `Features/Settings/NotificationsScreen`.
+
+**D51 · 2026-10-09 · Accepted** — **iOS 27 SDK checks for P7 (D23, D11).** Confirmed on the iOS 27.0 SDK (Xcode 27.0) and the iOS 27.0 iPhone SE simulator:
+- **`BGTaskScheduler.submit(_:)` is deprecated in iOS 27**, replaced by `try await submitTaskRequest(_:)`. `Reminders.scheduleRefresh` uses the new call. The scene's `.backgroundTask(.appRefresh("pranav.nook.reminders"))` builds, with `UIBackgroundModes: fetch` and the ID in `BGTaskSchedulerPermittedIdentifiers`. Whether iOS actually runs it is an owner device check.
+- **`UNCalendarNotificationTrigger(dateMatching:repeats:)` with no time zone in the components** is a floating date, as documented. `ReminderTests` checks that the components carry none. Firing at 9:00 after a time-zone change is an owner device check.
+- **`Button(role: .confirm)` and `.cancel` in a sheet's toolbar** draw the checkmark and the X from the I-06 board.
+- **`UIApplication.openNotificationSettingsURLString`** opens Nook's notification settings.
+
+*Affects:* `Nook/App/Reminders.swift`, `Info.plist`, `LendSheet.swift`.

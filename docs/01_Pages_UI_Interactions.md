@@ -184,6 +184,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **[v1.1 Duo] Duo outer screen:** compact "Quick find" bar at the top plus 2 rows of cards; nothing important below the fold (PRD §4 rule 4).
 - **Regular width:** sidebar shows rooms; the detail column shows the selected room's grid.
 - **Empty:** illustration, "Let's start with one room.", button Scan a room.
+- **As built (P7, D50):** "Warranties ending soon" shows only when a warranty ends within 30 days. Cards are 240 pt wide (`NookLayout.warrantyCardWidth`), become a list at accessibility sizes, and name Private items only as "Private item". See All switches to Reports and opens R-04.
 
 ### H-02 Room [PRD §3 pillar 1, §5 F1]
 - Looks like a **well-lit shelf**: header in the room's color, with item count and room value.
@@ -237,6 +238,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Validation** inline under the field. A warranty end date before the purchase date shows a warning but doesn't block saving. [Inferred]
 - Cancel with changes asks "Discard changes?". Save gives a success haptic, and the card settles into place.
 - **At the 25-item free limit:** saving the 26th item opens P-01. The draft is kept and saves after purchase. [Inferred]
+- **Warranty (P7, D50):** segmented None | 1 yr | 2 yrs | Other (a menu at accessibility sizes). A length counts from the purchase date, and picking one with no purchase date fills Purchased with today. Other is an end date. The footer reads "Ends Mar 14, 2027. Reminders 30 and 7 days before." Saving the first warranty with reminders asks for notifications (D15).
 
 ### I-03 Photo viewer
 - Pinch and double-tap to zoom, swipe between photos, swipe down to dismiss. Actions: Set as cover, Share, Delete photo.
@@ -261,6 +263,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### I-06 Lend sheet [PRD §5 F7]
 - Person (system contact picker, or a typed name), date lent (default today), optional return date, optional reminder. Save adds the Lent badge and puts the item in the Lent out filter.
+- **As built (P7, D50):** "Remind me" ("The morning it's due") appears only once Back by is set. Saving an item that's already out edits its loan. Reached from I-01's More menu (Lend or Edit Loan), the Lent out card's Edit, a card's context menu and R-05's Lend Something. Form sheet on regular width.
 
 ### I-07 Receipt viewer
 - Quick Look for an image or PDF (D42). Scanned receipts are selectable through Quick Look's own Live Text; Nook adds no text layer (D49).
@@ -340,7 +343,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - "**Office → Desk → Second drawer.** You put them there on Aug 3." Shows the item photo, spot photo, last confirmed date, and **Move** and **Found it here instead**.
 - Variants: lent ("Jordan has it since Sep 12"); packed ("Box 14, packed Jun 2"); room contents ("What's in the garage?" → items grouped by spot); quantity ("Do I have AA batteries?" → "Yes, 2 packs in Kitchen → Drawer").
 - Answers come only from saved data, so a location can never be invented (PRD §6).
-- **Classic (P5, D46):** the card names the item and reads "Last confirmed Aug 3." under the place. Private items never answer. The lent card is read-only until P7 adds Mark Returned. On regular width the card sits beside the results.
+- **Classic (P5, D46):** the card names the item and reads "Last confirmed Aug 3." under the place. Private items never answer. The lent card has Mark Returned (P7). On regular width the card sits beside the results.
 
 ### F-04 Move confirmation card [PRD §6]
 - After typing or saying "I put the passports in the safe", on AI iPhones: "Move Passports to Bedroom → Safe?" with **Move** and **Not now**. **Nothing moves without that tap.**
@@ -359,6 +362,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### R-01 Reports
 - Cards: **Insurance report** (with item count and total value), **Export CSV**, **Warranties** (count ending soon), **Lent out** (count), and **Declutter** (items not seen in 2 years) [PRD §2].
+- **As built (P7):** Warranties and Lent out, always shown. The insurance report and CSV arrive in P10.
 - Pro badge on gated features.
 
 ### R-02 Insurance report (Pro) [PRD §5 F9]
@@ -374,9 +378,11 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Groups: Ending in 30 days, Active, Expired. Rows show photo, name, end date and days left.
 - Tap → I-01. Swipe action: turn reminders on or off for that item.
 - Free users with 3 active reminders see "Unlock Pro for unlimited reminders" when adding a 4th.
+- **As built (P7, D50):** one row per item (its last-ending warranty). Expired rows have no reminder swipe; rows with reminders off show a bell-slash. Empty: "No warranties yet." with **Add a Warranty**, which chooses an item (or New Item) and opens its editor at the warranty. The free-tier line waits for P11.
 
 ### R-05 Lent out [PRD §5 F7]
 - Items, person, date lent, due date (overdue highlighted). Swipe: Mark returned.
+- **As built (P7, D50):** overdue first ("3 days late", danger), then the soonest due ("Due Oct 1", info), then loans with no date. Mark Returned shows a toast with Undo. Empty: "Nothing's out right now." with **Lend Something**, which chooses an item and opens I-06.
 
 ---
 
@@ -389,7 +395,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | S-04 | Backup & restore | Create a .nookbackup file (zip of JSON and photos, PRD §5 F9); restore by replacing or merging, with confirmation [Inferred] |
 | S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it |
 | S-06 | Appearance | System / Light / Dark; **accent color, 6 options** (PRD §3); Hide values by default [Inferred] |
-| S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row |
+| S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook only sends reminders you asked for.", and the denied card with Open Settings |
 | S-08 | Recently Deleted | Items with days left out of 30; Restore or Delete Now; Delete All with confirmation |
 | S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected" |
 | S-10 | Tags | Rename, merge, delete. Categories are a fixed list of 10 (PRD §8 DetectedItem) |
@@ -419,7 +425,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | Siri & Shortcuts | `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent` | [PRD §8] |
 | Spotlight | Items and rooms indexed, except Private items | [PRD §8, §9] |
 | QR codes | System Camera opens the container | [PRD §5 F8] |
-| Notifications | Warranty: "Your dishwasher warranty ends in 30 days" (View, Snooze [Inferred]); loan due: "Jordan's had your drill for 3 weeks" | [PRD §5 F4, F7] |
+| Notifications | Warranty: "Your dishwasher warranty ends in 30 days" (View, Snooze 1 Week); loan due, the morning it's due: "Jordan has had your drill since Sep 12. It's due back today." (Mark Returned, Snooze 1 Week). Private items aren't named (D50) | [PRD §5 F4, F7] |
 | Share sheet in | Receipts (image or PDF) from other apps | [PRD §5 F4] |
 
 ---
