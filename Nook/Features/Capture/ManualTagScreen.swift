@@ -566,17 +566,15 @@ private struct TagCard: View {
     /// 03 §8.5: a model's suggestion says so until the user takes it.
     private var showsSuggested: Bool { tag.isSuggested && !tag.isAccepted }
 
-    /// "Appliances · Good" (C-03); one under the other at accessibility sizes.
+    /// Category, then condition (C-03).
     @ViewBuilder
     private var details: some View {
         let category = tag.category.isEmpty ? nil : Text(verbatim: tag.category)
         let condition = tag.condition.map { Text($0.title) }
         if let category, let condition {
-            if typeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 0) { category; condition }
-            } else {
-                Text("\(category) · \(condition)")
-            }
+            // Two lines, not "Appliances · Good": the card's text column is narrow on a small
+            // phone, and the dot would start a line.
+            VStack(alignment: .leading, spacing: 0) { category; condition }
         } else if let only = category ?? condition {
             only
         }
