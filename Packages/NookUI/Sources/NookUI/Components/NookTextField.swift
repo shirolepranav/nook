@@ -9,13 +9,15 @@ public struct NookTextField: View {
     let prompt: Text?
     let helper: Text?
     let error: Text?
+    let isSuggested: Bool
 
     @FocusState private var isFocused: Bool
     @Environment(\.nookAccent) private var accent
 
     public init(_ label: Text, text: Binding<String>, prompt: Text? = nil,
-                helper: Text? = nil, error: Text? = nil) {
+                helper: Text? = nil, error: Text? = nil, isSuggested: Bool = false) {
         self.label = label
+        self.isSuggested = isSuggested
         self._text = text
         self.prompt = prompt
         self.helper = helper
@@ -30,9 +32,12 @@ public struct NookTextField: View {
     public var body: some View {
         let shape = RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            label
-                .font(.nookFootnote.weight(.semibold))
-                .foregroundStyle(NookColor.textSecondary)
+            HStack(spacing: NookSpace.s1) {
+                label
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(NookColor.textSecondary)
+                if isSuggested { SuggestedLabel() }
+            }
 
             // Placeholder in textSecondary, not textTertiary (D24).
             TextField(text: $text, prompt: prompt?.foregroundStyle(NookColor.textSecondary)) { label }
@@ -43,7 +48,7 @@ public struct NookTextField: View {
                 .padding(.horizontal, NookSpace.s2)
                 .padding(.vertical, NookSpace.s1)
                 .frame(minHeight: NookLayout.fieldHeight)
-                .background(NookColor.surfaceSunken, in: shape)
+                .background(isSuggested ? accent.suggested : NookColor.surfaceSunken, in: shape)
                 .overlay { shape.strokeBorder(borderColor, lineWidth: 2) }
                 .nookAnimation(.snappy, value: isFocused)
 
@@ -58,5 +63,21 @@ public struct NookTextField: View {
             }
         }
         .accessibilityElement(children: .contain)
+    }
+}
+
+/// "Suggested" beside a value the model filled in, until the user edits or accepts it
+/// (03 §8.5). Never "AI" (03 §12).
+public struct SuggestedLabel: View {
+    @Environment(\.nookAccent) private var accent
+
+    public init() {}
+
+    public var body: some View {
+        Text("Suggested", bundle: .module)
+            .font(.nookCaption.weight(.semibold))
+            .foregroundStyle(accent.color)
+            .padding(.horizontal, NookSpace.s1)
+            .background(accent.suggested, in: Capsule())
     }
 }

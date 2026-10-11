@@ -217,7 +217,9 @@ struct ManualTagScreen: View {
             MovePicker(title: Text("Where are these?"), current: location, allowsNoRoom: true) { location = $0 }
         }
         .sheet(item: $editing) { start in
-            ItemEditor(draft: start.draft) { item in
+            ItemEditor(draft: start.draft, suggestion: start.tag.isSuggested && !start.tag.isAccepted
+                       ? ItemEditor.Suggestion(name: start.tag.name, category: start.tag.category,
+                                               brand: start.tag.brand, condition: start.tag.condition) : nil) { item in
                 // Edited in I-02 and saved there; its card is done.
                 edited.append(item)
                 model.remove(start.tag)
@@ -581,13 +583,7 @@ private struct TagCard: View {
                     .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
                     .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
                     VStack(alignment: .leading, spacing: NookSpace.half) {
-                        if showsSuggested {
-                            Text("Suggested")
-                                .font(.nookCaption.weight(.semibold))
-                                .foregroundStyle(accent.color)
-                                .padding(.horizontal, NookSpace.s1)
-                                .background(accent.suggested, in: Capsule())
-                        }
+                        if showsSuggested { SuggestedLabel() }
                         Text(verbatim: tag.name).font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
                         if let details {
                             Text(details).font(.nookMeta).foregroundStyle(NookColor.textSecondary)

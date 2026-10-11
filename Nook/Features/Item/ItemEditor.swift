@@ -3,14 +3,26 @@ import SwiftData
 import PhotosUI
 import UniformTypeIdentifiers
 import NookKit
+import NookAI
 import NookUI
 
 /// I-02 Item editor, for a new item or an existing one. Only the name is required, so a
 /// photo and a name save in 2 taps (F2). Photos and receipts go to disk as they're picked
 /// (D40); the item itself is written only on Save. One warranty, by length or end date (F4, D50).
 struct ItemEditor: View {
+    /// What the model suggested (C-03, C-05). A field shows "Suggested" while it still holds
+    /// the suggested value; editing it makes it the user's (01 I-02).
+    struct Suggestion: Equatable {
+        var name = ""
+        var category = ""
+        var brand = ""
+        var condition: ItemCondition?
+    }
+
     let item: Item?
     var cameraOff = false
+    /// C-05: ask the router about the first photo and fill what's still empty.
+    var suggestsFromPhoto = false
     /// R-04's Add a Warranty opens the editor at the warranty.
     var startsAtWarranty = false
     var onSave: ((Item) -> Void)?
@@ -34,6 +46,7 @@ struct ItemEditor: View {
     @State private var failure: LocalizedStringResource?
     @State private var saved = 0
     @State private var failed = 0
+    @State private var suggestion: Suggestion?
     @FocusState private var focus: Field?
 
     @Environment(\.modelContext) private var context
@@ -44,9 +57,11 @@ struct ItemEditor: View {
     private enum Field { case name, price, tag, serial }
 
     init(item: Item? = nil, draft: ItemDraft? = nil, cameraOff: Bool = false, startsAtWarranty: Bool = false,
-         onSave: ((Item) -> Void)? = nil) {
+         suggestion: Suggestion? = nil, suggestsFromPhoto: Bool = false, onSave: ((Item) -> Void)? = nil) {
         self.item = item
         self.cameraOff = cameraOff
+        self.suggestsFromPhoto = suggestsFromPhoto
+        _suggestion = State(initialValue: suggestion)
         self.startsAtWarranty = startsAtWarranty
         self.onSave = onSave
         let start = draft ?? item.map(ItemDraft.init) ?? ItemDraft(currencyCode: HomeCurrency.code)
@@ -105,6 +120,7 @@ struct ItemEditor: View {
                 Button("OK") {}
             }
         }
+        .task { await prefill() }
         .presentationSizing(.form)   // a centered form sheet on regular width (D29)
         .interactiveDismissDisabled(hasChanges)   // a swipe down can't lose edits
         .nookHaptic(.saved, trigger: saved)
@@ -213,7 +229,8 @@ struct ItemEditor: View {
     private var nameField: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
             NookTextField(Text("Name"), text: $draft.name, prompt: Text("Espresso machine"),
-                          error: nameError ? Text("Give it a name.") : nil)
+                          error: nameError ? Text("Give it a name.") : nil,
+                          isSuggested: isSuggested(\.name, draft.name))
                 .focused($focus, equals: .name)
                 .submitLabel(.done)
             if !suggestions.isEmpty {
@@ -238,6 +255,39 @@ struct ItemEditor: View {
             suggestions = focus == .name
                 ? ItemSuggestions.suggestions(for: draft.name, past: past, common: CommonItems.all) : []
         }
+    }
+
+    // MARK: Suggestions (C-05)
+
+    private func isSuggested(_ value: KeyPath<Suggestion, String>, _ current: String) -> Bool {
+        guard let suggestion, !current.isEmpty else { return false }
+        return suggestion[keyPath: value] == current
+    }
+
+    private var conditionIsSuggested: Bool {
+        draft.condition != nil && suggestion?.condition == draft.condition
+    }
+
+    /// Fills only what the user hasn't: Save never waits for it (F2), and with Classic, a
+    /// failure or the timeout, the form simply stays as it is (PRD §8).
+    private func prefill() async {
+        guard suggestsFromPhoto, let cover = draft.photos.first,
+              let image = await BlobStore.shared.image(cover.fileName, maxPixels: 1536),
+              let found = await NookAI.router.fillItem(from: PhotoInput(image: image)) else { return }
+        var filled = Suggestion()
+        if draft.name.isEmpty { draft.name = found.name; filled.name = found.name }
+        if draft.category.isEmpty {
+            let category = ItemSuggestions.category(for: found.name, in: CommonItems.all)
+                ?? (DetectedItem.categories.contains(found.category) ? found.category : "")
+            draft.category = category
+            filled.category = category
+        }
+        if draft.brand.isEmpty, let brand = found.brand { draft.brand = brand; filled.brand = brand }
+        if draft.condition == nil, let condition = found.condition.flatMap(ItemCondition.init(rawValue:)) {
+            draft.condition = condition
+            filled.condition = condition
+        }
+        suggestion = filled
     }
 
     private func choose(_ name: String) {
@@ -279,7 +329,7 @@ struct ItemEditor: View {
 
     private var detailsSection: some View {
         VStack(alignment: .leading, spacing: NookSpace.s2) {
-            FieldWell(Text("Category")) {
+            FieldWell(Text("Category"), isSuggested: isSuggested(\.category, draft.category)) {
                 Menu {
                     ForEach(categoryChoices, id: \.self) { category in
                         Button(category) { draft.category = category }
@@ -307,7 +357,7 @@ struct ItemEditor: View {
                 }
                 .accessibilityLabel(Text("Quantity"))
             }
-            FieldWell(Text("Condition")) {
+            FieldWell(Text("Condition"), isSuggested: conditionIsSuggested) {
                 Menu {
                     Picker(selection: $draft.condition) {
                         Text("Not set").tag(ItemCondition?.none)
@@ -326,7 +376,8 @@ struct ItemEditor: View {
                 .accessibilityLabel(Text("Condition"))
                 .accessibilityValue(draft.condition.map { Text($0.title) } ?? Text(verbatim: ""))
             }
-            NookTextField(Text("Brand"), text: $draft.brand, prompt: Text("Add brand"))
+            NookTextField(Text("Brand"), text: $draft.brand, prompt: Text("Add brand"),
+                          isSuggested: isSuggested(\.brand, draft.brand))
             NookTextField(Text("Model"), text: $draft.model, prompt: Text("Add model"))
             HStack(alignment: .bottom, spacing: NookSpace.s1) {
                 NookTextField(Text("Serial number"), text: $draft.serial, prompt: Text("Add serial"))
@@ -655,26 +706,33 @@ struct ItemEditor: View {
 struct FieldWell<Content: View>: View {
     let label: Text
     var helper: Text?
+    var isSuggested = false
     @ViewBuilder let content: Content
 
-    init(_ label: Text, helper: Text? = nil, @ViewBuilder content: () -> Content) {
+    @Environment(\.nookAccent) private var accent
+
+    init(_ label: Text, helper: Text? = nil, isSuggested: Bool = false, @ViewBuilder content: () -> Content) {
         self.label = label
         self.helper = helper
+        self.isSuggested = isSuggested
         self.content = content()
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            label
-                .font(.nookFootnote.weight(.semibold))
-                .foregroundStyle(NookColor.textSecondary)
-                .accessibilityHidden(true)   // the control carries the same label
+            HStack(spacing: NookSpace.s1) {
+                label
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(NookColor.textSecondary)
+                    .accessibilityHidden(true)   // the control carries the same label
+                if isSuggested { SuggestedLabel() }
+            }
             content
                 .font(.nookBody)
                 .padding(.horizontal, NookSpace.s2)
                 .padding(.vertical, NookSpace.s1)
                 .frame(maxWidth: .infinity, minHeight: NookLayout.fieldHeight, alignment: .leading)
-                .background(NookColor.surfaceSunken,
+                .background(isSuggested ? accent.suggested : NookColor.surfaceSunken,
                             in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
             if let helper {
                 Label { helper } icon: { Image(systemName: "exclamationmark.triangle") }
