@@ -126,7 +126,10 @@ final class CaptureTests: XCTestCase {
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
         field.typeText("Kettle\n")
-        app.buttons["Save 1 Item"].tap()
+        XCTAssertTrue(app.buttons["Box 1, Kettle"].waitForExistence(timeout: 5))
+        let save = app.buttons["Save 1 Item"]
+        XCTAssertTrue(save.waitForExistence(timeout: 5))
+        save.tap()
         XCTAssertTrue(app.staticTexts["1 item saved."].waitForExistence(timeout: 10))
     }
 
