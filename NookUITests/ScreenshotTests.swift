@@ -327,6 +327,50 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP8Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "small", classic: false)
+        app.launchArguments += ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"]
+        app.launch()
+        let capture = app.buttons["Capture"]
+        XCTAssertTrue(capture.waitForExistence(timeout: 10))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
+        app.buttons["Scan room"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        let done = app.buttons["Done"]
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
+                                                                        object: done)], timeout: 10) == .completed)
+        done.tap()
+        XCTAssertTrue(app.staticTexts["Looking for items… 2 so far"].waitForExistence(timeout: 10)
+                      || app.staticTexts["6 suggestions"].exists)
+        snap("C-03 Scan review, streaming")
+        XCTAssertTrue(app.staticTexts["6 suggestions"].waitForExistence(timeout: 10))
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Toaster,'")).firstMatch.buttons.firstMatch.tap()
+        snap("C-03 Scan review")
+        app.buttons["Cancel"].tap()
+        app.buttons["Discard"].tap()
+
+        XCTAssertTrue(capture.waitForExistence(timeout: 5))
+        capture.tap()
+        app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        XCTAssertTrue(app.staticTexts["Suggested"].waitForExistence(timeout: 10))
+        snap("C-05 Quick add, prefilled")
+        app.buttons["Cancel"].tap()
+        app.buttons["Discard Changes"].tap()
+
+        app.tab("Settings").tap()
+        app.buttons["Apple Intelligence"].tap()
+        XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
+        snap("S-11 Apple Intelligence")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

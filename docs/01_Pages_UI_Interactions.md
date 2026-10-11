@@ -296,7 +296,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Acceptance: 8 clear items → at least 6 correct suggestions (PRD §5 F3).
 - **As built (P8, D53):** C-03 is C-04 with suggestions, on one screen.
   - Each photo goes to the router, the one on screen first. Suggestions arrive as cards that are **not yet accepted**: a "Suggested" label, the crop, the name, and "Category · Condition". Each outline is drawn as it arrives, with a light tap.
-  - A status row reads "Looking for items… 3 so far". The header then reads "6 suggestions" with "2 accepted…", and the title is "Review Items".
+  - A status row reads "Looking for items… 3 so far". The header then reads "6 suggestions" with "2 accepted…", and the title is "Review".
   - The tap-and-draw tools stay ("Missed something? Tap it, or draw a box around it."). A photo the model can't read, or one that times out, simply has no suggestions: that is the fallback to C-04.
   - A suggestion with no believable box has no outline and uses the whole photo.
   - Edit opens I-02 with the suggested fields marked.

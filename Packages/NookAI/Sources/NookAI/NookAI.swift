@@ -42,16 +42,16 @@ public struct ScriptedEngine: CapabilityEngine {
 
     public init(items: [DetectedItem]?) { self.items = items }
 
-    /// Six things on `CaptureFixtures.shelf`, with boxes.
+    /// Six things for `CaptureFixtures.shelf`: three on its three blocks, three without a box.
     public static let shelf = [
-        DetectedItem(name: "Kettle", category: "Appliances", condition: "good", box: CGRect(x: 0.05, y: 0.2, width: 0.18, height: 0.3)),
+        DetectedItem(name: "Kettle", category: "Appliances", condition: "good", box: CGRect(x: 0.08, y: 0.33, width: 0.24, height: 0.45)),
         DetectedItem(name: "Toaster", category: "Appliances", brand: "Breville", condition: "good",
-                     box: CGRect(x: 0.27, y: 0.25, width: 0.2, height: 0.25)),
+                     box: CGRect(x: 0.38, y: 0.33, width: 0.24, height: 0.45)),
         DetectedItem(name: "Espresso machine", category: "Appliances", condition: "likeNew",
-                     box: CGRect(x: 0.5, y: 0.15, width: 0.2, height: 0.35)),
-        DetectedItem(name: "Stand mixer", category: "Appliances", condition: "good", box: CGRect(x: 0.74, y: 0.2, width: 0.2, height: 0.3)),
-        DetectedItem(name: "Blender", category: "Appliances", condition: "good", box: CGRect(x: 0.1, y: 0.6, width: 0.15, height: 0.3)),
-        DetectedItem(name: "Cookbook", category: "Kitchen", box: nil),
+                     box: CGRect(x: 0.68, y: 0.33, width: 0.24, height: 0.45)),
+        DetectedItem(name: "Stand mixer", category: "Appliances", condition: "good"),
+        DetectedItem(name: "Blender", category: "Appliances", condition: "good"),
+        DetectedItem(name: "Cookbook", category: "Kitchen"),
     ]
 
     struct Failure: Error {}

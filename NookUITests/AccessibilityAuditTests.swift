@@ -251,6 +251,46 @@ final class AccessibilityAuditTests: XCTestCase {
         try off.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, off) }
     }
 
+    /// P8 screens with the scripted model (D53): C-03 with suggestions, C-05 prefilled, S-11.
+    @MainActor
+    func testAIScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "small", classic: false)
+        app.launchArguments += ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"]
+        app.launch()
+        let capture = app.buttons["Capture"]
+        XCTAssertTrue(capture.waitForExistence(timeout: 10))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
+        app.buttons["Scan room"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        let done = app.buttons["Done"]
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
+                                                                        object: done)], timeout: 10) == .completed)
+        done.tap()
+        XCTAssertTrue(app.staticTexts["6 suggestions"].waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+        app.buttons["Discard"].tap()
+
+        XCTAssertTrue(capture.waitForExistence(timeout: 5))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Add item"].waitForExistence(timeout: 5))
+        app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        XCTAssertTrue(app.staticTexts["Suggested"].waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+        app.buttons["Discard Changes"].tap()
+
+        app.tab("Settings").tap()
+        app.buttons["Apple Intelligence"].tap()
+        XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// P7 screens: Home's warranty row, I-01's Lent out and Warranty cards, I-06, R-01, R-04,
     /// R-05 and S-07.
     @MainActor

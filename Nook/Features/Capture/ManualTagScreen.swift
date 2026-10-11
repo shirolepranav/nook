@@ -205,7 +205,7 @@ struct ManualTagScreen: View {
                 .background(NookColor.canvas)
                 .navigationTitle(model.photos.count > 1
                                  ? Text("Photo \(model.current + 1) of \(model.photos.count)")
-                                 : model.suggestionCount > 0 ? Text("Review Items") : Text("Tag Items"))
+                                 : model.suggestionCount > 0 ? Text("Review") : Text("Tag Items"))
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar { toolbar }
                 // Naming takes Save's place, so the field sits right above the keyboard.
@@ -565,12 +565,20 @@ private struct TagCard: View {
     /// 03 §8.5: a model's suggestion says so until the user takes it.
     private var showsSuggested: Bool { tag.isSuggested && !tag.isAccepted }
 
-    /// "Appliances · Good" (C-03).
-    private var details: AttributedString? {
-        let parts = [tag.category.isEmpty ? nil : AttributedString(tag.category),
-                     tag.condition.map { AttributedString(localized: $0.title) }].compactMap { $0 }
-        guard let first = parts.first else { return nil }
-        return parts.dropFirst().reduce(first) { $0 + AttributedString(" · ") + $1 }
+    /// "Appliances · Good" on one line (C-03), or one under the other when that doesn't fit,
+    /// so a line never starts with the dot.
+    @ViewBuilder
+    private var details: some View {
+        let category = tag.category.isEmpty ? nil : Text(verbatim: tag.category)
+        let condition = tag.condition.map { Text($0.title) }
+        if let category, let condition {
+            ViewThatFits(in: .horizontal) {
+                Text("\(category) · \(condition)").fixedSize()
+                VStack(alignment: .leading, spacing: 0) { category; condition }
+            }
+        } else if let only = category ?? condition {
+            only
+        }
     }
 
     var body: some View {
@@ -585,9 +593,7 @@ private struct TagCard: View {
                     VStack(alignment: .leading, spacing: NookSpace.half) {
                         if showsSuggested { SuggestedLabel() }
                         Text(verbatim: tag.name).font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
-                        if let details {
-                            Text(details).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
-                        }
+                        details.font(.nookMeta).foregroundStyle(NookColor.textSecondary)
                     }
                     Spacer(minLength: 0)
                 }
