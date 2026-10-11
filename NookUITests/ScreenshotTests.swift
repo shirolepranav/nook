@@ -365,7 +365,10 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Discard Changes"].tap()
 
         app.tab("Settings").tap()
-        app.buttons["Apple Intelligence"].tap()
+        let row = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        snap("S-01 Settings")
+        row.tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         snap("S-11 Apple Intelligence")
     }

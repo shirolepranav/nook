@@ -1347,6 +1347,9 @@
     "Not accepted" : {
 
     },
+    "Not available" : {
+
+    },
     "Not available on this iPhone" : {
 
     },
@@ -1399,6 +1402,9 @@
 
     },
     "Ocean" : {
+
+    },
+    "Off" : {
 
     },
     "Only items priced in %@." : {
@@ -1631,7 +1637,7 @@
     "Retake" : {
 
     },
-    "Review Items" : {
+    "Review" : {
 
     },
     "Room" : {
@@ -2114,6 +2120,9 @@
       }
     },
     "Your %@ warranty ends today." : {
+
+    },
+    "Your data" : {
 
     },
     "Zoom" : {

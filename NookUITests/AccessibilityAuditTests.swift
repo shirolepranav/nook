@@ -286,7 +286,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.buttons["Discard Changes"].tap()
 
         app.tab("Settings").tap()
-        app.buttons["Apple Intelligence"].tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch.tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
