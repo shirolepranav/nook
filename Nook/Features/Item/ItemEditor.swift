@@ -307,6 +307,25 @@ struct ItemEditor: View {
                 }
                 .accessibilityLabel(Text("Quantity"))
             }
+            FieldWell(Text("Condition")) {
+                Menu {
+                    Picker(selection: $draft.condition) {
+                        Text("Not set").tag(ItemCondition?.none)
+                        ForEach(ItemCondition.allCases) { Text($0.title).tag(Optional($0)) }
+                    } label: { EmptyView() }
+                } label: {
+                    HStack {
+                        Text(draft.condition?.title ?? "Choose")
+                            .foregroundStyle(draft.condition == nil ? NookColor.textSecondary : NookColor.textPrimary)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .foregroundStyle(NookColor.textSecondary)
+                            .accessibilityHidden(true)
+                    }
+                }
+                .accessibilityLabel(Text("Condition"))
+                .accessibilityValue(draft.condition.map { Text($0.title) } ?? Text(verbatim: ""))
+            }
             NookTextField(Text("Brand"), text: $draft.brand, prompt: Text("Add brand"))
             NookTextField(Text("Model"), text: $draft.model, prompt: Text("Add model"))
             HStack(alignment: .bottom, spacing: NookSpace.s1) {

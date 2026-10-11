@@ -441,6 +441,9 @@ private struct ItemDetail: View {
         if item.quantity > 1 {
             rows.append(AnyView(DetailRow(Text("Quantity"), Text(item.quantity, format: .number))))
         }
+        if let condition = item.itemCondition {
+            rows.append(AnyView(DetailRow(Text("Condition"), Text(condition.title))))
+        }
         if let date = item.purchaseDate {
             let when = Text(date, format: .dateTime.month(.abbreviated).day().year())
             let value = item.store.isEmpty ? when : Text("\(when) · \(item.store)")

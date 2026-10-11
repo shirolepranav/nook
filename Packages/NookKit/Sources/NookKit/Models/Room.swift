@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-extension NookSchemaV1 {
+extension NookSchemaV2 {
     /// A room in the home (F1). Holds spots, and items placed straight in the room.
     @Model
     public final class Room {

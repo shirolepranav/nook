@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-extension NookSchemaV1 {
+extension NookSchemaV2 {
     /// A named search pinned on Find (F-06): the words and the filters. A model rather than
     /// a preference, so saved searches sync with everything else in P11 (D46).
     @Model

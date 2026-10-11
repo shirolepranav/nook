@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-extension NookSchemaV1 {
+extension NookSchemaV2 {
     /// A place in a room ("Top shelf") or a container ("Box 14"). Spots are top-level in a
     /// room; a container sits in the room or inside a spot, never inside another container
     /// (D3, D34). `RoomService` enforces it.

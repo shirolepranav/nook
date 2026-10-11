@@ -68,6 +68,7 @@ public struct ItemDraft: Equatable {
     public var store = ""
     public var notes = ""
     public var isPrivate = false
+    public var condition: ItemCondition?
     /// In order; the first is the cover.
     public var photos: [DraftPhoto] = []
     public var receipts: [DraftReceipt] = []
@@ -84,6 +85,7 @@ public struct ItemDraft: Equatable {
             (item.name, item.category, item.tags, item.quantity, item.brand, item.model, item.serial, item.barcode)
         (price, currencyCode, purchaseDate, store, notes, isPrivate) =
             (item.price, item.currencyCode, item.purchaseDate, item.store, item.notes, item.isPrivate)
+        condition = item.itemCondition
         photos = item.orderedPhotos.map { photo in
             DraftPhoto(fileName: photo.fileName, width: photo.width, height: photo.height, box: photo.boxX.map { x in
                 Box(x: x, y: photo.boxY ?? 0, width: photo.boxW ?? 0, height: photo.boxH ?? 0)
@@ -364,6 +366,7 @@ public struct ItemService {
         set(\.store, trim(draft.store))
         set(\.notes, draft.notes.trimmingCharacters(in: .whitespacesAndNewlines))
         set(\.isPrivate, draft.isPrivate)
+        set(\.condition, draft.condition?.rawValue ?? "")
     }
 
     /// Photos, receipts and place: rows follow the draft. Removed rows keep their files for

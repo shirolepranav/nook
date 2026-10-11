@@ -4,7 +4,7 @@ import SwiftData
 public enum NookStore {
     /// `inMemory` for tests and previews. CloudKit stays off until Pro sync (P11, D8).
     public static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
-        let schema = Schema(versionedSchema: NookSchemaV1.self)
+        let schema = Schema(versionedSchema: NookSchemaV2.self)
         let configuration = inMemory
             ? ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
             : ModelConfiguration(schema: schema, groupContainer: .identifier(NookKit.appGroupID),

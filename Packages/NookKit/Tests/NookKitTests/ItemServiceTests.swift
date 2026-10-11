@@ -206,3 +206,17 @@ private final class Fixture {
     f.items.delete([item])
     #expect(try f.items.item(withBarcode: "4006381333931") == nil)
 }
+
+// D53: condition is optional, saved as its raw value and read back into a draft.
+@MainActor @Test func conditionRoundTrips() throws {
+    let f = try Fixture()
+    let plain = try f.items.create(f.draft("Mug"))
+    #expect(plain.condition == "" && ItemDraft(plain).condition == nil)
+    var draft = try f.draft("Camera")
+    draft.condition = .likeNew
+    let camera = try f.items.create(draft)
+    #expect(camera.itemCondition == .likeNew && ItemDraft(camera).condition == .likeNew)
+    draft.condition = nil
+    try f.items.update(camera, from: draft)
+    #expect(camera.condition == "")
+}

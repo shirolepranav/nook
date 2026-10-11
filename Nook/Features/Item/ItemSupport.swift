@@ -18,6 +18,19 @@ enum HomeCurrency {
     static var code: String { Locale.current.currency?.identifier ?? "USD" }
 }
 
+extension ItemCondition {
+    /// "Like new" (PRD F2, D53).
+    var title: LocalizedStringResource {
+        switch self {
+        case .new: "New"
+        case .likeNew: "Like new"
+        case .good: "Good"
+        case .fair: "Fair"
+        case .worn: "Worn"
+        }
+    }
+}
+
 /// Item actions shared by the grid, detail, selection and Recently Deleted, each with the
 /// toast it shows (D14: every delete gets Undo).
 @MainActor

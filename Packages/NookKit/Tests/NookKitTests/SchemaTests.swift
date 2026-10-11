@@ -6,7 +6,7 @@ import Testing
 // The CloudKit-safe rules (D8, data-model-change skill), checked on the real schema so a
 // future model can't break sync silently: CloudKit only fails at runtime.
 
-private let schema = Schema(versionedSchema: NookSchemaV1.self)
+private let schema = Schema(versionedSchema: NookSchemaV2.self)
 
 @Test(arguments: schema.entities.map(\.name))
 func entityIsCloudKitSafe(name: String) throws {
@@ -28,4 +28,20 @@ func entityIsCloudKitSafe(name: String) throws {
     // 04 §4 plus Warranty (D21) and SavedSearch (D46).
     #expect(Set(schema.entities.map(\.name)) ==
             ["Room", "Spot", "Item", "Photo", "Receipt", "Warranty", "LocationEvent", "Loan", "SavedSearch"])
+}
+
+// D53: V1 stores (P2–P7) open and migrate to V2, keeping their items.
+@Test func v1StoreMigratesToV2() throws {
+    let fixture = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .appending(path: "../../../../Fixtures/stores/v1.store").standardized
+    let url = URL.temporaryDirectory.appending(path: "\(UUID().uuidString).store")
+    try FileManager.default.copyItem(at: fixture, to: url)
+    defer { try? FileManager.default.removeItem(at: url) }
+    let schema = Schema(versionedSchema: NookSchemaV2.self)
+    let container = try ModelContainer(for: schema, migrationPlan: NookMigrationPlan.self,
+                                       configurations: ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none))
+    let items = try ModelContext(container).fetch(FetchDescriptor<Item>(sortBy: [SortDescriptor(\.name)]))
+    #expect(items.map(\.name) == ["Kettle", "Toaster"])
+    #expect(items.allSatisfy { $0.condition == "" && $0.itemCondition == nil })
+    #expect(items.first?.room?.name == "Kitchen")
 }

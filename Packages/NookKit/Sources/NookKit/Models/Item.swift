@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-extension NookSchemaV1 {
+extension NookSchemaV2 {
     /// Something the user owns (F2). Location fields change only through
     /// `LocationService.move(items:to:source:)` (P4).
     @Model
@@ -22,6 +22,8 @@ extension NookSchemaV1 {
         public var store: String = ""
         public var notes: String = ""
         public var isPrivate: Bool = false
+        /// An `ItemCondition` raw value; empty when not set (PRD F2, D53).
+        public var condition: String = ""
         /// AI estimate range, labeled as an estimate (D16, P9).
         public var valueEstimateLow: Decimal?
         public var valueEstimateHigh: Decimal?
@@ -42,5 +44,18 @@ extension NookSchemaV1 {
         public init(name: String) {
             self.name = name
         }
+    }
+}
+
+/// How worn an item is (PRD F2, C-03). Stored as its raw value in `Item.condition`.
+public enum ItemCondition: String, CaseIterable, Identifiable, Sendable {
+    case new, likeNew, good, fair, worn
+    public var id: String { rawValue }
+}
+
+extension Item {
+    public var itemCondition: ItemCondition? {
+        get { ItemCondition(rawValue: condition) }
+        set { condition = newValue?.rawValue ?? "" }
     }
 }

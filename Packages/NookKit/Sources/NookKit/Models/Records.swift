@@ -4,7 +4,7 @@ import SwiftData
 // The records an item owns (04 §4). Each is deleted with its item (cascade). Blobs live on
 // disk in the App Group; only file names are stored (D7, 04 §5).
 
-extension NookSchemaV1 {
+extension NookSchemaV2 {
     @Model
     public final class Photo {
         public var id: UUID = UUID()
