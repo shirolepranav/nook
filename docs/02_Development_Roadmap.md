@@ -155,7 +155,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 ## Stage 3 — AI, exports & Pro
 
 ### P8 · Capability router & AI room scan
-**Status:** Not started
+**Status:** In progress (Claude), on `p8/router-ai-scan` (D53, D54). Built: the router, the AI engine, C-03, C-05 prefill, S-11, `Item.condition` and the evaluation harness. Open: the evaluation photos, which are waiting on the owner's download approval, and the phase close.
 **Scope**
 - NookAI router (`currentEngine()` checks `SystemLanguageModel.default.availability`, PRD §8).
 - **Vision check (added):** before choosing the AI path for photos, also confirm the on-device model supports image input. Developer reports suggest some Apple Intelligence models lack it; those iPhones use the Classic photo path while keeping AI for text questions.

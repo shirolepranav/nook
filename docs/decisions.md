@@ -59,13 +59,13 @@ The drafts' looser budgets (1.5 s launch, 150 ms search) are dropped.
 
 **D11 · 2026-09-28 · Accepted** — **APIs that need verification.** Anything marked `[Verify in SDK]` in the docs comes from beta notes, developer reports or the PRD, and nobody has checked it against the shipping SDK. Before relying on one, confirm it in Xcode 27.1 and record the result here. Current list:
 - `ReservedRegion` (27.1)
-- Foundation Models image input
+- ~~Foundation Models image input~~ (confirmed, D54)
 - `toolbarMinimizationBehavior(_:for:)` (possibly renamed from `toolbarMinimizeBehavior`)
 - `.reorderable()`
 - `Tab(role: .prominent)`
 - Swipe actions on arbitrary scroll-container views
 - Item-binding alerts and confirmation dialogs
-- The Evaluations framework API
+- ~~The Evaluations framework API~~ (confirmed, D54)
 - iPhone Duo point sizes
 
 **D12 · 2026-09-28 · Accepted** — The backup file extension is **`.nookbackup`**, a zip of JSON and photos with a `manifest.json` that carries a `schemaVersion`. The drafts' `.vaultbackup` is dropped.
@@ -415,3 +415,33 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
   - the iPhone 18 Pro and iPad mini simulators weren't part of the P7 runs (05 §3).
 
 *Affects:* roadmap Gate 2, `docs/qa/p7-qa-report.md`, `ItemEditor.swift`, `WarrantiesScreen.swift`.
+
+### P8 (2026-10-11)
+
+**D53 · 2026-10-11 · Accepted (product owner, the three choices marked)** — **Capability router and AI room scan (P8).**
+- **`Item.condition`** *(product owner)*. PRD F2 and the C-03 cards show a condition, but Item had no field. It's a defaulted `String` holding an `ItemCondition` raw value (New, Like new, Good, Fair or Worn), empty when not set. It ships as **schema V2** with a lightweight V1→V2 migration. V1's models are frozen in `NookSchemaV1.swift`, and a V1 store fixture (`Fixtures/stores/v1.store`) proves the migration. I-02 gets a Condition menu, and I-01 shows it when set. Classic leaves it empty.
+- **The evaluation set uses openly licensed online photos** *(product owner)*, CC0 or CC-BY, labeled by Claude, with their sources in `Fixtures/eval/SOURCES.md`. Each download is confirmed with the owner first. F3's real 8-item test shelf stays an owner device check (05 §4).
+- **The model estimates item boxes** *(product owner)*. Foundation Models returns no boxes, and the iOS 27 SDK has no Vision object detector (D54). `DetectedItem` carries optional `left`, `top`, `width` and `height` from 0 to 1. A box is drawn only when it's believable: present, at least 3% on each side, and at most 90% of the photo. Otherwise the card has no outline and uses the whole photo.
+- **C-03 and C-04 are one screen.** `ManualTagScreen` shows the model's suggestions as cards that wait for Accept, and its tap-and-draw tools stay available. "Fall back to C-04 for that photo" (PRD §8 step 5) is therefore simply a photo without suggestions: no second screen, and no visible switch. While a photo is being read, the screen shows "Looking for items… 3 so far". The title is "Review Items" when there are suggestions.
+- **Categories are the app's 19** from `common-items.json`, not the PRD's 10. The model picks from them, and a name the common-items list knows takes that item's category, as manual tagging does.
+- **`ItemSuggestion` is `DetectedItem`.** The quick-add fill returns the same type, so there's one shape for both.
+- **AI receipts and serials wait for P9.** The AI engine forwards them to Classic, and the router retries Classic if an AI read throws.
+- **The router never throws to the screen.** `detectItems` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. `fillItem` returns nil.
+- **Nothing is merged across photos.** The same item seen in two photos gives two suggestions, and the user removes one. Merging silently would be the model deciding for the user.
+- **Prefill (C-05) fills only empty fields,** and a field shows "Suggested" while it still holds the suggested value. Save never waits for it.
+- **S-11:** the four states from the board. The switch shows only for Ready and Downloading, as on the board. When the model can't see images, Ready says "You tag items in photos yourself." Debug builds add Force classic engine (05 §6).
+- **UI tests run Classic by default** (`-forceClassicEngine YES`), because the simulator can borrow the Mac's Apple Intelligence. AI-path tests use a scripted model (`-uiTestingFakeAI items|fail`) that streams six fixed items. Every UI-test launch resets S-11's switch to on.
+
+*Affects:* 00 §8, 01 C-03, C-05, I-01, I-02, S-11; 04 §2, §4; `NookAI`, `NookKit` (schema V2), `ManualTagScreen`, `ItemEditor`, `QuickAdd`, `AppleIntelligenceScreen`, `NookUITests`.
+
+**D54 · 2026-10-11 · Accepted** — **iOS 27 SDK checks for P8 (D23, D11).** Confirmed by building against the iOS 27.0 SDK (Xcode 27.0) and running on the iOS 27.0 iPhone SE simulator:
+- **Foundation Models image input:** `Attachment(_ cgImage:)` (`Attachment<ImageAttachmentContent>`) is `PromptRepresentable` and goes inside a `@PromptBuilder` prompt next to text. Struck from D11.
+- **The vision check** is `SystemLanguageModel.default.capabilities.contains(.vision)`. `.toolCalling` and `.guidedGeneration` are the other capabilities.
+- **Availability:** `.available`, or `.unavailable` with `.deviceNotEligible`, `.appleIntelligenceNotEnabled` or `.modelNotReady`. These map onto S-11's Not available, Turned off and Downloading.
+- **Failures are `LanguageModelError`:** guardrail violation, refusal, rate limited, timeout, unsupported capability, unsupported language or locale, context size exceeded. The router treats every one the same.
+- **`@Guide(.anyOf([...]))`, `.range(0...1)` and `.maximumCount(_:)`** work on `@Generable` properties, optional ones included.
+- **Streaming:** `streamResponse(generating:)` yields snapshots. `rawContent.value([GeneratedContent].self, forProperty:)` gives the array so far, and each element's `isComplete` says when it can be shown.
+- **No boxes:** neither Foundation Models nor Vision (`GenerateObjectnessBasedSaliencyImageRequest` gives regions, not items) names and locates household objects. Hence D53's estimated boxes.
+- **The Evaluations framework** ships with Xcode 27 for test targets (`Platforms/*/Developer/Library/Frameworks/Evaluations.framework`, like Testing). It provides `Evaluation`, `SampleProtocol`, `ArrayLoader`/`JSONLoader`, closure `Evaluator`s returning `Metric`s, `MetricsAggregator`, `run()` and the `.evaluates(_:)` test trait. A Swift package's test target imports it with no setup. Struck from D11.
+
+*Affects:* `NookAI/Router`, `NookAI/AIEngine`, `NookAI/Types/DetectedItem.swift`, `NookAITests/RoomScanEvaluation.swift`.

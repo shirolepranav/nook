@@ -319,7 +319,7 @@ Services never call the AI directly. They ask the router, which returns the same
 |---|---|---|
 | Room | name, symbol, color, order | has many Spots and Items |
 | Spot | name, photo, parent spot (for containers), QR id | belongs to a Room; has many Items |
-| Item | name, category, tags, quantity, brand, model, serial, price, currency, purchase date, store, warranty end, notes, isPrivate, createdAt, lastConfirmedAt | belongs to a Spot or Room; has many Photos, Receipts, LocationEvents |
+| Item | name, category, tags, quantity, brand, model, serial, price, currency, purchase date, store, warranty end, notes, isPrivate, condition (D53), createdAt, lastConfirmedAt | belongs to a Spot or Room; has many Photos, Receipts, LocationEvents |
 | Photo | file name, width, height, bounding box (if cropped from a room scan) | belongs to an Item or Spot |
 | Receipt | file name, type (image or PDF), extracted text | belongs to an Item |
 | LocationEvent | from spot, to spot, date, source (manual, Siri, AI) | belongs to an Item; powers location history |
@@ -371,6 +371,8 @@ struct DetectedItem {
     var brand: String?   // Left empty when no brand is visible
 }
 ```
+
+*As built (P8, D53):* `DetectedItem` also has an optional `condition` and an estimated box (`left`, `top`, `width`, `height`, 0 to 1). Categories are the app's 19 from `common-items.json`. Before sending a photo, the router checks that the model accepts images (`capabilities.contains(.vision)`); a model without it uses the Classic photo path.
 
 - **App Intents and Siri:** `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent` and `ScanRoomIntent`.
   - Items and rooms are exposed as `AppEntity` types and indexed in Spotlight, except items marked Private.

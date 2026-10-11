@@ -235,6 +235,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Only Name is required.** An item with a photo and name saves in 2 taps (PRD §5 F2 acceptance).
 - **Fields:** photos (up to 10), name (autocompletes from the 500 common items list and the user's past items), room and spot, category, tags, quantity, brand, model, serial (with "Read from sticker" → C-08), barcode (→ C-07), purchase date, price and currency, store, receipt (Scan Receipt, Choose File… or Choose from Photos, each through the C-06 review, so its text is searchable; P6), warranty length or end date (end computed from purchase date plus length, PRD §5 F4), notes, Private toggle.
 - **AI prefill:** when created from a photo, the name, category, brand and condition are filled with a soft "Suggested" tint until edited or accepted (PRD §5).
+- **Condition (P8, D53):** a menu with New, Like new, Good, Fair, Worn and Not set. I-01 shows it among the details when set.
 - **Validation** inline under the field. A warranty end date before the purchase date shows a warning but doesn't block saving. [Inferred]
 - Cancel with changes asks "Discard changes?". Save gives a success haptic, and the card settles into place.
 - **At the 25-item free limit:** saving the 26th item opens P-01. The draft is kept and saves after purchase. [Inferred]
@@ -293,6 +294,12 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **"Accept All"** in the header accepts every card at once (D28). **"Save all"** saves accepted cards to the current room and spot, then a success haptic and a summary toast: "6 items saved to Garage".
 - **Fallbacks:** if the model is busy, a guardrail triggers, or 20 seconds pass, that photo silently switches to C-04 with the photo loaded (PRD §8 step 5).
 - Acceptance: 8 clear items → at least 6 correct suggestions (PRD §5 F3).
+- **As built (P8, D53):** C-03 is C-04 with suggestions, on one screen.
+  - Each photo goes to the router, the one on screen first. Suggestions arrive as cards that are **not yet accepted**: a "Suggested" label, the crop, the name, and "Category · Condition". Each outline is drawn as it arrives, with a light tap.
+  - A status row reads "Looking for items… 3 so far". The header then reads "6 suggestions" with "2 accepted…", and the title is "Review Items".
+  - The tap-and-draw tools stay ("Missed something? Tap it, or draw a box around it."). A photo the model can't read, or one that times out, simply has no suggestions: that is the fallback to C-04.
+  - A suggestion with no believable box has no outline and uses the whole photo.
+  - Edit opens I-02 with the suggested fields marked.
 
 ### C-04 Manual tagging, Classic path [PRD §5 F3]
 - The user **taps or draws a box** around an item, then types a name, with suggestions from the 500 common items list. Each tagged item appears as a card below.
@@ -305,6 +312,9 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Also offers "Choose from Photos" and "Skip photo".
 - **P3 (D37):** the system camera stood in until P6. With the camera off or missing, I-02 opens directly and offers Photos.
 - **P6:** Nook's own camera, with Choose from Photos left of the shutter and Skip right of it. The editor's Take Photo uses the same camera without Skip.
+- **P8 (D53):** with a photo, the editor asks the router about it.
+  - Name, category, brand and condition are filled **only where still empty**, each marked "Suggested" (the `suggested` tint and label) while it holds the suggested value.
+  - Save never waits for it. Under Classic, or after a failure or 20 s, nothing changes.
 
 ### C-06 Receipt scan [PRD §5, F4]
 - Document camera, or import a photo or PDF from Files or the share sheet. Share-sheet import needs a Share Extension or an "Open in Nook" document type. [Inferred]
@@ -399,7 +409,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | S-08 | Recently Deleted | Items with days left out of 30; Restore or Delete Now; Delete All with confirmation |
 | S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected" |
 | S-10 | Tags | Rename, merge, delete. Categories are a fixed list of 10 (PRD §8 DetectedItem) |
-| S-11 | Apple Intelligence | Status: Ready, Downloading, Not available on this iPhone, or Turned off. App-level "Use Apple Intelligence" toggle [Inferred from PRD §8 "AI turned off"] |
+| S-11 | Apple Intelligence | Status: Ready, Downloading, Not available on this iPhone, or Turned off. App-level "Use Apple Intelligence" toggle [Inferred from PRD §8 "AI turned off"]. **As built (P8, D53):** a status card per state (Turned off has Open Settings); the switch shows only for Ready and Downloading, as on the board; a model that can't see images reads "You tag items in photos yourself."; debug builds add Force classic engine |
 | S-12 | Help & About | How-to tips, contact, version, acknowledgements |
 
 ---

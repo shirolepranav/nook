@@ -108,6 +108,15 @@ public actor CapabilityRouter {
 6. **Image preparation:** before model input, resize to 1,536 px on the long side (PRD pipeline).
 7. **Tests:** every engine method has a test against a fake availability, for `.ai`, `.classic`, and AI throwing or timing out.
 
+**As built (P8, D53, D54):** `NookAI/Router/CapabilityRouter.swift` is a `Sendable` struct, not an actor, because it holds no state.
+- **`NookAI.router`** is the one instance the app uses.
+- **Availability** is `Availability { usesAI, seesImages }`. It's read per task from `SystemLanguageModel.default` (`.available`, plus `capabilities.contains(.vision)`), S-11's `useAppleIntelligence` switch (App Group defaults) and `forceClassicEngine`. Photo tasks need `seesImages`.
+- **The router owns the fallback.** `detectItems(in:)` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. `fillItem(from:)` returns nil the same way. `readReceipt` and `readSerial` retry Classic if the AI read throws.
+- **The protocol** has no `answer(_:)` yet (P9). `fillItem` returns `DetectedItem?`, so there's no separate `ItemSuggestion`.
+- **The engines:** `AIEngine` (the only `import FoundationModels` besides `DetectedItem` and the router) resizes to 1,536 px, attaches the image, offers `ReadLabels` (Vision text) and `ReadBarcodes` (Vision barcodes plus the EAN check) as tools, and streams `DetectedItem`s as each completes. Its receipts and serials forward to Classic until P9. `ClassicEngine` finds no items and fills nothing.
+- **UI tests** swap in `ScriptedEngine` with `-uiTestingFakeAI items|fail` (DEBUG).
+- **Signposts** `photoScan` and `firstItem` are on the `pointsOfInterest` log.
+
 **Before the router (P6, D48):** the `ClassicEngine` ships first. NookAI has `ClassicEngine` (`readReceipt`, `readSerial`), the shared types in `Types/` (`TextLine`, `PhotoInput`, `DocumentInput`, `ReceiptReading`, `SerialReading`), and the VisionKit wrappers in `Scanners/` (`DocumentScanner`, `BarcodeScanner`). NookKit can't depend on NookAI, so there's no `CaptureService` in NookKit yet: the app calls `NookAI.classic` from exactly one place per capability (`ReceiptScanScreen`, `SerialScanScreen`), and P8 swaps each for `router.engine()`. Room-scan tagging (C-04) has no engine call; it's all user input.
 
 The shared result types live in NookAI: `DetectedItem` (`@Generable`, see PRD §8), `ItemSuggestion`, `ReceiptReading` (fields with a confidence level), `SerialReading`, `FindAnswer` (items, breadcrumb, lastConfirmed, proposedMove?). AI-only extras (the value estimate, the room summary) are **optional fields**, and the classic engine leaves them `nil`.
@@ -146,7 +155,7 @@ The entities come from PRD §8, plus `Warranty` (D21).
 |---|---|---|
 | `Room` | id: UUID, name, symbol, colorKey, order, createdAt | spots [Spot], items [Item] (items placed directly in the room) |
 | `Spot` | id, name, qrID: String, packedAt?, order, createdAt, kindRaw (spot or container, D34) | room: Room?, parent: Spot?, children [Spot], items [Item], photo: Photo? |
-| `Item` | id, name, category, tags [String], quantity = 1, brand, model, serial, barcode, price: Decimal?, currencyCode, purchaseDate, store, notes, isPrivate = false, valueEstimateLow/High?, createdAt, lastConfirmedAt (also "last seen", D46), lastSeenAt (unused), deletedAt? | room: Room?, spot: Spot?, photos [Photo], receipts [Receipt], warranties [Warranty], events [LocationEvent], loans [Loan] |
+| `Item` | id, name, category, tags [String], quantity = 1, brand, model, serial, barcode, price: Decimal?, currencyCode, purchaseDate, store, notes, isPrivate = false, condition (an `ItemCondition` raw value or empty; schema V2, D53), valueEstimateLow/High?, createdAt, lastConfirmedAt (also "last seen", D46), lastSeenAt (unused), deletedAt? | room: Room?, spot: Spot?, photos [Photo], receipts [Receipt], warranties [Warranty], events [LocationEvent], loans [Loan] |
 | `Photo` | id, fileName, width, height, boxX/Y/W/H? (normalized, from a scan), order | item: Item?, spot: Spot? |
 | `Receipt` | id, fileName, kind (image or pdf), extractedText | item: Item? |
 | `Warranty` | id, kind (manufacturer, extended or store), provider, startDate, endDate, lengthMonths?, policyNumber, cost?, reminderOffsetsDays = [30, 7], snoozedUntil? | item: Item? |
