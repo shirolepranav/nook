@@ -104,17 +104,22 @@ private struct Label: Decodable {
     var items: [String]
 }
 
-private var canRun: Bool {
+/// Availability alone isn't enough: a simulator can report the model as available with its
+/// assets missing, so every request fails (D54). Ask it something tiny first.
+@Sendable private func modelAnswers() async -> Bool {
     let model = SystemLanguageModel.default
-    return model.availability == .available && model.capabilities.contains(.vision)
-        && FileManager.default.fileExists(atPath: evalFolder.appending(path: "labels.json").path)
+    guard model.availability == .available, model.capabilities.contains(.vision),
+          FileManager.default.fileExists(atPath: evalFolder.appending(path: "labels.json").path) else { return false }
+    return (try? await LanguageModelSession().respond(to: "Reply with OK.")) != nil
 }
 
-@Test(.enabled(if: canRun, "needs Apple Intelligence with image input and Fixtures/eval/labels.json"))
+@Test(.enabled("needs a working on-device model with image input, and Fixtures/eval/labels.json", modelAnswers))
 func roomScanEvaluation() async throws {
     let labels = try JSONDecoder().decode([Label].self, from: Data(contentsOf: evalFolder.appending(path: "labels.json")))
     let evaluation = RoomScanEvaluation(dataset: ArrayLoader(samples: labels.map { ScanSample(input: $0.file, expected: $0.items) }))
     let result = try await evaluation.run()
+    // A photo the model couldn't read would count as a failing score, not a skip.
+    #expect(result.errors.inferenceFailureCount == 0, "\(result.errors.inferenceFailureCount) photos weren't read")
     let recall = result.aggregateValue(.mean(of: RoomScanEvaluation.recall))
     let precision = result.aggregateValue(.mean(of: RoomScanEvaluation.precision))
     let os = ProcessInfo.processInfo.operatingSystemVersionString

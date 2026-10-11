@@ -444,4 +444,6 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **No boxes:** neither Foundation Models nor Vision (`GenerateObjectnessBasedSaliencyImageRequest` gives regions, not items) names and locates household objects. Hence D53's estimated boxes.
 - **The Evaluations framework** ships with Xcode 27 for test targets (`Platforms/*/Developer/Library/Frameworks/Evaluations.framework`, like Testing). It provides `Evaluation`, `SampleProtocol`, `ArrayLoader`/`JSONLoader`, closure `Evaluator`s returning `Metric`s, `MetricsAggregator`, `run()` and the `.evaluates(_:)` test trait. A Swift package's test target imports it with no setup. Struck from D11.
 
+- **The simulator says the model is available but can't run it.** On the iOS 27.0 simulator `SystemLanguageModel.default.availability` is `.available` with `.vision`, yet every request fails ("Model Catalog error … no underlying assets"; the guardrail: "Simulator is not supported"). The router's fallback covers it in the app. The evaluation is gated on a real one-line request, not on availability, so it skips on simulators and runs on an Apple Intelligence device.
+
 *Affects:* `NookAI/Router`, `NookAI/AIEngine`, `NookAI/Types/DetectedItem.swift`, `NookAITests/RoomScanEvaluation.swift`.
