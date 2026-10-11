@@ -153,6 +153,9 @@
     "%lld Selected" : {
 
     },
+    "%lld accepted. Accept the ones you want, then save." : {
+
+    },
     "%lld days" : {
       "localizations" : {
         "en" : {
@@ -587,6 +590,15 @@
     "Appearance" : {
 
     },
+    "Apple Intelligence" : {
+
+    },
+    "Apple Intelligence is off in the Settings app. Nook works as usual without it." : {
+
+    },
+    "Apple Intelligence is still getting ready. Nook works as usual in the meantime." : {
+
+    },
     "Arrange Rooms" : {
 
     },
@@ -678,6 +690,9 @@
 
     },
     "Components" : {
+
+    },
+    "Condition" : {
 
     },
     "Contacts" : {
@@ -837,6 +852,9 @@
     "Don’t Accept" : {
 
     },
+    "Downloading" : {
+
+    },
     "Due %@" : {
 
     },
@@ -956,6 +974,9 @@
     "Espresso machine" : {
 
     },
+    "Everything in Nook still works. You tag items yourself, and search finds them just as fast." : {
+
+    },
     "Everything stays on your device. No account." : {
       "comment" : "O-01. Names the device (01 §1.3, D29).",
       "localizations" : {
@@ -982,6 +1003,9 @@
     "Expired" : {
 
     },
+    "Fair" : {
+
+    },
     "Fill the frame with the sticker." : {
 
     },
@@ -989,6 +1013,9 @@
 
     },
     "Find" : {
+
+    },
+    "Force classic engine" : {
 
     },
     "Found It Here Instead" : {
@@ -1007,6 +1034,9 @@
 
     },
     "Give it a name." : {
+
+    },
+    "Good" : {
 
     },
     "Here now" : {
@@ -1117,6 +1147,9 @@
     "Light" : {
 
     },
+    "Like new" : {
+
+    },
     "Line up the barcode inside the frame." : {
 
     },
@@ -1124,6 +1157,12 @@
 
     },
     "Location history" : {
+
+    },
+    "Looking for items…" : {
+
+    },
+    "Looking for items… %lld so far" : {
 
     },
     "Mark Not Private" : {
@@ -1139,6 +1178,9 @@
 
     },
     "Mint" : {
+
+    },
+    "Missed something? Tap it, or draw a box around it." : {
 
     },
     "Model" : {
@@ -1215,6 +1257,9 @@
     "Name suggestions" : {
 
     },
+    "New" : {
+
+    },
     "New Category…" : {
 
     },
@@ -1278,6 +1323,12 @@
     "Nook" : {
 
     },
+    "Nook can read receipts and answer questions about your home. You tag items in photos yourself." : {
+
+    },
+    "Nook can suggest item names from photos, read receipts and answer questions about your home." : {
+
+    },
     "Nook couldn’t open your items" : {
 
     },
@@ -1296,6 +1347,9 @@
     "Not accepted" : {
 
     },
+    "Not available on this iPhone" : {
+
+    },
     "Not in a spot" : {
 
     },
@@ -1303,6 +1357,9 @@
 
     },
     "Not seen in 2 years" : {
+
+    },
+    "Not set" : {
 
     },
     "Notes" : {
@@ -1496,6 +1553,9 @@
     "Reading the sticker…" : {
 
     },
+    "Ready" : {
+
+    },
     "Receipt" : {
 
     },
@@ -1569,6 +1629,9 @@
 
     },
     "Retake" : {
+
+    },
+    "Review Items" : {
 
     },
     "Room" : {
@@ -1770,7 +1833,13 @@
     "Studio" : {
 
     },
+    "Suggested" : {
+
+    },
     "Suggested move, confirmed by you" : {
+
+    },
+    "Suggestions are made on this iPhone and are always yours to edit. Answers only come from things you’ve saved." : {
 
     },
     "Symbol" : {
@@ -1902,7 +1971,13 @@
     "Turn it on in Settings, or pick photos you already have." : {
 
     },
+    "Turn off to always tag and fill details yourself." : {
+
+    },
     "Turn on notifications in the Settings app so warranty and loan reminders can reach you." : {
+
+    },
+    "Turned off" : {
 
     },
     "Type" : {
@@ -1915,6 +1990,9 @@
 
     },
     "Up to %@" : {
+
+    },
+    "Use Apple Intelligence" : {
 
     },
     "Use as Model Number" : {
@@ -1995,6 +2073,9 @@
     "Who has it?" : {
 
     },
+    "Worn" : {
+
+    },
     "Yes, you have %lld." : {
 
     },
@@ -2052,6 +2133,9 @@
 
     },
     "^[%lld item](inflect: true) tagged" : {
+
+    },
+    "^[%lld suggestion](inflect: true)" : {
 
     },
     "from %@" : {

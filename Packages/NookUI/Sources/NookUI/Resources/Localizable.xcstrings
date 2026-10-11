@@ -82,6 +82,9 @@
     "Scan a room, add an item, or scan a receipt or barcode" : {
       "comment" : "VoiceOver hint for the Capture button."
     },
+    "Suggested" : {
+      "comment" : "Beside a value filled in from a photo, until the user edits or accepts it (03 §8.5)."
+    },
     "Take Photo" : {
 
     },
