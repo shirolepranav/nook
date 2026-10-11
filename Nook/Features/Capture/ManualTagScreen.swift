@@ -1,17 +1,24 @@
 import SwiftUI
 import SwiftData
 import NookKit
+import NookAI
 import NookUI
 
-/// One thing tagged on a room-scan photo (C-04). `box` is normalized with a top-left origin;
-/// nil means the whole photo ("Add Item by Name", for VoiceOver and Voice Control).
+/// One thing tagged on a room-scan photo (C-04), or suggested for it (C-03). `box` is
+/// normalized with a top-left origin; nil means the whole photo ("Add Item by Name", for
+/// VoiceOver and Voice Control, or a suggestion without a believable box, D53).
 struct ManualTag: Identifiable, Equatable {
     let id = UUID()
     var photo: Int
     var box: CGRect?
     var name: String
     var category: String
-    var isAccepted = true   // the user named it, so it's in until they say otherwise
+    var brand = ""
+    var condition: ItemCondition?
+    /// The user named it, so it's in until they say otherwise. Suggestions wait for a tap.
+    var isAccepted = true
+    /// Came from the model (C-03): shown as "Suggested" until accepted.
+    var isSuggested = false
 }
 
 /// C-04's state: the photos, the tags, and the one being named. Survives the window
@@ -30,6 +37,9 @@ final class ManualTagModel {
     var name = ""
     var selected: ManualTag.ID?
     private(set) var images: [String: CGImage] = [:]
+    /// C-03: photos still being looked at, and the suggestions found so far. Empty on the
+    /// Classic path, where the user tags everything (D53).
+    private(set) var detecting: Set<Int> = []
 
     /// Crops are padded so a tight box still shows the whole thing (D48).
     static let cropPadding = 0.08
@@ -39,7 +49,29 @@ final class ManualTagModel {
     init(photos: [ScanPhoto]) { self.photos = photos }
 
     var acceptedCount: Int { tags.filter(\.isAccepted).count }
+    var suggestionCount: Int { tags.filter(\.isSuggested).count }
+    var isDetecting: Bool { !detecting.isEmpty }
     var currentTags: [ManualTag] { tags.filter { $0.photo == current && $0.box != nil } }
+
+    /// C-03: asks the router about each photo, the one on screen first. Items join as cards,
+    /// not yet accepted. A photo the model can't read just has no suggestions: the tagging
+    /// tools are right there, so the fallback needs no screen of its own (PRD §8 step 5, D53).
+    func detect(router: CapabilityRouter, category: (String) -> String?) async {
+        let order = [current] + photos.indices.filter { $0 != current }
+        for index in order {
+            guard router.detects, !Task.isCancelled,   // checked per photo: AI can turn off mid-scan
+                  let image = await BlobStore.shared.image(photos[index].fileName, maxPixels: 1536) else { continue }
+            detecting.insert(index)
+            for await item in router.detectItems(in: PhotoInput(image: image)) {
+                let known = DetectedItem.categories.contains(item.category) ? item.category : ""
+                tags.append(ManualTag(photo: index, box: item.box, name: item.name,
+                                      category: category(item.name) ?? known, brand: item.brand ?? "",
+                                      condition: item.condition.flatMap(ItemCondition.init(rawValue:)),
+                                      isAccepted: false, isSuggested: true))
+            }
+            detecting.remove(index)
+        }
+    }
 
     func load(_ index: Int) async {
         let fileName = photos[index].fileName
@@ -111,6 +143,8 @@ final class ManualTagModel {
         var draft = ItemDraft(currencyCode: HomeCurrency.code, location: location)
         draft.name = tag.name
         draft.category = tag.category
+        draft.brand = tag.brand
+        draft.condition = tag.condition
         draft.photos = [.init(fileName: photo.fileName, width: photo.width, height: photo.height,
                               box: .init(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height))]
         return draft
@@ -129,9 +163,10 @@ final class ManualTagModel {
     }
 }
 
-/// C-04 Manual tagging, Classic path (01 C-04, D48). Tap or draw a box, name it with
-/// suggestions, and each tag becomes a card with Accept, Edit and Remove; Save all saves
-/// them to the chosen place. Compact: the photo above the cards. Regular: the photo left,
+/// C-03 Scan review and C-04 Manual tagging, one screen (D48, D53). Tap or draw a box, name
+/// it with suggestions, and each tag becomes a card with Accept, Edit and Remove; Save all
+/// saves them to the chosen place. Where the router can look at photos, the model's
+/// suggestions stream in as cards too, with outlines drawn one by one. Compact: the photo above the cards. Regular: the photo left,
 /// cards right. Accessibility sizes: one scrolling column with cards as a list.
 struct ManualTagScreen: View {
     @Binding var location: Location?
@@ -169,13 +204,15 @@ struct ManualTagScreen: View {
             layout
                 .background(NookColor.canvas)
                 .navigationTitle(model.photos.count > 1
-                                 ? Text("Photo \(model.current + 1) of \(model.photos.count)") : Text("Tag Items"))
+                                 ? Text("Photo \(model.current + 1) of \(model.photos.count)")
+                                 : model.suggestionCount > 0 ? Text("Review Items") : Text("Tag Items"))
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar { toolbar }
                 // Naming takes Save's place, so the field sits right above the keyboard.
                 .safeAreaInset(edge: .bottom) { model.naming == nil ? AnyView(saveBar) : AnyView(namingBar) }
         }
         .task(id: model.current) { await model.load(model.current) }
+        .task { await model.detect(router: NookAI.router) { ItemSuggestions.category(for: $0, in: CommonItems.all) } }
         .sheet(isPresented: $choosesPlace) {
             MovePicker(title: Text("Where are these?"), current: location, allowsNoRoom: true) { location = $0 }
         }
@@ -330,7 +367,9 @@ struct ManualTagScreen: View {
             .accessibilityLabel(Text("Saving to"))
             .accessibilityValue(Text(verbatim: location?.names.joined(separator: ", ") ?? String(localized: "Choose a room")))
 
-            Text("Tap an item, or draw a box around it.")
+            if model.isDetecting { detectionStatus }
+            Text(model.suggestionCount > 0 ? "Missed something? Tap it, or draw a box around it."
+                                           : "Tap an item, or draw a box around it.")
                 .font(.nookMeta)
                 .foregroundStyle(NookColor.textSecondary)
             Button { model.startNaming(nil); nameFocused = true } label: {
@@ -341,13 +380,23 @@ struct ManualTagScreen: View {
 
             if !model.tags.isEmpty {
                 VStack(alignment: .leading, spacing: NookSpace.half) {
-                    Text("^[\(model.tags.count) item](inflect: true) tagged")
-                        .font(.nookSection)
-                        .foregroundStyle(NookColor.textPrimary)
-                        .accessibilityAddTraits(.isHeader)
-                    Text("Tag as many as you like, then save.")
-                        .font(.nookMeta)
-                        .foregroundStyle(NookColor.textSecondary)
+                    if model.suggestionCount > 0 {
+                        Text("^[\(model.tags.count) suggestion](inflect: true)")
+                            .font(.nookSection)
+                            .foregroundStyle(NookColor.textPrimary)
+                            .accessibilityAddTraits(.isHeader)
+                        Text("\(model.acceptedCount) accepted. Accept the ones you want, then save.")
+                            .font(.nookMeta)
+                            .foregroundStyle(NookColor.textSecondary)
+                    } else {
+                        Text("^[\(model.tags.count) item](inflect: true) tagged")
+                            .font(.nookSection)
+                            .foregroundStyle(NookColor.textPrimary)
+                            .accessibilityAddTraits(.isHeader)
+                        Text("Tag as many as you like, then save.")
+                            .font(.nookMeta)
+                            .foregroundStyle(NookColor.textSecondary)
+                    }
                 }
                 ForEach(model.tags) { tag in
                     TagCard(tag: tag, crop: model.crop(tag)?.image, isSelected: model.selected == tag.id,
@@ -360,6 +409,18 @@ struct ManualTagScreen: View {
             }
         }
         .frame(maxWidth: NookLayout.readableWidth, alignment: .leading)
+    }
+
+    /// C-03 streaming: "Looking for items… 3 so far". Never says who's looking (CLAUDE.md).
+    private var detectionStatus: some View {
+        HStack(spacing: NookSpace.s1) {
+            ProgressView()
+            (model.suggestionCount == 0 ? Text("Looking for items…")
+                                        : Text("Looking for items… \(model.suggestionCount) so far"))
+                .font(.nookMeta)
+                .foregroundStyle(NookColor.textSecondary)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var namingBar: some View {
@@ -499,6 +560,17 @@ private struct TagCard: View {
 
     @Environment(\.nookAccent) private var accent
 
+    /// 03 §8.5: a model's suggestion says so until the user takes it.
+    private var showsSuggested: Bool { tag.isSuggested && !tag.isAccepted }
+
+    /// "Appliances · Good" (C-03).
+    private var details: AttributedString? {
+        let parts = [tag.category.isEmpty ? nil : AttributedString(tag.category),
+                     tag.condition.map { AttributedString(localized: $0.title) }].compactMap { $0 }
+        guard let first = parts.first else { return nil }
+        return parts.dropFirst().reduce(first) { $0 + AttributedString(" · ") + $1 }
+    }
+
     var body: some View {
         HStack(spacing: NookSpace.s2) {
             Button(action: select) {
@@ -509,9 +581,16 @@ private struct TagCard: View {
                     .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
                     .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
                     VStack(alignment: .leading, spacing: NookSpace.half) {
+                        if showsSuggested {
+                            Text("Suggested")
+                                .font(.nookCaption.weight(.semibold))
+                                .foregroundStyle(accent.color)
+                                .padding(.horizontal, NookSpace.s1)
+                                .background(accent.suggested, in: Capsule())
+                        }
                         Text(verbatim: tag.name).font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
-                        if !tag.category.isEmpty {
-                            Text(verbatim: tag.category).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+                        if let details {
+                            Text(details).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
                         }
                     }
                     Spacer(minLength: 0)
@@ -548,7 +627,7 @@ private struct TagCard: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: [tag.name, tag.category].filter { !$0.isEmpty }.joined(separator: ", ")))
-        .accessibilityValue(tag.isAccepted ? Text("Accepted") : Text("Not accepted"))
+        .accessibilityValue(tag.isAccepted ? Text("Accepted") : showsSuggested ? Text("Suggested") : Text("Not accepted"))
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .accessibilityAction(named: tag.isAccepted ? Text("Don’t Accept") : Text("Accept"), toggleAccept)
         .accessibilityAction(named: Text("Edit"), edit)

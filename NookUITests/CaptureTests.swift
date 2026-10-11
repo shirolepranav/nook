@@ -8,7 +8,8 @@ final class CaptureTests: XCTestCase {
     }
 
     @MainActor
-    private func launch(_ store: String = "small", _ extra: [String] = ["-uiTestingCameraFixture"]) -> XCUIApplication {
+    private func launch(_ store: String = "small",
+                        _ extra: [String] = ["-uiTestingCameraFixture", "-forceClassicEngine", "YES"]) -> XCUIApplication {
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: store)
         app.launchArguments += extra
@@ -33,15 +34,7 @@ final class CaptureTests: XCTestCase {
     /// 4 × 2 grid, so no box lands on another.
     @MainActor
     private func scanAndTag(_ app: XCUIApplication, _ names: [String]) {
-        capture(app, "Scan room")
-        let shutter = app.buttons["Take Photo"]
-        XCTAssertTrue(shutter.waitForExistence(timeout: 5))
-        shutter.tap()
-        let done = app.buttons["Done"]
-        XCTAssertTrue(done.waitForExistence(timeout: 5))
-        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
-                                                                        object: done)], timeout: 10) == .completed)
-        done.tap()
+        shootOnePhoto(app)
         let photo = app.otherElements["Photo 1"]
         XCTAssertTrue(photo.waitForExistence(timeout: 5))
         for (index, name) in names.enumerated() {
@@ -53,6 +46,53 @@ final class CaptureTests: XCTestCase {
             field.typeText(name + "\n")
             XCTAssertTrue(app.buttons["Box \(index + 1), \(name)"].waitForExistence(timeout: 5))
         }
+    }
+
+    /// Scan room → shutter → Done.
+    @MainActor
+    private func shootOnePhoto(_ app: XCUIApplication) {
+        capture(app, "Scan room")
+        let shutter = app.buttons["Take Photo"]
+        XCTAssertTrue(shutter.waitForExistence(timeout: 5))
+        shutter.tap()
+        let done = app.buttons["Done"]
+        XCTAssertTrue(done.waitForExistence(timeout: 5))
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "isEnabled == true"),
+                                                                        object: done)], timeout: 10) == .completed)
+        done.tap()
+    }
+
+    /// Smoke S8a (P8): suggestions stream in with outlines, Accept All takes them, and they save.
+    @MainActor
+    func testAIScanSuggestsAndSavesAll() {
+        let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"])
+        shootOnePhoto(app)
+        XCTAssertTrue(app.staticTexts["6 suggestions"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Box 1, Kettle"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] 'AI'")).firstMatch.exists)
+        XCTAssertFalse(app.buttons["Save 0 Items"].isEnabled)   // suggestions wait for the user
+        card(app, "Toaster").tap()
+        app.buttons["Accept All"].tap()
+        app.buttons["Save 6 Items"].tap()
+        XCTAssertTrue(app.staticTexts["6 items saved."].waitForExistence(timeout: 10))
+        XCTAssertTrue(card(app, "Espresso machine").waitForExistence(timeout: 5))
+    }
+
+    /// Smoke S8b (P8): when the model fails, the same photo is simply ready to tag by hand.
+    @MainActor
+    func testAIScanFailureFallsBackToTagging() {
+        let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "fail"])
+        shootOnePhoto(app)
+        XCTAssertTrue(app.staticTexts["Tap an item, or draw a box around it."].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["Looking for items…"].exists)
+        let photo = app.otherElements["Photo 1"]
+        photo.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.3)).tap()
+        let field = app.textFields["What is it?"]
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
+        field.typeText("Kettle\n")
+        app.buttons["Save 1 Item"].tap()
+        XCTAssertTrue(app.staticTexts["1 item saved."].waitForExistence(timeout: 10))
     }
 
     /// Smoke S6a: a Classic room scan tags 3 items on a photo and saves them.
