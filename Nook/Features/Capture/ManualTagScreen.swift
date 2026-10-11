@@ -566,16 +566,16 @@ private struct TagCard: View {
     /// 03 §8.5: a model's suggestion says so until the user takes it.
     private var showsSuggested: Bool { tag.isSuggested && !tag.isAccepted }
 
-    /// "Appliances · Good" on one line (C-03), or one under the other when that doesn't fit,
-    /// so a line never starts with the dot.
+    /// "Appliances · Good" (C-03); one under the other at accessibility sizes.
     @ViewBuilder
     private var details: some View {
         let category = tag.category.isEmpty ? nil : Text(verbatim: tag.category)
         let condition = tag.condition.map { Text($0.title) }
         if let category, let condition {
-            ViewThatFits(in: .horizontal) {
-                Text("\(category) · \(condition)").fixedSize()
+            if typeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 0) { category; condition }
+            } else {
+                Text("\(category) · \(condition)")
             }
         } else if let only = category ?? condition {
             only

@@ -13,6 +13,7 @@ public struct NookTextField: View {
 
     @FocusState private var isFocused: Bool
     @Environment(\.nookAccent) private var accent
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     public init(_ label: Text, text: Binding<String>, prompt: Text? = nil,
                 helper: Text? = nil, error: Text? = nil, isSuggested: Bool = false) {
@@ -38,13 +39,14 @@ public struct NookTextField: View {
     public var body: some View {
         let shape = RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            if isSuggested {
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: NookSpace.s1) { styledLabel; SuggestedLabel() }
-                    VStack(alignment: .leading, spacing: NookSpace.half) { styledLabel; SuggestedLabel() }
-                }
-            } else {
+            // Stacked at accessibility sizes (a size switch, not ViewThatFits, which the
+            // audit reads as text that doesn't grow; D51).
+            let row = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+                : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            row {
                 styledLabel
+                if isSuggested { SuggestedLabel() }
             }
 
             // Placeholder in textSecondary, not textTertiary (D24).
@@ -86,11 +88,6 @@ public struct SuggestedLabel: View {
             .font(.nookCaption.weight(.semibold))
             .foregroundStyle(accent.color)
             .padding(.horizontal, NookSpace.s1)
-            .lineLimit(1)
-            .fixedSize()
             .background(accent.suggested, in: Capsule())
-            // A tag, not reading text: it stops growing at the first accessibility size so it
-            // never wraps (D53).
-            .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }
 }

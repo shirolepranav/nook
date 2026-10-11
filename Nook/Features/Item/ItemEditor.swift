@@ -710,6 +710,7 @@ struct FieldWell<Content: View>: View {
     @ViewBuilder let content: Content
 
     @Environment(\.nookAccent) private var accent
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     init(_ label: Text, helper: Text? = nil, isSuggested: Bool = false, @ViewBuilder content: () -> Content) {
         self.label = label
@@ -727,9 +728,12 @@ struct FieldWell<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: NookSpace.s1) { styledLabel; if isSuggested { SuggestedLabel() } }
-                VStack(alignment: .leading, spacing: NookSpace.half) { styledLabel; if isSuggested { SuggestedLabel() } }
+            let row = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+                : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            row {
+                styledLabel
+                if isSuggested { SuggestedLabel() }
             }
             content
                 .font(.nookBody)
@@ -778,11 +782,15 @@ struct ClearableDate: View {
     }
 
     private var clearButton: some View {
-        Button("Clear", systemImage: "xmark.circle.fill", action: clear)
-            .labelStyle(.iconOnly)
-            .foregroundStyle(NookColor.textSecondary)
-            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-            .accessibilityLabel(clearLabel)
+        // The 44-pt frame goes inside the label: outside, the tap area stays the glyph.
+        Button(action: clear) {
+            Image(systemName: "xmark.circle.fill")
+                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(NookColor.textSecondary)
+        .accessibilityLabel(clearLabel)
     }
 }
 

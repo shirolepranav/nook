@@ -142,6 +142,8 @@ final class CaptureTests: XCTestCase {
         app.buttons["Save 3 Items"].tap()
         XCTAssertTrue(app.staticTexts["3 items saved."].waitForExistence(timeout: 10))
         for name in ["Toaster", "Blender", "Kettle"] {
+            // Recently added is a lazy grid: on a tall phone the third card is a row below.
+            if !card(app, name).waitForExistence(timeout: 3) { app.swipeUp() }
             XCTAssertTrue(card(app, name).waitForExistence(timeout: 5), name)
         }
     }
