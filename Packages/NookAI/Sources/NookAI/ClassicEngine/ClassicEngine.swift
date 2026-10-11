@@ -1,11 +1,16 @@
 import Foundation
 
 /// The Classic engine (04 §2): Vision text recognition and plain parsing, on every iPhone.
-/// It returns candidates for the user to tap and never fills a field itself (PRD §5).
-/// Until the router arrives in P8, the app calls `NookAI.classic` from one place per
-/// capability (D48).
-public struct ClassicEngine: Sendable {
+/// It returns candidates for the user to tap and never fills a field itself (PRD §5), so it
+/// finds no items in a room scan: the user tags them (C-04).
+public struct ClassicEngine: CapabilityEngine {
     public init() {}
+
+    public func detectItems(in photo: PhotoInput) -> AsyncThrowingStream<DetectedItem, Error> {
+        AsyncThrowingStream { $0.finish() }
+    }
+
+    public func fillItem(from photo: PhotoInput) async throws -> DetectedItem? { nil }
 
     /// Every page is read; candidates carry their page.
     public func readReceipt(_ document: DocumentInput) async throws -> ReceiptReading {

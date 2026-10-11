@@ -219,7 +219,7 @@ struct ReceiptScanScreen: View {
         .nookHaptic(.selected, trigger: drops)
         .task {
             // D48: the one place receipts are read; P8 asks the router instead.
-            reading = try? await NookAI.classic.readReceipt(DocumentInput(pages: pages.pages))
+            reading = try? await NookAI.router.readReceipt(DocumentInput(pages: pages.pages))
             if let code = reading?.currencyCode { currencyCode = code }
             isReading = false
         }

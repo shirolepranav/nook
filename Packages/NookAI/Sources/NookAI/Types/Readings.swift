@@ -33,6 +33,19 @@ public struct PhotoInput: Sendable {
         guard let image = DocumentInput.image(from: data, maxPixels: maxPixels) else { return nil }
         self.image = image
     }
+
+    /// At most `maxPixels` on the long edge; unchanged when already that small.
+    public func resized(maxPixels: Int) -> PhotoInput {
+        let scale = CGFloat(maxPixels) / CGFloat(max(image.width, image.height))
+        guard scale < 1 else { return self }
+        let width = Int(CGFloat(image.width) * scale), height = Int(CGFloat(image.height) * scale)
+        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+                                      space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                      bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else { return self }
+        context.interpolationQuality = .high
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        return context.makeImage().map(PhotoInput.init(image:)) ?? self
+    }
 }
 
 /// A receipt or document: one image per page.

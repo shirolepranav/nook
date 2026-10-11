@@ -32,7 +32,7 @@ private func readAll(_ folder: String) async throws -> [Outcome] {
             ? DocumentInput(pdf: base.appendingPathExtension("pdf"))
             : files.first { $0.deletingPathExtension() == base && $0.pathExtension != "json" }
                 .flatMap { try? Data(contentsOf: $0) }.flatMap(DocumentInput.init(imageData:))
-        let reading = try await NookAI.classic.readReceipt(try #require(document, "\(base.lastPathComponent)"))
+        let reading = try await ClassicEngine().readReceipt(try #require(document, "\(base.lastPathComponent)"))
         let date = reading.dates.first.map { Calendar.current.dateComponents([.year, .month, .day], from: $0.value) }
         let parts = expected.date.split(separator: "-").compactMap { Int($0) }
         outcomes.append(Outcome(
@@ -64,7 +64,7 @@ func damagedReceiptsMostlyReadRight(folder: String) async throws {
 
 @Test func stickerFixtureReadsSerialAndModel() async throws {
     let data = try Data(contentsOf: fixtures.appending(path: "serials/brewmaster.jpg"))
-    let reading = try await NookAI.classic.readSerial(from: try #require(PhotoInput(data: data)))
+    let reading = try await ClassicEngine().readSerial(from: try #require(PhotoInput(data: data)))
     #expect(reading.serial == "7XK2-48812-QA")
     #expect(reading.model == "EM-4200")
 }

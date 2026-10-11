@@ -52,7 +52,7 @@ struct SerialScanScreen: View {
         photo = UIImage(cgImage: input.image)
         Task {
             // D48: the one place stickers are read; P8 asks the router instead.
-            reading = (try? await NookAI.classic.readSerial(from: input)) ?? SerialReading(lines: [])
+            reading = (try? await NookAI.router.readSerial(from: input)) ?? SerialReading(lines: [])
         }
     }
 
