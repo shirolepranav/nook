@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import NookKit
+import NookAI
 import NookUI
 
 @main
@@ -21,6 +22,8 @@ struct NookApp: App {
         let arguments = ProcessInfo.processInfo.arguments
         if let flag = arguments.firstIndex(of: "-uiTestingOnboarded"), flag + 1 < arguments.count {
             defaults.set(arguments[flag + 1] == "YES", forKey: PreferenceKey.hasOnboarded)
+            // S-11's switch starts on for every UI test; one test turns it off (D53).
+            defaults.removeObject(forKey: CapabilityRouter.useAppleIntelligenceKey)
         }
         #endif
     }

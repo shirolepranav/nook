@@ -29,6 +29,16 @@ struct SettingsScreen: View {
                 .listRowBackground(NookColor.surface)
                 Section {
                     NavigationLink {
+                        AppleIntelligenceScreen()
+                    } label: {
+                        Label("Apple Intelligence", systemImage: "apple.intelligence")
+                            .font(.nookBody)
+                            .frame(minHeight: NookLayout.minTapTarget)
+                    }
+                }
+                .listRowBackground(NookColor.surface)
+                Section {
+                    NavigationLink {
                         RecentlyDeletedScreen()
                     } label: {
                         Label("Recently Deleted", systemImage: "trash")

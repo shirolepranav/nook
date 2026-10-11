@@ -24,6 +24,14 @@ public enum NookAI {
         #endif
         return CapabilityRouter(ai: AIEngine(), classic: ClassicEngine())
     }()
+
+    /// S-11's status. The scripted model reports Ready, so UI tests can reach the switch.
+    public static var status: AIStatus {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingFakeAI") { return .ready(seesImages: true) }
+        #endif
+        return CapabilityRouter.systemStatus
+    }
 }
 
 #if DEBUG

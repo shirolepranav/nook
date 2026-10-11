@@ -8,10 +8,9 @@ final class CaptureTests: XCTestCase {
     }
 
     @MainActor
-    private func launch(_ store: String = "small",
-                        _ extra: [String] = ["-uiTestingCameraFixture", "-forceClassicEngine", "YES"]) -> XCUIApplication {
+    private func launch(_ store: String = "small", _ extra: [String] = ["-uiTestingCameraFixture"]) -> XCUIApplication {
         XCUIDevice.shared.orientation = .portrait
-        let app = XCUIApplication.nook(store: store)
+        let app = XCUIApplication.nook(store: store, classic: !extra.contains("-uiTestingFakeAI"))
         app.launchArguments += extra
         app.launch()
         return app
@@ -76,6 +75,42 @@ final class CaptureTests: XCTestCase {
         app.buttons["Save 6 Items"].tap()
         XCTAssertTrue(app.staticTexts["6 items saved."].waitForExistence(timeout: 10))
         XCTAssertTrue(card(app, "Espresso machine").waitForExistence(timeout: 5))
+    }
+
+    /// C-05 (P8): the photo's suggestion fills the empty fields, marked Suggested; Save keeps it.
+    @MainActor
+    func testQuickAddPrefillsFromThePhoto() {
+        let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"])
+        capture(app, "Add item")
+        let shutter = app.buttons["Take Photo"]
+        XCTAssertTrue(shutter.waitForExistence(timeout: 5))
+        shutter.tap()
+        let name = app.textFields["Name"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        XCTAssertTrue(XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == 'Kettle'"),
+                                                                        object: name)], timeout: 10) == .completed)
+        XCTAssertTrue(app.staticTexts["Suggested"].exists)
+        XCTAssertEqual(app.textFields["Brand"].value as? String, "Breville")
+        app.buttons["Save"].tap()
+        XCTAssertTrue(card(app, "Kettle").waitForExistence(timeout: 5))
+    }
+
+    /// S-11 (P8): turning off "Use Apple Intelligence" makes the next scan Classic, at once.
+    @MainActor
+    func testTurningOffAppleIntelligenceMakesScansManual() {
+        let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"])
+        XCTAssertTrue(app.tab("Settings").waitForExistence(timeout: 10))
+        app.tab("Settings").tap()
+        app.buttons["Apple Intelligence"].tap()
+        XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
+        let toggle = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Use Apple Intelligence'")).firstMatch
+        XCTAssertEqual(toggle.value as? String, "1")
+        toggle.switches.firstMatch.tap()
+        XCTAssertEqual(toggle.value as? String, "0")
+        app.tab("Home").tap()
+        shootOnePhoto(app)
+        XCTAssertTrue(app.staticTexts["Tap an item, or draw a box around it."].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["Box 1, Kettle"].waitForExistence(timeout: 3))
     }
 
     /// Smoke S8b (P8): when the model fails, the same photo is simply ready to tag by hand.
