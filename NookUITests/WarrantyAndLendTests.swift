@@ -26,6 +26,27 @@ final class WarrantyAndLendTests: XCTestCase {
         app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", words)).firstMatch
     }
 
+    /// R-04 → Add a Warranty → New Item: the editor opens at the top with Name focused (the
+    /// photo and name come first), and Add photo → Choose from Photos opens the picker.
+    @MainActor
+    func testAddAWarrantyNewItemStartsAtTheTopAndPicksPhotos() {
+        let app = launch("small")
+        app.tab("Reports").tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Warranties'")).firstMatch.tap()
+        app.buttons["Add a Warranty"].firstMatch.tap()
+        XCTAssertTrue(app.buttons["New Item"].waitForExistence(timeout: 5))
+        app.buttons["New Item"].tap()
+        let add = app.buttons["Add photo"]
+        XCTAssertTrue(add.waitForExistence(timeout: 5))
+        XCTAssertTrue(add.isHittable)
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
+        add.tap()
+        app.buttons["Choose from Photos"].tap()
+        let cancels = app.buttons.matching(NSPredicate(format: "label == 'Cancel'"))
+        expectation(for: NSPredicate(format: "count == 2"), evaluatedWith: cancels)
+        waitForExpectations(timeout: 10)
+    }
+
     /// S7 (warranty half), I-02 → I-01 → R-04: a 2-year warranty from today, reminders 30 and
     /// 7 days before; then R-04's swipe turns them off.
     @MainActor

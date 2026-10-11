@@ -85,7 +85,8 @@ struct WarrantiesScreen: View {
                     Task { self.flow = .edit(item) }   // after the chooser closes
                 }
             case .edit(let item):
-                ItemEditor(item: item, startsAtWarranty: true)
+                // A new item starts at the top: its photo and name come first (D50).
+                ItemEditor(item: item, startsAtWarranty: item != nil)
             }
         }
         .toast($toast)

@@ -127,6 +127,22 @@ final class CaptureTests: XCTestCase {
         XCTAssertTrue(app.textFields["Name"].waitForExistence(timeout: 5))
     }
 
+    /// I-02's Add photo → Choose from Photos opens the system picker. It used to be a
+    /// PhotosPicker inside the Menu, which closing the menu tore down before it could open.
+    @MainActor
+    func testEditorChooseFromPhotosOpensThePicker() {
+        let app = launch()
+        newItemEditor(app)
+        app.buttons["Add photo"].tap()
+        let choose = app.buttons["Choose from Photos"]
+        XCTAssertTrue(choose.waitForExistence(timeout: 5))
+        choose.tap()
+        // The picker brings its own close button, beside the editor's Cancel.
+        let cancels = app.buttons.matching(NSPredicate(format: "label == 'Cancel'"))
+        expectation(for: NSPredicate(format: "count == 2"), evaluatedWith: cancels)
+        waitForExpectations(timeout: 10)
+    }
+
     /// C-07: the editor's Scan button fills the barcode; from C-01 a new item gets it.
     @MainActor
     func testBarcodeFillsEditor() {

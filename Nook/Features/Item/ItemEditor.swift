@@ -26,6 +26,7 @@ struct ItemEditor: View {
     @State private var scansBarcode = false
     @State private var readsSticker = false
     @State private var takesPhoto = false
+    @State private var picksPhotos = false
     @State private var confirmsDiscard = false
     @State private var namesCategory = false
     @State private var newCategory = ""
@@ -139,6 +140,8 @@ struct ItemEditor: View {
             result.apply(to: &draft)
             if let price = draft.price { priceText = price.formatted(.number.grouping(.never)) }
         }
+        .photosPicker(isPresented: $picksPhotos, selection: $pickedPhotos,
+                      maxSelectionCount: max(1, ItemService.maxPhotos - draft.photos.count), matching: .images)
         .onChange(of: pickedPhotos) { _, items in
             guard !items.isEmpty else { return }
             pickedPhotos = []
@@ -158,11 +161,10 @@ struct ItemEditor: View {
                             if !cameraOff && Camera.isUsable {
                                 Button("Take Photo", systemImage: "camera") { takesPhoto = true }
                             }
-                            PhotosPicker(selection: $pickedPhotos,
-                                         maxSelectionCount: ItemService.maxPhotos - draft.photos.count,
-                                         matching: .images) {
-                                Label("Choose from Photos", systemImage: "photo.on.rectangle")
-                            }
+                            // A PhotosPicker inside the Menu never opens: closing the menu
+                            // removes the view that would present it. The picker hangs off
+                            // the editor instead, like the receipt menu below.
+                            Button("Choose from Photos", systemImage: "photo.on.rectangle") { picksPhotos = true }
                         } label: {
                             AddPhotoTile()
                         }
