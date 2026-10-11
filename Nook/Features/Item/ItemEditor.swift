@@ -718,14 +718,18 @@ struct FieldWell<Content: View>: View {
         self.content = content()
     }
 
+    private var styledLabel: some View {
+        label
+            .font(.nookFootnote.weight(.semibold))
+            .foregroundStyle(NookColor.textSecondary)
+            .accessibilityHidden(true)   // the control carries the same label
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            HStack(spacing: NookSpace.s1) {
-                label
-                    .font(.nookFootnote.weight(.semibold))
-                    .foregroundStyle(NookColor.textSecondary)
-                    .accessibilityHidden(true)   // the control carries the same label
-                if isSuggested { SuggestedLabel() }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: NookSpace.s1) { styledLabel; if isSuggested { SuggestedLabel() } }
+                VStack(alignment: .leading, spacing: NookSpace.half) { styledLabel; if isSuggested { SuggestedLabel() } }
             }
             content
                 .font(.nookBody)

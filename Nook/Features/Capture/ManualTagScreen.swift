@@ -561,6 +561,7 @@ private struct TagCard: View {
     let remove: () -> Void
 
     @Environment(\.nookAccent) private var accent
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     /// 03 §8.5: a model's suggestion says so until the user takes it.
     private var showsSuggested: Bool { tag.isSuggested && !tag.isAccepted }
@@ -581,43 +582,76 @@ private struct TagCard: View {
         }
     }
 
+    private var thumbnail: some View {
+        Group {
+            if let crop { Image(decorative: crop, scale: 1).resizable().scaledToFill() } else { NookColor.surfaceSunken }
+        }
+        .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
+        .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
+    }
+
+    private var words: some View {
+        VStack(alignment: .leading, spacing: NookSpace.half) {
+            if showsSuggested { SuggestedLabel() }
+            Text(verbatim: tag.name).font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+            details.font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+        }
+    }
+
+    private var acceptButton: some View {
+        Button(action: toggleAccept) {
+            Image(systemName: tag.isAccepted ? "checkmark.circle.fill" : "circle")
+                .font(.nookTitle)
+                .foregroundStyle(tag.isAccepted ? accent.color : NookColor.textSecondary)
+                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+        }
+        .buttonStyle(.plain)
+        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+    }
+
+    private var menu: some View {
+        Menu {
+            Button("Edit", systemImage: "pencil", action: edit)
+            Button("Remove", systemImage: "trash", role: .destructive, action: remove)
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .font(.nookTitle)
+                .foregroundStyle(NookColor.textSecondary)
+                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+        }
+        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+    }
+
     var body: some View {
-        HStack(spacing: NookSpace.s2) {
-            Button(action: select) {
-                HStack(spacing: NookSpace.s2) {
-                    Group {
-                        if let crop { Image(decorative: crop, scale: 1).resizable().scaledToFill() } else { NookColor.surfaceSunken }
+        Group {
+            // Accessibility sizes: the photo and controls on top, the words below at full
+            // width, so names never break mid-word (05 §5).
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: NookSpace.s1) {
+                    HStack(spacing: NookSpace.s2) {
+                        Button(action: select) { thumbnail }.buttonStyle(.plain)
+                        Spacer(minLength: 0)
+                        acceptButton
+                        menu
                     }
-                    .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
-                    .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
-                    VStack(alignment: .leading, spacing: NookSpace.half) {
-                        if showsSuggested { SuggestedLabel() }
-                        Text(verbatim: tag.name).font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
-                        details.font(.nookMeta).foregroundStyle(NookColor.textSecondary)
-                    }
-                    Spacer(minLength: 0)
+                    Button(action: select) { words.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle()) }
+                        .buttonStyle(.plain)
                 }
-                .contentShape(Rectangle())
+            } else {
+                HStack(spacing: NookSpace.s2) {
+                    Button(action: select) {
+                        HStack(spacing: NookSpace.s2) {
+                            thumbnail
+                            words
+                            Spacer(minLength: 0)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    acceptButton
+                    menu
+                }
             }
-            .buttonStyle(.plain)
-            Button(action: toggleAccept) {
-                Image(systemName: tag.isAccepted ? "checkmark.circle.fill" : "circle")
-                    .font(.nookTitle)
-                    .foregroundStyle(tag.isAccepted ? accent.color : NookColor.textSecondary)
-                    .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-            }
-            .buttonStyle(.plain)
-            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-            Menu {
-                Button("Edit", systemImage: "pencil", action: edit)
-                Button("Remove", systemImage: "trash", role: .destructive, action: remove)
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.nookTitle)
-                    .foregroundStyle(NookColor.textSecondary)
-                    .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-            }
-            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
         }
         .padding(NookSpace.s1)
         .nookCard(elevation: .flat)

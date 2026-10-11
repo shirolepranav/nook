@@ -368,6 +368,7 @@ final class ScreenshotTests: XCTestCase {
         let row = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         snap("S-01 Settings")
+        if !row.isHittable { app.swipeUp() }   // below the fold at AX5
         row.tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         snap("S-11 Apple Intelligence")

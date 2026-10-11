@@ -29,14 +29,22 @@ public struct NookTextField: View {
         return isFocused ? accent.color : .clear
     }
 
+    private var styledLabel: some View {
+        label
+            .font(.nookFootnote.weight(.semibold))
+            .foregroundStyle(NookColor.textSecondary)
+    }
+
     public var body: some View {
         let shape = RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            HStack(spacing: NookSpace.s1) {
-                label
-                    .font(.nookFootnote.weight(.semibold))
-                    .foregroundStyle(NookColor.textSecondary)
-                if isSuggested { SuggestedLabel() }
+            if isSuggested {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: NookSpace.s1) { styledLabel; SuggestedLabel() }
+                    VStack(alignment: .leading, spacing: NookSpace.half) { styledLabel; SuggestedLabel() }
+                }
+            } else {
+                styledLabel
             }
 
             // Placeholder in textSecondary, not textTertiary (D24).
@@ -78,6 +86,11 @@ public struct SuggestedLabel: View {
             .font(.nookCaption.weight(.semibold))
             .foregroundStyle(accent.color)
             .padding(.horizontal, NookSpace.s1)
+            .lineLimit(1)
+            .fixedSize()
             .background(accent.suggested, in: Capsule())
+            // A tag, not reading text: it stops growing at the first accessibility size so it
+            // never wraps (D53).
+            .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }
 }
