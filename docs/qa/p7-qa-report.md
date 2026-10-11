@@ -83,6 +83,8 @@ P7 doesn't touch the router; every P7 flow is Classic. No user-facing string men
 | — | P2 | `testEightItemsTaggedUnderTwoMinutes` fails on `main` and on this branch on every simulator (F3's timing test). Not caused by P7; needs its own look |
 
 ## Gate 2 — Works with AI off (for the team's go/no-go)
+**Signed off by the product owner on 2026-10-10 (D52).** What was still open at sign-off is listed there.
+
 - Stage 2 smoke S1–S7 on the SE simulator: see the matrix above.
 - A real iPhone without Apple Intelligence: **Owner.**
 - No screen shows an AI error or a dead end. Every P7 empty state has an action: Add a Warranty, Lend Something.

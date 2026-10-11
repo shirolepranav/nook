@@ -382,7 +382,7 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Snooze 1 Week** sets `snoozedUntil` to a week from now. The reminder comes back at that moment, and offsets earlier than it are skipped. **`Loan.snoozedUntil` is added to schema V1 in place**, because V1 hasn't shipped (as D44 and D46 did).
 - **Private items are never named in a notification:** "A private item's warranty ends in 7 days." and "Something you lent Jordan is due back today." Notifications show on the Lock Screen (PRD §9).
 - **Notification actions work without a window.** `AppDelegate` owns the store, the reminders and the router, so Mark Returned and Snooze run when iOS wakes the app in the background. A tap or View, from a cold start too, opens the item in a sheet over the current tab (`AppRouter.openedItem`). Tab roots keep their own stacks: binding Home's stack to shared router state reset its root on every update, which lost the Capture flow's "Saved" toast. Home's See All pushes R-04 on Home's own stack (`ReportsRoute` is registered in `itemNavigation()`).
-- **Empty states keep their action (01 §1.3).** R-04's Add a Warranty and R-05's Lend Something open `ItemChooser`, a searchable list of items, and then the item's editor (scrolled to the warranty) or the Lend sheet. Add a Warranty also offers New Item. Private items aren't offered; R-04, R-05 and the Home row show them as "Private item" with no photo (D46).
+- **Empty states keep their action (01 §1.3).** R-04's Add a Warranty and R-05's Lend Something open `ItemChooser`, a searchable list of items, and then the item's editor (scrolled to the warranty) or the Lend sheet. Add a Warranty also offers New Item, whose editor opens at the top with Name focused, since the photo and name come first. Private items aren't offered; R-04, R-05 and the Home row show them as "Private item" with no photo (D46).
 - **Badges:** photo cards get the Lent badge. The boards have no warranty badge on cards, so `CardBadge.endingSoon` stays unused.
 - **R-01 always shows the Warranties and Lent out cards,** with counts ("2 ending in the next 30 days", "1 item with Jordan"). Each leads to a list or to its empty state with an action.
 - **Lending an item that's already out edits its loan**, so an item is never lent twice. Mark Returned is a property change, so the toast's Undo and ⌘Z bring the loan back.
@@ -402,3 +402,16 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **I-01's tag chips (P5's other finding, D47)** report "Potentially inaccessible text" with no element. Two more fixes failed: one labeled element over the flow layout, and that element on a wrapping VStack. VoiceOver reads each tag ("Tag: Coffee"). So the audit skips element-less findings of that kind while tag chips are on screen. *(Product owner, 2026-10-09.)*
 
 *Affects:* `Nook/App/Reminders.swift`, `Info.plist`, `LendSheet.swift`, `ItemEditor.swift` (`ClearableDate`), `AccessibilityAuditTests.swift`.
+
+### Gate 2 (2026-10-10)
+
+**D52 · 2026-10-10 · Accepted (product owner)** — **Gate 2, "Works with AI off", is passed.** The product owner signed it off on 2026-10-10, so Stage 3 (P8–P11) can start.
+- **Evidence:** the P7 close ran smoke S1–S7 on the iPhone SE, iPhone 18 Pro Max and 13-inch iPad simulators (`docs/qa/p7-qa-report.md`). The real-device "No AI" pass (05 §6) and the device checks are taken on the owner's sign-off.
+- **Found in pre-gate testing and fixed:** I-02's Add photo → Choose from Photos did nothing in any editor. A `PhotosPicker` inside a `Menu` is removed when the menu closes, before it can present. It's now a button that sets state, with `.photosPicker` on the editor, as the receipt menu already did. Add a Warranty → New Item also opened mid-form at the warranty; a new item now opens at the top with Name focused (D50). UI tests: `testEditorChooseFromPhotosOpensThePicker` and `testAddAWarrantyNewItemStartsAtTheTopAndPicksPhotos`.
+- **Still open at sign-off, carried into Stage 3:**
+  - F3's timing test (`testEightItemsTaggedUnderTwoMinutes`, P6) fails on `main`;
+  - I-01's tag-chip audit finding, which is skipped (D51);
+  - D27's open risks: no first-time user or VoiceOver user has been watched yet (P13 TestFlight);
+  - the iPhone 18 Pro and iPad mini simulators weren't part of the P7 runs (05 §3).
+
+*Affects:* roadmap Gate 2, `docs/qa/p7-qa-report.md`, `ItemEditor.swift`, `WarrantiesScreen.swift`.

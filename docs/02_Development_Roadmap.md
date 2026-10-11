@@ -148,6 +148,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — date math and scheduler unit tests with a fake clock (PRD §9); loan UI tests. Smoke — S1–S7.
 
 **Gate 2 — Works with AI off:** the full Stage 2 app passes all smoke checks on the iPhone SE simulator and a real iPhone without Apple Intelligence. No screen shows an AI error or a dead end.
+**Status:** Passed. Signed off by the product owner on 2026-10-10 (D52). Stage 3 can start.
 
 ---
 
