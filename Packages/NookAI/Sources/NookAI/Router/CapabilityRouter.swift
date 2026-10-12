@@ -12,6 +12,11 @@ public protocol CapabilityEngine: Sendable {
     func fillItem(from photo: PhotoInput) async throws -> DetectedItem?
     func readReceipt(_ document: DocumentInput) async throws -> ReceiptReading
     func readSerial(from photo: PhotoInput) async throws -> SerialReading
+    /// "Where is…?" and "I put X in Y" (PRD §6), read into the question Find answers from
+    /// records. Classic reads it with `FindQuestion`'s rules. `index` is all it may look up.
+    func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion
+    /// I-02's value range (D16). Classic suggests none.
+    func estimateValue(for item: ValueSubject) async throws -> ValueEstimate?
 }
 
 /// What the on-device model can do right now.
@@ -58,8 +63,12 @@ public struct CapabilityRouter: Sendable {
     /// Checked per task, never cached: the user can turn AI off, or the model can finish
     /// downloading, mid-session.
     public func engine(needsImages: Bool) -> any CapabilityEngine {
+        usesAI(needsImages: needsImages) ? ai : classic
+    }
+
+    private func usesAI(needsImages: Bool) -> Bool {
         let now = availability()
-        return now.usesAI && (now.seesImages || !needsImages) ? ai : classic
+        return now.usesAI && (now.seesImages || !needsImages)
     }
 
     /// True when a photo would go to the model, so C-03 can show "Looking for items…".
@@ -103,31 +112,55 @@ public struct CapabilityRouter: Sendable {
     /// as the user would find it anyway.
     public func fillItem(from photo: PhotoInput) async -> DetectedItem? {
         let engine = engine(needsImages: true)
-        return await withTaskGroup(of: DetectedItem??.self) { group in
-            group.addTask { try? await engine.fillItem(from: photo) }
-            group.addTask { try? await Task.sleep(for: self.timeout); return .some(nil) }
+        return await timed { try await engine.fillItem(from: photo) } ?? nil
+    }
+
+    /// Receipts (F4). The AI reads the recognized text, so a model that can't see images
+    /// still reads receipts. A failed or slow AI read falls back to Classic.
+    public func readReceipt(_ document: DocumentInput) async throws -> ReceiptReading {
+        if usesAI(needsImages: false), let reading = await timed({ try await ai.readReceipt(document) }) {
+            return reading
+        }
+        return try await classic.readReceipt(document)
+    }
+
+    /// Serial stickers (F2). A failed or slow AI read falls back to Classic.
+    public func readSerial(from photo: PhotoInput) async throws -> SerialReading {
+        if usesAI(needsImages: false), let reading = await timed({ try await ai.readSerial(from: photo) }) {
+            return reading
+        }
+        return try await classic.readSerial(from: photo)
+    }
+
+    /// Find's question (PRD §6). Never fails: the Classic reading stands in.
+    public func understand(_ text: String, index: SearchIndex) async -> FindQuestion {
+        if usesAI(needsImages: false), let question = await timed({ try await ai.understand(text, index: index) }) {
+            return question
+        }
+        return (try? await classic.understand(text, index: index)) ?? FindQuestion(text)
+    }
+
+    /// A value range for I-02, or nil on Classic, a failure or the timeout (D16).
+    public func estimateValue(for item: ValueSubject) async -> ValueEstimate? {
+        guard usesAI(needsImages: false) else { return nil }
+        return await timed { try await ai.estimateValue(for: item) } ?? nil
+    }
+
+    /// The work's result, or nil when it throws or outlasts the timeout (PRD §8): the caller's
+    /// Classic path takes over that one unit of work, with its input untouched.
+    private func timed<T: Sendable>(_ work: @escaping @Sendable () async throws -> T) async -> T? {
+        await withTaskGroup(of: T?.self) { group in
+            group.addTask {
+                do { return try await work() } catch {
+                    Self.log.info("Fell back to Classic: \(String(describing: type(of: error)), privacy: .public)")
+                    return nil
+                }
+            }
+            group.addTask { try? await Task.sleep(for: self.timeout); return nil }
             let first = await group.next() ?? nil
             group.cancelAll()
-            return first ?? nil
+            return first
         }
-    }
-
-    /// Receipts (F4). Either engine's reading; a failed AI read falls back to Classic.
-    public func readReceipt(_ document: DocumentInput) async throws -> ReceiptReading {
-        let engine = engine(needsImages: true)
-        guard engine is ClassicEngine == false, let reading = try? await engine.readReceipt(document) else {
-            return try await classic.readReceipt(document)
-        }
-        return reading
-    }
-
-    /// Serial stickers (F2). A failed AI read falls back to Classic.
-    public func readSerial(from photo: PhotoInput) async throws -> SerialReading {
-        let engine = engine(needsImages: true)
-        guard engine is ClassicEngine == false, let reading = try? await engine.readSerial(from: photo) else {
-            return try await classic.readSerial(from: photo)
-        }
-        return reading
     }
 
     // MARK: The system

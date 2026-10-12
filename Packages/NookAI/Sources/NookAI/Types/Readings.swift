@@ -112,6 +112,22 @@ public struct ReceiptReading: Sendable, Equatable {
     public var dates: [Candidate<Date>]
     public var store: String?
     public var currencyCode: String
+    /// The AI reading's picks (P9), each one a candidate above, so a pick always points at
+    /// something printed. Shown as "Suggested" until the user taps another (C-06). Classic
+    /// leaves it nil.
+    public var suggested: Suggested?
+
+    public struct Suggested: Sendable, Equatable {
+        /// Indexes into `dates` and `amounts`.
+        public var date: Int?
+        public var amount: Int?
+        public var store: String?
+        /// "2 YEAR WARRANTY" → 24, only when the receipt says so (D50 counts it from the
+        /// purchase date).
+        public var warrantyMonths: Int?
+
+        public var isEmpty: Bool { date == nil && amount == nil && store == nil && warrantyMonths == nil }
+    }
 
     /// Every line, for search (Receipt.extractedText).
     public var text: String { lines.map(\.text).joined(separator: "\n") }
@@ -132,7 +148,9 @@ public struct SerialReading: Sendable, Equatable {
 
     public var lines: [Line]
     public var serial: String? { lines.first { $0.kind == .serial }?.value }
+    /// The AI reading labeled the serial and model (P9): C-08 marks them "Suggested".
+    public var isSuggested: Bool
 
-    public init(lines: [Line]) { self.lines = lines }
+    public init(lines: [Line], isSuggested: Bool = false) { (self.lines, self.isSuggested) = (lines, isSuggested) }
     public var model: String? { lines.first { $0.kind == .model }?.value }
 }

@@ -75,12 +75,35 @@ public struct ScriptedEngine: CapabilityEngine {
         return DetectedItem(name: "Kettle", category: "Appliances", brand: "Breville", condition: "likeNew")
     }
 
+    /// The Classic reading, with its best candidates picked as a model would.
     public func readReceipt(_ document: DocumentInput) async throws -> ReceiptReading {
-        try await ClassicEngine().readReceipt(document)
+        guard items != nil else { throw Failure() }
+        var reading = try await ClassicEngine().readReceipt(document)
+        reading.suggested = .init(date: reading.dates.isEmpty ? nil : 0, amount: reading.amounts.isEmpty ? nil : 0,
+                                  store: reading.store)
+        return reading
     }
 
     public func readSerial(from photo: PhotoInput) async throws -> SerialReading {
-        try await ClassicEngine().readSerial(from: photo)
+        guard items != nil else { throw Failure() }
+        var reading = try await ClassicEngine().readSerial(from: photo)
+        reading.isSuggested = reading.serial != nil
+        return reading
+    }
+
+    /// "I put the passports in the safe" proposes a move (F-04); anything else reads the
+    /// Classic way.
+    public func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion {
+        guard items != nil else { throw Failure() }
+        let lower = text.lowercased()
+        guard lower.hasPrefix("i put "), let split = lower.range(of: " in ") else { return FindQuestion(text) }
+        return FindQuestion(intent: .move, terms: FindQuestion(String(lower[..<split.lowerBound])).terms,
+                            placeTerms: FindQuestion(String(lower[split.upperBound...])).terms)
+    }
+
+    public func estimateValue(for item: ValueSubject) async throws -> ValueEstimate? {
+        guard items != nil else { throw Failure() }
+        return ValueEstimate(low: 60, high: 90)
     }
 }
 #endif

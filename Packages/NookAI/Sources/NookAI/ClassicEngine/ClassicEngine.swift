@@ -1,4 +1,5 @@
 import Foundation
+import NookKit
 
 /// The Classic engine (04 §2): Vision text recognition and plain parsing, on every iPhone.
 /// It returns candidates for the user to tap and never fills a field itself (PRD §5), so it
@@ -24,4 +25,10 @@ public struct ClassicEngine: CapabilityEngine {
     public func readSerial(from photo: PhotoInput) async throws -> SerialReading {
         SerialParser.read(try await TextReader.lines(in: photo.image))
     }
+
+    /// Find's everyday-question rules (D46). "I put…" stays a search (F-04).
+    public func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion { FindQuestion(text) }
+
+    /// D16: the manual path suggests no value.
+    public func estimateValue(for item: ValueSubject) async throws -> ValueEstimate? { nil }
 }
