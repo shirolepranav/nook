@@ -80,6 +80,8 @@ Each phase's QA runs on at least SE, 18 Pro Max, the 13-inch iPad (portrait and 
   - Pass criteria:
     - **Zero invented locations.** A record is required for every answer.
     - Every move statement produces a confirm card, never a write.
+  - As built (P9, D55): `NookAITests/WhereIsEvaluation.swift` over `Fixtures/eval/where-is.json`, run as Find runs it (router, then `FindService`). The AI run needs a real device (D54). A Classic run of the same questions checks zero invented answers, no proposals and no writes everywhere, CI included.
+- **Receipt evaluation (P9, D55):** `NookAITests/ReceiptEvaluation.swift` runs the AI receipt reading over `Fixtures/receipts/clean` and `hard`. Its picked totals and dates must meet D48's bar (clean 100%, hard 80%). A warranty must be suggested exactly where one is printed. The hard set includes `us-long-warranty`, a 135-line receipt.
 - **Where results go:** log them in the PR as `run date · iOS build · device · recall · precision · notes`.
 
 ---

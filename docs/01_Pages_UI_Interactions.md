@@ -223,7 +223,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Hero:** photo carousel (up to 10). Swipe between photos, tap for the viewer (I-03). Zoom transition from the source card (cross-fade under Reduce Motion, PRD §3).
 - **Title block:** name, category, tags, Private badge, Lent badge.
 - **Location card (most prominent):** breadcrumb, spot photo, "Last confirmed Aug 3", and two buttons: **Move** (I-04) and **"Found it here instead"** (also I-04). For valuables, an **Open Find My** link (PRD §6 honest limits).
-- **Details card:** brand, model, serial (tap to copy), quantity, purchase date, price, store, value estimate (AI only, labeled "Estimate", PRD §5).
+- **Details card:** brand, model, serial (tap to copy), quantity, purchase date, price, store, value estimate (AI only, labeled "Estimate", PRD §5). As built (P9, D55): a "Value today" row with the range ("$420–$510") over "Estimate", in the item's currency.
 - **Warranty card:** end date, days left, reminder status ("Reminders 30 and 7 days before").
 - **Receipt card:** thumbnail → I-07; "Add receipt" if missing.
 - **Lending card:** "Jordan has it since Sep 12 · due Oct 1". Actions: Mark returned, Edit (I-06).
@@ -235,6 +235,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Only Name is required.** An item with a photo and name saves in 2 taps (PRD §5 F2 acceptance).
 - **Fields:** photos (up to 10), name (autocompletes from the 500 common items list and the user's past items), room and spot, category, tags, quantity, brand, model, serial (with "Read from sticker" → C-08), barcode (→ C-07), purchase date, price and currency, store, receipt (Scan Receipt, Choose File… or Choose from Photos, each through the C-06 review, so its text is searchable; P6), warranty length or end date (end computed from purchase date plus length, PRD §5 F4), notes, Private toggle.
 - **AI prefill:** when created from a photo, the name, category, brand and condition are filled with a soft "Suggested" tint until edited or accepted (PRD §5).
+- **Value estimate (P9, D16, D55):** on AI iPhones, once an item has a name and no range, the editor asks once and fills "Value estimate" (low – high, in the item's currency) with the Suggested tint. Both ends are editable, Clear empties them, and only Save writes them. A suggested range alone doesn't make Cancel ask. Classic suggests none, so the row appears only for a range already saved.
 - **Condition (P8, D53):** a menu with New, Like new, Good, Fair, Worn and Not set. I-01 shows it among the details when set.
 - **Validation** inline under the field. A warranty end date before the purchase date shows a warning but doesn't block saving. [Inferred]
 - Cancel with changes asks "Discard changes?". Save gives a success haptic, and the card settles into place.
@@ -322,6 +323,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Classic:** Vision text recognition highlights prices and dates on the receipt; **the user taps a number to drop it into the focused field**.
 - The receipt is attached to the item; extracted text is stored for search (PRD §8 Receipt.extractedText).
 - **As built (P6, D48):** several pages become one PDF; one page is a photo. "Open in Nook" (a document type, not a Share Extension) opens images and PDFs from the share sheet and Files into the same review, then a new item. The review starts on Date; every amount and date is highlighted (the best guess strongest), and nothing is filled until tapped. A tap drops the value into its field and selects the next empty one; with Store selected, the receipt's lines are tappable too. One tap layer picks the nearest highlight, because printed lines sit closer than 44 pt. If nothing can be read: "That receipt couldn't be read. You can type the numbers in." Regular width: receipt left, fields right.
+- **As built (P9, D55):** on AI iPhones the review arrives with store, date and price filled, each tinted and labeled "Suggested", and their highlights marked used. The status line reads "Check the suggested fields, or tap the receipt to change them." Tapping a highlight, typing or clearing makes a field the user's. A warranty length printed on the receipt gets a Suggested "Warranty 2 yr" row with a Remove button. Saved, it fills I-02's warranty only if none is chosen (D50). Each pick is a printed candidate, never a guess.
 
 ### C-07 Barcode scanner [PRD §5]
 - System barcode scanner (UPC/EAN) on every iPhone. Reticle, guidance text, torch. A successful read gives a haptic and fills the barcode field. Manual entry is the fallback.
@@ -331,6 +333,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **AI:** the serial and model numbers are found and labeled on the sticker photo.
 - **Classic:** all recognized lines are listed; the user taps the right line.
 - **As built (P6):** "Read from Sticker" beside I-02's Serial field. The photo, then the lines, labeled serials first ("Labeled as the serial"), then models, then code-like lines. A tap fills Serial; each row's menu has Use as Model Number. "Enter it myself" closes and focuses Serial. Without a camera, Photos opens first.
+- **As built (P9, D55):** on AI iPhones the model labels the lines. Its serial and model come first, captioned "The serial number" and "The model number" with a Suggested chip. Taps and menus work as in Classic.
 
 ---
 
@@ -354,10 +357,13 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Variants: lent ("Jordan has it since Sep 12"); packed ("Box 14, packed Jun 2"); room contents ("What's in the garage?" → items grouped by spot); quantity ("Do I have AA batteries?" → "Yes, 2 packs in Kitchen → Drawer").
 - Answers come only from saved data, so a location can never be invented (PRD §6).
 - **Classic (P5, D46):** the card names the item and reads "Last confirmed Aug 3." under the place. Private items never answer. The lent card has Mark Returned (P7). On regular width the card sits beside the results.
+- **Which one? (P9, D55):** when several items match about equally ("Where's the key?" with four keys, or Scissors in two rooms), there's no card. The results are headed "Which one?", each row with its place and Move. This works the same on both engines.
+- **AI (P9):** typing stays Classic and instant. Pressing Search asks the router, and the AI reading (better words, a room, a move) cross-fades in. Nothing mentions AI, and there's no spinner.
 
 ### F-04 Move confirmation card [PRD §6]
 - After typing or saying "I put the passports in the safe", on AI iPhones: "Move Passports to Bedroom → Safe?" with **Move** and **Not now**. **Nothing moves without that tap.**
 - Classic: the sentence is treated as a search, and the user moves the item with the Move button.
+- **As built (P9, D55):** an answer card reading "Move Winter coat to **Living room** → Blue bin?" over "Now in Bedroom → Wardrobe.", with the item and spot photos, and **Move** and **Not Now**. Move goes through I-04's path with the "Suggested move, confirmed by you" history source (D44): the toast with Undo and the settle animation. Not Now shows the plain search. A move is proposed only when the item and the place are each clear and the item isn't already there; otherwise the search shows.
 
 ### F-05 Filters [PRD §5 F5]
 - Room, category, tag, value range, warranty status, lent out, last seen date (for decluttering, PRD §2). Active filters show as removable chips. "Save this search" → F-06.

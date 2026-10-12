@@ -71,7 +71,8 @@ public protocol CapabilityEngine: Sendable {
     func fillItem(from photo: PhotoInput) async throws -> ItemSuggestion                 // single add
     func readReceipt(_ doc: DocumentInput) async throws -> ReceiptReading                // F4
     func readSerial(from photo: PhotoInput) async throws -> SerialReading                // F2
-    func answer(_ query: String, store: any FindQuerying) async throws -> FindAnswer     // §6
+    func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion     // §6 (P9, D55)
+    func estimateValue(for item: ValueSubject) async throws -> ValueEstimate?            // D16 (P9)
 }
 
 public actor CapabilityRouter {
@@ -103,17 +104,17 @@ public actor CapabilityRouter {
 1. **Check per task.** Availability can change while the app is running (the user turns AI off, or the model finishes downloading).
 2. **Timeouts:** an AI room scan has a 20 s timeout per photo. On timeout, a guardrail refusal, a busy model or any thrown error, **fall back per photo** to the manual flow with the photo already loaded. Never show an error that mentions AI.
 3. **Streaming:** `detectItems` streams results, so the first card should appear in under 2 s.
-4. **Answers come from records.** `answer(_:)` on the AI engine uses **tool calling** into `FindQuerying` (NookKit). The model builds the query and phrases the result. It **never invents a location**. With no record, it returns `.notFound`.
-5. **Moves always return a proposal.** AI engines never write. `FindAnswer.proposedMove` is shown in the confirm card, and only `LocationService.move(...)` writes, after the user taps.
+4. **Answers come from records.** `understand(_:index:)` on the AI engine uses **tool calling** (`LookUp`, over the `SearchIndex`) to turn the question into a `FindQuestion`; `FindService` builds the answer from records. The model only picks words, so it **never invents a location**. Words that find nothing saved fall back to the Classic reading, and no record means no answer (D55).
+5. **Moves always return a proposal.** AI engines never write. A `.move` question becomes `FindService.proposedMove`, shown in the confirm card (F-04), and only `LocationService.move(...)` writes, after the user taps.
 6. **Image preparation:** before model input, resize to 1,536 px on the long side (PRD pipeline).
 7. **Tests:** every engine method has a test against a fake availability, for `.ai`, `.classic`, and AI throwing or timing out.
 
 **As built (P8, D53, D54):** `NookAI/Router/CapabilityRouter.swift` is a `Sendable` struct, not an actor, because it holds no state.
 - **`NookAI.router`** is the one instance the app uses.
 - **Availability** is `Availability { usesAI, seesImages }`. It's read per task from `SystemLanguageModel.default` (`.available`, plus `capabilities.contains(.vision)`), S-11's `useAppleIntelligence` switch (App Group defaults) and `forceClassicEngine`. Photo tasks need `seesImages`.
-- **The router owns the fallback.** `detectItems(in:)` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. `fillItem(from:)` returns nil the same way. `readReceipt` and `readSerial` retry Classic if the AI read throws.
-- **The protocol** has no `answer(_:)` yet (P9). `fillItem` returns `DetectedItem?`, so there's no separate `ItemSuggestion`.
-- **The engines:** `AIEngine` (the only `import FoundationModels` besides `DetectedItem` and the router) resizes to 1,536 px, attaches the image, offers `ReadLabels` (Vision text) and `ReadBarcodes` (Vision barcodes plus the EAN check) as tools, and streams `DetectedItem`s as each completes. Its receipts and serials forward to Classic until P9. `ClassicEngine` finds no items and fills nothing.
+- **The router owns the fallback.** `detectItems(in:)` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. Every other task shares one 20 s timeout (P9): `fillItem` and `estimateValue` return nil, and `readReceipt`, `readSerial` and `understand` take the Classic result, when the AI read throws or runs long. Receipts, serials, questions and values are text work (`needsImages: false`), so a model without image input keeps them.
+- **The protocol** has `understand(_:index:)` in place of the planned `answer(_:store:)`, and `estimateValue(for:)` (P9, D55). `fillItem` returns `DetectedItem?`, so there's no separate `ItemSuggestion`.
+- **The engines:** `AIEngine` (the only `import FoundationModels` besides `DetectedItem` and the router) resizes to 1,536 px, attaches the image, offers `ReadLabels` (Vision text) and `ReadBarcodes` (Vision barcodes plus the EAN check) as tools, and streams `DetectedItem`s as each completes. For receipts and serials (P9) it reads the Classic reader's text and keeps only picks that are printed there: `ReceiptReading.suggested` (indexes into the candidates, plus a printed warranty length) and `SerialReading.isSuggested`. `LookUp` and `NearWords` (word vectors over the index's words) serve questions (D55). `ClassicEngine` finds no items and fills nothing.
 - **UI tests** swap in `ScriptedEngine` with `-uiTestingFakeAI items|fail` (DEBUG).
 - **Signposts** `photoScan` and `firstItem` are on the `pointsOfInterest` log.
 
@@ -227,7 +228,7 @@ final class Item {
   - every word must match; with no such result, the best partial matches
 - **Ranking:** exact name > name prefix > tag > synonym > room/spot > brand, model, serial, notes > receipt text. Boost recently confirmed items.
 - **Filters (F-05):** `SearchFilter` (Codable, saved with a search): rooms, category, tags, value range in the home currency, warranty status, lent out, last seen (`lastConfirmedAt`).
-- **Questions and answers:** `FindQuestion` reads the Classic intents (where, who has, what's in, do I have). `FindService.answer` builds a `FindAnswer` (NookKit, D46) from records only: location, lent, packed, quantity or contents. It has the `FindQuerying` names, `items(matching:)` and `contents(of:)`; P9 adds the protocol with `history(of:)` and `loans()` for the AI engine's tools.
+- **Questions and answers:** `FindQuestion` reads the Classic intents (where, who has, what's in, do I have). On Search, the router's AI reading returns the same type, adding `.move` and `placeTerms` (P9, D55). `FindService.answer` builds a `FindAnswer` (NookKit, D46) from records only: location, lent, packed, quantity, contents, or `.choose` when several items match about equally. `FindService.proposedMove` gives F-04's proposal. The AI's only tool reads `SearchIndex.records(matching:)`, which leaves out Private items; there's no `FindQuerying` protocol (D55).
 - **Spotlight:** Core Spotlight indexes items, rooms and spots, **excluding `isPrivate`**. Changes are pushed from `LocationService` and `ItemService`.
 
 ---
@@ -261,7 +262,7 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
   - Private targets require authentication.
 - **App Intents:**
   - `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`.
-  - `ItemEntity` and `RoomEntity` use `EntityQuery` backed by `FindQuerying`.
+  - `ItemEntity` and `RoomEntity` use `EntityQuery` backed by the search index and `FindService` (D55).
   - App Shortcuts phrases are included.
   - `MoveItemIntent` asks for confirmation (`requestConfirmation`) before writing.
   - Private items are excluded from entity queries unless the app is unlocked.
