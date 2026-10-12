@@ -138,18 +138,6 @@ final class FindTests: XCTestCase {
         app.buttons["Delete"].tap()
         XCTAssertFalse(tools.waitForExistence(timeout: 2))
     }
-}
-
-extension XCUIElement {
-    /// Replaces a field's text.
-    @MainActor
-    func clearAndType(_ text: String) {
-        tap()
-        if let current = value as? String, !current.isEmpty {
-            typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: current.count))
-        }
-        typeText(text)
-    }
 
     /// Smoke S9 / F-04: "I put X in Y" proposes the move, and nothing moves until Move is
     /// tapped (PRD §6). The scripted model reads the sentence (D53).
@@ -182,5 +170,17 @@ extension XCUIElement {
         XCTAssertTrue(proposal.waitForExistence(timeout: 10))
         card.buttons["Move"].tap()
         XCTAssertTrue(text(app, startingWith: "Moved to").waitForExistence(timeout: 5))
+    }
+}
+
+extension XCUIElement {
+    /// Replaces a field's text.
+    @MainActor
+    func clearAndType(_ text: String) {
+        tap()
+        if let current = value as? String, !current.isEmpty {
+            typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: current.count))
+        }
+        typeText(text)
     }
 }

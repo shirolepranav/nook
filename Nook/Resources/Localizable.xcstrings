@@ -244,6 +244,12 @@
     "%lld items · Mixed currencies" : {
 
     },
+    "%lld mo" : {
+
+    },
+    "%lld months, suggested" : {
+
+    },
     "%lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -354,6 +360,12 @@
           }
         }
       }
+    },
+    "%lld years, suggested" : {
+
+    },
+    "%lld yr" : {
+
     },
     "**%@** has it since %@" : {
       "localizations" : {
@@ -647,6 +659,9 @@
     "Check the spelling, or add it now." : {
 
     },
+    "Check the suggested fields, or tap the receipt to change them." : {
+
+    },
     "Choose" : {
 
     },
@@ -681,6 +696,9 @@
 
     },
     "Clear return date" : {
+
+    },
+    "Clear value estimate" : {
 
     },
     "Close" : {
@@ -974,6 +992,9 @@
     "Espresso machine" : {
 
     },
+    "Estimate" : {
+
+    },
     "Everything in Nook still works. You tag items yourself, and search finds them just as fast." : {
 
     },
@@ -1049,6 +1070,12 @@
 
     },
     "Hide values by default" : {
+
+    },
+    "High" : {
+
+    },
+    "Highest value" : {
 
     },
     "Home" : {
@@ -1165,6 +1192,12 @@
     "Looking for items… %lld so far" : {
 
     },
+    "Low" : {
+
+    },
+    "Lowest value" : {
+
+    },
     "Mark Not Private" : {
 
     },
@@ -1194,6 +1227,16 @@
     },
     "Move %@" : {
 
+    },
+    "Move %@ to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move %1$@ to %2$@"
+          }
+        }
+      }
     },
     "Move %lld Items" : {
 
@@ -1396,6 +1439,9 @@
 
     },
     "Notifications" : {
+
+    },
+    "Now in %@." : {
 
     },
     "OK" : {
@@ -1608,6 +1654,9 @@
 
     },
     "Remove" : {
+
+    },
+    "Remove Warranty" : {
 
     },
     "Remove filter: %@" : {
@@ -1911,6 +1960,9 @@
     "The containers in it are deleted too." : {
 
     },
+    "The model number" : {
+
+    },
     "The morning it’s due" : {
 
     },
@@ -1921,6 +1973,9 @@
 
     },
     "The scanner isn’t available here, so type the numbers in." : {
+
+    },
+    "The serial number" : {
 
     },
     "Theme" : {
@@ -2010,10 +2065,16 @@
     "Value" : {
 
     },
+    "Value estimate" : {
+
+    },
     "Value from" : {
 
     },
     "Value to" : {
+
+    },
+    "Value today" : {
 
     },
     "View" : {
@@ -2071,6 +2132,9 @@
 
     },
     "Which line is the serial?" : {
+
+    },
+    "Which one?" : {
 
     },
     "Which rooms do you have?" : {
