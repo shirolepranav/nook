@@ -509,7 +509,7 @@ struct ItemEditor: View {
                     TextField(text: $lowText, prompt: Text("Low").foregroundStyle(NookColor.textSecondary)) { Text("Lowest value") }
                         .accessibilityLabel(Text("Lowest value"))
                         .multilineTextAlignment(.trailing)   // "60 – 90" reads as one range
-                    Text(verbatim: "–").accessibilityHidden(true)
+                    Text(verbatim: "–").accessibilityLabel(Text("to"))
                     TextField(text: $highText, prompt: Text("High").foregroundStyle(NookColor.textSecondary)) { Text("Highest value") }
                         .accessibilityLabel(Text("Highest value"))
                 }
@@ -517,11 +517,14 @@ struct ItemEditor: View {
                     Text(verbatim: draft.currencyCode).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
                         .fixedSize()   // a currency code never wraps
                     if typeSize.isAccessibilitySize { Spacer(minLength: 0) }
-                    Button("Clear", systemImage: "xmark.circle.fill") { (lowText, highText) = ("", "") }
-                        .labelStyle(.iconOnly)
-                        .foregroundStyle(NookColor.textSecondary)
-                        .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-                        .accessibilityLabel(Text("Clear value estimate"))
+                    // The 44-pt frame sits inside the label, so it's the hit area too.
+                    Button { (lowText, highText) = ("", "") } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                            .contentShape(Rectangle())
+                    }
+                    .foregroundStyle(NookColor.textSecondary)
+                    .accessibilityLabel(Text("Clear value estimate"))
                 }
             }
             .keyboardType(.decimalPad)

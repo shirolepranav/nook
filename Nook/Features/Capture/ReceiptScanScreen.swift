@@ -405,15 +405,17 @@ struct ReceiptScanScreen: View {
                         }
                         .labelsHidden()
                         Spacer(minLength: 0)
-                        Button("Clear", systemImage: "xmark.circle.fill") {
+                        Button {
                             self.date = nil
                             suggested.remove(.date)
                             field = .date
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                                .contentShape(Rectangle())
                         }
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(NookColor.textSecondary)
-                            .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-                            .accessibilityLabel(Text("Clear date"))
+                        .foregroundStyle(NookColor.textSecondary)
+                        .accessibilityLabel(Text("Clear date"))
                     }
                 } else {
                     Button { field = .date } label: {
@@ -464,10 +466,13 @@ struct ReceiptScanScreen: View {
             }
             .padding(.vertical, isLarge ? NookSpace.s1 : 0)
             Spacer(minLength: 0)
-            Button("Remove Warranty", systemImage: "xmark.circle.fill") { warrantyMonths = nil }
-                .labelStyle(.iconOnly)
-                .foregroundStyle(NookColor.textSecondary)
-                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+            Button { warrantyMonths = nil } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                    .contentShape(Rectangle())
+            }
+            .foregroundStyle(NookColor.textSecondary)
+            .accessibilityLabel(Text("Remove Warranty"))
         }
         .padding(.horizontal, NookSpace.s2)
         .frame(maxWidth: .infinity, minHeight: NookLayout.fieldHeight, alignment: .leading)

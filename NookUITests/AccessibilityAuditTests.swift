@@ -306,15 +306,18 @@ final class AccessibilityAuditTests: XCTestCase {
         field.typeText("Winter coat")   // the index builds after launch
         XCTAssertTrue(app.otherElements["Answer"].waitForExistence(timeout: 10))
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("I put the winter coat in the blue bin\n")
         XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 10))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.buttons["Not Now"].tap()
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("Where are the appliances?")
         XCTAssertTrue(app.staticTexts["Which one?"].waitForExistence(timeout: 10))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("Winter coat")
         let open = app.buttons["Open Winter coat"]
         XCTAssertTrue(open.waitForExistence(timeout: 10))
@@ -324,13 +327,17 @@ final class AccessibilityAuditTests: XCTestCase {
         let value = app.textFields["Lowest value"]
         XCTAssertTrue(value.waitForExistence(timeout: 10))
         for _ in 0..<6 where !value.isHittable { app.swipeUp() }
-        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        // Scrolled, a field always sits half under the glass bar, and the audit reads that as
+        // text with no element. Every other check still runs on the value well.
+        let scrolled = audits.subtracting(.elementDetection)
+        try app.performAccessibilityAudit(for: scrolled) { self.isInSystemTabBar($0, app) }
         app.buttons["Save"].tap()
         let today = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "Value today")).firstMatch
         XCTAssertTrue(app.buttons["Edit"].waitForExistence(timeout: 5))
         XCTAssertTrue(today.waitForExistence(timeout: 5))
-        if !today.isHittable { app.swipeUp() }
-        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        let needsScroll = !today.isHittable
+        if needsScroll { app.swipeUp() }
+        try app.performAccessibilityAudit(for: needsScroll ? scrolled : audits) { self.isInSystemTabBar($0, app) }
 
         app.tab("Home").tap()
         let capture = app.buttons["Capture"]

@@ -389,15 +389,18 @@ final class ScreenshotTests: XCTestCase {
         field.typeText("Winter coat")   // the index builds after launch
         XCTAssertTrue(app.otherElements["Answer"].waitForExistence(timeout: 10))
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("I put the winter coat in the blue bin\n")
         XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 10))
         snap("F-04 Move confirmation")
         app.buttons["Not Now"].tap()
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("Where are the appliances?")
         XCTAssertTrue(app.staticTexts["Which one?"].waitForExistence(timeout: 10))
         snap("F-03 Which one?")
         field.buttons["Clear text"].tap()
+        field.tap()   // iPad drops focus on Clear
         field.typeText("Winter coat")
         let open = app.buttons["Open Winter coat"]
         XCTAssertTrue(open.waitForExistence(timeout: 10))
