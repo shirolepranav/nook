@@ -137,3 +137,47 @@ import SwiftData
     try home.context.save()
     #expect(find.savedSearches().map(\.name) == ["Kitchen"])
 }
+
+// D55: four keys answer "Which one?", never a guess; an exact name still answers alone.
+@MainActor @Test func severalEqualMatchesAskWhichOne() throws {
+    let home = try Home()
+    let car = try home.add("Car key", at: Location(room: home.garage, spot: home.bench))
+    let house = try home.add("House key", at: Location(room: home.office, spot: home.desk))
+    let shed = try home.add("Shed key", at: Location(room: home.garage))
+    try home.add("Safe key", at: Location(room: home.office), isPrivate: true)
+    guard case .choose(let items) = home.ask("Where’s the key?") else { Issue.record("expected Which one?"); return }
+    #expect(Set(items) == [car.id, house.id, shed.id])                          // the private one isn't offered
+    #expect(home.ask("Where's the house key?") == .location(item: house.id))
+
+    // The same name in two rooms is two things, so it asks too.
+    try home.add("Scissors", at: Location(room: home.office, spot: home.desk))
+    try home.add("Scissors", at: Location(room: home.garage, spot: home.bench))
+    guard case .choose(let pair) = home.ask("scissors") else { Issue.record("expected Which one?"); return }
+    #expect(pair.count == 2)
+}
+
+// F-04: a proposal only when the item and the place are both clear; nothing moves here.
+@MainActor @Test func aMoveIsProposedOnlyWhenItsClear() throws {
+    let home = try Home()
+    let passport = try home.add("Passport", at: Location(room: home.office, spot: home.desk))
+    let index = home.index
+    let find = FindService(context: home.context)
+    let move = find.proposedMove(itemHits: index.search(terms: ["passport"]), placeHits: index.search(terms: ["box", "14"]))
+    #expect(move == ProposedMove(item: passport.id, to: Location(room: home.garage, spot: home.box)))
+    #expect(passport.spot == home.desk)                                         // proposing never writes
+
+    #expect(find.proposedMove(itemHits: index.search(terms: ["passport"]), placeHits: index.search(terms: ["attic"])) == nil)
+    try home.add("Car key", at: Location(room: home.garage))
+    try home.add("House key", at: Location(room: home.garage))
+    let keys = home.index
+    #expect(find.proposedMove(itemHits: keys.search(terms: ["key"]), placeHits: keys.search(terms: ["desk"])) == nil)
+}
+
+// The AI's lookup tool sees only what's here and never a Private item (PRD §9).
+@MainActor @Test func lookupsLeaveOutPrivateItems() throws {
+    let home = try Home()
+    try home.add("Passport", at: Location(room: home.office, spot: home.desk), isPrivate: true)
+    try home.add("Passport photos", at: Location(room: home.office, spot: home.desk))
+    #expect(home.index.records(matching: "passport").map(\.name) == ["Passport photos"])
+    #expect(home.index.records(matching: "skis").isEmpty)
+}

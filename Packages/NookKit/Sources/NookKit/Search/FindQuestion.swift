@@ -13,13 +13,19 @@ public struct FindQuestion: Sendable, Equatable {
         case contents
         /// "Do I have any AA batteries?"
         case quantity
+        /// "I put the passports in the safe." Only the AI reading finds it (F-04): it proposes
+        /// the move, and the user's tap makes it. Classic searches the sentence instead.
+        case move
     }
 
     public let intent: Intent
     public let terms: [String]
+    /// Where things went, for `.move`; or the room asked about ("the key in the garage").
+    public let placeTerms: [String]
 
-    init(intent: Intent, terms: [String]) {
-        (self.intent, self.terms) = (intent, terms)
+    /// The AI reading (P9) builds the same question, so Find answers it the same way.
+    public init(intent: Intent, terms: [String], placeTerms: [String] = []) {
+        (self.intent, self.terms, self.placeTerms) = (intent, terms, placeTerms)
     }
 
     public init(_ text: String) {
@@ -38,6 +44,7 @@ public struct FindQuestion: Sendable, Equatable {
         let kept = words.filter { !Self.stopWords.contains($0) }
         // A search made only of small words ("in", "the") still searches for them.
         terms = kept.isEmpty ? words : kept
+        placeTerms = []
     }
 
     static let stopWords: Set<String> = [

@@ -15,13 +15,22 @@ public enum FindAnswer: Equatable, Sendable {
     case quantity(item: UUID, count: Int)
     /// "22 things in the Garage.", grouped by spot. `place` is a room, spot or container.
     case contents(place: UUID, total: Int, groups: [ContentsGroup])
+    /// "Where's the key?" with four keys: which one? Several items match about equally, so
+    /// none is picked for the user (D55).
+    case choose(items: [UUID])
 
     public var itemID: UUID? {
         switch self {
         case .location(let id), .lent(let id, _, _, _), .packed(let id, _, _), .quantity(let id, _): id
-        case .contents: nil
+        case .contents, .choose: nil
         }
     }
+}
+
+/// F-04's "Move Passports to Bedroom → Safe?": a suggestion only, until the user taps Move.
+public struct ProposedMove: Hashable {
+    public let item: UUID
+    public let to: Location
 }
 
 /// One spot's share of a "What's in…?" answer. Private items count but aren't named.
@@ -53,6 +62,8 @@ public struct FindService {
         if question.intent == .contents, let place = places.first { return contents(of: place.id) }
         guard let top = hits.first(where: { !$0.isPrivate }) else { return nil }
         if top.kind != .item { return contents(of: top.id) }
+        let close = closeItems(to: top, in: hits)
+        if close.count > 1 { return .choose(items: close) }
         guard let item = item(top.id) else { return nil }
 
         if let loan = item.activeLoan {
@@ -67,6 +78,32 @@ public struct FindService {
         return .location(item: item.id)
     }
 
+    /// F-04: "I put the passports in the safe" proposes one item to one place, when both are
+    /// clear. Anything less clear gives nil, and Find shows the search instead. Nothing moves
+    /// here: the screen asks, and the user's tap moves it (PRD §6).
+    public func proposedMove(itemHits: [SearchHit], placeHits: [SearchHit]) -> ProposedMove? {
+        guard let top = itemHits.first(where: { $0.kind == .item && !$0.isPrivate }),
+              closeItems(to: top, in: itemHits).count == 1,
+              let item = item(top.id),
+              let place = placeHits.first(where: { $0.kind != .item }),
+              let location = location(of: place) else { return nil }
+        return ProposedMove(item: item.id, to: location)
+    }
+
+    /// Visible items scoring within a whisker of the top one: the same word in each name, told
+    /// apart only by recency (which adds at most 5). Two or more means "Which one?".
+    private func closeItems(to top: SearchHit, in hits: [SearchHit]) -> [UUID] {
+        hits.filter { $0.kind == .item && !$0.isPrivate && top.score - $0.score < 10 }.prefix(6).map(\.id)
+    }
+
+    private func location(of hit: SearchHit) -> Location? {
+        switch hit.kind {
+        case .item: nil
+        case .room: room(hit.id).map { Location(room: $0) }
+        case .spot, .container: spot(hit.id).flatMap { spot in spot.room.map { Location(room: $0, spot: spot) } }
+        }
+    }
+
     /// Items found for hits, in hit order.
     public func items(matching hits: [SearchHit]) -> [Item] {
         let ids = hits.filter { $0.kind == .item }.map(\.id)
@@ -77,13 +114,7 @@ public struct FindService {
 
     /// Rooms, spots and containers found for hits, in hit order.
     public func places(matching hits: [SearchHit]) -> [Location] {
-        hits.compactMap { hit in
-            switch hit.kind {
-            case .item: nil
-            case .room: room(hit.id).map { Location(room: $0) }
-            case .spot, .container: spot(hit.id).flatMap { spot in spot.room.map { Location(room: $0, spot: spot) } }
-            }
-        }
+        hits.compactMap(location(of:))
     }
 
     /// What's in a room, spot or container, grouped by the spot or container each thing is in.

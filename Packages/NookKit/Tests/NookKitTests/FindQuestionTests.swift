@@ -16,3 +16,10 @@ import Testing
     // Only small words: search for them anyway.
     #expect(FindQuestion("in").terms == ["in"])
 }
+
+// F-04: only the AI reading builds a move; Classic still searches the sentence (D46).
+@Test func theClassicReadingNeverProposesAMove() {
+    let question = FindQuestion("I put the passports in the safe")
+    #expect(question.intent == .locate && question.placeTerms.isEmpty)
+    #expect(FindQuestion(intent: .move, terms: ["passports"], placeTerms: ["safe"]).placeTerms == ["safe"])
+}

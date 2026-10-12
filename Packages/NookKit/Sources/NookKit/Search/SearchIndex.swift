@@ -46,7 +46,8 @@ public struct SearchIndex: Sendable {
 
     public let docs: [SearchDoc]
     private let names: [String]                     // folded, for the exact-name bonus
-    private let vocabulary: [String]                // sorted, for prefix lookups
+    /// Every indexed word, sorted, for prefix lookups; the AI lookup's near-word search reads it (D55).
+    public let vocabulary: [String]
     private let scalars: [[Unicode.Scalar]]         // the vocabulary, for typo distances
     private let postings: [String: [Posting]]
     private let synonyms: Synonyms
@@ -128,6 +129,16 @@ public struct SearchIndex: Sendable {
             .sorted { $0.1 != $1.1 ? $0.1 > $1.1 : names[$0.0] < names[$1.0] }
             .prefix(limit)
             .map { hit($0.0, score: $0.1) }
+    }
+
+    /// What the AI reading may look up (P9, D55): the best matches, never a Private item
+    /// (PRD §9). The model can only name things that are here.
+    public func records(matching text: String, limit: Int = 8) -> [SearchDoc] {
+        let byID = Dictionary(docs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        return search(text, limit: limit * 2)
+            .filter { !$0.isPrivate }
+            .prefix(limit)
+            .compactMap { byID[$0.id] }
     }
 
     // MARK: Private
