@@ -155,7 +155,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 ## Stage 3 — AI, exports & Pro
 
 ### P8 · Capability router & AI room scan
-**Status:** In QA: closed on `p8/router-ai-scan` on 2026-10-11 (QA report `docs/qa/p8-qa-report.md`, D53, D54). The full suite ran on the SE, Pro Max and 13-inch iPad, and every failure was rerun on its own; all pass except F3's timing test, which also fails on `main`. The owner's device checks are open on a real Apple Intelligence iPhone: the 8-item test shelf (F3), the 2 s and 8 s budgets, the 102-photo evaluation (a simulator can't run the model, D54) and box quality.
+**Status:** Done (2026-10-11, PR #37; QA report `docs/qa/p8-qa-report.md`, D53, D54). The full suite ran on the SE, Pro Max and 13-inch iPad, and every failure was rerun on its own; all pass except F3's timing test, which also fails on `main` (P8-1). The product owner signed off the real-device checks on 2026-10-11: the 8-item test shelf (F3), the 2 s and 8 s budgets, the evaluation run, box quality and the No-AI pass.
 **Scope**
 - NookAI router (`currentEngine()` checks `SystemLanguageModel.default.availability`, PRD §8).
 - **Vision check (added):** before choosing the AI path for photos, also confirm the on-device model supports image input. Developer reports suggest some Apple Intelligence models lack it; those iPhones use the Classic photo path while keeping AI for text questions.

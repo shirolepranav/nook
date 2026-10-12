@@ -127,7 +127,7 @@ func roomScanEvaluation() async throws {
     print("EVAL \(Date.now.formatted(date: .numeric, time: .omitted)) · \(os) · \(labels.count) photos · "
           + "recall \(recall.formatted(.percent.precision(.fractionLength(0)))) · "
           + "precision \(precision.formatted(.percent.precision(.fractionLength(0))))")
-    try? result.saveJSON(to: URL.temporaryDirectory)
+    _ = try? result.saveJSON(to: URL.temporaryDirectory)
 }
 
 // The scoring itself runs everywhere, CI included.

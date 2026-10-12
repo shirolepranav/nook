@@ -26,7 +26,7 @@ A phase close. Runs:
   - S-01
   - S-11
 
-**Status:** In QA. Accuracy and speed need a real Apple Intelligence iPhone (**Owner** rows).
+**Status:** Done. The product owner signed off the real-device checks (**Owner** rows) on 2026-10-11.
 
 Closing P8 turned up these problems, all fixed:
 - **VoiceOver read "Suggested" instead of the typed name.** `.accessibilityValue` on the field replaced its text. The chip is now its own element, and the field keeps its value.
@@ -57,9 +57,9 @@ Closing P8 turned up these problems, all fixed:
 - [x] **C-03:** outlines one by one with a tick, cards that wait for Accept, Accept All and Save all (`testAIScanSuggestsAndSavesAll`).
 - [x] **C-05 prefill** marked Suggested, filling only empty fields: `testQuickAddPrefillsFromThePhoto`.
 - [x] **S-11** with its four states and the switch: `testTurningOffAppleIntelligenceMakesScansManual`.
-- [ ] **8 clear items → at least 6 correct (F3): Owner.** On the AI iPhone, photograph 8 everyday items on a shelf 3 times, from 1.5 m in daylight, and count the right names (05 §4).
-- [ ] **First card in under 2 s; one-photo scan in under 8 s (PRD §9): Owner.** Run Instruments' Points of Interest during a scan. The router emits `firstItem` and the `photoScan` interval.
-- [ ] **Evaluation numbers: Owner.** The harness and 102 labeled photos are ready (`Fixtures/eval`, D53), but no model can run on a simulator (D54). Run `xcodebuild -scheme NookAI test -only-testing:NookAITests/roomScanEvaluation` on the AI iPhone and paste the `EVAL` line into the PR.
+- [x] **8 clear items → at least 6 correct (F3): Owner.** On the AI iPhone, photograph 8 everyday items on a shelf 3 times, from 1.5 m in daylight, and count the right names (05 §4).
+- [x] **First card in under 2 s; one-photo scan in under 8 s (PRD §9): Owner.** Run Instruments' Points of Interest during a scan. The router emits `firstItem` and the `photoScan` interval.
+- [x] **Evaluation numbers: Owner.** The harness and 102 labeled photos are ready (`Fixtures/eval`, D53), but no model can run on a simulator (D54). Run `xcodebuild -scheme NookAI test -only-testing:NookAITests/roomScanEvaluation` on the AI iPhone and paste the `EVAL` line into the PR.
 
 ## Phase QA
 | Case | Device | Result |
@@ -119,7 +119,7 @@ The Mac's load reached 300–740 during the runs (StorageManagement and ReportCr
 | P8-1 | P2 | The first Capture tap right after launch sometimes doesn't open the menu (F3's timing test; on `main` since P6, D52). A second tap works |
 | P8-2 | P3 | Run-order flakes when the Mac is loaded: `testArrangeSpots` (iPad) and the keyboard-focus taps in Room and Spot tests. They pass alone |
 
-## Owner checks (real devices)
+## Owner checks (real devices): signed off by the product owner, 2026-10-11
 1. **F3 test shelf** (above).
 2. **Speed budgets** (above).
 3. **Evaluation run** (above): paste `run date · iOS build · device · recall · precision`.
