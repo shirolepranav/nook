@@ -20,6 +20,8 @@ struct ReceiptScanResult {
     var date: Date?
     var price: Decimal?
     var currencyCode: String?
+    /// "2 YEAR WARRANTY", when the AI reading found it printed and the user kept it (P9).
+    var warrantyMonths: Int?
 
     /// Fills a draft, leaving alone what the user didn't choose.
     func apply(to draft: inout ItemDraft) {
@@ -29,6 +31,10 @@ struct ReceiptScanResult {
         if let price {
             draft.price = price
             if let currencyCode { draft.currencyCode = currencyCode }
+        }
+        // A warranty already chosen stays; the length counts from the purchase date (D50).
+        if let warrantyMonths, draft.warranty == nil {
+            draft.warranty = ItemDraft.WarrantyDraft(lengthMonths: warrantyMonths)
         }
     }
 }
@@ -197,6 +203,10 @@ struct ReceiptScanScreen: View {
     @State private var currencyCode = HomeCurrency.code
     @State private var used: Set<String> = []
     @State private var drops = 0
+    /// Fields the AI reading filled, tinted "Suggested" until the user changes them (03 §8.6).
+    @State private var suggested: Set<Field> = []
+    @State private var warrantyMonths: Int?
+    @Environment(\.nookAccent) private var accent
     @FocusState private var typing: Field?
     @Environment(\.windowSizeClass) private var windowSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -221,6 +231,7 @@ struct ReceiptScanScreen: View {
             // D48: the one place receipts are read; P8 asks the router instead.
             reading = try? await NookAI.router.readReceipt(DocumentInput(pages: pages.pages))
             if let code = reading?.currencyCode { currencyCode = code }
+            fillSuggestions()
             isReading = false
         }
     }
@@ -293,6 +304,7 @@ struct ReceiptScanScreen: View {
     private var statusLine: LocalizedStringResource {
         if isReading { return "Reading the receipt…" }
         guard let reading, !reading.lines.isEmpty else { return "That receipt couldn’t be read. You can type the numbers in." }
+        if !suggested.isEmpty { return "Check the suggested fields, or tap the receipt to change them." }
         if field == .store { return "Tap the store’s name, or type it." }
         return reading.amounts.isEmpty && reading.dates.isEmpty
             ? "No numbers found. You can type them in."
@@ -378,7 +390,7 @@ struct ReceiptScanScreen: View {
     private var fields: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
             target(.store, Text("Store")) {
-                TextField(text: $store, prompt: Text("Tap the name, or type it").foregroundStyle(NookColor.textSecondary)) {
+                TextField(text: Binding { store } set: { store = $0; suggested.remove(.store) }, prompt: Text("Tap the name, or type it").foregroundStyle(NookColor.textSecondary)) {
                     Text("Store")
                 }
                 .focused($typing, equals: .store)
@@ -387,12 +399,17 @@ struct ReceiptScanScreen: View {
             target(.date, Text("Date")) {
                 if let date {
                     HStack {
-                        DatePicker(selection: Binding { date } set: { self.date = $0 }, displayedComponents: .date) {
+                        DatePicker(selection: Binding { date } set: { self.date = $0; suggested.remove(.date) },
+                                   displayedComponents: .date) {
                             Text("Date")
                         }
                         .labelsHidden()
                         Spacer(minLength: 0)
-                        Button("Clear", systemImage: "xmark.circle.fill") { self.date = nil; field = .date }
+                        Button("Clear", systemImage: "xmark.circle.fill") {
+                            self.date = nil
+                            suggested.remove(.date)
+                            field = .date
+                        }
                             .labelStyle(.iconOnly)
                             .foregroundStyle(NookColor.textSecondary)
                             .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
@@ -410,7 +427,7 @@ struct ReceiptScanScreen: View {
             }
             target(.price, Text("Price")) {
                 HStack {
-                    TextField(text: $priceText, prompt: Text("Tap a number").foregroundStyle(NookColor.textSecondary)) {
+                    TextField(text: Binding { priceText } set: { priceText = $0; suggested.remove(.price) }, prompt: Text("Tap a number").foregroundStyle(NookColor.textSecondary)) {
                         Text("Price")
                     }
                     .keyboardType(.decimalPad)
@@ -420,9 +437,34 @@ struct ReceiptScanScreen: View {
                     Text(verbatim: currencyCode).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
                 }
             }
+            if let warrantyMonths { warrantyRow(warrantyMonths) }
         }
         .frame(maxWidth: NookLayout.readableWidth)
         .onChange(of: typing) { _, now in if let now { field = now } }
+    }
+
+    /// "Warranty 2 years", found printed by the AI reading. Kept on Save unless removed.
+    private func warrantyRow(_ months: Int) -> some View {
+        HStack(spacing: NookSpace.s1) {
+            Text("Warranty")
+                .font(.nookFootnote.weight(.semibold))
+                .foregroundStyle(NookColor.textSecondary)
+                .frame(minWidth: NookLayout.photoTileWidth / 1.5, alignment: .leading)
+                .accessibilityHidden(true)
+            Text(months % 12 == 0 ? "\(months / 12) yr" : "\(months) mo")
+                .font(.nookBody)
+                .accessibilityLabel(Text("Warranty"))
+                .accessibilityValue(months % 12 == 0 ? Text("\(months / 12) years, suggested") : Text("\(months) months, suggested"))
+            SuggestedLabel().accessibilityHidden(true)
+            Spacer(minLength: 0)
+            Button("Remove Warranty", systemImage: "xmark.circle.fill") { warrantyMonths = nil }
+                .labelStyle(.iconOnly)
+                .foregroundStyle(NookColor.textSecondary)
+                .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+        }
+        .padding(.horizontal, NookSpace.s2)
+        .frame(maxWidth: .infinity, minHeight: NookLayout.fieldHeight, alignment: .leading)
+        .background(accent.suggested, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
     }
 
     /// A field well that shows when it's the one a tap fills.
@@ -435,10 +477,11 @@ struct ReceiptScanScreen: View {
                 .accessibilityHidden(true)
             content()
                 .font(.nookBody)
+            if suggested.contains(which) { SuggestedLabel() }
         }
         .padding(.horizontal, NookSpace.s2)
         .frame(maxWidth: .infinity, minHeight: NookLayout.fieldHeight, alignment: .leading)
-        .background(NookColor.surfaceSunken, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
+        .background(suggested.contains(which) ? accent.suggested : NookColor.surfaceSunken, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
         .overlay {
             if field == which {
                 RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
@@ -461,9 +504,29 @@ struct ReceiptScanScreen: View {
         case .date: date = dropped
         case .price: priceText = amount.map { $0.formatted(.number.grouping(.never).precision(.fractionLength(0...2))) } ?? priceText
         }
+        suggested.remove(kind)
         drops += 1
         typing = nil
         field = Field.allCases.first(where: isEmpty) ?? kind
+    }
+
+    /// C-06 on AI iPhones: the reading's picks arrive filled, each one a printed candidate
+    /// (D55). Classic leaves every field for the user to tap.
+    private func fillSuggestions() {
+        guard let reading, let picks = reading.suggested else { return }
+        if let store = picks.store { self.store = store; suggested.insert(.store) }
+        if let index = picks.date {
+            date = reading.dates[index].value
+            used.insert("d\(index)")
+            suggested.insert(.date)
+        }
+        if let index = picks.amount {
+            priceText = reading.amounts[index].value.formatted(.number.grouping(.never).precision(.fractionLength(0...2)))
+            used.insert("a\(index)")
+            suggested.insert(.price)
+        }
+        warrantyMonths = picks.warrantyMonths
+        field = Field.allCases.first(where: isEmpty) ?? .date
     }
 
     private func isEmpty(_ field: Field) -> Bool {
@@ -481,6 +544,7 @@ struct ReceiptScanScreen: View {
         result.date = date
         result.price = try? Decimal(priceText.trimmingCharacters(in: .whitespaces), format: .number)
         result.currencyCode = currencyCode
+        result.warrantyMonths = warrantyMonths
         finish(result)
     }
 }

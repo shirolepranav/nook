@@ -6,7 +6,8 @@ import NookUI
 
 /// C-08 Serial sticker reader, Classic (01 C-08): photograph the sticker, then every
 /// recognized line is listed, labeled serials first. Tapping a line fills Serial; each row's
-/// menu can use it as the model number instead. Full screen (01 §1.5).
+/// menu can use it as the model number instead. On AI iPhones the reading labels the serial
+/// and model itself, shown as "Suggested" (P9). Full screen (01 §1.5).
 struct SerialScanScreen: View {
     enum Pick: Equatable {
         case serial(String), model(String), typeIt
@@ -118,7 +119,10 @@ struct SerialScanScreen: View {
                         .font(.nookBody.monospaced())
                         .foregroundStyle(NookColor.textPrimary)
                     if let kind = label(line.kind) {
-                        Text(kind).font(.nookCaption).foregroundStyle(NookColor.textSecondary)
+                        HStack(spacing: NookSpace.s1) {
+                            Text(kind).font(.nookCaption).foregroundStyle(NookColor.textSecondary)
+                            if reading?.isSuggested == true { SuggestedLabel() }
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, minHeight: NookLayout.minTapTarget, alignment: .leading)
@@ -140,10 +144,11 @@ struct SerialScanScreen: View {
 
     /// The label printed on the sticker, said back so the right line is easy to spot.
     private func label(_ kind: SerialReading.Line.Kind) -> LocalizedStringResource? {
+        let suggested = reading?.isSuggested == true
         switch kind {
-        case .serial: "Labeled as the serial"
-        case .model: "Labeled as the model"
-        case .code, .other: nil
+        case .serial: return suggested ? "The serial number" : "Labeled as the serial"
+        case .model: return suggested ? "The model number" : "Labeled as the model"
+        case .code, .other: return nil
         }
     }
 
