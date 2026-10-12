@@ -86,7 +86,8 @@ public struct FindService {
               closeItems(to: top, in: itemHits).count == 1,
               let item = item(top.id),
               let place = placeHits.first(where: { $0.kind != .item }),
-              let location = location(of: place) else { return nil }
+              let location = location(of: place),
+              Location(of: item) != location else { return nil }   // already there: the answer says so
         return ProposedMove(item: item.id, to: location)
     }
 

@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
+import NookAI
 import NookKit
 import NookUI
 
 /// F-01 Find: one field for searching and asking (PRD §6). Before typing it shows saved
 /// searches, quick filters and recent searches; while typing, the answer card (F-03) and
-/// instant results (F-02). Classic only in P5: questions are read by `FindQuestion` and
-/// answered from records by `FindService`; the AI path joins in P9.
+/// instant results (F-02). Typing reads questions the Classic way (`FindQuestion`); pressing
+/// Search also asks the router, whose AI reading can propose a move (F-04, P9). Either way
+/// `FindService` answers from records only (PRD §6, D55).
 struct FindScreen: View {
     @Environment(\.searchLibrary) private var library
     @Environment(\.modelContext) private var context
@@ -19,6 +21,8 @@ struct FindScreen: View {
     @State private var query = ""
     @State private var filter = SearchFilter()
     @State private var found = Found()
+    /// The router's reading of what was searched, while the field still says it.
+    @State private var understood: Understood?
     @State private var path = NavigationPath()
     @State private var editsFilters = false
     @State private var savesAfterFilters = false
@@ -61,8 +65,13 @@ struct FindScreen: View {
         .searchable(text: $query,
                     placement: sizeClass == .regular ? .navigationBarDrawer(displayMode: .always) : .automatic,
                     prompt: Text("Search or ask: Where are the passports?"))
-        .onSubmit(of: .search) { RecentSearches.add(query, to: &recentText) }
-        .task(id: SearchKey(query: query, filter: filter, version: library?.version ?? 0)) { await search() }
+        .onSubmit(of: .search) {
+            RecentSearches.add(query, to: &recentText)
+            understand()
+        }
+        .task(id: SearchKey(query: query, filter: filter, version: library?.version ?? 0, understood: understood)) {
+            await search()
+        }
         // The name prompt waits until the sheet has gone: an alert asked for while the sheet
         // is still closing is dropped, and Save Search would silently do nothing.
         .sheet(isPresented: $editsFilters, onDismiss: {
@@ -140,6 +149,9 @@ struct FindScreen: View {
     }
 
     private var answerView: AnswerView? {
+        if let proposal = found.proposal, let item = found.items.first(where: { $0.id == proposal.item }) {
+            return AnswerView(answer: nil, proposal: proposal, item: item, place: nil, actions: answerActions)
+        }
         guard let answer = found.answer else { return nil }
         let item = answer.itemID.flatMap { id in found.items.first { $0.id == id } }
         var place: Location?
@@ -147,12 +159,42 @@ struct FindScreen: View {
             place = found.places.first { ($0.spot?.id ?? $0.room.id) == id }
         }
         guard item != nil || place != nil else { return nil }
-        return AnswerView(answer: answer, item: item, place: place,
-                          actions: AnswerActions(move: { moving = Moving(item: $0, source: $1) }, open: open,
-                                                 returned: markReturned))
+        return AnswerView(answer: answer, item: item, place: place, actions: answerActions)
+    }
+
+    private var answerActions: AnswerActions {
+        AnswerActions(move: { moving = Moving(item: $0, source: $1) }, open: open, returned: markReturned,
+                      confirm: confirm, decline: { understood = nil })
     }
 
     // MARK: Actions
+
+    /// F-04's Move: the user's tap, so the move is theirs, recorded as a confirmed suggestion
+    /// (D44). Afterwards the field reads as a plain search again.
+    private func confirm(_ proposal: ProposedMove) {
+        guard let item = found.items.first(where: { $0.id == proposal.item }) else { return }
+        withNookAnimation(.settle, reduceMotion: reduceMotion) {
+            if let message = actions.move([item], to: proposal.to, source: .ai) {
+                toast = message
+                moves += 1
+            }
+        }
+        understood = nil
+    }
+
+    /// Asks the router what was meant. Classic gives back the same question, so nothing
+    /// changes; the AI reading arrives a moment later and the answer cross-fades.
+    // ponytail: every Search press asks, plain searches too; skip non-questions if the model
+    // call shows up in battery or latency checks.
+    private func understand() {
+        guard let library else { return }
+        let (text, index) = (query, library.index)
+        Task {
+            let question = await NookAI.router.understand(text, index: index)
+            guard text == query, question != FindQuestion(text) else { return }
+            understood = Understood(text: text, question: question)
+        }
+    }
 
     private func markReturned(_ item: Item) {
         if let loan = item.activeLoan { toast = actions.markReturned(loan) }
@@ -165,16 +207,23 @@ struct FindScreen: View {
 
     private func search() async {
         guard let library else { return }
-        let question = FindQuestion(query)
+        let question = understood?.text == query ? understood!.question : FindQuestion(query)
         guard !question.terms.isEmpty || !filter.isEmpty else {
             found = Found()
             return
         }
         let hits = await library.search(question, filter: filter)
-        guard !Task.isCancelled else { return }
+        var proposal: ProposedMove?
         let find = FindService(context: context)
+        if question.intent == .move {
+            let places = await library.search(FindQuestion(intent: .locate, terms: question.placeTerms), filter: SearchFilter())
+            proposal = find.proposedMove(itemHits: hits, placeHits: places)
+        }
+        guard !Task.isCancelled else { return }
+        // An unclear move ("the key" with four keys) reads as a search, like Classic (F-04).
         let next = Found(searched: true,
-                         answer: question.terms.isEmpty ? nil : find.answer(question, hits: hits),
+                         answer: question.terms.isEmpty || proposal != nil ? nil : find.answer(question, hits: hits),
+                         proposal: proposal,
                          items: find.items(matching: hits),
                          places: find.places(matching: hits))
         withNookAnimation(.fade, reduceMotion: reduceMotion) { found = next }   // 03 §9: results cross-fade
@@ -200,14 +249,22 @@ struct FindScreen: View {
 struct Found {
     var searched = false
     var answer: FindAnswer?
+    var proposal: ProposedMove?
     var items: [Item] = []
     var places: [Location] = []
+}
+
+/// What the router read from a searched sentence (P9).
+struct Understood: Hashable {
+    let text: String
+    let question: FindQuestion
 }
 
 private struct SearchKey: Hashable {
     let query: String
     let filter: SearchFilter
     let version: Int
+    let understood: Understood?
 }
 
 private struct Moving: Identifiable {

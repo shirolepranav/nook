@@ -165,6 +165,7 @@ import SwiftData
     let move = find.proposedMove(itemHits: index.search(terms: ["passport"]), placeHits: index.search(terms: ["box", "14"]))
     #expect(move == ProposedMove(item: passport.id, to: Location(room: home.garage, spot: home.box)))
     #expect(passport.spot == home.desk)                                         // proposing never writes
+    #expect(find.proposedMove(itemHits: index.search(terms: ["passport"]), placeHits: index.search(terms: ["desk"])) == nil)
 
     #expect(find.proposedMove(itemHits: index.search(terms: ["passport"]), placeHits: index.search(terms: ["attic"])) == nil)
     try home.add("Car key", at: Location(room: home.garage))

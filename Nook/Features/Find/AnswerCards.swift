@@ -9,17 +9,31 @@ struct AnswerActions {
     let open: (any Hashable) -> Void
     /// The lent card's Mark Returned (F7).
     let returned: (Item) -> Void
+    /// F-04's Move and Not Now. Only the user's tap moves anything (PRD §6).
+    var confirm: (ProposedMove) -> Void = { _ in }
+    var decline: () -> Void = {}
 }
 
 /// F-03: one answer, built from records only (PRD §6). The screen resolves the models; an
 /// answer whose item or place is gone shows nothing.
 struct AnswerView: View {
-    let answer: FindAnswer
+    let answer: FindAnswer?
+    /// F-04, from the AI reading of "I put X in Y"; it takes the answer's place.
+    var proposal: ProposedMove?
     let item: Item?
     let place: Location?
     let actions: AnswerActions
 
     var body: some View {
+        if let proposal, let item {
+            MoveProposal(item: item, proposal: proposal, actions: actions)
+        } else if let answer {
+            card(answer)
+        }
+    }
+
+    @ViewBuilder
+    private func card(_ answer: FindAnswer) -> some View {
         switch answer {
         case .location:
             if let item, let location = Location(of: item) { LocationAnswer(item: item, location: location, actions: actions) }
@@ -36,6 +50,8 @@ struct AnswerView: View {
             }
         case .contents(_, let total, let groups):
             if let place { ContentsAnswer(place: place, total: total, groups: groups, actions: actions) }
+        case .choose:
+            EmptyView()   // the results list is the answer, headed "Which one?" (D55)
         }
     }
 }
@@ -76,6 +92,42 @@ private struct LocationAnswer: View {
                 Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { actions.move(item, .manual) }
                     .buttonStyle(.nookPrimary)
                 Button("Found It Here Instead") { actions.move(item, .found) }
+                    .buttonStyle(.nookSecondary)
+            }
+        }
+    }
+}
+
+/// F-04: "Move Passports to Bedroom → Safe?" with where it is now, and Move / Not Now.
+/// A suggestion until tapped, like every AI result (01 §1.2).
+private struct MoveProposal: View {
+    let item: Item
+    let proposal: ProposedMove
+    let actions: AnswerActions
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    var body: some View {
+        let place = proposal.to
+        AnswerCard {
+            VStack(alignment: .leading, spacing: NookSpace.half) {
+                Text("Move \(item.name) to \(Breadcrumb.text(place.names, color: place.roomColor, ending: "?"))")
+                    .font(.nookSection)
+                    .foregroundStyle(NookColor.textPrimary)
+                if let now = Location(of: item) {
+                    Text("Now in \(now.path).")
+                        .font(.nookMeta)
+                        .foregroundStyle(NookColor.textSecondary)
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityElement(children: .combine)
+            AnswerPhotos(item: item, spot: place.spot, actions: actions)
+            let buttons = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: NookSpace.s1)) : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            buttons {
+                Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { actions.confirm(proposal) }
+                    .buttonStyle(.nookPrimary)
+                Button("Not Now") { actions.decline() }
                     .buttonStyle(.nookSecondary)
             }
         }

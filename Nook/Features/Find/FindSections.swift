@@ -135,6 +135,15 @@ struct FindResultsSections: View {
     let add: () -> Void
     let showFilters: () -> Void
 
+    /// "Which one?" when several things match about equally and none was picked (D55).
+    private var itemsHeader: LocalizedStringKey {
+        switch found.answer {
+        case nil: found.proposal == nil ? "Items" : "Also matching"
+        case .choose: "Which one?"
+        default: "Also matching"
+        }
+    }
+
     var body: some View {
         if let answer {
             Section {
@@ -151,14 +160,14 @@ struct FindResultsSections: View {
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
         }
-        let items = found.items.filter { $0.id != found.answer?.itemID }
+        let items = found.items.filter { $0.id != found.answer?.itemID && $0.id != found.proposal?.item }
         if !items.isEmpty {
             Section {
                 ForEach(items) { item in
                     ResultRow(item: item, selection: $selection, open: open, move: move)
                 }
                 .listRowBackground(NookColor.surface)
-            } header: { FindHeader(found.answer == nil ? "Items" : "Also matching") }
+            } header: { FindHeader(itemsHeader) }
         }
         let rooms = found.places.filter { $0.spot?.isContainer != true }
         if !rooms.isEmpty {

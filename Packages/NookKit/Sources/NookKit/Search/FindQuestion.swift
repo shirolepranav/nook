@@ -3,8 +3,8 @@ import Foundation
 /// The Classic reading of what was typed in Find (PRD §6): a plain search or an everyday
 /// question, turned into search words and what kind of answer fits. English only, like
 /// v1's copy. Answers still come only from records; this only picks the words.
-public struct FindQuestion: Sendable, Equatable {
-    public enum Intent: Sendable, Equatable {
+public struct FindQuestion: Sendable, Hashable {
+    public enum Intent: Sendable, Hashable {
         /// "Where are the passports?", or any plain search.
         case locate
         /// "Who has my drill?"
