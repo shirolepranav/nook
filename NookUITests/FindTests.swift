@@ -150,4 +150,37 @@ extension XCUIElement {
         }
         typeText(text)
     }
+
+    /// Smoke S9 / F-04: "I put X in Y" proposes the move, and nothing moves until Move is
+    /// tapped (PRD §6). The scripted model reads the sentence (D53).
+    @MainActor
+    func testAMoveSentenceWaitsForTheTap() {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived", classic: false)
+        app.launchArguments += ["-uiTestingFakeAI", "items"]
+        app.launch()
+        app.tab("Find").tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        search(app, "Winter coat")   // warm up: the index builds after launch
+        XCTAssertTrue(app.otherElements["Answer"].waitForExistence(timeout: 10))
+        field.buttons["Clear text"].tap()
+
+        search(app, "I put the winter coat in the blue bin\n")
+        let card = app.otherElements["Answer"]
+        let proposal = card.descendants(matching: .any)
+            .matching(NSPredicate(format: "label BEGINSWITH %@", "Move Winter coat to")).firstMatch
+        XCTAssertTrue(proposal.waitForExistence(timeout: 10))
+        XCTAssertTrue(proposal.label.contains("Now in Bedroom → Wardrobe"), proposal.label)   // proposing moved nothing
+
+        card.buttons["Not Now"].tap()
+        XCTAssertTrue(proposal.waitForNonExistence(timeout: 5))
+        XCTAssertFalse(text(app, startingWith: "Moved to").exists)
+
+        field.tap()
+        field.typeText("\n")                                                  // ask again, then Move
+        XCTAssertTrue(proposal.waitForExistence(timeout: 10))
+        card.buttons["Move"].tap()
+        XCTAssertTrue(text(app, startingWith: "Moved to").waitForExistence(timeout: 5))
+    }
 }

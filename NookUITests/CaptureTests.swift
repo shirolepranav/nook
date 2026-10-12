@@ -189,6 +189,23 @@ final class CaptureTests: XCTestCase {
         XCTAssertTrue(card(app, "Espresso machine").waitForExistence(timeout: 5))
     }
 
+    /// P9 C-06 on AI iPhones: the reading's picks arrive filled and marked Suggested; Classic
+    /// fills nothing (`tapDateAndTotal`). The scripted model picks the best candidates (D53).
+    @MainActor
+    func testAIReceiptArrivesFilledAndSuggested() {
+        let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"])
+        capture(app, "Scan receipt")
+        let price = app.textFields["Price"]
+        XCTAssertTrue(price.waitForExistence(timeout: 20))
+        expectation(for: NSPredicate(format: "value == %@", "766.41"), evaluatedWith: price)
+        waitForExpectations(timeout: 20)                            // reading takes a moment
+        XCTAssertTrue(app.staticTexts["Suggested"].exists)
+        XCTAssertFalse(app.buttons["Tap a date"].exists)
+        app.buttons["Save Receipt"].tap()
+        XCTAssertTrue(app.navigationBars["New Item"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.textFields["Price"].value as? String, "766.41")
+    }
+
     /// C-06 import: a receipt opened in Nook from another app goes to the review.
     @MainActor
     func testOpenInNookShowsReceiptReview() {

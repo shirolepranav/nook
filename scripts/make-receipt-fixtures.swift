@@ -14,6 +14,8 @@ struct Receipt {
     let date: String        // yyyy-MM-dd
     let currency: String
     var pages: [[String]]? = nil   // a multi-page PDF instead of an image
+    var warrantyMonths: Int? = nil // printed on it, for the AI reading's evaluation (P9)
+    var hardOnly = false           // too long for OCR to read every line: the hard set, as printed
 }
 
 let item = { (name: String, price: String) in name.padding(toLength: 24, withPad: " ", startingAt: 0) + price }
@@ -82,6 +84,13 @@ let receipts: [Receipt] = [
             "", item("SUBTOTAL", "1,260.00"), item("TAX", "76.23"), item("TOTAL", "1,336.23"), "", "Thank you",
         ],
     ]),
+    // P9's very long receipt: the store and warranty at the top, the total 130 lines down.
+    Receipt(name: "us-long-warranty", lines: [
+        "ELECTRO WAREHOUSE", "88 Commerce Blvd", "Austin, TX", "", "10/02/2026  16:05", "",
+        item("TV 65IN QLED", "1,299.00"), "  2 YEAR WARRANTY INCLUDED", "",
+    ] + (1...120).map { item("Cable tie pack \($0)", String(format: "%d.%02d", 1 + $0 % 9, ($0 * 13) % 100)) } + [
+        "", item("SUBTOTAL", "1,940.40"), item("TAX 8.25%", "160.08"), item("TOTAL", "2,100.48"), "", "THANK YOU",
+    ], total: "2100.48", date: "2026-10-02", currency: "USD", warrantyMonths: 24, hardOnly: true),
 ]
 
 let root = URL(filePath: FileManager.default.currentDirectoryPath).appending(path: "Fixtures")
@@ -141,7 +150,8 @@ func writePDF(_ pages: [CGImage], to url: URL) {
 }
 
 func writeJSON(_ receipt: Receipt, to url: URL) {
-    let json = ["total": receipt.total, "date": receipt.date, "currency": receipt.currency]
+    var json: [String: Any] = ["total": receipt.total, "date": receipt.date, "currency": receipt.currency]
+    if let months = receipt.warrantyMonths { json["warrantyMonths"] = months }
     try! JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .sortedKeys]).write(to: url)
 }
 
@@ -150,6 +160,11 @@ for folder in ["receipts/clean", "receipts/hard", "receipts/real", "serials"] {
 }
 for receipt in receipts {
     let clean = root.appending(path: "receipts/clean")
+    if receipt.hardOnly {
+        writeJPEG(render(receipt.lines), to: root.appending(path: "receipts/hard/\(receipt.name).jpg"))
+        writeJSON(receipt, to: root.appending(path: "receipts/hard/\(receipt.name).json"))
+        continue
+    }
     if let pages = receipt.pages {
         writePDF(pages.map(render), to: clean.appending(path: receipt.name + ".pdf"))
     } else {
