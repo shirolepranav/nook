@@ -375,6 +375,56 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP9Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived", classic: false)
+        app.launchArguments += ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"]
+        app.launch()
+        app.tab("Find").tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        field.tap()
+        field.typeText("Winter coat")   // the index builds after launch
+        XCTAssertTrue(app.otherElements["Answer"].waitForExistence(timeout: 10))
+        field.buttons["Clear text"].tap()
+        field.typeText("I put the winter coat in the blue bin\n")
+        XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 10))
+        snap("F-04 Move confirmation")
+        app.buttons["Not Now"].tap()
+        field.buttons["Clear text"].tap()
+        field.typeText("Where are the appliances?")
+        XCTAssertTrue(app.staticTexts["Which one?"].waitForExistence(timeout: 10))
+        snap("F-03 Which one?")
+        field.buttons["Clear text"].tap()
+        field.typeText("Winter coat")
+        let open = app.buttons["Open Winter coat"]
+        XCTAssertTrue(open.waitForExistence(timeout: 10))
+        open.tap()
+        XCTAssertTrue(app.buttons["Edit"].waitForExistence(timeout: 5))
+        app.buttons["Edit"].tap()
+        let value = app.textFields["Lowest value"]
+        XCTAssertTrue(value.waitForExistence(timeout: 10))
+        for _ in 0..<6 where !value.isHittable { app.swipeUp() }
+        snap("I-02 Value estimate, suggested")
+        app.buttons["Save"].tap()
+        let today = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "Value today")).firstMatch
+        XCTAssertTrue(app.buttons["Edit"].waitForExistence(timeout: 5))
+        for _ in 0..<8 where !(today.exists && today.isHittable) { app.swipeUp() }
+        snap("I-01 Value today")
+
+        app.tab("Home").tap()
+        let capture = app.buttons["Capture"]
+        XCTAssertTrue(capture.waitForExistence(timeout: 5))
+        capture.tap()
+        XCTAssertTrue(app.buttons["Scan receipt"].waitForExistence(timeout: 5))
+        app.buttons["Scan receipt"].tap()
+        XCTAssertTrue(app.staticTexts["Suggested"].waitForExistence(timeout: 20))
+        snap("C-06 Receipt, suggested")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
