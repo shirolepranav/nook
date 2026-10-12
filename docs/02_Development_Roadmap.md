@@ -167,7 +167,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — router fallback unit tests including the vision check (PRD §9); AI quality tests with Apple's Evaluations framework on 100 labeled household photos (PRD §9). Smoke — S1–S8.
 
 ### P9 · AI receipts, serials, values & "Where is…?"
-**Status:** In progress (branch `p9/ai-receipts-find`, D55). Built; minimal test pass done on the iPhone SE. The phase close (`qa-regression`, full suite, screenshots, the one PR) and the owner's real-device evaluation runs are next.
+**Status:** In QA (PR from `p9/ai-receipts-find`, D55). Built; minimal pass done on iPhone SE and iPad (2026-10-12). The owner's real-device evaluation runs and the cumulative smoke suite on CI are still to do.
 **Scope:** AI receipt extraction (store, date, price, warranty length); AI serial labeling; replacement value range labeled as an estimate; natural-language questions turned into structured searches with tool calling (PRD §6); move-by-sentence with the confirmation card (F-04); Spotlight semantic matching ("car fob" → "Spare car key").
 **Acceptance:** answers come only from saved data; nothing moves without the confirmation tap (PRD §6); every AI field is editable and marked as suggested.
 **QA:** ambiguous questions ("Where's the key?" with 4 keys), items with the same name in two rooms, misheard voice input, very long receipts.
