@@ -220,3 +220,18 @@ private final class Fixture {
     try f.items.update(camera, from: draft)
     #expect(camera.condition == "")
 }
+
+// D16: the value estimate saves as a whole range, and goes when cleared.
+@MainActor @Test func aValueEstimateSavesAsAWholeRange() throws {
+    let f = try Fixture()
+    var draft = try f.draft("Kettle")
+    (draft.valueEstimateLow, draft.valueEstimateHigh) = (60, 90)
+    let kettle = try f.items.create(draft)
+    #expect(kettle.valueEstimateLow == 60 && kettle.valueEstimateHigh == 90)
+    #expect(ItemDraft(kettle).valueEstimateHigh == 90)
+
+    var edit = ItemDraft(kettle)
+    edit.valueEstimateHigh = nil
+    try f.items.update(kettle, from: edit)
+    #expect(kettle.valueEstimateLow == nil && kettle.valueEstimateHigh == nil)
+}

@@ -30,6 +30,11 @@ struct ItemEditor: View {
     @State private var draft: ItemDraft
     private let initial: ItemDraft
     @State private var priceText: String
+    @State private var lowText: String
+    @State private var highText: String
+    /// The router's value range (D16), "Suggested" while the fields still hold it.
+    @State private var valueSuggestion: ValueEstimate?
+    @State private var askedValue = false
     @State private var tagText = ""
     @State private var nameError = false
     @State private var suggestions: [String] = []
@@ -68,10 +73,17 @@ struct ItemEditor: View {
         initial = item.map(ItemDraft.init) ?? ItemDraft(currencyCode: start.currencyCode, location: start.location)
         _draft = State(initialValue: start)
         _priceText = State(initialValue: start.price.map { $0.formatted(.number.grouping(.never)) } ?? "")
+        _lowText = State(initialValue: start.valueEstimateLow.map { $0.formatted(.number.grouping(.never)) } ?? "")
+        _highText = State(initialValue: start.valueEstimateHigh.map { $0.formatted(.number.grouping(.never)) } ?? "")
     }
 
     private var service: ItemService { ItemService(context: context) }
-    private var hasChanges: Bool { draft != initial || !priceText.isEmpty && draft.price == nil }
+    /// A suggested value alone isn't an edit to lose: Cancel doesn't ask about it.
+    private var hasChanges: Bool {
+        var compared = draft
+        if isValueSuggested { (compared.valueEstimateLow, compared.valueEstimateHigh) = (initial.valueEstimateLow, initial.valueEstimateHigh) }
+        return compared != initial || !priceText.isEmpty && draft.price == nil
+    }
 
     var body: some View {
         NavigationStack {
@@ -120,7 +132,11 @@ struct ItemEditor: View {
                 Button("OK") {}
             }
         }
-        .task { await prefill() }
+        .task {
+            await prefill()
+            await suggestValue()
+        }
+        .onChange(of: focus) { old, _ in if old == .name { Task { await suggestValue() } } }
         .presentationSizing(.form)   // a centered form sheet on regular width (D29)
         .interactiveDismissDisabled(hasChanges)   // a swipe down can't lose edits
         .nookHaptic(.saved, trigger: saved)
@@ -475,8 +491,54 @@ struct ItemEditor: View {
                 }
             }
             .onChange(of: priceText) { _, text in draft.price = Self.decimal(text) }
+            if valueSuggestion != nil || !lowText.isEmpty || !highText.isEmpty { valueWell }
             NookTextField(Text("Store"), text: $draft.store, prompt: Text("Where you bought it"))
         }
+    }
+
+    /// "Value estimate 420 – 510 USD", only ever an estimate (PRD §5, D16). It appears when the
+    /// router suggests one, so Classic shows none; a range already saved stays editable.
+    private var valueWell: some View {
+        FieldWell(Text("Value estimate"), isSuggested: isValueSuggested) {
+            HStack(spacing: NookSpace.s1) {
+                TextField(text: $lowText, prompt: Text("Low").foregroundStyle(NookColor.textSecondary)) { Text("Lowest value") }
+                    .accessibilityLabel(Text("Lowest value"))
+                Text(verbatim: "–").accessibilityHidden(true)
+                TextField(text: $highText, prompt: Text("High").foregroundStyle(NookColor.textSecondary)) { Text("Highest value") }
+                    .accessibilityLabel(Text("Highest value"))
+                Text(verbatim: draft.currencyCode).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+                Button("Clear", systemImage: "xmark.circle.fill") { (lowText, highText) = ("", "") }
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(NookColor.textSecondary)
+                    .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                    .accessibilityLabel(Text("Clear value estimate"))
+            }
+            .keyboardType(.decimalPad)
+            .font(.nookBody.monospacedDigit())
+        }
+        .onChange(of: lowText) { _, text in draft.valueEstimateLow = Self.decimal(text) }
+        .onChange(of: highText) { _, text in draft.valueEstimateHigh = Self.decimal(text) }
+    }
+
+    private var isValueSuggested: Bool {
+        guard let valueSuggestion else { return false }
+        return draft.valueEstimateLow == valueSuggestion.low && draft.valueEstimateHigh == valueSuggestion.high
+    }
+
+    /// Asks once per edit, when the item has a name and no range yet; Save never waits for it
+    /// and it never overwrites what the user typed (like C-05's prefill).
+    private func suggestValue() async {
+        let name = draft.name.trimmingCharacters(in: .whitespaces)
+        guard !askedValue, !name.isEmpty, lowText.isEmpty, highText.isEmpty else { return }
+        askedValue = true
+        let subject = ValueSubject(name: name, category: draft.category, brand: draft.brand.isEmpty ? nil : draft.brand,
+                                   condition: draft.condition?.rawValue, price: draft.price,
+                                   purchaseDate: draft.purchaseDate, currencyCode: draft.currencyCode)
+        guard let estimate = await NookAI.router.estimateValue(for: subject), lowText.isEmpty, highText.isEmpty else { return }
+        (draft.valueEstimateLow, draft.valueEstimateHigh) = (estimate.low, estimate.high)
+        lowText = estimate.low.formatted(.number.grouping(.never))
+        highText = estimate.high.formatted(.number.grouping(.never))
+        valueSuggestion = estimate
     }
 
     private var isFuture: Bool { (draft.purchaseDate ?? .distantPast) > .now }

@@ -456,6 +456,19 @@ private struct ItemDetail: View {
                 MoneyText(value.amount, currencyCode: value.currencyCode, font: .nookBody)
             }))
         }
+        if let low = item.valueEstimateLow, let high = item.valueEstimateHigh {
+            // "$420–$510" over "Estimate", never shown as a fact (PRD §5, D16).
+            rows.append(AnyView(DetailRow(Text("Value today")) {
+                VStack(alignment: typeSize.isAccessibilitySize ? .leading : .trailing, spacing: 0) {
+                    HStack(spacing: 0) {
+                        MoneyText(low, currencyCode: item.currencyCode, font: .nookBody)
+                        Text(verbatim: "–")
+                        MoneyText(high, currencyCode: item.currencyCode, font: .nookBody)
+                    }
+                    Text("Estimate").font(.nookCaption).foregroundStyle(NookColor.textSecondary)
+                }
+            }))
+        }
         if !item.barcode.isEmpty {
             rows.append(AnyView(DetailRow(Text("Barcode"), Text(verbatim: item.barcode))))
         }
