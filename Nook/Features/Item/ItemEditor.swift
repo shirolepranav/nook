@@ -500,18 +500,29 @@ struct ItemEditor: View {
     /// router suggests one, so Classic shows none; a range already saved stays editable.
     private var valueWell: some View {
         FieldWell(Text("Value estimate"), isSuggested: isValueSuggested) {
-            HStack(spacing: NookSpace.s1) {
-                TextField(text: $lowText, prompt: Text("Low").foregroundStyle(NookColor.textSecondary)) { Text("Lowest value") }
-                    .accessibilityLabel(Text("Lowest value"))
-                Text(verbatim: "–").accessibilityHidden(true)
-                TextField(text: $highText, prompt: Text("High").foregroundStyle(NookColor.textSecondary)) { Text("Highest value") }
-                    .accessibilityLabel(Text("Highest value"))
-                Text(verbatim: draft.currencyCode).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
-                Button("Clear", systemImage: "xmark.circle.fill") { (lowText, highText) = ("", "") }
-                    .labelStyle(.iconOnly)
-                    .foregroundStyle(NookColor.textSecondary)
-                    .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
-                    .accessibilityLabel(Text("Clear value estimate"))
+            // At accessibility sizes the currency and Clear go below, so the numbers keep the width.
+            let layout = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+                : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            layout {
+                HStack(spacing: NookSpace.s1) {
+                    TextField(text: $lowText, prompt: Text("Low").foregroundStyle(NookColor.textSecondary)) { Text("Lowest value") }
+                        .accessibilityLabel(Text("Lowest value"))
+                        .multilineTextAlignment(.trailing)   // "60 – 90" reads as one range
+                    Text(verbatim: "–").accessibilityHidden(true)
+                    TextField(text: $highText, prompt: Text("High").foregroundStyle(NookColor.textSecondary)) { Text("Highest value") }
+                        .accessibilityLabel(Text("Highest value"))
+                }
+                HStack(spacing: NookSpace.s1) {
+                    Text(verbatim: draft.currencyCode).font(.nookMeta).foregroundStyle(NookColor.textSecondary)
+                        .fixedSize()   // a currency code never wraps
+                    if typeSize.isAccessibilitySize { Spacer(minLength: 0) }
+                    Button("Clear", systemImage: "xmark.circle.fill") { (lowText, highText) = ("", "") }
+                        .labelStyle(.iconOnly)
+                        .foregroundStyle(NookColor.textSecondary)
+                        .frame(minWidth: NookLayout.minTapTarget, minHeight: NookLayout.minTapTarget)
+                        .accessibilityLabel(Text("Clear value estimate"))
+                }
             }
             .keyboardType(.decimalPad)
             .font(.nookBody.monospacedDigit())

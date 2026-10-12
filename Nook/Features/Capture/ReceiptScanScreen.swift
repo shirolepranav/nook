@@ -445,17 +445,24 @@ struct ReceiptScanScreen: View {
 
     /// "Warranty 2 years", found printed by the AI reading. Kept on Save unless removed.
     private func warrantyRow(_ months: Int) -> some View {
-        HStack(spacing: NookSpace.s1) {
-            Text("Warranty")
-                .font(.nookFootnote.weight(.semibold))
-                .foregroundStyle(NookColor.textSecondary)
-                .frame(minWidth: NookLayout.photoTileWidth / 1.5, alignment: .leading)
-                .accessibilityHidden(true)
-            Text(months % 12 == 0 ? "\(months / 12) yr" : "\(months) mo")
-                .font(.nookBody)
-                .accessibilityLabel(Text("Warranty"))
-                .accessibilityValue(months % 12 == 0 ? Text("\(months / 12) years, suggested") : Text("\(months) months, suggested"))
-            SuggestedLabel().accessibilityHidden(true)
+        let isLarge = dynamicTypeSize.isAccessibilitySize
+        let row = isLarge
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+            : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+        return HStack(spacing: NookSpace.s1) {
+            row {
+                Text("Warranty")
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(NookColor.textSecondary)
+                    .frame(minWidth: isLarge ? nil : NookLayout.photoTileWidth / 1.5, alignment: .leading)
+                    .accessibilityHidden(true)
+                Text(months % 12 == 0 ? "\(months / 12) yr" : "\(months) mo")
+                    .font(.nookBody)
+                    .accessibilityLabel(Text("Warranty"))
+                    .accessibilityValue(months % 12 == 0 ? Text("\(months / 12) years, suggested") : Text("\(months) months, suggested"))
+                SuggestedLabel().accessibilityHidden(true)
+            }
+            .padding(.vertical, isLarge ? NookSpace.s1 : 0)
             Spacer(minLength: 0)
             Button("Remove Warranty", systemImage: "xmark.circle.fill") { warrantyMonths = nil }
                 .labelStyle(.iconOnly)
@@ -467,18 +474,27 @@ struct ReceiptScanScreen: View {
         .background(accent.suggested, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
     }
 
-    /// A field well that shows when it's the one a tap fills.
+    /// At accessibility sizes the label and its Suggested chip sit above the value, so the
+    /// row never runs wider than the screen.
     private func target(_ which: Field, _ label: Text, @ViewBuilder content: () -> some View) -> some View {
-        HStack(spacing: NookSpace.s1) {
-            label
-                .font(.nookFootnote.weight(.semibold))
-                .foregroundStyle(field == which ? AnyShapeStyle(.tint) : AnyShapeStyle(NookColor.textSecondary))
-                .frame(minWidth: NookLayout.photoTileWidth / 1.5, alignment: .leading)
-                .accessibilityHidden(true)
+        let isLarge = dynamicTypeSize.isAccessibilitySize
+        let row = isLarge
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+            : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+        return row {
+            HStack(spacing: NookSpace.s1) {
+                label
+                    .font(.nookFootnote.weight(.semibold))
+                    .foregroundStyle(field == which ? AnyShapeStyle(.tint) : AnyShapeStyle(NookColor.textSecondary))
+                    .frame(minWidth: isLarge ? nil : NookLayout.photoTileWidth / 1.5, alignment: .leading)
+                    .accessibilityHidden(true)
+                if isLarge, suggested.contains(which) { SuggestedLabel() }
+            }
             content()
                 .font(.nookBody)
-            if suggested.contains(which) { SuggestedLabel() }
+            if !isLarge, suggested.contains(which) { SuggestedLabel() }
         }
+        .padding(.vertical, isLarge ? NookSpace.s1 : 0)
         .padding(.horizontal, NookSpace.s2)
         .frame(maxWidth: .infinity, minHeight: NookLayout.fieldHeight, alignment: .leading)
         .background(suggested.contains(which) ? accent.suggested : NookColor.surfaceSunken, in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))

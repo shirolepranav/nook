@@ -407,6 +407,8 @@ final class ScreenshotTests: XCTestCase {
         let value = app.textFields["Lowest value"]
         XCTAssertTrue(value.waitForExistence(timeout: 10))
         for _ in 0..<6 where !value.isHittable { app.swipeUp() }
+        let store = app.textFields["Store"]   // the whole well in view: the field under it shows
+        for _ in 0..<3 where !(store.exists && store.isHittable) { shortDrag(app) }
         snap("I-02 Value estimate, suggested")
         app.buttons["Save"].tap()
         let today = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "Value today")).firstMatch
