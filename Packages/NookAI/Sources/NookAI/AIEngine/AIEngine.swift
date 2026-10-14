@@ -253,4 +253,24 @@ struct AIEngine: CapabilityEngine {
         }.content
         return ValueEstimate(low: range.low, high: range.high)
     }
+
+    /// Plain text: the router keeps it only if it's grounded (D56).
+    func summarizeRoom(_ facts: RoomFacts) async throws -> String? {
+        let session = LanguageModelSession(instructions: """
+            You write one short paragraph, two or three sentences, for a home insurance inventory. \
+            Describe what the room holds, using only the items and numbers given. \
+            Don't add items, values, advice or opinions. Don't use more than 300 characters.
+            """)
+        let things = facts.things.prefix(60).map { thing in
+            [thing.name, thing.quantity > 1 ? "×\(thing.quantity)" : nil, thing.category.isEmpty ? nil : "(\(thing.category))"]
+                .compactMap { $0 }.joined(separator: " ")
+        }
+        let totals = facts.totals.map { "\($0.amount) \($0.currencyCode)" }.joined(separator: ", ")
+        return try await session.respond {
+            "Room: \(facts.room)"
+            "Number of items: \(facts.things.count)"
+            "Items: \(things.joined(separator: "; "))"
+            if !totals.isEmpty { "Total value: \(totals)" }
+        }.content
+    }
 }

@@ -105,5 +105,11 @@ public struct ScriptedEngine: CapabilityEngine {
         guard items != nil else { throw Failure() }
         return ValueEstimate(low: 60, high: 90)
     }
+
+    public func summarizeRoom(_ facts: RoomFacts) async throws -> String? {
+        guard items != nil else { throw Failure() }
+        let names = facts.things.prefix(2).map(\.name).joined(separator: " and ")
+        return "The \(facts.room.lowercased()) holds \(facts.things.count) things, including \(names)."
+    }
 }
 #endif

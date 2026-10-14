@@ -17,6 +17,8 @@ public protocol CapabilityEngine: Sendable {
     func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion
     /// I-02's value range (D16). Classic suggests none.
     func estimateValue(for item: ValueSubject) async throws -> ValueEstimate?
+    /// R-02's optional paragraph per room (PRD §5). Classic writes none.
+    func summarizeRoom(_ facts: RoomFacts) async throws -> String?
 }
 
 /// What the on-device model can do right now.
@@ -144,6 +146,13 @@ public struct CapabilityRouter: Sendable {
     public func estimateValue(for item: ValueSubject) async -> ValueEstimate? {
         guard usesAI(needsImages: false) else { return nil }
         return await timed { try await ai.estimateValue(for: item) } ?? nil
+    }
+
+    /// A room's paragraph for the insurance report, or nil on Classic, a failure, the timeout
+    /// or anything that isn't grounded in the room's records (D56).
+    public func summarizeRoom(_ facts: RoomFacts) async -> String? {
+        guard usesAI(needsImages: false), let text = await timed({ try await ai.summarizeRoom(facts) }) ?? nil else { return nil }
+        return RoomSummary.grounded(text, in: facts)
     }
 
     /// The work's result, or nil when it throws or outlasts the timeout (PRD §8): the caller's

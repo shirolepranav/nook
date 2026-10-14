@@ -31,4 +31,5 @@ public struct ClassicEngine: CapabilityEngine {
 
     /// D16: the manual path suggests no value.
     public func estimateValue(for item: ValueSubject) async throws -> ValueEstimate? { nil }
+    public func summarizeRoom(_ facts: RoomFacts) async throws -> String? { nil }
 }

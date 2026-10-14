@@ -64,6 +64,14 @@ private final class FakeEngine: CapabilityEngine, @unchecked Sendable {
         }
     }
 
+    func summarizeRoom(_ facts: RoomFacts) async throws -> String? {
+        switch ending {
+        case .finish: return "The kitchen holds 2 things, including a Kettle. Together they're worth $2,608."
+        case .fail: throw Failure()
+        case .hang: try await Task.sleep(for: .seconds(60)); return nil
+        }
+    }
+
     func estimateValue(for item: ValueSubject) async throws -> ValueEstimate? {
         switch ending {
         case .finish: return ValueEstimate(low: 40, high: 60)
@@ -252,4 +260,27 @@ private func close(_ a: CGRect?, _ b: CGRect) -> Bool {
     #expect(NearWords.records(for: "clicker", in: index).map(\.name) == ["TV remote"])
     #expect(NearWords.records(for: "comforter", in: index).map(\.name) == ["Duvet"])
     #expect(NearWords.records(for: "zzzz", in: index).isEmpty)
+}
+
+// D56: R-02's room summary is AI-only, never fails, and is kept only when grounded.
+private let kitchenFacts = RoomFacts(room: "Kitchen", things: [.init(name: "Kettle"), .init(name: "Toaster")],
+                                     totals: [(2_608, "USD")])
+
+@Test func roomSummariesFallBackToNone() async {
+    #expect(await CapabilityRouter(ai: FakeEngine(), classic: ClassicEngine()) { ai }.summarizeRoom(kitchenFacts) != nil)
+    #expect(await CapabilityRouter(ai: FakeEngine(), classic: ClassicEngine()) { .classic }.summarizeRoom(kitchenFacts) == nil)
+    #expect(await CapabilityRouter(ai: FakeEngine(ending: .fail), classic: ClassicEngine()) { ai }.summarizeRoom(kitchenFacts) == nil)
+    let hung = CapabilityRouter(ai: FakeEngine(ending: .hang), classic: ClassicEngine(), availability: { ai }, timeout: .milliseconds(100))
+    #expect(await hung.summarizeRoom(kitchenFacts) == nil)
+}
+
+@Test func roomSummariesMustBeGrounded() {
+    let ok = "Two appliances: a Kettle and a Toaster, 2 items worth $2,608 in all."
+    #expect(RoomSummary.grounded(ok, in: kitchenFacts) == ok)
+    #expect(RoomSummary.grounded("The Kettle is worth $2,608.00.", in: kitchenFacts) != nil)
+    #expect(RoomSummary.grounded("A Kettle worth $3,000.", in: kitchenFacts) == nil)           // invented value
+    #expect(RoomSummary.grounded("The room has 7 things, a Kettle among them.", in: kitchenFacts) == nil)
+    #expect(RoomSummary.grounded("A warm, well-used room.", in: kitchenFacts) == nil)          // names nothing real
+    #expect(RoomSummary.grounded(String(repeating: "Kettle ", count: 80), in: kitchenFacts) == nil)
+    #expect(RoomSummary.numbers(in: "Worth $2,608.50. It has 3.") == [Decimal(string: "2608.5")!, 3])
 }
