@@ -188,13 +188,14 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — entitlement logic tests with StoreKit configuration files; paywall trigger UI tests; two-device sync script. Smoke — S1–S11.
 
 **Gate 3 — Feature complete:** every PRD feature (F1–F11) is in; the "no AI" pass is repeated with Apple Intelligence off (PRD §9).
+**Status:** Waived provisionally (D60) so P12 can start; P11's owner checks are open. It must pass before Gate 4.
 
 ---
 
 ## Stage 4 — Platform, polish & v1.0 release
 
 ### P12 · Privacy lock, Private items & system surfaces
-**Status:** Not started
+**Status:** In progress (branch `p12/privacy-surfaces`, D60)
 **Scope:** Face ID / Touch ID app lock (L-02, S-05) with an app-switcher cover; Private items always need biometrics and are excluded from Spotlight, Siri suggestions and widgets (PRD §9); file protection `completeUntilFirstUserAuthentication` (PRD §9); widgets (warranties, total value, quick find) reading the App Group store; Control Center control and Action button option for room scan; Lock Screen control; App Intents (`FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`) as AppEntity types; Spotlight indexing; plain-language privacy page (S-09).
 **PRD acceptance:** widgets render correctly in every size on supported iPhones (F10; Duo inner screen checked in v1.1).
 **QA:** biometrics not enrolled, lockout, widgets after a restart before first unlock, tinted and clear Home Screen styles.

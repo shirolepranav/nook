@@ -554,3 +554,5 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Introductory offers are subscription-only.** A non-consumable has one price, which D58 settles.
 
 *Affects:* plan T2, T4, T7–T9; `NookStore`, `FileSync`, `SyncStatus`, `PaywallSheet`; `Nook.entitlements`.
+
+**D60 · 2026-10-14 · Accepted (product owner)** — **Gate 3 is waived provisionally so P12 can start.** P11 is built and merged (PR #40), but its owner checks are still open: App Store Connect and CloudKit setup, sandbox purchases on a device, and the two-device sync script (`docs/qa/p11-sync-script.md`). The owner chose to build P12 while those run in parallel, rather than wait. *Why:* P12 (lock, Private items, widgets, intents, Spotlight) touches little of the purchase and sync code, and the open checks need the owner's accounts and devices, not agent time. *Risk accepted:* a P11 finding could force a change to sync or entitlement code under P12; it's fixed on `main` and P12 rebases. **Gate 3 must still pass, with the "no AI" pass, before Gate 4.** *Affects:* roadmap Gate 3 and P12 status.
