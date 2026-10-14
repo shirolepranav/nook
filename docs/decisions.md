@@ -496,3 +496,29 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 **D57 · 2026-10-13 · Accepted** — **Copy that names the device says "iPad" on iPad (01 §1.3, D29) through String Catalog device variations.** Every key in `Localizable.xcstrings` that says "iPhone" now carries an `ipad` variation, with "iPhone" as `other`. The compiled bundle carries them as `NSStringDeviceSpecificRuleType`, so SwiftUI picks the right one and no view branches on the device (CLAUDE.md: size classes only). The seven keys are S-11's two, R-02's two and S-04's three. `DeviceCopyTests` checks them on the iPhone SE and the 13-inch iPad. **New copy that names the device gets the same variation** when it's added to the catalog, because `scripts/sync-strings.sh` keeps variations but doesn't add them. The iPhone Duo is an iPhone and keeps "iPhone". The debug-only component gallery's verbatim sample is left as is.
 
 *Affects:* 01 §1.3; `Nook/Resources/Localizable.xcstrings`; `NookTests/DeviceCopyTests`.
+
+### P11 (2026-10-13)
+
+**D59 · 2026-10-13 · Accepted** — **iOS 27 SDK checks for P11 (D23, D11).** Each API was typechecked against the iOS 27.0 SDK (Xcode 27.0, 27A266a) with Swift 6. The runtime checks used a throwaway probe app on the iOS 27.0 iPhone SE simulator, which isn't signed into iCloud.
+- **SwiftData + CloudKit on an existing store works.** `ModelConfiguration(schema:url:cloudKitDatabase: .private("iCloud.pranav.nook"))` opens the same file a `.none` container wrote, and all 3 rows were still there. A new row saved, and reopening with `.none` kept all 4. A container can be released and reopened on the same URL in one process, so P11 can switch sync on and off by reopening the store (plan T7). **Owner check:** that the rows saved before sync was turned on actually export needs a device, or a simulator signed into a sandbox iCloud account.
+- **Opening `.private` without the iCloud entitlement crashes the app** (SIGTRAP in `PFCloudKitContainerProvider containerWithIdentifier:`). So `NookStore` opens `.private` only when sync is on, and no test or preview turns it on.
+- **SwiftData posts `NSPersistentCloudKitContainer.eventChangedNotification`.** Each `Event` has `type` (`.setup`, `.import`, `.export`), `endDate`, `succeeded` and `error`. With no iCloud account, setup ends with Cocoa error 134400, and `CKContainer.accountStatus()` returns `.noAccount`. S-03's signed-out state reads both, and `CKError.quotaExceeded` on an event means storage full.
+- **CloudKit schema:** `NSManagedObjectModel.makeManagedObjectModel(for:)` exists and returns a model for `@Model` types, so a DEBUG-only helper can run `NSPersistentCloudKitContainer.initializeCloudKitSchema(options:)`. SwiftData has no equivalent. The owner runs it once against Development, then deploys the schema to Production.
+- **`CKSyncEngine`:**
+  - `Configuration(database:stateSerialization:delegate:)` with `automaticallySync`
+  - `state.add(pendingDatabaseChanges:)` / `add(pendingRecordZoneChanges:)`
+  - `RecordZoneChangeBatch(pendingChanges:recordProvider:)`
+  - events `.stateUpdate`, `.accountChange` (`.signIn`, `.signOut`, `.switchAccounts`), `.fetchedRecordZoneChanges` and `.sentRecordZoneChanges` (failed saves carry a `CKError`)
+  - `fetchChanges()` / `sendChanges()` for Sync Now
+  - **`CKSyncEngineDelegate` is `Sendable`,** so FileSync is an actor.
+  - Runtime needs an account: owner check.
+- **StoreKit:**
+  - `ProductView(id:)` takes a custom `ProductViewStyle`. Its `Configuration.state` is `.loading`, `.success(Product)`, `.unavailable` or `.failure`, and `configuration.purchase()` starts the purchase.
+  - `.onInAppPurchaseStart` and `.onInAppPurchaseCompletion` give `.success(.success(VerificationResult<Transaction>))`, `.pending` and `.userCancelled`.
+  - `Transaction.currentEntitlements`, `Transaction.updates`, `revocationDate`, `ownershipType == .familyShared` and `AppStore.sync()` are all present.
+  - The purchase flow runs against `Nook.storekit` in T2/T4.
+- **`CKContainer.accountStatus()` is an async throwing method**, not a property. `.CKAccountChanged` is the change notification.
+- **The iCloud entitlements need no signing change for CI.** Nook built for `generic/platform=iOS Simulator` with `icloud-container-identifiers`, `icloud-services` (CloudKit) and `aps-environment` added. Xcode puts simulator entitlements in the binary's `__TEXT,__entitlements` section with the team app ID (`6WSVMM9FGS.pranav.nook`), and that build launches. **Ad-hoc signing those entitlements into the code signature stops the app launching** on the simulator, so never pass them to `codesign`. Device and Release builds need the container `iCloud.pranav.nook` and Push registered for the App ID (owner, App Store Connect checklist).
+- **Introductory offers are subscription-only.** A non-consumable has one price, which D58 settles.
+
+*Affects:* plan T2, T4, T7–T9; `NookStore`, `FileSync`, `SyncStatus`, `PaywallSheet`; `Nook.entitlements`.
