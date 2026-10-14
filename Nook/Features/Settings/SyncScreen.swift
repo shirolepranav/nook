@@ -116,7 +116,7 @@ struct SyncScreen: View {
             } icon: {
                 Image(systemName: "icloud").foregroundStyle(NookColor.info)
             }
-            Text("Your items stay on this iPhone. With Pro, they sync to your other iPhones through your own iCloud.")
+            Text("Your items stay on this iPhone. With Pro, they sync to your other devices through your own iCloud.")
                 .font(.nookMeta)
                 .foregroundStyle(NookColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)

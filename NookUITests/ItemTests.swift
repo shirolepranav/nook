@@ -56,7 +56,7 @@ final class ItemTests: XCTestCase {
         XCTAssertTrue(card(app, "Mug cup").waitForNonExistence(timeout: 5))
 
         app.tab("Settings").tap()
-        app.buttons["Recently Deleted"].tap()
+        app.settingsRow("Recently Deleted").tap()
         XCTAssertTrue(app.staticTexts["Mug cup"].waitForExistence(timeout: 5))
         app.buttons["Restore"].firstMatch.tap()
         XCTAssertTrue(app.staticTexts["Nothing deleted."].waitForExistence(timeout: 5))
@@ -124,7 +124,7 @@ final class ItemTests: XCTestCase {
         app.buttons["Move Items to Recently Deleted"].tap()
         XCTAssertTrue(garage.waitForNonExistence(timeout: 5))
         app.tab("Settings").tap()
-        app.buttons["Recently Deleted"].tap()
+        app.settingsRow("Recently Deleted").tap()
         XCTAssertTrue(app.staticTexts["Cordless drill"].waitForExistence(timeout: 5))
     }
 

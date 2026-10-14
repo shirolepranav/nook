@@ -254,7 +254,7 @@ struct PaywallSheet: View {
             Text("Nook Pro is yours.")
                 .font(.nookDisplay)
                 .foregroundStyle(NookColor.textPrimary)
-            Text("Thank you. Everything is unlocked, on every iPhone in your family.")
+            Text("Thank you. Everything is unlocked, for you and your family.")
                 .font(.nookMeta)
                 .foregroundStyle(NookColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)

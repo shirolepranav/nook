@@ -20,4 +20,13 @@ extension XCUIApplication {
                                   XCUIElement.ElementType.button.rawValue, XCUIElement.ElementType.cell.rawValue))
             .firstMatch
     }
+
+    /// A Settings row (its label starts with `name`; some carry a detail), scrolled into view first: since P11 the Pro card and Privacy push the
+    /// lower rows off the iPhone SE's screen (D58).
+    @MainActor
+    func settingsRow(_ name: String) -> XCUIElement {
+        let row = buttons.matching(NSPredicate(format: "label BEGINSWITH %@", name)).firstMatch
+        for _ in 0..<4 where !row.isHittable { swipeUp() }
+        return row
+    }
 }

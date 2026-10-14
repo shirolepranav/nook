@@ -21,7 +21,7 @@ struct ProScreen: View {
                 included("square.stack.3d.up", "Unlimited items", "Free keeps up to 25.")
                 included("bell", "Unlimited warranty reminders", "Free keeps up to 3.")
                 included("doc.richtext", "Insurance report and CSV", "Free shows a preview.")
-                included("icloud", "iCloud sync and backup", "Keep every iPhone in step.")
+                included("icloud", "iCloud sync and backup", "Keep all your devices in step.")
             } header: {
                 Text("What’s included").font(.nookMeta).foregroundStyle(NookColor.textSecondary).textCase(nil)
             }
@@ -34,7 +34,7 @@ struct ProScreen: View {
                 }
                 .disabled(restoring)
                 .listRowBackground(NookColor.surface)
-                Text("Bought Nook Pro before, or on another iPhone? Restore it here. Family Sharing is on, so your family gets Pro too.")
+                Text("Bought Nook Pro before, or on another device? Restore it here. Family Sharing is on, so your family gets Pro too.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
