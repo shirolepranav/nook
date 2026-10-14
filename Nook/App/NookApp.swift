@@ -71,11 +71,14 @@ struct NookApp: App {
         return (try? NookStore.makeContainer(sync: syncs)) ?? (try? NookStore.makeContainer())
     }
 
-    /// Whether this launch's store mirrors to iCloud: on in S-03 and Pro (D58). Never for UI
-    /// tests' in-memory stores.
+    /// Whether this launch's store mirrors to iCloud: on in S-03 and Pro (D58). Never under
+    /// tests.
     static var syncs: Bool {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-uiTestingStore") { return false }
+        // Unit tests host the app with the real store; earlier UI tests may have left the
+        // switch on in the simulator's App Group.
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil { return false }
         #endif
         return SyncSettings.isActive
     }

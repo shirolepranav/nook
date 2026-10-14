@@ -85,7 +85,7 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Close"].tap()
 
         app.tab("Settings").tap()
-        app.buttons["Recently Deleted"].tap()
+        app.settingsRow("Recently Deleted").tap()
         snap("S-08 Recently Deleted (empty)")
     }
 
@@ -297,7 +297,7 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Lent out"].waitForExistence(timeout: 5))
         snap("R-05 Lent out")
         app.tab("Settings").tap()
-        app.buttons["Notifications"].tap()
+        app.settingsRow("Notifications").tap()
         XCTAssertTrue(app.navigationBars["Notifications"].waitForExistence(timeout: 5))
         snap("S-07 Notifications")
         app.terminate()
@@ -314,7 +314,7 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(empty.staticTexts["Nothing’s out right now."].waitForExistence(timeout: 5))
         snap("R-05 Empty")
         empty.tab("Settings").tap()
-        empty.buttons["Notifications"].tap()
+        empty.settingsRow("Notifications").tap()
         XCTAssertTrue(empty.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
         snap("S-07 Denied")
     }
@@ -365,7 +365,7 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Discard Changes"].tap()
 
         app.tab("Settings").tap()
-        let row = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch
+        let row = app.settingsRow("Apple Intelligence")
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         snap("S-01 Settings")
         if !row.isHittable { app.swipeUp() }   // below the fold at AX5
@@ -470,6 +470,49 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Print or Share Label"].tap()
         XCTAssertTrue(app.buttons["Print"].waitForExistence(timeout: 5))
         snap("H-06 Box label")
+    }
+
+    @MainActor
+    func testP11Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "atLimit")
+        app.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "success"]
+        app.launch()
+        app.tab("Settings").tap()
+        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 10))
+        snap("S-01 Settings, Free")
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["iCloud sync comes with Nook Pro"].waitForExistence(timeout: 5))
+        snap("S-03 iCloud Sync, Free")
+        app.navigationBars.buttons.firstMatch.tap()
+        card.tap()
+        let unlock = app.buttons["Unlock Nook Pro"]
+        XCTAssertTrue(unlock.waitForExistence(timeout: 5))
+        snap("P-01 Paywall")
+        unlock.tap()
+        XCTAssertTrue(app.staticTexts["Nook Pro is yours."].waitForExistence(timeout: 5))
+        snap("P-01 Paywall, success")
+        app.buttons["Done"].tap()
+        let thanks = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro,'")).firstMatch
+        XCTAssertTrue(thanks.waitForExistence(timeout: 5))
+        snap("S-01 Settings, Pro")
+        thanks.tap()
+        XCTAssertTrue(app.staticTexts["Nook Pro is unlocked"].waitForExistence(timeout: 5))
+        snap("S-02 Nook Pro")
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
+        let toggle = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Sync with iCloud'")).firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        XCTAssertTrue(app.staticTexts["Last synced"].waitForExistence(timeout: 5))
+        snap("S-03 iCloud Sync, on")
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons["Privacy"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Privacy"].waitForExistence(timeout: 5))
+        snap("S-09 Privacy")
     }
 
     @MainActor

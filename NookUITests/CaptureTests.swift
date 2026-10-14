@@ -101,7 +101,7 @@ final class CaptureTests: XCTestCase {
         let app = launch("small", ["-uiTestingCameraFixture", "-uiTestingFakeAI", "items"])
         XCTAssertTrue(app.tab("Settings").waitForExistence(timeout: 10))
         app.tab("Settings").tap()
-        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch.tap()
+        app.settingsRow("Apple Intelligence").tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         let toggle = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Use Apple Intelligence'")).firstMatch
         XCTAssertEqual(toggle.value as? String, "1")

@@ -30,7 +30,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.tab("Settings").tap()
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
-        app.buttons["Appearance"].tap()
+        app.settingsRow("Appearance").tap()
         XCTAssertTrue(app.navigationBars["Appearance"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
@@ -109,7 +109,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.buttons["Cancel"].tap()
 
         app.tab("Settings").tap()
-        app.buttons["Recently Deleted"].tap()
+        app.settingsRow("Recently Deleted").tap()
         XCTAssertTrue(app.staticTexts["Nothing deleted."].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
@@ -286,7 +286,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.buttons["Discard Changes"].tap()
 
         app.tab("Settings").tap()
-        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Apple Intelligence'")).firstMatch.tap()
+        app.settingsRow("Apple Intelligence").tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
@@ -396,6 +396,52 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P11 screens: the paywall (P-01), S-01's Pro card, S-02 Nook Pro, S-03 iCloud Sync (free
+    /// and Pro) and S-09 Privacy.
+    @MainActor
+    func testP11ScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let free = XCUIApplication.nook(store: "atLimit")
+        free.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "pending"]
+        free.launch()
+        free.tab("Settings").tap()
+        let card = free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 10))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
+        card.tap()
+        XCTAssertTrue(free.buttons["Unlock Nook Pro"].waitForExistence(timeout: 5))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
+        free.buttons["Unlock Nook Pro"].tap()   // Ask to Buy: the waiting note
+        XCTAssertTrue(free.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS 'Waiting for approval'"))
+            .firstMatch.waitForExistence(timeout: 5))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
+        free.scrollViews.buttons["Privacy"].tap()   // P-01's link, not the Settings row behind it
+        XCTAssertTrue(free.navigationBars["Privacy"].waitForExistence(timeout: 5))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
+        free.buttons["Done"].tap()
+        free.buttons["Close"].tap()
+        free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
+        XCTAssertTrue(free.staticTexts["iCloud sync comes with Nook Pro"].waitForExistence(timeout: 5))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
+        free.terminate()
+
+        let pro = XCUIApplication.nook(store: "small")
+        pro.launch()
+        pro.tab("Settings").tap()
+        let thanks = pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro'")).firstMatch
+        XCTAssertTrue(thanks.waitForExistence(timeout: 10))
+        thanks.tap()
+        XCTAssertTrue(pro.staticTexts["Nook Pro is unlocked"].waitForExistence(timeout: 5))
+        try pro.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, pro) }
+        pro.navigationBars.buttons.firstMatch.tap()
+        pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
+        let toggle = pro.switches.matching(NSPredicate(format: "label BEGINSWITH 'Sync with iCloud'")).firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        XCTAssertTrue(pro.staticTexts["Last synced"].waitForExistence(timeout: 5))
+        try pro.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, pro) }
+    }
+
     /// P7 screens: Home's warranty row, I-01's Lent out and Warranty cards, I-06, R-01, R-04,
     /// R-05 and S-07.
     @MainActor
@@ -444,7 +490,7 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         app.tab("Settings").tap()
-        app.buttons["Notifications"].tap()
+        app.settingsRow("Notifications").tap()
         XCTAssertTrue(app.navigationBars["Notifications"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }

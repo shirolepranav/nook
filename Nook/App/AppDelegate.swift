@@ -94,6 +94,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         UNUserNotificationCenter.current().delegate = self
         Reminders.registerCategories()
         if NookApp.syncs { application.registerForRemoteNotifications() }   // CloudKit's pushes
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-initializeCloudKitSchema") {
+            do { try NookStore.initializeCloudKitSchema(); print("CloudKit schema initialized") }
+            catch { print("CloudKit schema failed: \(error)") }
+        }
+        #endif
         return true
     }
 

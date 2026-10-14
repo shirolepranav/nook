@@ -24,7 +24,7 @@ final class AppearanceTests: XCTestCase {
     @MainActor
     private func openAppearance(_ app: XCUIApplication) {
         app.tab("Settings").tap()
-        app.buttons["Appearance"].tap()
+        app.settingsRow("Appearance").tap()
         XCTAssertTrue(app.navigationBars["Appearance"].waitForExistence(timeout: 5))
     }
 }

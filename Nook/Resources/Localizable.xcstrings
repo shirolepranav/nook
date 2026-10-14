@@ -250,6 +250,16 @@
     "%lld items lent" : {
 
     },
+    "%lld items worth %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld items worth %2$@"
+          }
+        }
+      }
+    },
     "%lld items · %@" : {
       "localizations" : {
         "en" : {
@@ -299,18 +309,21 @@
         }
       }
     },
-    "%lld on" : {
-
-    },
-    "%lld pages · %lld items" : {
+    "%lld of %lld reminders used. Unlimited with Nook Pro." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$lld pages · %2$lld items"
+            "value" : "%1$lld of %2$lld reminders used. Unlimited with Nook Pro."
           }
         }
       }
+    },
+    "%lld on" : {
+
+    },
+    "%lld pages" : {
+
     },
     "%lld places" : {
       "localizations" : {
@@ -684,7 +697,13 @@
     "Arrange Spots" : {
 
     },
+    "Back Up Now" : {
+
+    },
     "Back by" : {
+
+    },
+    "Back to Your Report" : {
 
     },
     "Backup & Restore" : {
@@ -694,6 +713,12 @@
 
     },
     "Blue bin" : {
+
+    },
+    "Bought %@." : {
+
+    },
+    "Bought Nook Pro before, or on another device? Restore it here. Family Sharing is on, so your family gets Pro too." : {
 
     },
     "Box Label" : {
@@ -1164,6 +1189,15 @@
     "Found in %@." : {
 
     },
+    "Free keeps up to 25." : {
+
+    },
+    "Free keeps up to 3." : {
+
+    },
+    "Free shows a preview." : {
+
+    },
     "From %@" : {
 
     },
@@ -1218,6 +1252,12 @@
     "Insurance report" : {
 
     },
+    "Insurance report and CSV" : {
+
+    },
+    "Insurance report and CSV export" : {
+
+    },
     "Insurer" : {
 
     },
@@ -1233,6 +1273,12 @@
     "Items you delete wait here for 30 days, in case you change your mind." : {
 
     },
+    "Items, photos and moves sync through your private iCloud database. Apple encrypts it, and we can’t see it." : {
+
+    },
+    "Items, photos and moves sync through your private iCloud. We can’t see them." : {
+
+    },
     "Its spots and containers are deleted too. You can undo right after." : {
 
     },
@@ -1246,6 +1292,9 @@
 
     },
     "Keep Tagging" : {
+
+    },
+    "Keep all your devices in step." : {
 
     },
     "Kettle" : {
@@ -1279,6 +1328,9 @@
 
     },
     "Last seen" : {
+
+    },
+    "Last synced" : {
 
     },
     "Lavender" : {
@@ -1323,6 +1375,9 @@
     "List top items" : {
 
     },
+    "Loading price" : {
+
+    },
     "Loan reminders" : {
 
     },
@@ -1345,6 +1400,9 @@
 
     },
     "Making your report" : {
+
+    },
+    "Manage Storage" : {
 
     },
     "Maple Street" : {
@@ -1500,6 +1558,12 @@
     "No numbers found. You can type them in." : {
 
     },
+    "No purchase found" : {
+
+    },
+    "No purchase found for this Apple Account." : {
+
+    },
     "No room" : {
 
     },
@@ -1522,6 +1586,24 @@
 
     },
     "Nook" : {
+
+    },
+    "Nook Pro" : {
+
+    },
+    "Nook Pro is unlocked" : {
+
+    },
+    "Nook Pro is unlocked." : {
+
+    },
+    "Nook Pro is yours." : {
+
+    },
+    "Nook Pro isn’t available right now. Check your connection and try again." : {
+
+    },
+    "Nook Pro isn’t on this Apple Account. If you bought it with another one, sign in with it in the App Store." : {
 
     },
     "Nook can read receipts and answer questions about your home. You tag items in photos yourself." : {
@@ -1591,6 +1673,9 @@
     "Not set" : {
 
     },
+    "Not yet" : {
+
+    },
     "Notes" : {
 
     },
@@ -1637,6 +1722,9 @@
     "Nothing to find yet." : {
 
     },
+    "Nothing. No account, no analytics, no ads. The App Store label says “Data Not Collected.”" : {
+
+    },
     "Nothing’s out right now" : {
 
     },
@@ -1658,7 +1746,35 @@
     "Off" : {
 
     },
+    "On" : {
+
+    },
     "On the cover" : {
+
+    },
+    "On this iPhone" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On this iPhone"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "One-time purchase" : {
 
     },
     "Only items priced in %@." : {
@@ -1709,6 +1825,9 @@
           }
         }
       }
+    },
+    "Pay once. No subscription. Family Sharing included." : {
+
     },
     "Photo" : {
 
@@ -1819,6 +1938,9 @@
     "Print or Share Label" : {
 
     },
+    "Privacy" : {
+
+    },
     "Private" : {
 
     },
@@ -1835,6 +1957,9 @@
 
     },
     "Purchased" : {
+
+    },
+    "Purchasing" : {
 
     },
     "Quantity" : {
@@ -1949,6 +2074,9 @@
     "Restore" : {
 
     },
+    "Restore Purchases" : {
+
+    },
     "Restore from a Backup" : {
 
     },
@@ -2007,6 +2135,15 @@
 
     },
     "Save Search" : {
+
+    },
+    "Save Your Item" : {
+
+    },
+    "Save Your Items" : {
+
+    },
+    "Save Your Warranty" : {
 
     },
     "Save ^[%lld Item](inflect: true)" : {
@@ -2126,11 +2263,36 @@
     "Share Backup" : {
 
     },
+    "Shared with you through Family Sharing." : {
+
+    },
     "Show %lld Items" : {
 
     },
     "Show Values" : {
 
+    },
+    "Sign in to iCloud in the Settings app to sync. Your items are safe on this iPhone." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sign in to iCloud in the Settings app to sync. Your items are safe on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sign in to iCloud in the Settings app to sync. Your items are safe on this iPhone."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Since %@ · due back %@." : {
       "localizations" : {
@@ -2233,6 +2395,37 @@
     "Symbol" : {
 
     },
+    "Sync Now" : {
+
+    },
+    "Sync with iCloud" : {
+
+    },
+    "Syncing pauses until there’s space. Your items are safe on this iPhone." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Syncing pauses until there’s space. Your items are safe on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Syncing pauses until there’s space. Your items are safe on this iPhone."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Syncing…" : {
+
+    },
     "System" : {
 
     },
@@ -2281,7 +2474,16 @@
     "Tap the store’s name, or type it." : {
 
     },
+    "Terms" : {
+
+    },
     "Terracotta" : {
+
+    },
+    "Thank you for supporting Nook." : {
+
+    },
+    "Thank you. Everything is unlocked, for you and your family." : {
 
     },
     "That box isn’t in Nook anymore." : {
@@ -2334,6 +2536,9 @@
 
     },
     "The numbers under the bars" : {
+
+    },
+    "The purchase didn’t go through, and you haven’t been charged. You can try again." : {
 
     },
     "The report couldn’t be made" : {
@@ -2424,6 +2629,9 @@
     "Try removing one." : {
 
     },
+    "Turn On iCloud Sync" : {
+
+    },
     "Turn Reminders Off" : {
 
     },
@@ -2446,6 +2654,21 @@
 
     },
     "Type It Instead" : {
+
+    },
+    "Unlimited items" : {
+
+    },
+    "Unlimited items and warranty reminders" : {
+
+    },
+    "Unlimited items, reports and iCloud sync. Pay once." : {
+
+    },
+    "Unlimited warranty reminders" : {
+
+    },
+    "Unlock Nook Pro" : {
 
     },
     "Unlock Pro to Back Up" : {
@@ -2487,6 +2710,9 @@
     "View" : {
 
     },
+    "Waiting for approval. Pro unlocks as soon as it’s approved." : {
+
+    },
     "Warranties" : {
 
     },
@@ -2515,6 +2741,12 @@
 
     },
     "What is it?" : {
+
+    },
+    "What we collect" : {
+
+    },
+    "What’s included" : {
 
     },
     "When you lend something, it shows up here with a due date." : {
@@ -2551,6 +2783,9 @@
 
     },
     "Whole home" : {
+
+    },
+    "With iCloud sync (Pro)" : {
 
     },
     "Worn" : {
@@ -2602,6 +2837,9 @@
     "Your data" : {
 
     },
+    "Your iCloud storage is full" : {
+
+    },
     "Your items are safe on this iPhone. Try again in a moment." : {
       "localizations" : {
         "en" : {
@@ -2623,6 +2861,56 @@
           }
         }
       }
+    },
+    "Your items stay on this iPhone. With Pro, they sync to your other devices through your own iCloud." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your items stay on this iPad. With Pro, they sync to your other devices through your own iCloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your items stay on this iPhone. With Pro, they sync to your other devices through your own iCloud."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Your items, photos, receipts and answers live on this iPhone. Photos and text are read on this iPhone too." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your items, photos, receipts and answers live on this iPad. Photos and text are read on this iPad too."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your items, photos, receipts and answers live on this iPhone. Photos and text are read on this iPhone too."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "You’re signed out of iCloud" : {
+
+    },
+    "You’ve documented" : {
+
     },
     "Zoom" : {
 
@@ -2647,6 +2935,15 @@
 
     },
     "from %@" : {
+
+    },
+    "iCloud Sync" : {
+
+    },
+    "iCloud sync and backup" : {
+
+    },
+    "iCloud sync comes with Nook Pro" : {
 
     },
     "to" : {

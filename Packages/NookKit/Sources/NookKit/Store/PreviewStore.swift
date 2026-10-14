@@ -9,10 +9,11 @@ import UniformTypeIdentifiers
 /// containers; `lived` adds a dozen items with photos, plus what Find's answers need (a loan,
 /// warranties, a packed box, a receipt, tags and a serial); `items1k` is 1,000 items for the
 /// grid scrolling budget, and `items5k` 5,000 named items for the search budget (PRD §9).
+/// `atLimit` is the Free tier full: 25 items, 3 of them with reminders on (D9, P-01 tests).
 @MainActor
 public enum PreviewStore {
     public enum Size: String, Sendable {
-        case empty, small, many, lived, items1k, items5k
+        case empty, small, many, lived, items1k, items5k, atLimit
     }
 
     /// Box 14's QR label id in the `lived` seed: `nook://spot/lived-box-14` (F8, S10).
@@ -30,6 +31,9 @@ public enum PreviewStore {
                 try seedItems(container.mainContext)
             case .items1k: try seedThousand(container.mainContext)
             case .items5k: try seedFiveThousand(container.mainContext)
+            case .atLimit:
+                try seedSmall(container.mainContext)
+                try seedFreeLimit(container.mainContext)
             }
             return container
         } catch {
@@ -191,6 +195,18 @@ public enum PreviewStore {
         CGImageDestinationAddImage(destination, context.makeImage()!, nil)
         CGImageDestinationFinalize(destination)
         return data as Data
+    }
+
+    private static func seedFreeLimit(_ context: ModelContext) throws {
+        let kitchen = try RoomService(context: context).rooms().first { $0.name == "Kitchen" }
+        let items = ItemService(context: context, isPro: { true })
+        for number in 1...EntitlementStore.freeItemLimit {
+            var draft = ItemDraft(currencyCode: Locale.current.currency?.identifier ?? "USD", location: kitchen.map { Location(room: $0) })
+            (draft.name, draft.price) = ("Thing \(number)", Decimal(number * 10))
+            if number <= EntitlementStore.freeReminderLimit { draft.warranty = .init(endDate: .now.addingTimeInterval(200 * 86_400)) }
+            try items.create(draft)
+        }
+        try context.save()
     }
 
     private static func seedMany(_ context: ModelContext) throws {
