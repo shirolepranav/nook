@@ -1,0 +1,37 @@
+{
+  "identifier" : "6F1D2C3A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "14.99",
+      "familyShareable" : true,
+      "internalID" : "6740000001",
+      "localizations" : [
+        {
+          "description" : "Unlimited items, reports and iCloud sync. Pay once.",
+          "displayName" : "Nook Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "pranav.nook.pro",
+      "referenceName" : "Nook Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

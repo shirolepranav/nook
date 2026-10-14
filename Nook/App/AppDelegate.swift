@@ -11,8 +11,14 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     private(set) var container: ModelContainer?
     private(set) var reminders: Reminders?
     let router = AppRouter()
-    /// Everyone is Pro until P11; `-uiTestingFree YES` shows the Free states (D56).
-    let entitlements = EntitlementStore(isPro: !ProcessInfo.processInfo.arguments.contains("-uiTestingFree"))
+    let entitlements: EntitlementStore = {
+        #if DEBUG
+        // UI tests skip StoreKit: Pro, or Free with `-uiTestingFree YES` (D56, D58).
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-uiTestingStore") { return EntitlementStore(forcedPro: !arguments.contains("-uiTestingFree")) }
+        #endif
+        return EntitlementStore()
+    }()
 
     override init() {
         super.init()
