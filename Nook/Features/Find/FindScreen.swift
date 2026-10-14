@@ -17,6 +17,7 @@ struct FindScreen: View {
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(RecentSearches.key) private var recentText = ""
+    @Environment(AppRouter.self) private var router
 
     @State private var query = ""
     @State private var filter = SearchFilter()
@@ -65,6 +66,12 @@ struct FindScreen: View {
         .searchable(text: $query,
                     placement: sizeClass == .regular ? .navigationBarDrawer(displayMode: .always) : .automatic,
                     prompt: Text("Search or ask: Where are the passports?"))
+        // `nook://find?q=` from a widget, Siri or Shortcuts (04 §8).
+        .onChange(of: router.findQuery, initial: true) { _, text in
+            guard let text else { return }
+            query = text
+            router.findQuery = nil
+        }
         .onSubmit(of: .search) {
             RecentSearches.add(query, to: &recentText)
             understand()
@@ -304,7 +311,7 @@ private struct FindPreview: View {
     var body: some View {
         FindScreen()
             .modelContainer(container)
-            .environment(AppLock.preview)
+            .environment(AppLock.preview).environment(AppRouter())
             .environment(\.searchLibrary, library)
             .task {
                 let library = SearchLibrary(container: container)
@@ -319,6 +326,6 @@ private struct FindPreview: View {
 #Preview("Dark") { FindPreview().preferredColorScheme(.dark) }
 #Preview("AX5") { FindPreview().dynamicTypeSize(.accessibility5) }
 #Preview("Empty") {
-    FindScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta).environment(AppLock.preview)
+    FindScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta).environment(AppLock.preview).environment(AppRouter())
 }
 #endif

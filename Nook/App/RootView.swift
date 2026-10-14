@@ -141,6 +141,33 @@ private struct TabShell: View {
         .sheet(item: Bindable(router).openedItem) { item in
             NavigationStack { ItemDetailScreen(item: item).itemNavigation() }
         }
+        .sheet(item: Bindable(router).openedRoom) { room in
+            NavigationStack {
+                RoomScreen(room: room)
+                    .itemNavigation()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Done", systemImage: "xmark") { router.openedRoom = nil }
+                        }
+                    }
+            }
+        }
+        .sheet(isPresented: Bindable(router).showsWarranties) {
+            NavigationStack {
+                WarrantiesScreen()
+                    .itemNavigation()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Done", systemImage: "xmark") { router.showsWarranties = false }
+                        }
+                    }
+            }
+        }
+        .onChange(of: router.link) { _, link in
+            guard let link else { return }
+            router.link = nil
+            open(link)
+        }
         .sheet(item: Bindable(router).openedSpot) { spot in
             NavigationStack {
                 SpotScreen(spot: spot)
@@ -161,17 +188,36 @@ private struct TabShell: View {
         }
     }
 
-    /// `nook://spot/<qrID>` (D19): the container, or a note if it's been deleted.
+    /// `nook://` links (D19, 04 §8). Things open in sheets over the current tab, as a
+    /// notification's item does; a deleted target gets a note instead.
     private func open(_ link: DeepLink) {
+        router.openedItem = nil
+        router.openedSpot = nil
+        router.openedRoom = nil
+        router.showsWarranties = false
         switch link {
         case .spot(let qrID):
             let spot = try? context.fetch(FetchDescriptor<Spot>(predicate: #Predicate { $0.qrID == qrID })).first
-            if let spot {
-                router.openedItem = nil
-                router.openedSpot = spot
-            } else {
+            if let spot { router.openedSpot = spot } else {
                 toast = ToastMessage(symbol: "shippingbox", "That box isn’t in Nook anymore.")
             }
+        case .item(let id):
+            let item = try? context.fetch(FetchDescriptor<Item>(predicate: #Predicate { $0.id == id && $0.deletedAt == nil })).first
+            if let item { router.openedItem = item } else {
+                toast = ToastMessage(symbol: "questionmark.circle", "That item isn’t in Nook anymore.")
+            }
+        case .room(let id):
+            let room = try? context.fetch(FetchDescriptor<Room>(predicate: #Predicate { $0.id == id })).first
+            if let room { router.openedRoom = room } else {
+                toast = ToastMessage(symbol: "questionmark.circle", "That room isn’t in Nook anymore.")
+            }
+        case .find(let query):
+            router.findQuery = query
+            tab = .find
+        case .scan:
+            scansRoom = true
+        case .warranties:
+            router.showsWarranties = true
         }
     }
 
