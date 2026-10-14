@@ -522,6 +522,8 @@
 		4E4F4F4B00000000000000D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				/* StoreKitTest.framework's own header uses a type deprecated in iOS 18; CI builds with warnings as errors. */
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-deprecated-declarations";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookTests;
@@ -534,6 +536,8 @@
 		4E4F4F4B00000000000000D5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				/* StoreKitTest.framework's own header uses a type deprecated in iOS 18; CI builds with warnings as errors. */
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-deprecated-declarations";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pranav.nookTests;
