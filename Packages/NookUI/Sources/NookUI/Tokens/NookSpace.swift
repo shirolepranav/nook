@@ -71,6 +71,8 @@ public enum NookLayout {
     public static let placeIconSize: CGFloat = 32
     /// A dot on the location history timeline (I-05 mockup).
     public static let timelineDotSize: CGFloat = 10
+    /// The Nook mark on L-02 and the lock circle on a locked Private item (L02Lock, ItemDetail boards).
+    public static let lockMarkSize: CGFloat = 72
     /// The camera shutter (C-02 mockup).
     public static let shutterSize: CGFloat = 72
     /// Floating glass camera controls: torch, tips, close (C-02 mockup).

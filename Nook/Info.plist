@@ -78,6 +78,9 @@
 	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
 	<key>NSCameraUsageDescription</key>
 	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
+	<!-- L-02, S-05, Private items (PRD F11, §9): asked when the lock is turned on or a Private item first opens (D15). -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Nook uses Face ID to keep your home and private items to yourself.</string>
 	<!-- H-06 Save Image (D56): add-only, asked the first time a label is saved. -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Nook saves box labels to your photos. It can't see the rest of your library.</string>

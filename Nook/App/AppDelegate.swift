@@ -16,6 +16,22 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     /// True for the moment the store reopens with sync turned on or off.
     private(set) var isSwitchingStore = false
     let router = AppRouter()
+    /// L-02, S-05 and the Private-item lock (PRD §9).
+    let lock: AppLock = {
+        #if DEBUG
+        // UI tests stand in for Face ID; without a flag every ask passes, so a Private item
+        // opens as before.
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-uiTestingStore") {
+            // S-05 starts off; an earlier test may have left it on in the App Group.
+            UserDefaults.nook.removeObject(forKey: AppLock.enabledKey)
+            UserDefaults.nook.removeObject(forKey: AppLock.timingKey)
+        }
+        if let fake = AppLock.forTesting(arguments) { return fake }
+        if arguments.contains("-uiTestingStore") { return AppLock(method: { .faceID }, authenticate: { _ in true }) }
+        #endif
+        return AppLock()
+    }()
     let entitlements: EntitlementStore = {
         #if DEBUG
         // UI tests skip StoreKit: Pro, or Free with `-uiTestingFree YES` (D56, D58).

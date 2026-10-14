@@ -13,6 +13,7 @@ struct SettingsScreen: View {
     @AppStorage(SyncSettings.key) private var syncOn = false
     @Environment(EntitlementStore.self) private var entitlements
     @Environment(AppRouter.self) private var router
+    @Environment(AppLock.self) private var lock
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -32,6 +33,10 @@ struct SettingsScreen: View {
                 }
                 .listRowBackground(NookColor.surface)
                 Section {
+                    // S-05 leads the Privacy section (01 S-01).
+                    NavigationLink { LockScreen() } label: {
+                        rowLabel("\(lockName) Lock", lock.method.symbol, detail: lock.isEnabled ? "On" : "Off")
+                    }
                     row("Privacy", "hand.raised") { PrivacyScreen() }
                 } header: {
                     header("Privacy")
@@ -124,6 +129,11 @@ struct SettingsScreen: View {
         Text(title).font(.nookMeta).foregroundStyle(NookColor.textSecondary).textCase(nil)
     }
 
+    /// "Face ID", or Face ID when the device has no passcode to lock with.
+    private var lockName: String {
+        lock.method == .unavailable ? AppLock.Method.faceID.name : lock.method.name
+    }
+
     /// S-01's "Ready" beside Apple Intelligence.
     private var aiDetail: LocalizedStringKey {
         switch aiStatus {
@@ -143,4 +153,5 @@ enum SettingsRoute: Hashable { case sync }
         .environment(EntitlementStore(forcedPro: false))
         .environment(AppRouter())
         .environment(SyncStatus())
+        .environment(AppLock(defaults: UserDefaults(suiteName: "preview")!, method: { .faceID }, authenticate: { _ in true }))
 }

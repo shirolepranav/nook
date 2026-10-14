@@ -40,6 +40,7 @@ struct NookApp: App {
                         .environment(app.router)
                         .environment(app.entitlements)
                         .environment(app.syncStatus)
+                        .environment(app.lock)
                         .environment(\.reminders, app.reminders)
                 } else {
                     StoreErrorView { app.openStore() }
@@ -47,6 +48,7 @@ struct NookApp: App {
             }
             .nookAccent(accent)
             .preferredColorScheme(theme.colorScheme)
+            .appLock(app.lock, accent: accent, theme: theme.colorScheme)
             .defaultAppStorage(.nook)   // every @AppStorage, NookUI's too, uses the App Group
         }
         .commands { NookCommands() }

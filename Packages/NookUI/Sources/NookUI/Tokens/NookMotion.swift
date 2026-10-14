@@ -20,11 +20,14 @@ public enum NookMotion: Sendable {
         case (.snappy, _): .easeOut(duration: 0.2)
         case (.settle, false): .spring(duration: 0.35, bounce: 0.2)
         case (.settle, true): .easeInOut(duration: 0.25)
-        case (.fade, _): .easeInOut(duration: 0.3)
+        case (.fade, _): .easeInOut(duration: NookMotion.fadeSeconds)
         case (.shimmer, false): .linear(duration: 1.6).repeatForever(autoreverses: false)
         case (.shimmer, true): nil
         }
     }
+
+    /// `fade`'s length, for UIKit animations and timed swaps outside SwiftUI (L-02's cover).
+    public static let fadeSeconds: Double = 0.3
 
     /// Delay between items appearing one after another (detection outlines, streamed cards).
     /// No stagger under Reduce Motion; haptics stay.
