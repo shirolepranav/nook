@@ -9,16 +9,22 @@ struct SettingsScreen: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var aiStatus = NookAI.status
     @State private var paywall: PaywallRequest?
+    @State private var path: [SettingsRoute] = []
+    @AppStorage(SyncSettings.key) private var syncOn = false
     @Environment(EntitlementStore.self) private var entitlements
+    @Environment(AppRouter.self) private var router
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 // Grouped as on the S-01 board; rows join their sections as features arrive.
                 Section { proCard }
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                 Section {
+                    NavigationLink(value: SettingsRoute.sync) {
+                        rowLabel("iCloud Sync", "icloud", detail: !entitlements.isPro ? "Pro" : syncOn ? "On" : "Off")
+                    }
                     row("Backup & Restore", "externaldrive") { BackupScreen() }
                     row("Recently Deleted", "trash") { RecentlyDeletedScreen() }
                 } header: {
@@ -54,7 +60,12 @@ struct SettingsScreen: View {
             .background(NookColor.canvas)
             .captureButton()
             .navigationTitle("Settings")
+            .navigationDestination(for: SettingsRoute.self) { _ in SyncScreen() }
             .paywall($paywall)
+            .onAppear {
+                // Back on S-03 after its switch reopened the store (D58).
+                if router.reopensSync { path = [.sync]; router.reopensSync = false }
+            }
             .onChange(of: scenePhase) { _, phase in if phase == .active { aiStatus = NookAI.status } }
         }
     }
@@ -97,14 +108,16 @@ struct SettingsScreen: View {
 
     private func row(_ title: LocalizedStringKey, _ symbol: String, detail: LocalizedStringKey? = nil,
                      @ViewBuilder destination: @escaping () -> some View) -> some View {
-        NavigationLink(destination: destination) {
-            HStack {
-                Label(title, systemImage: symbol).font(.nookBody)
-                Spacer(minLength: NookSpace.s1)
-                if let detail { Text(detail).font(.nookMeta).foregroundStyle(NookColor.textSecondary) }
-            }
-            .frame(minHeight: NookLayout.minTapTarget)
+        NavigationLink(destination: destination) { rowLabel(title, symbol, detail: detail) }
+    }
+
+    private func rowLabel(_ title: LocalizedStringKey, _ symbol: String, detail: LocalizedStringKey?) -> some View {
+        HStack {
+            Label(title, systemImage: symbol).font(.nookBody)
+            Spacer(minLength: NookSpace.s1)
+            if let detail { Text(detail).font(.nookMeta).foregroundStyle(NookColor.textSecondary) }
         }
+        .frame(minHeight: NookLayout.minTapTarget)
     }
 
     private func header(_ title: LocalizedStringKey) -> some View {
@@ -122,4 +135,12 @@ struct SettingsScreen: View {
     }
 }
 
-#Preview { SettingsScreen().nookAccent(.terracotta).environment(EntitlementStore(forcedPro: false)) }
+/// Screens Settings opens by value, so it can reopen S-03 (D58).
+enum SettingsRoute: Hashable { case sync }
+
+#Preview {
+    SettingsScreen().nookAccent(.terracotta)
+        .environment(EntitlementStore(forcedPro: false))
+        .environment(AppRouter())
+        .environment(SyncStatus())
+}
