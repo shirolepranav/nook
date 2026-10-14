@@ -38,12 +38,13 @@ public struct RoomService {
     /// Adds a room at the end. Symbol and color come from the preset when the name matches
     /// one (O-02), unless given.
     @discardableResult
-    public func addRoom(named name: String, symbol: String? = nil, colorKey: String? = nil) throws -> Room {
+    public func addRoom(named name: String, symbol: String? = nil, colorKey: String? = nil, id: UUID? = nil) throws -> Room {
         let name = try validated(name)
         let existing = try rooms()
         let style = RoomPreset.style(for: name, existingColorKeys: existing.map(\.colorKey))
         let room = Room(name: name, symbol: symbol ?? style.symbol, colorKey: colorKey ?? style.colorKey,
                         order: (existing.last?.order ?? -1) + 1)
+        if let id { room.id = id }
         context.insert(room)
         return room
     }

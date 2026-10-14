@@ -10,6 +10,11 @@ import NookKit
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     private(set) var container: ModelContainer?
     private(set) var reminders: Reminders?
+    /// S-03 (D58). Starts only when this launch's store syncs.
+    let syncStatus = SyncStatus()
+    @ObservationIgnored private var fileSync: FileSync?
+    /// True for the moment the store reopens with sync turned on or off.
+    private(set) var isSwitchingStore = false
     let router = AppRouter()
     let entitlements: EntitlementStore = {
         #if DEBUG
@@ -22,18 +27,73 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     override init() {
         super.init()
+        syncStatus.setSync = { [weak self] in await self?.setSync($0) }
+        syncStatus.syncNow = { [weak self] in await self?.syncNow() }
         openStore()
     }
 
     func openStore() {
         container = NookApp.openStore()
         reminders = container.map { Reminders(container: $0) }
+        startSync()
+    }
+
+    /// S-03's switch (D58). SwiftData can't start or stop mirroring an open store, so the store
+    /// closes and reopens; the views go with it and come back on S-03.
+    func setSync(_ on: Bool) async {
+        guard on != SyncSettings.isOn else { return }
+        SyncSettings.isOn = on
+        #if DEBUG
+        // UI tests' in-memory store would be lost by reopening; the switch alone is checked.
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingStore") { return }
+        #endif
+        isSwitchingStore = true
+        await fileSync?.stop()
+        fileSync = nil
+        syncStatus.stop()
+        reminders = nil
+        container = nil   // released before the next one opens the same file (D59)
+        try? await Task.sleep(for: .milliseconds(300))
+        router.reopensSync = true
+        openStore()
+        isSwitchingStore = false
+        if on { UIApplication.shared.registerForRemoteNotifications() }
+    }
+
+    /// Rows mirror through SwiftData; files through `FileSync`; copies merge after imports.
+    private func startSync() {
+        guard let container, NookApp.syncs else { return }
+        syncStatus.onImport = { [weak container] in
+            guard let container else { return }
+            _ = try? DedupeService(context: container.mainContext).run()
+        }
+        syncStatus.start()
+        _ = try? DedupeService(context: container.mainContext).run()
+        let status = syncStatus
+        let files = FileSync { [weak self] event in
+            Task { @MainActor in
+                status.handle(event)
+                // Another Apple Account: stop rather than mix two people's homes.
+                if case .switchedAccounts = event { await self?.setSync(false) }
+            }
+        }
+        fileSync = files
+        let referenced = (try? ItemService(context: container.mainContext).referencedFiles())
+            .map { $0.photos.map { (BlobStore.Folder.photos, $0) } + $0.receipts.map { (.receipts, $0) } } ?? []
+        Task { await files.start { referenced } }
+    }
+
+    /// S-03's Sync Now. Rows have no "now" in SwiftData; they go on every save.
+    func syncNow() async {
+        try? await fileSync?.syncNow()
+        syncStatus.checkAccount()
     }
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         Reminders.registerCategories()
+        if NookApp.syncs { application.registerForRemoteNotifications() }   // CloudKit's pushes
         return true
     }
 

@@ -21,7 +21,9 @@ struct OnboardingFlow: View {
     private func createRooms(_ names: [String]) {
         let rooms = RoomService(context: context)
         for name in names {
-            _ = try? rooms.addRoom(named: name)   // names come from presets or a trimmed field
+            // Names come from presets or a trimmed field; presets get stable ids (D58).
+            let preset = RoomPreset.all.contains { $0.name == name }
+            _ = try? rooms.addRoom(named: name, id: preset ? RoomPreset.onboardingID(for: name) : nil)
         }
         try? context.save()
         done()
