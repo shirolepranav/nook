@@ -131,8 +131,12 @@ final class FindTests: XCTestCase {
         let rename = app.alerts.textFields.firstMatch
         XCTAssertTrue(rename.waitForExistence(timeout: 5))
         rename.clearAndType("Tools")
-        app.alerts.buttons["Rename"].tap()
-        let tools = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Tools")).firstMatch
+        // On iOS 27 the first tap can be lost while the keyboard is still up; the alert stays.
+        let confirm = app.alerts.buttons["Rename"]
+        confirm.tap()
+        if confirm.waitForExistence(timeout: 1) { confirm.tap() }
+        // Not BEGINSWITH "Tools": the keyboard's suggestions ("Toolset") are buttons too.
+        let tools = app.buttons.matching(NSPredicate(format: "label == 'Tools' OR label BEGINSWITH 'Tools,'")).firstMatch
         XCTAssertTrue(tools.waitForExistence(timeout: 5))
         tools.swipeLeft()
         app.buttons["Delete"].tap()
