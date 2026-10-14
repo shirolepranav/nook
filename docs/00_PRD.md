@@ -22,7 +22,7 @@
 ### Goals and success metrics (first 6 months after launch)
 | Metric | Target |
 |---|---|
-| Net revenue | $1,000/month by month 6 (~59 Pro unlocks at $19.99, after the 15% commission) |
+| Net revenue | $1,000/month by month 6 (~79 Pro unlocks at $14.99, after the 15% commission; D58) |
 | Download → Pro conversion | 3–5% |
 | Time to first room documented | Under 3 minutes (median) |
 | Day-7 retention | 25% or more (driven by "Where is…?" lookups) |
@@ -253,9 +253,9 @@ This is a headline feature. It's the reason people will open the app every week,
 
 ## 7. Monetization and paywall
 
-Free download, then a one-time $19.99 "Nook Pro" unlock. No subscription and no ads. About 59 unlocks a month reach $1,000 net after Apple's 15% Small Business Program commission.
+Free download, then a one-time $14.99 "Nook Pro" unlock. No subscription and no ads. About 79 unlocks a month ($12.74 net each) reach $1,000 net after Apple's 15% Small Business Program commission (D58).
 
-| | Free | Pro ($19.99 once) |
+| | Free | Pro ($14.99 once) |
 |---|---|---|
 | Items | Up to 25 | Unlimited |
 | Rooms | Unlimited | Unlimited |
@@ -274,7 +274,7 @@ Free download, then a one-time $19.99 "Nook Pro" unlock. No subscription and no 
 
 **Technical:** a StoreKit 2 non-consumable in-app purchase, shown with the native `ProductView`. The entitlement is checked with `Transaction.currentEntitlements` and cached for offline use. No third-party SDKs.
 
-**Launch pricing:** $14.99 introductory price for the first 2 weeks, then $19.99. Seasonal lifetime-style discounts (Black Friday, moving season in June) are allowed twice a year.
+**Pricing:** one price, $14.99, with no launch or introductory price (Apple's introductory offers are for subscriptions only; D58). Seasonal discounts (Black Friday, moving season in June) are allowed twice a year, as temporary price changes in App Store Connect.
 
 ---
 

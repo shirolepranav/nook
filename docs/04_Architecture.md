@@ -137,7 +137,7 @@ Nook/                         # app target
   Resources/                  # Assets (app icon), Localizable.xcstrings, common-items.json, synonyms.json
 NookWidgets/                  # widget + control extension
 Packages/
-  NookKit/    Sources/NookKit/{Models, Store, Services, Search, Reminders, Reports, Backup, Entitlements}
+  NookKit/    Sources/NookKit/{Models, Store, Services, Search, Reminders, Reports, Backup, Entitlements, Sync}
   NookAI/     Sources/NookAI/{Router, AIEngine, ClassicEngine, Types, Evaluations}
   NookUI/     Sources/NookUI/{Tokens, Components, Gallery}   # Assets.xcassets with color sets
 NookTests/  NookUITests/
@@ -169,7 +169,7 @@ The entities come from PRD §8, plus `Warranty` (D21).
 SwiftData + CloudKit fails at runtime unless all of these hold:
 - **Every attribute is optional or has a default value.**
 - **Every relationship is optional and has an explicit inverse.** No `.deny` delete rule. Use `.cascade` for owned children (photos, receipts, warranties, events, loans) and `.nullify` otherwise.
-- **No `@Attribute(.unique)`.** Identity is an **app-owned `id: UUID`**, and duplicates created by sync are merged in `DedupeService` by `id`.
+- **No `@Attribute(.unique)`.** Identity is an **app-owned `id: UUID`**, and duplicates created by sync are merged in `DedupeService` by `id` (P11, D58): once when a synced store opens and a second after each import. Leaves go first, then items, spots and rooms; the earliest copy stays and children only a later copy holds move onto it. Onboarding's preset rooms get stable ids (`RoomPreset.onboardingID`) so two devices merge them.
 - **No ordered relationships.** Order is stored in an `order: Int` field.
 - Enums are stored as raw `String` values with a computed accessor.
 - Photo and PDF blobs **never** go in the database. Store the file name only (see §5).
@@ -197,12 +197,12 @@ final class Item {
   - The models are nested in their schema (`NookSchemaV1.Room`), and typealiases (`Room`) point at the current version, so a V2 can keep V1's classes for migration.
   - `SchemaTests` walks the real schema and fails on any CloudKit-unsafe property, so a mistake shows up in CI rather than at sync time.
   - **Deleting a room** deletes its spots and containers (cascade) but never its items (nullify). `RoomService.delete(_:rehoming:)` moves the items to another room or sends them to Recently Deleted in the same step, and one Undo puts everything back (D28, D35).
-- **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is set to `.none` for Free users and `.private(...)` for Pro (P11).
+- **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is `.private("iCloud.pranav.nook")` only while S-03's switch is on and Pro is unlocked (`SyncSettings.isActive`), `.none` otherwise (P11, D58). SwiftData can't toggle mirroring on an open store, so `AppDelegate.setSync` closes the store (the views go with it), reopens it, and Settings comes back on S-03. Opening `.private` without the iCloud entitlement traps, so tests and previews never do (D59). `SyncStatus` reads `NSPersistentCloudKitContainer.eventChangedNotification` and the account for S-03.
 - **Soft delete:** `ItemService.delete` sets `deletedAt` (a property change, so the window's Undo works), and queries filter out deleted rows. `purgeExpired()` hard-deletes rows older than 30 days, and their files, after the first frame at launch. Delete Now and Delete All Now are final and confirm first (D40).
 - **`ItemService` (P3):** create and update from an `ItemDraft` (only the name is required, F2), duplicate, cover and photo removal (snapshot undo, D35), Private, tags, soft delete, restore, purge, and the queries screens use. Location changes go on to `LocationService`.
 - **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload (Spotlight and widget reloads join in P12). `LocationService` also moves a container with everything in it (`move(_:to:)`, one event per item inside; `RoomService.place` goes through it), lists the Move picker's recents (`recents(limit:excluding:)`: the last 5 live places moved to, from the newest 50 events) and an item's history (`history(of:)`). Moves undo through SwiftData's own undo, which keeps a saved move's undo, event included (D45).
 - **Container depth:** a container sits on its room or inside a spot, never inside another container; spots are always top-level (D3, D34). `RoomService` enforces this.
-- **Free limit:** `EntitlementStore.canAddItems(count:)` counts non-deleted items. It is checked in services, not views.
+- **Free limits (P11, D58):** `ItemService` reads the cached entitlement (`EntitlementCache`, kept by `EntitlementStore`) and throws `.itemLimit` past 25 non-deleted items (`checkCanAdd(_:)`, which Save All calls for its whole batch first) or `.reminderLimit` for a 4th active warranty reminder. Views catch them and open P-01, then run the action again after the unlock. Restore, edits and existing reminders are never gated.
 
 ---
 
@@ -211,7 +211,7 @@ final class Item {
 - **Photos:** HEIC files in `AppGroup/Photos/<uuid>.heic` (upright, at most 4032 px), with 400-px thumbnails under the same base name in `AppGroup/Thumbs/`. Loading downsamples (ImageIO) into an in-memory `NSCache`. `BlobStore` owns all of it.
 - **Receipts:** stored in `AppGroup/Receipts/<uuid>.(heic|pdf)`, each with a thumbnail (a PDF's first page).
 - **File lifecycle (D40):** files are written when picked, before Save. Soft-deleted items keep theirs; the purge removes them. At launch, `BlobStore.sweepOrphans` removes files no row references that are over an hour old (cancelled or killed edits).
-- **iCloud sync (Pro)** syncs files as `CKAsset`s through a small sync companion [design in P11]. Alternatively, files move to external storage attributes if CloudKit sync of `@Attribute(.externalStorage)` proves reliable. The choice is made in P11 and logged in decisions.md.
+- **iCloud sync (Pro, P11, D58):** `FileSync` (an actor, the `CKSyncEngineDelegate`) sends each photo and receipt as a `NookFile` record with one `CKAsset` (`asset`) in the `NookFiles` zone; record names are `<Folder>.<fileName>`. `BlobStore` reports saves and removals to it (`observe`); files from iCloud come in through `BlobStore.adopt`, which makes the thumbnail here (thumbnails never sync), and `SyncStatus.arrivals` makes photo placeholders retry. Only final deletes and discarded edits send removals; `sweepOrphans` sends nothing and, while syncing, keeps orphans 30 days. Engine state is saved beside the folders (`FileSync.state`).
 - **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9).
 - **Backup (`.nookbackup`, D12, D56):** a zip containing `manifest.json` (`schemaVersion`, `appVersion`, `createdAt`, `itemCount`, `homeName`), `data.json` (every row, relationships as UUIDs) and `files/{Photos,Thumbs,Receipts}/`. `BackupService` writes and reads it; `ZipArchive` is Nook's own, because the SDK can't read zips. Restore offers **Merge** (adds only rows whose id is new) or **Replace** (what the backup lacks goes to Recently Deleted, then the backup's rows are written over the store's). Files are copied before any row changes. A newer `schemaVersion` is refused. `BackupTests` fails if a model field isn't carried by its backup record.
 - **No network calls** except StoreKit and CloudKit. The CI grep fails on `URLSession` usage outside an allowlist.
@@ -249,7 +249,7 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 - IDs are stable (`w.<warranty>.<offset>`, `w.<warranty>.snooze`, `l.<loan>`), and each request carries a fingerprint (date and text) in `userInfo`. The reconciler adds what's new or changed and removes IDs no longer wanted (D50).
 - Snooze sets `snoozedUntil` (on `Warranty` or `Loan`) to a week from now; the planner adds one request then and skips earlier offsets.
 - Private items get neutral copy. The text is written by the app (`Reminders.text(for:)`) so it lives in the string catalog; NookKit's `ReminderPlanner` and `ReminderScheduler` stay pure and testable.
-- The Free tier limits active reminders to 3 (D9). Enforcement lives in `EntitlementStore` (P11), not in the scheduler.
+- The Free tier limits active reminders to 3 (D9). The limit is decided by `EntitlementStore` and enforced in `ItemService` when a reminder is turned on (P11, D58), never in the scheduler: reminders already on keep firing.
 - Categories: `WARRANTY` (View, Snooze 1 Week) and `LOAN` (Mark Returned, Snooze 1 Week). `AppDelegate` owns the store, so the actions work when iOS wakes the app in the background.
 - Tests inject `now`, the `calendar` and a fake notification center (`NotificationScheduling`).
 

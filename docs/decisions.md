@@ -499,6 +499,38 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 
 ### P11 (2026-10-13)
 
+**D58 · 2026-10-14 · Accepted (product owner, the four choices marked)** — **Nook Pro and iCloud sync (P11).**
+- **One price: $14.99, once** *(product owner)*. There's no launch price and no $19.99. Apple's introductory offers are for subscriptions only, so a launch price would have meant a scheduled price change. The app only ever shows `product.displayPrice`. Copy says "one-time purchase" and "Pay once. No subscription." and never "subscription" otherwise. Seasonal sales (PRD §7) are temporary price changes in App Store Connect, with no code. PRD §1 and §7, D9 and the P-01 boards change to match.
+- **Files sync through a `CKSyncEngine` companion** *(product owner)*. This settles 04 §5. SwiftData mirrors the rows; `FileSync` sends each photo and receipt as a `NookFile` record with one `CKAsset`, in its own `NookFiles` zone of the same private database.
+  - Files stay on disk, and blobs stay out of the database.
+  - Thumbnails don't sync: each device makes its own.
+  - Removals sync only from final deletes and discarded edits. `sweepOrphans` sends nothing, and while sync is on its grace grows from 1 hour to 30 days, so a file that arrives before its row isn't swept.
+  - The first time sync is turned on, every file a row references goes up.
+- **Sync is off until the user turns it on** *(product owner)*, in S-03. Buying Pro doesn't start it, unless the purchase began at S-03's switch. Data never leaves the device without that choice.
+  - SwiftData can't start or stop mirroring an open store, so the switch closes the store and reopens it with `.private("iCloud.pranav.nook")` or `.none`. Settings comes back on S-03.
+  - Sync runs only while the switch is on and Pro is unlocked. After a refund it stops at the next launch, and every row stays.
+  - Signing out pauses it. Another Apple Account turns it off rather than mix two homes.
+- **Legal links** *(product owner)*. P-01's Terms opens Apple's standard EULA. Privacy opens S-09, built minimally here; P12 finishes it. The owner hosts the same text at a URL for App Store Connect.
+- **The limits** live in `ItemService`, which reads the cached entitlement, so every path is held to them without views deciding anything:
+  - **Gated:** creating an item past 25 (the editor, Duplicate, Save All), turning on a 4th *active* reminder (on, ending today or later, on an item that isn't deleted; loans don't count), Export (R-02, R-03, the proof pack), Back Up, and S-03's switch.
+  - **Never gated:** view, search, move, delete, restore from Recently Deleted, restoring a backup, editing, preview seeding, and reminders already on. They keep firing after a refund: limits apply only when something new is added.
+  - **Save All is all or nothing:** past the limit nothing saves and the cards stay in review (01 §15).
+  - **The draft is kept:** P-01 opens over the editor or the screen, and the action runs again after the unlock.
+- **P-01 opens only from the triggers** and from S-01's and S-02's Unlock buttons, never on launch.
+  - Each screen presents it as its own sheet (`.paywall($request)`), so it can open over a sheet such as the editor. It's a form sheet on regular width.
+  - `ProductView` is drawn by `NookProductViewStyle` as the board's card and button.
+  - An Ask to Buy approval or a purchase on another device turns the open paywall into its success state.
+- **The entitlement** is `Transaction.currentEntitlements` for `pranav.nook.pro`, skipping revoked purchases. `Transaction.updates` keeps it current, and it's cached in the App Group (`EntitlementCache`) so launch shows the right tier at once, offline too. Restore is `AppStore.sync()`. S-02 shows "Bought …" or "Shared with you through Family Sharing."
+- **Duplicates from sync merge by `id`** (`DedupeService`): once at open and a second after each import. Leaves go first, then items, spots and rooms. The earliest copy stays, and children only a later copy holds move onto it.
+  - **Onboarding's preset rooms get stable ids** (`RoomPreset.onboardingID`), so two devices set up apart merge their Kitchen. Rooms added later keep random ids.
+- **Testing:**
+  - `Nook.storekit` is on the shared scheme (now checked in) and drives `StoreKitTests` with `SKTestSession`.
+  - UI tests stay forced Pro, or Free with `-uiTestingFree`. `-uiTestingPurchase success|pending|failed` stands in for the App Store sheet, and `PreviewStore`'s `atLimit` seed is the Free tier full.
+  - UI tests never sync, and each starts with S-03 off.
+  - `-initializeCloudKitSchema YES` (DEBUG) creates the CloudKit record types in Development (D59).
+
+*Affects:* 00 §1, §7; 01 P-01, S-01, S-02, S-03, S-07, S-09, R-04; 03 §8.10; 04 §4, §5; D9; `NookKit` (`Entitlements`, `Sync/`, `ItemService`, `BlobStore`, `NookStore`, `RoomPreset`, `RoomService`, `PreviewStore`), `Nook/App`, `Features/Paywall`, `Features/Settings`, `ItemEditor`, `ManualTagScreen`, `ItemSupport`, `ItemGrid`, `ItemDetailScreen`, `WarrantiesScreen`, `ReportPreviewScreen`, `CSVExportSheet`, `BackupScreen`, `NotificationsScreen`, `Nook.entitlements`, `Info.plist`, `Nook.xcscheme`, `NookTests/Nook.storekit`.
+
 **D59 · 2026-10-13 · Accepted** — **iOS 27 SDK checks for P11 (D23, D11).** Each API was typechecked against the iOS 27.0 SDK (Xcode 27.0, 27A266a) with Swift 6. The runtime checks used a throwaway probe app on the iOS 27.0 iPhone SE simulator, which isn't signed into iCloud.
 - **SwiftData + CloudKit on an existing store works.** `ModelConfiguration(schema:url:cloudKitDatabase: .private("iCloud.pranav.nook"))` opens the same file a `.none` container wrote, and all 3 rows were still there. A new row saved, and reopening with `.none` kept all 4. A container can be released and reopened on the same URL in one process, so P11 can switch sync on and off by reopening the store (plan T7). **Owner check:** that the rows saved before sync was turned on actually export needs a device, or a simulator signed into a sandbox iCloud account.
 - **Opening `.private` without the iCloud entitlement crashes the app** (SIGTRAP in `PFCloudKitContainerProvider containerWithIdentifier:`). So `NookStore` opens `.private` only when sync is on, and no test or preview turns it on.

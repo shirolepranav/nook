@@ -567,6 +567,7 @@ Each state is a designed screen: **illustration, one sentence, one action** (PRD
 
 ### 8.10 Paywall (PRD §7)
 - One screen, one price, one button. Warm illustration of a full shelf, the user's own numbers ("You've documented 25 items worth $4,380") in `total` type, three short benefit lines, the native StoreKit product view, Restore Purchases, and a close button that's always visible.
+- One price card: "Nook Pro · One-time purchase · $14.99" with no launch-price line (D58), then the primary "Unlock Nook Pro" and "Pay once. No subscription. Family Sharing included."
 - No countdown timers, fake discounts or guilt. On success: a warm settle animation and a success haptic, then straight back to what the user was doing.
 
 ---
