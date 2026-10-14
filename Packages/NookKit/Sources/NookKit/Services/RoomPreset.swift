@@ -1,3 +1,6 @@
+import CryptoKit
+import Foundation
+
 /// The suggested rooms in onboarding (O-02), each with a soft color and an SF Symbol chosen
 /// for it (PRD §3). Colors are `RoomColor` raw values (NookUI).
 public struct RoomPreset: Hashable, Sendable {
@@ -19,6 +22,15 @@ public struct RoomPreset: Hashable, Sendable {
         RoomPreset(name: "Basement", symbol: "stairs", colorKey: "clay"),
         RoomPreset(name: "Attic", symbol: "house.lodge", colorKey: "butter"),
     ]
+
+    /// The id onboarding gives this room: the same on every device, so two iPhones set up
+    /// apart merge their Kitchen when iCloud sync meets them (`DedupeService`, D58). Rooms added
+    /// later get a random id, so a second Kitchen made on purpose stays separate.
+    public static func onboardingID(for name: String) -> UUID {
+        let bytes = Array(Insecure.SHA1.hash(data: Data(("nook.room." + name).utf8)))
+        return UUID(uuid: (bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7],
+                           bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]))
+    }
 
     /// The 8 room colors, in the order new custom rooms take them (03 §2.3).
     public static let colorKeys = ["clay", "sage", "sky", "lavender", "butter", "rose", "stone", "mint"]

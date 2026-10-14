@@ -9,6 +9,8 @@ final class AppRouter {
     var openedItem: Item?
     /// A box label scanned with the Camera app (F8): the container in a sheet.
     var openedSpot: Spot?
+    /// Set when the store reopens after S-03's switch, so Settings comes back on S-03 (D58).
+    var reopensSync = false
 
     func open(_ item: Item) {
         openedItem = item

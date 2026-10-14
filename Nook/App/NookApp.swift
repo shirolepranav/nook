@@ -24,6 +24,7 @@ struct NookApp: App {
             defaults.set(arguments[flag + 1] == "YES", forKey: PreferenceKey.hasOnboarded)
             // S-11's switch starts on for every UI test; one test turns it off (D53).
             defaults.removeObject(forKey: CapabilityRouter.useAppleIntelligenceKey)
+            SyncSettings.isOn = false   // S-03 starts off (D58)
         }
         #endif
     }
@@ -31,11 +32,14 @@ struct NookApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if let container = app.container {
+                if app.isSwitchingStore {
+                    NookColor.canvas.ignoresSafeArea()
+                } else if let container = app.container {
                     RootView()
                         .modelContainer(container)
                         .environment(app.router)
                         .environment(app.entitlements)
+                        .environment(app.syncStatus)
                         .environment(\.reminders, app.reminders)
                 } else {
                     StoreErrorView { app.openStore() }
@@ -63,6 +67,16 @@ struct NookApp: App {
         }
         #endif
         // Failing to open leaves the file untouched; the user sees a calm error, not a crash.
-        return try? NookStore.makeContainer()
+        // If iCloud can't be set up, the store opens on this device alone.
+        return (try? NookStore.makeContainer(sync: syncs)) ?? (try? NookStore.makeContainer())
+    }
+
+    /// Whether this launch's store mirrors to iCloud: on in S-03 and Pro (D58). Never for UI
+    /// tests' in-memory stores.
+    static var syncs: Bool {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingStore") { return false }
+        #endif
+        return SyncSettings.isActive
     }
 }

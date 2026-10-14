@@ -184,7 +184,10 @@ private struct TabShell: View {
         guard let files = try? items.referencedFiles() else { return }
         let blobs = BlobStore.shared
         await Task.detached(priority: .background) {
-            blobs.sweepOrphans(photos: files.photos, receipts: files.receipts)
+            // ponytail: with sync on, a file can arrive well before its row; 30 days covers any
+            // sane gap. Files orphaned while syncing stay in iCloud until a purge.
+            blobs.sweepOrphans(photos: files.photos, receipts: files.receipts,
+                               grace: SyncSettings.isActive ? 30 * 86_400 : 3600)
         }.value
     }
 }
