@@ -47,7 +47,7 @@ Each state is a designed screen with an **illustration, one sentence and one act
 - **Empty:** e.g. empty room: "Nothing here yet. Scan this room to fill it in 30 seconds." → Scan room.
 - **Loading:** skeleton photo cards in the warm palette; spinners only for waits under 1 second. [Inferred]
 - **AI unavailable or failed:** never shown as an error. The screen quietly becomes its Classic version with the user's photo already loaded (PRD §8 step 5).
-- **Error (rare: storage full, iCloud, StoreKit):** plain reason, reassurance ("Your items are safe on this iPhone"), and Retry. Copy that names the device says "iPad" on iPad (D29).
+- **Error (rare: storage full, iCloud, StoreKit):** plain reason, reassurance ("Your items are safe on this iPhone"), and Retry. Copy that names the device says "iPad" on iPad (D29), through a device variation in the string catalog (D57).
 - **Offline:** not a state. The app needs no network except StoreKit and optional iCloud (PRD §9).
 
 ### 1.4 Free vs Pro gating (PRD §7)

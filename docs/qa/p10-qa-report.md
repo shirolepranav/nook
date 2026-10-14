@@ -80,5 +80,5 @@ Closing P10 turned up these problems, all fixed:
 
 ## Open bugs
 None found. Out of scope, noted for later:
-- Copy that names the device ("on this iPhone") doesn't yet switch to "iPad" on iPad (01 §1.3, D29). This applies app-wide, including P8's S-11; String Catalog device variations would cover it.
+- ~~Copy that names the device ("on this iPhone") said "iPhone" on iPad (01 §1.3, D29).~~ Fixed in this phase with String Catalog device variations (D57). `DeviceCopyTests` checks it on the SE and the iPad.
 - A label scanned while another sheet is open can't show its container over that sheet; the system keeps the open sheet.
