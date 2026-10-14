@@ -26,12 +26,61 @@
 				<string>com.adobe.pdf</string>
 			</array>
 		</dict>
+		<!-- S-04 (D12, D56): a .nookbackup opened from Files offers Merge or Replace. -->
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Nook Backup</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>pranav.nook.backup</string>
+			</array>
+		</dict>
+	</array>
+	<!-- D56: conforms only to public.data, so Files keeps a backup whole instead of unzipping it. -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>pranav.nook.backup</string>
+			<key>UTTypeDescription</key>
+			<string>Nook Backup</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>nookbackup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<!-- D19, F8: box labels' QR codes open nook://spot/<qrID> from the Camera app. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>pranav.nook</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>nook</string>
+			</array>
+		</dict>
 	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
 	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
 	<key>NSCameraUsageDescription</key>
 	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
+	<!-- H-06 Save Image (D56): add-only, asked the first time a label is saved. -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Nook saves box labels to your photos. It can't see the rest of your library.</string>
 	<!-- D13, 04 §7: background refresh tops up the rolling reminder list when the app isn't opened. -->
 	<key>UIBackgroundModes</key>
 	<array>

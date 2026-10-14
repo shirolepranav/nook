@@ -4,7 +4,7 @@ import NookKit
 import NookUI
 
 /// H-03 Spot / container: where it is, what's inside. A container moves with everything in
-/// it (Move Container). The QR label (H-06) arrives in P10.
+/// it (Move Container), and prints its QR label (H-06, F8).
 struct SpotScreen: View {
     let spot: Spot
     @State private var editing = false
@@ -15,6 +15,7 @@ struct SpotScreen: View {
     @State private var selection: Set<UUID>?
     @State private var toast: ToastMessage?
     @State private var moving = false
+    @State private var labeling = false
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
 
@@ -83,6 +84,9 @@ struct SpotScreen: View {
                 }
                 if spot.isContainer {
                     ToolbarItem(placement: .secondaryAction) {
+                        Button("Print or Share Label", systemImage: "qrcode") { labeling = true }
+                    }
+                    ToolbarItem(placement: .secondaryAction) {
                         Button("Move Container", systemImage: "arrow.up.and.down.and.arrow.left.and.right") {
                             moving = true
                         }
@@ -91,6 +95,7 @@ struct SpotScreen: View {
             }
         }
         .quickAdd(isPresented: $addsItem, at: location)
+        .sheet(isPresented: $labeling) { QRLabelSheet(spot: spot) }
         .fullScreenCover(isPresented: $viewsPhoto) {
             if let photo = spot.photo { SpotPhotoViewer(fileName: photo.fileName) }
         }

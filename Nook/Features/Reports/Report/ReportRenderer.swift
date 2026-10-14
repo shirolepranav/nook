@@ -111,16 +111,14 @@ struct ReportRenderer {
         return max(CGPDFDocument(blobs.url(for: receipt.fileName, in: .receipts) as CFURL)?.numberOfPages ?? 1, 1)
     }
 
-    /// Thumbnails decode off the main actor, all at once (400 px, D7).
+    /// Thumbnails, decoded off the main actor one at a time (400 px, D7): decoding them all
+    /// at once in a task group deadlocked ImageIO's HEIC decoder on the cooperative pool (D56).
     func loadThumbnails(limit: Int = .max) async -> [String: CGImage] {
-        let files = Set(report.sections.flatMap(\.lines).compactMap(\.photoFile).prefix(limit))
-        let blobs = blobs
-        return await withTaskGroup(of: (String, CGImage?).self) { group in
-            for file in files { group.addTask { (file, await blobs.thumbnail(file)) } }
-            var images: [String: CGImage] = [:]
-            for await (file, image) in group { images[file] = image }
-            return images
+        var images: [String: CGImage] = [:]
+        for file in report.sections.flatMap(\.lines).compactMap(\.photoFile).prefix(limit) where images[file] == nil {
+            images[file] = await blobs.thumbnail(file)
         }
+        return images
     }
 }
 

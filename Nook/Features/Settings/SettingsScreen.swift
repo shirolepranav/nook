@@ -14,6 +14,7 @@ struct SettingsScreen: View {
             List {
                 // Grouped as on the S-01 board; rows join their sections as features arrive.
                 Section {
+                    row("Backup & Restore", "externaldrive") { BackupScreen() }
                     row("Recently Deleted", "trash") { RecentlyDeletedScreen() }
                 } header: {
                     header("Your data")

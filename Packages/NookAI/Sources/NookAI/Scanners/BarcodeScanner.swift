@@ -2,8 +2,8 @@ import SwiftUI
 import Vision
 import VisionKit
 
-/// The system barcode scanner (C-07): retail codes (EAN-8, EAN-13, UPC-E) and Code 128 for
-/// store tags. The first valid read wins; a retail code must pass its check digit (`EAN`).
+/// The system barcode scanner (C-07): retail codes (EAN-8, EAN-13, UPC-E), Code 128 for
+/// store tags, and Nook's own box labels (QR, D19's fallback for the Camera app). The first valid read wins; a retail code must pass its check digit (`EAN`).
 /// Lives in NookAI because only NookAI imports VisionKit.
 public struct BarcodeScanner: UIViewControllerRepresentable {
     /// False on the simulator and on devices without the scanner (D49); C-07 is manual entry then.
@@ -17,7 +17,7 @@ public struct BarcodeScanner: UIViewControllerRepresentable {
 
     public func makeUIViewController(context: Context) -> DataScannerViewController {
         let scanner = DataScannerViewController(
-            recognizedDataTypes: [.barcode(symbologies: [.ean8, .ean13, .upce, .code128])],
+            recognizedDataTypes: [.barcode(symbologies: [.ean8, .ean13, .upce, .code128, .qr])],
             qualityLevel: .balanced, recognizesMultipleItems: false,
             isHighFrameRateTrackingEnabled: false, isGuidanceEnabled: false, isHighlightingEnabled: true)
         scanner.delegate = context.coordinator
@@ -48,9 +48,14 @@ public struct BarcodeScanner: UIViewControllerRepresentable {
             }
         }
 
-        /// Retail codes must check out; Code 128 carries its own check inside the symbol.
+        /// Retail codes must check out; Code 128 carries its own check inside the symbol; a QR
+        /// code counts only when it's a Nook label.
         static func accepts(_ code: String, symbology: VNBarcodeSymbology) -> Bool {
-            symbology == .code128 ? !code.isEmpty : EAN.isValid(code)
+            switch symbology {
+            case .code128: !code.isEmpty
+            case .qr: code.hasPrefix("nook://")
+            default: EAN.isValid(code)
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ import NookKit
 @Observable @MainActor
 final class AppRouter {
     var openedItem: Item?
+    /// A box label scanned with the Camera app (F8): the container in a sheet.
+    var openedSpot: Spot?
 
     func open(_ item: Item) {
         openedItem = item

@@ -103,7 +103,8 @@ struct ReportPreviewScreen: View {
     private var bottomBar: some View {
         Group {
             if drawn != nil {
-                Button("Cancel") { work?.cancel() }.buttonStyle(.nookSecondary)
+                Button { work?.cancel() } label: { Text("Cancel").frame(maxWidth: .infinity) }
+                    .buttonStyle(.nookSecondary)
             } else if entitlements.canExport {
                 Button(action: make) {
                     Label("Create Report", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity)

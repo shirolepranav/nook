@@ -32,6 +32,8 @@ private struct TabShell: View {
     @State private var scansRoom = false
     @State private var openedReceipt: ReceiptSource?
     @State private var openedItem: ItemDraft?
+    @State private var openedBackup: URL?
+    @State private var toast: ToastMessage?
     @State private var library: SearchLibrary?
     @Environment(AppRouter.self) private var router
     @Environment(\.reminders) private var reminders
@@ -84,8 +86,18 @@ private struct TabShell: View {
         .focusedSceneValue(\.scanRoom, MenuAction { scansRoom = true })
         .quickAdd(isPresented: $addsItem, at: selectedRoom.map { Location(room: $0) })
         .roomScan(isPresented: $scansRoom, at: selectedRoom.map { Location(room: $0) })
-        // "Open in Nook" from the share sheet or Files (D48): the receipt review, then a new item.
-        .onOpenURL { url in openedReceipt = .file(url) }
+        // A box label's code (F8), a backup from Files (S-04), or "Open in Nook" from the share
+        // sheet or Files (D48): the receipt review, then a new item.
+        .onOpenURL { url in
+            if let link = DeepLink(url: url) {
+                open(link)
+            } else if url.pathExtension == BackupService.fileExtension {
+                openedBackup = url
+            } else {
+                openedReceipt = .file(url)
+            }
+        }
+        .restoreBackup($openedBackup, toast: $toast)
         .receiptScan($openedReceipt) { result in
             var draft = ItemDraft(currencyCode: HomeCurrency.code, location: selectedRoom.map { Location(room: $0) })
             result.apply(to: &draft)
@@ -129,11 +141,37 @@ private struct TabShell: View {
         .sheet(item: Bindable(router).openedItem) { item in
             NavigationStack { ItemDetailScreen(item: item).itemNavigation() }
         }
+        .sheet(item: Bindable(router).openedSpot) { spot in
+            NavigationStack {
+                SpotScreen(spot: spot)
+                    .itemNavigation()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Done", systemImage: "xmark") { router.openedSpot = nil }
+                        }
+                    }
+            }
+        }
+        .toast($toast)
         .task {
             // Find's index: built after the first frame, then kept current on every save (04 §6).
             let library = SearchLibrary(container: context.container)
             self.library = library
             await library.keepCurrent()
+        }
+    }
+
+    /// `nook://spot/<qrID>` (D19): the container, or a note if it's been deleted.
+    private func open(_ link: DeepLink) {
+        switch link {
+        case .spot(let qrID):
+            let spot = try? context.fetch(FetchDescriptor<Spot>(predicate: #Predicate { $0.qrID == qrID })).first
+            if let spot {
+                router.openedItem = nil
+                router.openedSpot = spot
+            } else {
+                toast = ToastMessage(symbol: "shippingbox", "That box isn’t in Nook anymore.")
+            }
         }
     }
 

@@ -163,6 +163,7 @@ private struct BarcodeScanFlow: ViewModifier {
     @State private var opened: Item?
     @State private var newItem: ItemDraft?
     @Environment(\.modelContext) private var context
+    @Environment(\.openURL) private var openURL
 
     func body(content: Content) -> some View {
         content
@@ -197,6 +198,8 @@ private struct BarcodeScanFlow: ViewModifier {
         let code = scanned
         scanned = ""
         guard !code.isEmpty else { return }
+        // A box label (F8): open its container as the Camera app would (D19).
+        if let url = URL(string: code), DeepLink(url: url) != nil { return openURL(url) }
         if let item = try? ItemService(context: context).item(withBarcode: code) {
             match = item
         } else {
