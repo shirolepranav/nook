@@ -16,6 +16,7 @@ struct ItemGrid: View {
     @State private var editing: Item?
     @State private var moving: Item?
     @State private var lending: Item?
+    @State private var paywall: PaywallRequest?
 
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
 
@@ -25,6 +26,7 @@ struct ItemGrid: View {
                 cell(item)
             }
         }
+        .paywall($paywall)
         .sheet(item: $editing) { ItemEditor(item: $0) }
         .sheet(item: $lending) { LendSheet(item: $0) { toast = $0 } }
         .sheet(item: $moving) { item in
@@ -59,11 +61,16 @@ struct ItemGrid: View {
                        systemImage: item.isPrivate ? "lock.open" : "lock") {
                     toast = actions.setPrivate([item], !item.isPrivate)
                 }
-                Button("Duplicate", systemImage: "plus.square.on.square") { toast = actions.duplicate(item) }
+                Button("Duplicate", systemImage: "plus.square.on.square") { duplicate(item) }
                 Divider()
                 Button("Delete", systemImage: "trash", role: .destructive) { toast = actions.delete([item]) }
             }
         }
+    }
+
+    /// At the Free tier's 25 items, P-01 opens and the copy is made after the unlock (D58).
+    private func duplicate(_ item: Item) {
+        toast = actions.duplicate(item) { paywall = PaywallRequest(reason: .item) { duplicate(item) } }
     }
 }
 

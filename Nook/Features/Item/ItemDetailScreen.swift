@@ -84,6 +84,8 @@ private struct ItemDetail: View {
     @Environment(\.undoManager) private var undoManager
     @Environment(\.dismiss) private var dismiss
 
+    @State private var paywall: PaywallRequest?
+
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
     private var hasPhotos: Bool { !(item.photos ?? []).isEmpty }
 
@@ -139,7 +141,7 @@ private struct ItemDetail: View {
                 Button("Export Proof Pack", systemImage: "doc.richtext") { exportsProof = true }
             }
             ToolbarItem(placement: .secondaryAction) {
-                Button("Duplicate", systemImage: "plus.square.on.square") { toast = actions.duplicate(item) }
+                Button("Duplicate", systemImage: "plus.square.on.square") { duplicate() }
             }
             ToolbarItem(placement: .secondaryAction) {
                 Button("Delete", systemImage: "trash", role: .destructive) { confirmsDelete = true }
@@ -173,6 +175,7 @@ private struct ItemDetail: View {
             }
         }
         .nookHaptic(.saved, trigger: moves)
+        .paywall($paywall)
         .toast($toast)
     }
 
@@ -386,7 +389,18 @@ private struct ItemDetail: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .nookCard(elevation: .flat)
         .accessibilityAction(named: warranty.remindersOn ? Text("Turn Reminders Off") : Text("Turn Reminders On")) {
-            toast = actions.setReminders(warranty, on: !warranty.remindersOn)
+            setReminders(warranty, on: !warranty.remindersOn)
+        }
+    }
+
+    /// The Free tier's limits open P-01, and the action runs again after the unlock (D58).
+    private func duplicate() {
+        toast = actions.duplicate(item) { paywall = PaywallRequest(reason: .item) { duplicate() } }
+    }
+
+    private func setReminders(_ warranty: Warranty, on: Bool) {
+        toast = actions.setReminders(warranty, on: on) {
+            paywall = PaywallRequest(reason: .reminder) { setReminders(warranty, on: on) }
         }
     }
 

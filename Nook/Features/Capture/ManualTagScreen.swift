@@ -151,12 +151,14 @@ final class ManualTagModel {
     }
 
     /// Save all: each accepted card becomes an item, placed through LocationService (D38).
+    /// Past the Free tier's 25 it throws before saving any, so the cards stay in review (01 §15).
     func saveAll(context: ModelContext, location: Location?) async throws -> [Item] {
+        let service = ItemService(context: context)
+        try service.checkCanAdd(tags.count(where: \.isAccepted))
         var drafts: [ItemDraft] = []
         for tag in tags where tag.isAccepted {
             if let draft = await draft(for: tag, at: location) { drafts.append(draft) }
         }
-        let service = ItemService(context: context)
         let items = try drafts.map { try service.create($0) }
         try context.save()
         return items
@@ -180,6 +182,7 @@ struct ManualTagScreen: View {
     @State private var confirmsDiscard = false
     @State private var isSaving = false
     @State private var failure = false
+    @State private var paywall: PaywallRequest?
     @State private var suggestions: [String] = []
     @FocusState private var nameFocused: Bool
     @Environment(\.modelContext) private var context
@@ -230,6 +233,7 @@ struct ManualTagScreen: View {
             Button("Discard", role: .destructive) { finish(edited.isEmpty ? nil : edited) }
             Button("Keep Tagging", role: .cancel) {}
         }
+        .paywall($paywall)
         .alert(Text("Couldn’t save right now. Your photos are still here."), isPresented: $failure) {
             Button("OK") {}
         }
@@ -497,6 +501,8 @@ struct ManualTagScreen: View {
             do {
                 let items = try await model.saveAll(context: context, location: location)
                 finish(edited + items)
+            } catch ItemService.Failure.itemLimit {
+                paywall = PaywallRequest(reason: .items) { saveAll() }   // D58
             } catch {
                 context.rollback()
                 failure = true

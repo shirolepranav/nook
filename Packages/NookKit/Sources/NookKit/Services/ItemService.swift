@@ -161,7 +161,12 @@ public struct ItemService {
     public func activeReminderCount() throws -> Int {
         let today = Calendar.current.startOfDay(for: now())
         return try context.fetch(FetchDescriptor<Warranty>(predicate: #Predicate { $0.endDate != nil }))
-            .count { $0.remindersOn && $0.endDate! >= today && $0.item != nil && $0.item?.deletedAt == nil }
+            .count { Self.isActiveReminder($0, today: today) }
+    }
+
+    public static func isActiveReminder(_ warranty: Warranty, today: Date) -> Bool {
+        guard let end = warranty.endDate, let item = warranty.item else { return false }
+        return warranty.remindersOn && end >= today && item.deletedAt == nil
     }
 
     /// Throws `.reminderLimit` when turning on one more reminder would pass the Free tier's 3.

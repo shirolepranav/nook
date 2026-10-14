@@ -9,6 +9,7 @@ import QuickLook
 struct ReportPreviewScreen: View {
     let renderer: ReportRenderer
     @Environment(EntitlementStore.self) private var entitlements
+    @State private var paywall: PaywallRequest?
     @AppStorage(MoneyText.hideValuesKey) private var hideValues = false
     @State private var thumbnails: [String: CGImage] = [:]
     @State private var drawn: (done: Int, total: Int)?
@@ -46,6 +47,7 @@ struct ReportPreviewScreen: View {
         .toolbarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(drawn != nil)   // Cancel is the way out while it renders
         .quickLookPreview($pdf)
+        .paywall($paywall)
         .nookHaptic(.saved, trigger: made)
         .task { thumbnails = await renderer.loadThumbnails(limit: ReportPaper.firstPageRows) }
         .onDisappear { work?.cancel() }
@@ -113,8 +115,8 @@ struct ReportPreviewScreen: View {
                 }
                 .buttonStyle(.nookPrimary)
             } else {
-                // P11: opens the paywall (P-01). Until then only UI tests reach the Free state (D56).
-                Button {} label: {
+                // Export is a moment of value: P-01, then the report is made (PRD §7, D58).
+                Button { paywall = PaywallRequest(reason: .export) { make() } } label: {
                     Label("Unlock Pro to Export", systemImage: "lock.open").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.nookPrimary)

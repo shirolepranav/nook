@@ -15,6 +15,7 @@ extension UTType {
 struct BackupScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(EntitlementStore.self) private var entitlements
+    @State private var paywall: PaywallRequest?
     @AppStorage(PreferenceKey.reportHomeName) private var homeName = ""
     @AppStorage(PreferenceKey.lastBackup) private var lastBackup: Double = 0
     @State private var size: Int64?
@@ -64,6 +65,7 @@ struct BackupScreen: View {
             if case .success(let url) = result { restoring = url }
         }
         .restoreBackup($restoring, toast: $toast)
+        .paywall($paywall)
         .toast($toast)
         .task { size = try? BackupService(context: context).estimatedSize() }
         .onDisappear { work?.cancel() }
@@ -103,8 +105,9 @@ struct BackupScreen: View {
                 }
                 .buttonStyle(.nookPrimary)
             } else {
-                // P11: opens the paywall (P-01). Until then only UI tests see this (D56).
-                Button {} label: { Label("Unlock Pro to Back Up", systemImage: "lock.open").frame(maxWidth: .infinity) }
+                Button { paywall = PaywallRequest(reason: .backup) { create() } } label: {
+                    Label("Unlock Pro to Back Up", systemImage: "lock.open").frame(maxWidth: .infinity)
+                }
                     .buttonStyle(.nookPrimary)
             }
             if let detail { detail.font(.nookFootnote).foregroundStyle(NookColor.textSecondary) }

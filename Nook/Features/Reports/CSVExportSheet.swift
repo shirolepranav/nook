@@ -7,6 +7,7 @@ import NookUI
 struct CSVExportSheet: View {
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
     @Environment(EntitlementStore.self) private var entitlements
+    @State private var paywall: PaywallRequest?
     @Environment(\.dismiss) private var dismiss
     @State private var file: URL?
     @State private var saving = false
@@ -45,6 +46,7 @@ struct CSVExportSheet: View {
                 }
             }
             .toast($toast)
+            .paywall($paywall)
         }
         .presentationDetents([.medium, .large])
         .task { file = write() }
@@ -88,8 +90,10 @@ struct CSVExportSheet: View {
     @ViewBuilder
     private var actions: some View {
         if !entitlements.canExport {
-            // P11: opens the paywall (P-01). Until then only UI tests see this (D56).
-            Button {} label: { Label("Unlock Pro to Export", systemImage: "lock.open").frame(maxWidth: .infinity) }
+            // Unlocking shows Share and Save to Files here at once (D58).
+            Button { paywall = PaywallRequest(reason: .export) } label: {
+                Label("Unlock Pro to Export", systemImage: "lock.open").frame(maxWidth: .infinity)
+            }
                 .buttonStyle(.nookPrimary)
         } else if let file {
             ShareLink(item: file) {
