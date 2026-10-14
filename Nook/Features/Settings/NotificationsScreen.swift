@@ -47,6 +47,9 @@ struct NotificationsScreen: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 0, leading: NookSpace.s2, bottom: 0, trailing: NookSpace.s2))
+                ReminderAllowanceNote()   // Free only (D50, D58)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 0, leading: NookSpace.s2, bottom: 0, trailing: NookSpace.s2))
             }
         }
         .scrollContentBackground(.hidden)

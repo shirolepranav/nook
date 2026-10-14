@@ -56,11 +56,16 @@ struct ItemActions {
                             isPrivate ? "Marked Private." : "No longer Private.", undo: undo)
     }
 
-    func duplicate(_ item: Item) -> ToastMessage {
+    /// `needsPro` opens P-01 when Free already has 25 items; the caller duplicates again
+    /// after the unlock (D58).
+    func duplicate(_ item: Item, needsPro: () -> Void) -> ToastMessage? {
         do {
             try service.duplicate(item)
             try context.save()
             return ToastMessage(symbol: "plus.square.on.square", "Duplicated \(item.name).", undo: undo)
+        } catch ItemService.Failure.itemLimit {
+            needsPro()
+            return nil
         } catch {
             return ToastMessage(symbol: "exclamationmark.circle", "Couldn’t duplicate it. Your items are safe.")
         }
@@ -97,8 +102,14 @@ struct ItemActions {
         return ToastMessage(symbol: "checkmark", "\(name) is back.", undo: undo)
     }
 
-    func setReminders(_ warranty: Warranty, on: Bool) -> ToastMessage {
-        warranty.remindersOn = on
+    /// `needsPro` opens P-01 when Free already has 3 reminders on (D9, D58).
+    func setReminders(_ warranty: Warranty, on: Bool, needsPro: () -> Void) -> ToastMessage? {
+        do {
+            try service.setReminders(warranty, on: on)
+        } catch {
+            needsPro()
+            return nil
+        }
         try? context.save()
         return ToastMessage(symbol: on ? "bell" : "bell.slash", on ? "Reminders on." : "Reminders off.", undo: undo)
     }

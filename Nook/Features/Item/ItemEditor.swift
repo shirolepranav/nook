@@ -52,6 +52,7 @@ struct ItemEditor: View {
     @State private var saved = 0
     @State private var failed = 0
     @State private var suggestion: Suggestion?
+    @State private var paywall: PaywallRequest?
     @FocusState private var focus: Field?
 
     @Environment(\.modelContext) private var context
@@ -123,6 +124,7 @@ struct ItemEditor: View {
                 Button("Discard Changes", role: .destructive, action: discard)
                 Button("Keep Editing", role: .cancel) {}
             }
+            .paywall($paywall)
             .alert(Text("New category"), isPresented: $namesCategory) {
                 TextField("Category", text: $newCategory)
                 Button("Cancel", role: .cancel) {}
@@ -760,6 +762,11 @@ struct ItemEditor: View {
             nameError = true
             failed += 1
             focus = .name
+        } catch ItemService.Failure.itemLimit {
+            // The 26th item: P-01 over the editor; the draft stays and saves after the unlock (D58).
+            paywall = PaywallRequest(reason: .item) { save() }
+        } catch ItemService.Failure.reminderLimit {
+            paywall = PaywallRequest(reason: .reminder) { save() }
         } catch {
             context.rollback()
             failed += 1

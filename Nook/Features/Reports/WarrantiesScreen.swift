@@ -9,6 +9,7 @@ struct WarrantiesScreen: View {
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
     @State private var toast: ToastMessage?
     @State private var flow: AddFlow?
+    @State private var paywall: PaywallRequest?
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
 
@@ -71,6 +72,8 @@ struct WarrantiesScreen: View {
                         }
                         .listRowBackground(NookColor.surface)
                     }
+                    Section { ReminderAllowanceNote() }
+                        .listRowBackground(Color.clear)
                 }
                 .scrollContentBackground(.hidden)
             }
@@ -89,6 +92,7 @@ struct WarrantiesScreen: View {
                 ItemEditor(item: item, startsAtWarranty: item != nil)
             }
         }
+        .paywall($paywall)
         .toast($toast)
     }
 
@@ -131,7 +135,14 @@ struct WarrantiesScreen: View {
     private func reminderButton(_ warranty: Warranty) -> some View {
         Button(warranty.remindersOn ? "Reminders Off" : "Reminders On",
                systemImage: warranty.remindersOn ? "bell.slash" : "bell") {
-            toast = actions.setReminders(warranty, on: !warranty.remindersOn)
+            setReminders(warranty, on: !warranty.remindersOn)
+        }
+    }
+
+    /// A 4th reminder on the Free tier opens P-01, then turns on after the unlock (D58).
+    private func setReminders(_ warranty: Warranty, on: Bool) {
+        toast = actions.setReminders(warranty, on: on) {
+            paywall = PaywallRequest(reason: .reminder) { setReminders(warranty, on: on) }
         }
     }
 }
