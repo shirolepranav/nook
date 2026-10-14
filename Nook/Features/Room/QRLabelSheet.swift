@@ -95,8 +95,10 @@ struct QRLabelSheet: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, NookSpace.s2)
         // A picture of the label: one image element, not its paper-sized text.
-        .accessibilityRepresentation {
-            Color.clear.accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook"))
+        .accessibilityHidden(true)
+        .overlay {
+            Color.clear.accessibilityElement()
+                .accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook"))
                 .accessibilityAddTraits(.isImage)
         }
     }

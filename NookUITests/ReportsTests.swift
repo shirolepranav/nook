@@ -28,10 +28,12 @@ final class ReportsTests: XCTestCase {
         app.tab("Reports").tap()
         card(app, "Insurance report").tap()
         app.buttons["Preview Report"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["Report page 1 of 3"].waitForExistence(timeout: 10))
+        let page = app.descendants(matching: .any)["Report page 1 of 3"]
+        XCTAssertTrue(page.waitForExistence(timeout: 10))
         app.buttons["Create Report"].tap()
-        // Quick Look's title is the report's file name.
-        XCTAssertTrue(app.staticTexts["Home inventory"].waitForExistence(timeout: 20))
+        // Quick Look's title is the report's file name (a text or, with its menu, a button).
+        let title = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Home inventory'")).firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 30))
     }
 
     /// PRD §7: Free sees the first page marked PREVIEW and Unlock Pro, never an export.

@@ -73,7 +73,8 @@ struct CSVExportSheet: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .nookCard(radius: NookRadius.medium, elevation: .flat)
         // One element that reads the rows; the table itself is a glimpse, cut to fit.
-        .accessibilityRepresentation { Color.clear.accessibilityLabel(Text(previewDescription)) }
+        .accessibilityHidden(true)
+        .overlay { Color.clear.accessibilityElement().accessibilityLabel(Text(previewDescription)) }
     }
 
     /// "Preview of the first rows: Espresso machine, Kitchen, 649.00; …".

@@ -61,24 +61,24 @@ struct ReportPreviewScreen: View {
             .warmShadow(.lifted)
             .blur(radius: hideValues ? NookSpace.s1 : 0)   // Hide values covers the page too (F11)
             // One element: the page's own text is paper at a fixed size, not app UI.
-            .accessibilityRepresentation {
-                Color.clear.accessibilityLabel(Text("Report page 1 of \(renderer.pageCount)")).accessibilityAddTraits(.isImage)
+            .accessibilityHidden(true)
+            .overlay {
+                Color.clear.accessibilityElement()
+                    .accessibilityLabel(Text("Report page 1 of \(renderer.pageCount)"))
+                    .accessibilityAddTraits(.isImage)
             }
     }
 
-    /// "18 pages · 126 items · $24,380".
+    /// "18 pages · 126 items · $24,380", one line of text; values mask with Hide values (F11).
     private var summary: some View {
-        HStack(spacing: NookSpace.half) {
-            Text("\(renderer.pageCount) pages · \(renderer.report.itemCount) items")
-            ForEach(renderer.report.totals, id: \.currencyCode) { total in
-                Text(verbatim: "·")
-                MoneyText(total.amount, currencyCode: total.currencyCode, font: .nookMeta)
-            }
-        }
-        .font(.nookMeta)
-        .foregroundStyle(NookColor.textSecondary)
-        .multilineTextAlignment(.center)
-        .accessibilityElement(children: .combine)
+        let totals = renderer.report.totals.map { hideValues ? "••••" : $0.amount.formatted(.currency(code: $0.currencyCode)) }
+        let text = ([String(localized: "\(renderer.pageCount) pages"), String(localized: "\(renderer.report.itemCount) items")] + totals)
+            .joined(separator: " · ")
+        return Text(verbatim: text)
+            .font(.nookMeta)
+            .foregroundStyle(NookColor.textSecondary)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private func generating(_ drawn: (done: Int, total: Int)) -> some View {
