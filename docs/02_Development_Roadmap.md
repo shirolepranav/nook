@@ -181,7 +181,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — PDF and CSV golden-file comparisons; backup round-trip test (export, wipe, restore, compare). Smoke — S1–S10.
 
 ### P11 · Nook Pro & iCloud sync
-**Status:** In QA (branch `p11/pro-sync`, D58, D59; QA report `docs/qa/p11-qa-report.md`). Built; minimal pass on the iPhone SE (2026-10-14). Still to do: the owner's App Store Connect and CloudKit setup, sandbox purchases on a device, the two-device script (`docs/qa/p11-sync-script.md`), and smoke S1–S11 on CI.
+**Status:** In QA (merged to `main` 2026-10-14, PR #40; D58, D59; QA report `docs/qa/p11-qa-report.md`). Built; minimal pass on the iPhone SE and 13-inch iPad, and CI on the PR (one known flaky Find audit, which passes on rerun). Still to do: the owner's App Store Connect and CloudKit setup, sandbox purchases on a device, and the two-device script (`docs/qa/p11-sync-script.md`).
 **Scope:** StoreKit 2 non-consumable with the native `ProductView`; entitlement checked with `Transaction.currentEntitlements` and cached offline (PRD §7); paywall (P-01) at the 26th item, Export and the 4th reminder; Restore Purchases; Family Sharing; one $14.99 price (no introductory offer, D58); iCloud sync with the CloudKit private database for Pro users (S-03).
 **Acceptance:** the paywall never appears on launch; free users can always view, search and delete everything; two devices sync items, photos and moves.
 **QA:** Ask to Buy, interrupted purchases, purchasing offline, signing out of iCloud mid-sync, iCloud storage full, edits on two offline devices.
