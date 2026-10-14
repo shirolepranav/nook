@@ -77,7 +77,7 @@ public enum PreviewStore {
             ("Spare car key", "Other", nil, spot("Kitchen", "Top drawer"), false),
             ("AA batteries", "Other", nil, spot("Kitchen", "Top drawer"), false),
         ]
-        let items = ItemService(context: context)
+        let items = ItemService(context: context, isPro: { true })   // seeding isn't a user add (D58)
         for (index, entry) in entries.enumerated() {
             var draft = ItemDraft(currencyCode: Locale.current.currency?.identifier ?? "USD", location: entry.3)
             (draft.name, draft.category, draft.price, draft.isPrivate) = (entry.0, entry.1, entry.2, entry.4)

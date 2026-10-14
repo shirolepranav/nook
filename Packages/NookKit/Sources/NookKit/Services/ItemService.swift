@@ -120,6 +120,10 @@ public struct ItemService {
         case emptyName
         case tooManyPhotos
         case noPerson
+        /// The Free tier's 25 items or 3 reminders (D9, D58): the caller opens P-01 and keeps
+        /// the draft.
+        case itemLimit
+        case reminderLimit
     }
 
     /// D7.
@@ -130,11 +134,59 @@ public struct ItemService {
     let context: ModelContext
     let blobs: BlobStore
     let now: () -> Date
+    let isPro: () -> Bool
 
-    public init(context: ModelContext, blobs: BlobStore = .shared, now: @escaping () -> Date = Date.init) {
+    /// `isPro` reads the cached entitlement (`EntitlementStore` keeps it current), so every
+    /// caller is held to the Free limits without passing the store around.
+    public init(context: ModelContext, blobs: BlobStore = .shared, now: @escaping () -> Date = Date.init,
+                isPro: @escaping () -> Bool = { EntitlementCache.isPro }) {
         self.context = context
         self.blobs = blobs
         self.now = now
+        self.isPro = isPro
+    }
+
+    // MARK: Free limits (D9, D58)
+
+    /// Throws `.itemLimit` when `count` more items would pass the Free tier's 25. Save All
+    /// checks its whole batch first, so it saves all or nothing (01 §15).
+    public func checkCanAdd(_ count: Int = 1) throws {
+        guard !isPro() else { return }
+        let existing = try context.fetchCount(FetchDescriptor<Item>(predicate: #Predicate { $0.deletedAt == nil }))
+        guard EntitlementStore.canAddItems(isPro: false, existing: existing, adding: count) else { throw Failure.itemLimit }
+    }
+
+    /// Warranty reminders that can still fire: on, ending today or later, on an item that
+    /// isn't deleted (D58). Loans don't count (D9).
+    public func activeReminderCount() throws -> Int {
+        let today = Calendar.current.startOfDay(for: now())
+        return try context.fetch(FetchDescriptor<Warranty>(predicate: #Predicate { $0.endDate != nil }))
+            .count { $0.remindersOn && $0.endDate! >= today && $0.item != nil && $0.item?.deletedAt == nil }
+    }
+
+    /// Throws `.reminderLimit` when turning on one more reminder would pass the Free tier's 3.
+    /// Reminders already on keep working whatever the tier: nothing entered is locked away.
+    public func checkCanAddReminder() throws {
+        guard !isPro() else { return }
+        guard EntitlementStore.canAddReminder(isPro: false, active: try activeReminderCount()) else {
+            throw Failure.reminderLimit
+        }
+    }
+
+    /// R-04's swipe and I-01's action (F4).
+    public func setReminders(_ warranty: Warranty, on: Bool) throws {
+        guard on != warranty.remindersOn else { return }
+        if on, let end = warranty.endDate, end >= Calendar.current.startOfDay(for: now()) { try checkCanAddReminder() }
+        warranty.remindersOn = on
+    }
+
+    /// Whether saving `draft` would turn on a reminder that isn't on now.
+    private func addsReminder(_ draft: ItemDraft, to item: Item?) -> Bool {
+        guard let warranty = draft.warranty, warranty.remindersOn,
+              let end = warranty.end(purchasedOn: draft.purchaseDate),
+              end >= Calendar.current.startOfDay(for: now()) else { return false }
+        guard let current = item?.primaryWarranty, let currentEnd = current.endDate else { return true }
+        return !(current.remindersOn && currentEnd >= Calendar.current.startOfDay(for: now()))
     }
 
     // MARK: Create and edit
@@ -142,7 +194,8 @@ public struct ItemService {
     /// Only the name is required (F2).
     @discardableResult
     public func create(_ draft: ItemDraft) throws -> Item {
-        // P11: check EntitlementStore.canAddItems here, not in a view (D9).
+        try checkCanAdd()
+        if addsReminder(draft, to: nil) { try checkCanAddReminder() }
         let item = Item(name: "")
         try apply(draft, to: item)
         context.insert(item)
@@ -153,6 +206,7 @@ public struct ItemService {
     }
 
     public func update(_ item: Item, from draft: ItemDraft) throws {
+        if addsReminder(draft, to: item) { try checkCanAddReminder() }
         try apply(draft, to: item)
         try write(draft, into: item)
     }
@@ -421,7 +475,6 @@ public struct ItemService {
             }
             return
         }
-        // P11: a new warranty with reminders on checks EntitlementStore.canAddReminder here (D9).
         let warranty = current ?? {
             let warranty = Warranty(kind: .manufacturer)
             context.insert(warranty)
