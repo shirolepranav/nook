@@ -15,6 +15,8 @@ final class AppRouter {
     var showsWarranties = false
     /// A link for the shell to open (Spotlight, intents); it clears it.
     var link: DeepLink?
+    /// AddItemIntent: the editor, with the name and place filled in.
+    var newItem: NewItemRequest?
     /// What Find's field should say next (`nook://find?q=`); Find clears it.
     var findQuery: String?
     /// Set when the store reopens after S-03's switch, so Settings comes back on S-03 (D58).
@@ -23,6 +25,11 @@ final class AppRouter {
     func open(_ item: Item) {
         openedItem = item
     }
+}
+
+struct NewItemRequest: Equatable {
+    var name: String
+    var place: UUID?
 }
 
 /// Screens pushed from Reports, and from Home's See All (R-04, R-05).

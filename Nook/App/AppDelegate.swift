@@ -50,6 +50,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     func openStore() {
         container = NookApp.openStore()
+        IntentStore.container = container
+        IntentStore.router = router
         reminders = container.map { Reminders(container: $0) }
         startSync()
     }
@@ -69,6 +71,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         syncStatus.stop()
         reminders = nil
         container = nil   // released before the next one opens the same file (D59)
+        IntentStore.container = nil
         try? await Task.sleep(for: .milliseconds(300))
         router.reopensSync = true
         openStore()

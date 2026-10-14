@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import CoreSpotlight
+import WidgetKit
 import NookKit
 import NookUI
 
@@ -163,6 +165,14 @@ private struct TabShell: View {
                     }
             }
         }
+        .onChange(of: router.newItem) { _, request in
+            guard let request else { return }
+            router.newItem = nil
+            var draft = ItemDraft(currencyCode: HomeCurrency.code,
+                                  location: request.place.flatMap { PlaceQuery.location($0, in: context) })
+            draft.name = request.name
+            openedItem = draft
+        }
         .onChange(of: router.link) { _, link in
             guard let link else { return }
             router.link = nil
@@ -180,6 +190,20 @@ private struct TabShell: View {
             }
         }
         .toast($toast)
+        .task {
+            // Spotlight and the widgets follow every save (04 §8, D61).
+            await SystemSurfaces(container: context.container).keepCurrent()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Hide values, the accent and Pro change without a save; widgets catch up here.
+            if phase == .background { WidgetCenter.shared.reloadAllTimelines() }
+        }
+        .onContinueUserActivity(CSSearchableItemActionType) { activity in
+            // A Spotlight result Nook indexed by hand, should iOS hand one over that way.
+            if let id = (activity.userInfo?[CSSearchableItemActivityIdentifier] as? String).flatMap(UUID.init) {
+                open(.item(id))
+            }
+        }
         .task {
             // Find's index: built after the first frame, then kept current on every save (04 §6).
             let library = SearchLibrary(container: context.container)
@@ -207,8 +231,10 @@ private struct TabShell: View {
                 toast = ToastMessage(symbol: "questionmark.circle", "That item isn’t in Nook anymore.")
             }
         case .room(let id):
+            // A spot or container from Spotlight or Shortcuts comes this way too (PlaceEntity).
             let room = try? context.fetch(FetchDescriptor<Room>(predicate: #Predicate { $0.id == id })).first
-            if let room { router.openedRoom = room } else {
+            let spot = try? context.fetch(FetchDescriptor<Spot>(predicate: #Predicate { $0.id == id })).first
+            if let room { router.openedRoom = room } else if let spot { router.openedSpot = spot } else {
                 toast = ToastMessage(symbol: "questionmark.circle", "That room isn’t in Nook anymore.")
             }
         case .find(let query):
