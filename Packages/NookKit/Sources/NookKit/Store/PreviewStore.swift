@@ -15,6 +15,9 @@ public enum PreviewStore {
         case empty, small, many, lived, items1k, items5k
     }
 
+    /// Box 14's QR label id in the `lived` seed: `nook://spot/lived-box-14` (F8, S10).
+    public static let boxLabelID = "lived-box-14"
+
     public static func seeded(_ size: Size) -> ModelContainer {
         do {
             let container = try NookStore.makeContainer(inMemory: true)
@@ -129,6 +132,7 @@ public enum PreviewStore {
         item("Board games")?.lastConfirmedAt = .now.addingTimeInterval(-800 * day)   // "Not seen in 2 years"
         let boxes = try context.fetch(FetchDescriptor<Spot>()).filter { $0.name == "Box 14" }
         boxes.first?.packedAt = .now.addingTimeInterval(-120 * day)
+        boxes.first?.qrID = Self.boxLabelID   // UI tests open its label's link (S10)
     }
 
     /// 5,000 items named after the common items list, across 6 rooms, for Find's budget.

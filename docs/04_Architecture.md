@@ -73,6 +73,7 @@ public protocol CapabilityEngine: Sendable {
     func readSerial(from photo: PhotoInput) async throws -> SerialReading                // F2
     func understand(_ text: String, index: SearchIndex) async throws -> FindQuestion     // §6 (P9, D55)
     func estimateValue(for item: ValueSubject) async throws -> ValueEstimate?            // D16 (P9)
+    func summarizeRoom(_ facts: RoomFacts) async throws -> String?                       // R-02 (P10, D56)
 }
 
 public actor CapabilityRouter {
@@ -112,7 +113,7 @@ public actor CapabilityRouter {
 **As built (P8, D53, D54):** `NookAI/Router/CapabilityRouter.swift` is a `Sendable` struct, not an actor, because it holds no state.
 - **`NookAI.router`** is the one instance the app uses.
 - **Availability** is `Availability { usesAI, seesImages }`. It's read per task from `SystemLanguageModel.default` (`.available`, plus `capabilities.contains(.vision)`), S-11's `useAppleIntelligence` switch (App Group defaults) and `forceClassicEngine`. Photo tasks need `seesImages`.
-- **The router owns the fallback.** `detectItems(in:)` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. Every other task shares one 20 s timeout (P9): `fillItem` and `estimateValue` return nil, and `readReceipt`, `readSerial` and `understand` take the Classic result, when the AI read throws or runs long. Receipts, serials, questions and values are text work (`needsImages: false`), so a model without image input keeps them.
+- **The router owns the fallback.** `detectItems(in:)` returns a plain `AsyncStream` that ends quietly on any error or after 20 s, keeping what arrived. Every other task shares one 20 s timeout (P9): `fillItem`, `estimateValue` and `summarizeRoom` return nil (a summary also when it isn't grounded, D56), and `readReceipt`, `readSerial` and `understand` take the Classic result, when the AI read throws or runs long. Receipts, serials, questions and values are text work (`needsImages: false`), so a model without image input keeps them.
 - **The protocol** has `understand(_:index:)` in place of the planned `answer(_:store:)`, and `estimateValue(for:)` (P9, D55). `fillItem` returns `DetectedItem?`, so there's no separate `ItemSuggestion`.
 - **The engines:** `AIEngine` (the only `import FoundationModels` besides `DetectedItem` and the router) resizes to 1,536 px, attaches the image, offers `ReadLabels` (Vision text) and `ReadBarcodes` (Vision barcodes plus the EAN check) as tools, and streams `DetectedItem`s as each completes. For receipts and serials (P9) it reads the Classic reader's text and keeps only picks that are printed there: `ReceiptReading.suggested` (indexes into the candidates, plus a printed warranty length) and `SerialReading.isSuggested`. `LookUp` and `NearWords` (word vectors over the index's words) serve questions (D55). `ClassicEngine` finds no items and fills nothing.
 - **UI tests** swap in `ScriptedEngine` with `-uiTestingFakeAI items|fail` (DEBUG).
@@ -136,7 +137,7 @@ Nook/                         # app target
   Resources/                  # Assets (app icon), Localizable.xcstrings, common-items.json, synonyms.json
 NookWidgets/                  # widget + control extension
 Packages/
-  NookKit/    Sources/NookKit/{Models, Store, Services, Search, Reminders, Backup, Entitlements}
+  NookKit/    Sources/NookKit/{Models, Store, Services, Search, Reminders, Reports, Backup, Entitlements}
   NookAI/     Sources/NookAI/{Router, AIEngine, ClassicEngine, Types, Evaluations}
   NookUI/     Sources/NookUI/{Tokens, Components, Gallery}   # Assets.xcassets with color sets
 NookTests/  NookUITests/
@@ -212,7 +213,7 @@ final class Item {
 - **File lifecycle (D40):** files are written when picked, before Save. Soft-deleted items keep theirs; the purge removes them. At launch, `BlobStore.sweepOrphans` removes files no row references that are over an hour old (cancelled or killed edits).
 - **iCloud sync (Pro)** syncs files as `CKAsset`s through a small sync companion [design in P11]. Alternatively, files move to external storage attributes if CloudKit sync of `@Attribute(.externalStorage)` proves reliable. The choice is made in P11 and logged in decisions.md.
 - **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9).
-- **Backup (`.nookbackup`, D12):** a zip containing `manifest.json` (with `schemaVersion`, `appVersion` and `createdAt`), `data.json` (all entities keyed by UUID) and `files/`. Restore offers **Replace** or **Merge**, where Merge upserts by UUID.
+- **Backup (`.nookbackup`, D12, D56):** a zip containing `manifest.json` (`schemaVersion`, `appVersion`, `createdAt`, `itemCount`, `homeName`), `data.json` (every row, relationships as UUIDs) and `files/{Photos,Thumbs,Receipts}/`. `BackupService` writes and reads it; `ZipArchive` is Nook's own, because the SDK can't read zips. Restore offers **Merge** (adds only rows whose id is new) or **Replace** (what the backup lacks goes to Recently Deleted, then the backup's rows are written over the store's). Files are copied before any row changes. A newer `schemaVersion` is refused. `BackupTests` fails if a model field isn't carried by its backup record.
 - **No network calls** except StoreKit and CloudKit. The CI grep fails on `URLSession` usage outside an allowlist.
 
 ---
@@ -256,7 +257,7 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 
 ## 8. App surfaces
 
-- **Deep links (D19):**
+- **Deep links (D19):** P10 handles `nook://spot/<qrID>` (box labels, F8) in `DeepLink`; the rest arrive with widgets and intents in P12.
   - `nook://item/<uuid>`, `nook://room/<uuid>`, `nook://spot/<qrID>`, `nook://find?q=…`, `nook://scan`
   - One `DeepLinkRouter` in the app builds the navigation path, so the back stack is intact.
   - Private targets require authentication.

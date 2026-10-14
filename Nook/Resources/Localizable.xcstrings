@@ -92,6 +92,12 @@
         }
       }
     },
+    "%@ · Home inventory" : {
+
+    },
+    "%@ · Proof of ownership" : {
+
+    },
     "%@ · since %@" : {
       "localizations" : {
         "en" : {
@@ -101,6 +107,19 @@
           }
         }
       }
+    },
+    "%@, +%lld more" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, +%2$lld more"
+          }
+        }
+      }
+    },
+    "%@, continued" : {
+
     },
     "%@, packed %@." : {
       "localizations" : {
@@ -231,6 +250,26 @@
     "%lld items lent" : {
 
     },
+    "%lld items · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld items · %2$@"
+          }
+        }
+      }
+    },
+    "%lld items · %lld columns · all fields" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld items · %2$lld columns · all fields"
+          }
+        }
+      }
+    },
     "%lld items · %lld spots" : {
       "localizations" : {
         "en" : {
@@ -262,6 +301,16 @@
     },
     "%lld on" : {
 
+    },
+    "%lld pages · %lld items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld pages · %2$lld items"
+          }
+        }
+      }
     },
     "%lld places" : {
       "localizations" : {
@@ -405,13 +454,22 @@
     "1 yr+" : {
 
     },
+    "1 × 2⅝ in" : {
+
+    },
     "2 yrs" : {
 
     },
     "2 yrs+" : {
 
     },
+    "2 × 4 in" : {
+
+    },
     "30 and 7 days before a warranty ends" : {
+
+    },
+    "A backup is one **.nookbackup** file with every item, photo and receipt. Keep it in Files, iCloud Drive or on a computer." : {
 
     },
     "A container sits in a room or a spot. It can’t go inside another container." : {
@@ -440,6 +498,12 @@
       }
     },
     "A private item's warranty ends today." : {
+
+    },
+    "A short paragraph per room. You can edit it." : {
+
+    },
+    "About %@" : {
 
     },
     "Accent color" : {
@@ -516,6 +580,9 @@
 
     },
     "Add a few things and Nook will tell you where they are." : {
+
+    },
+    "Add a sentence about this room, or leave it empty." : {
 
     },
     "Add a tag" : {
@@ -620,10 +687,16 @@
     "Back by" : {
 
     },
+    "Backup & Restore" : {
+
+    },
     "Barcode" : {
 
     },
     "Blue bin" : {
+
+    },
+    "Box Label" : {
 
     },
     "Brand" : {
@@ -668,6 +741,9 @@
     "Choose File…" : {
 
     },
+    "Choose a .nookbackup file. You’ll pick Merge or Replace before anything changes." : {
+
+    },
     "Choose a Room" : {
 
     },
@@ -678,6 +754,9 @@
 
     },
     "Choose from Photos" : {
+
+    },
+    "Choose rooms" : {
 
     },
     "Clay" : {
@@ -781,6 +860,12 @@
 
     },
     "Cover" : {
+
+    },
+    "Create Backup" : {
+
+    },
+    "Create Report" : {
 
     },
     "Currency" : {
@@ -995,7 +1080,13 @@
     "Estimate" : {
 
     },
+    "Every item and field, for Numbers or Excel" : {
+
+    },
     "Everything in Nook still works. You tag items yourself, and search finds them just as fast." : {
+
+    },
+    "Everything is made on this iPhone. It takes about 20 seconds." : {
 
     },
     "Everything stays on your device. No account." : {
@@ -1022,6 +1113,12 @@
       }
     },
     "Expired" : {
+
+    },
+    "Export CSV" : {
+
+    },
+    "Export Proof Pack" : {
 
     },
     "Fair" : {
@@ -1081,13 +1178,28 @@
     "Home" : {
 
     },
+    "Home inventory" : {
+
+    },
+    "Home name" : {
+
+    },
     "In the room" : {
 
     },
     "In this room" : {
 
     },
+    "Include" : {
+
+    },
     "Inside" : {
+
+    },
+    "Insurance report" : {
+
+    },
+    "Insurer" : {
 
     },
     "It holds %lld items. Where should they go? You can undo right after." : {
@@ -1126,10 +1238,19 @@
     "Know what you own and where it is." : {
 
     },
+    "Label preview: %@, with a code that opens it in Nook" : {
+
+    },
+    "Label size" : {
+
+    },
     "Labeled as the model" : {
 
     },
     "Labeled as the serial" : {
+
+    },
+    "Last backup %@" : {
 
     },
     "Last confirmed %@" : {
@@ -1180,6 +1301,9 @@
     "Line up the barcode inside the frame." : {
 
     },
+    "List top items" : {
+
+    },
     "Loan reminders" : {
 
     },
@@ -1198,6 +1322,15 @@
     "Lowest value" : {
 
     },
+    "Making your backup…" : {
+
+    },
+    "Making your report" : {
+
+    },
+    "Maple Street" : {
+
+    },
     "Mark Not Private" : {
 
     },
@@ -1208,6 +1341,9 @@
 
     },
     "Marked Private." : {
+
+    },
+    "Merge" : {
 
     },
     "Mint" : {
@@ -1345,6 +1481,9 @@
     "No numbers found. You can type them in." : {
 
     },
+    "No room" : {
+
+    },
     "No room yet" : {
 
     },
@@ -1372,7 +1511,13 @@
     "Nook can suggest item names from photos, read receipts and answer questions about your home." : {
 
     },
+    "Nook can’t save to Photos. You can turn it on in Settings." : {
+
+    },
     "Nook couldn’t open your items" : {
+
+    },
+    "Nook items %@" : {
 
     },
     "Nook only sends reminders you asked for." : {
@@ -1426,6 +1571,9 @@
     "Nothing matches these filters." : {
 
     },
+    "Nothing on this iPhone changes until you choose." : {
+
+    },
     "Nothing to choose yet." : {
 
     },
@@ -1453,6 +1601,9 @@
     "Off" : {
 
     },
+    "On the cover" : {
+
+    },
     "Only items priced in %@." : {
 
     },
@@ -1462,7 +1613,13 @@
     "Open Settings" : {
 
     },
+    "Opens in Numbers, Excel and Google Sheets. Prices keep each item’s own currency." : {
+
+    },
     "Opens the receipt" : {
+
+    },
+    "Optional" : {
 
     },
     "Other" : {
@@ -1472,6 +1629,9 @@
 
     },
     "PDF receipt" : {
+
+    },
+    "PREVIEW" : {
 
     },
     "Packed" : {
@@ -1541,6 +1701,9 @@
     "Photograph your things" : {
 
     },
+    "Photos" : {
+
+    },
     "Photos, %lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -1560,10 +1723,25 @@
     "Pick photos you already have instead." : {
 
     },
+    "Plain card" : {
+
+    },
     "Plum" : {
 
     },
+    "Policy %@" : {
+
+    },
+    "Policy number" : {
+
+    },
     "Press Return to add each tag." : {
+
+    },
+    "Preview Report" : {
+
+    },
+    "Preview of the first rows: %@" : {
 
     },
     "Previous Page" : {
@@ -1578,6 +1756,12 @@
     "Prices show as •••• until you tap the eye on Home." : {
 
     },
+    "Print" : {
+
+    },
+    "Print or Share Label" : {
+
+    },
     "Private" : {
 
     },
@@ -1585,6 +1769,12 @@
 
     },
     "Private item. Unlock to see it" : {
+
+    },
+    "Pro" : {
+
+    },
+    "Proof pack" : {
 
     },
     "Purchased" : {
@@ -1611,10 +1801,19 @@
     "Receipt" : {
 
     },
+    "Receipt attached" : {
+
+    },
     "Receipt photo" : {
 
     },
+    "Receipt · %@" : {
+
+    },
     "Receipt, page %lld" : {
+
+    },
+    "Receipts at the end" : {
 
     },
     "Recent" : {
@@ -1671,16 +1870,47 @@
     "Rename search" : {
 
     },
+    "Rendering %lld of %lld items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Rendering %1$lld of %2$lld items"
+          }
+        }
+      }
+    },
+    "Replace" : {
+
+    },
+    "Report page 1 of %lld" : {
+
+    },
     "Reports" : {
 
     },
     "Restore" : {
 
     },
+    "Restore from a Backup" : {
+
+    },
+    "Restore this backup?" : {
+
+    },
+    "Restore “%@”?" : {
+
+    },
+    "Restored %lld items." : {
+
+    },
     "Restored to %@." : {
 
     },
     "Restored." : {
+
+    },
+    "Restoring…" : {
 
     },
     "Retake" : {
@@ -1693,6 +1923,9 @@
 
     },
     "Room name" : {
+
+    },
+    "Room summaries" : {
 
     },
     "Rooms" : {
@@ -1710,6 +1943,9 @@
     "Save" : {
 
     },
+    "Save Image" : {
+
+    },
     "Save Receipt" : {
 
     },
@@ -1722,13 +1958,22 @@
     "Save this search" : {
 
     },
+    "Save to Files" : {
+
+    },
     "Saved searches" : {
 
     },
     "Saved to %@." : {
 
     },
+    "Saved to Files." : {
+
+    },
     "Saved to Find." : {
+
+    },
+    "Saved to Photos." : {
 
     },
     "Saved." : {
@@ -1803,6 +2048,9 @@
     "Serial number" : {
 
     },
+    "Serial numbers" : {
+
+    },
     "Set as Cover" : {
 
     },
@@ -1813,6 +2061,12 @@
 
     },
     "Settings…" : {
+
+    },
+    "Share" : {
+
+    },
+    "Share Backup" : {
 
     },
     "Show %lld Items" : {
@@ -1897,6 +2151,9 @@
     "Suggestions are made on this iPhone and are always yours to edit. Answers only come from things you’ve saved." : {
 
     },
+    "Summary for %@" : {
+
+    },
     "Symbol" : {
 
     },
@@ -1951,13 +2208,25 @@
     "Terracotta" : {
 
     },
+    "That box isn’t in Nook anymore." : {
+
+    },
     "That file can’t be added as a receipt. Try a photo or a PDF." : {
 
     },
     "That receipt couldn’t be read. You can type the numbers in." : {
 
     },
+    "The backup couldn’t be made. Your items are safe. Try again in a moment." : {
+
+    },
+    "The backup couldn’t be restored. Nothing on this iPhone changed." : {
+
+    },
     "The containers in it are deleted too." : {
+
+    },
+    "The file couldn’t be made. Try again in a moment." : {
 
     },
     "The model number" : {
@@ -1972,6 +2241,9 @@
     "The numbers under the bars" : {
 
     },
+    "The report couldn’t be made" : {
+
+    },
     "The scanner isn’t available here, so type the numbers in." : {
 
     },
@@ -1979,6 +2251,12 @@
 
     },
     "Theme" : {
+
+    },
+    "There isn’t enough space for the backup. Free some up and try again." : {
+
+    },
+    "There isn’t enough space to restore it. Free some up and try again." : {
 
     },
     "Things you haven’t moved or confirmed in that long." : {
@@ -1990,10 +2268,19 @@
     "Things you put on this spot will show up here." : {
 
     },
+    "This backup is from a newer Nook. Update Nook, then try again." : {
+
+    },
     "This can’t be undone." : {
 
     },
     "This date is in the future. You can still save." : {
+
+    },
+    "This file isn’t a Nook backup." : {
+
+    },
+    "This iPhone already has %lld items. Merge keeps what’s here and adds what’s missing. Replace moves what’s here to Recently Deleted first." : {
 
     },
     "This is before the purchase date. You can still save." : {
@@ -2045,6 +2332,12 @@
 
     },
     "Type It Instead" : {
+
+    },
+    "Unlock Pro to Back Up" : {
+
+    },
+    "Unlock Pro to Export" : {
 
     },
     "Unlock to see it" : {
@@ -2143,7 +2436,13 @@
     "Who has it?" : {
 
     },
+    "Whole home" : {
+
+    },
     "Worn" : {
+
+    },
+    "Writing a summary…" : {
 
     },
     "Yes, you have %lld." : {
@@ -2189,6 +2488,9 @@
     "Your data" : {
 
     },
+    "Your items are safe on this iPhone. Try again in a moment." : {
+
+    },
     "Zoom" : {
 
     },
@@ -2212,6 +2514,9 @@
 
     },
     "from %@" : {
+
+    },
+    "to" : {
 
     }
   },

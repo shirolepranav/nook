@@ -349,6 +349,53 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// P10 screens: R-01's report cards, R-02's builder (room summaries on, from the scripted
+    /// model) and preview, R-03, S-04 and H-06.
+    @MainActor
+    func testP10ScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived", classic: false)
+        app.launchArguments += ["-uiTestingFakeAI", "items"]
+        app.launch()
+        app.tab("Reports").tap()
+        let report = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Insurance report'")).firstMatch
+        XCTAssertTrue(report.waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        report.tap()
+        let summaries = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Room summaries'")).firstMatch
+        XCTAssertTrue(summaries.waitForExistence(timeout: 5))
+        for _ in 0..<3 where !summaries.isHittable { app.swipeUp() }
+        summaries.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()   // the switch itself
+        XCTAssertTrue(app.staticTexts["Suggested"].firstMatch.waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Preview Report"].tap()
+        XCTAssertTrue(app.buttons["Create Report"].waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.navigationBars.buttons.firstMatch.tap()
+        app.navigationBars.buttons.firstMatch.tap()
+
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Export CSV'")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["Share"].waitForExistence(timeout: 5))
+        // At the medium detent the audit draws the sheet scaled and calls it clipped (D45).
+        let grabber = app.buttons["Sheet Grabber"]
+        if grabber.exists { grabber.swipeUp(); sleep(1) }
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons["Cancel"].tap()
+
+        app.tab("Settings").tap()
+        app.buttons["Backup & Restore"].tap()
+        XCTAssertTrue(app.buttons["Create Backup"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        app.open(URL(string: "nook://spot/lived-box-14")!)
+        let more = app.buttons["More"]
+        XCTAssertTrue(more.waitForExistence(timeout: 10))
+        more.tap()
+        app.buttons["Print or Share Label"].tap()
+        XCTAssertTrue(app.buttons["Print"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// P7 screens: Home's warranty row, I-01's Lent out and Warranty cards, I-06, R-01, R-04,
     /// R-05 and S-07.
     @MainActor

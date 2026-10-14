@@ -24,6 +24,7 @@ struct CSVExportSheet: View {
                     Text("\(items.count) items · \(CSVExport.columns.count) columns · all fields")
                         .font(.nookMeta)
                         .foregroundStyle(NookColor.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
                     preview
                     Text("Opens in Numbers, Excel and Google Sheets. Prices keep each item’s own currency.")
                         .font(.nookFootnote)
@@ -71,8 +72,16 @@ struct CSVExportSheet: View {
         .padding(NookSpace.s2)
         .frame(maxWidth: .infinity, alignment: .leading)
         .nookCard(radius: NookRadius.medium, elevation: .flat)
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel(Text("Preview of the first rows"))
+        // One element that reads the rows; the table itself is a glimpse, cut to fit.
+        .accessibilityRepresentation { Color.clear.accessibilityLabel(Text(previewDescription)) }
+    }
+
+    /// "Preview of the first rows: Espresso machine, Kitchen, 649.00; …".
+    private var previewDescription: String {
+        let rows = ordered.prefix(3).map { item in
+            [item.name, item.room?.name ?? "", item.price.map(CSVExport.plain) ?? ""].filter { !$0.isEmpty }.joined(separator: ", ")
+        }
+        return String(localized: "Preview of the first rows: \(rows.joined(separator: "; "))")
     }
 
     @ViewBuilder

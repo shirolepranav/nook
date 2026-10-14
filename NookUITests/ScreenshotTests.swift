@@ -430,6 +430,49 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testP10Screens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived", classic: false)
+        app.launchArguments += ["-uiTestingFakeAI", "items"]
+        app.launch()
+        app.tab("Reports").tap()
+        let report = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Insurance report'")).firstMatch
+        XCTAssertTrue(report.waitForExistence(timeout: 10))
+        snap("R-01 Reports")
+        report.tap()
+        let summaries = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Room summaries'")).firstMatch
+        XCTAssertTrue(summaries.waitForExistence(timeout: 5))
+        for _ in 0..<3 where !summaries.isHittable { app.swipeUp() }
+        snap("R-02 Insurance report")
+        summaries.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()   // the switch itself
+        XCTAssertTrue(app.staticTexts["Suggested"].firstMatch.waitForExistence(timeout: 10))
+        for _ in 0..<2 { app.swipeUp() }
+        snap("R-02 Room summaries, suggested")
+        app.buttons["Preview Report"].tap()
+        XCTAssertTrue(app.buttons["Create Report"].waitForExistence(timeout: 10))
+        snap("R-02 Preview")
+        app.navigationBars.buttons.firstMatch.tap()
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Export CSV'")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["Share"].waitForExistence(timeout: 5))
+        snap("R-03 CSV export")
+        app.buttons["Cancel"].tap()
+        app.tab("Settings").tap()
+        app.buttons["Backup & Restore"].tap()
+        XCTAssertTrue(app.buttons["Create Backup"].waitForExistence(timeout: 5))
+        snap("S-04 Backup & Restore")
+        app.open(URL(string: "nook://spot/lived-box-14")!)
+        let more = app.buttons["More"]
+        XCTAssertTrue(more.waitForExistence(timeout: 10))
+        more.tap()
+        app.buttons["Print or Share Label"].tap()
+        XCTAssertTrue(app.buttons["Print"].waitForExistence(timeout: 5))
+        snap("H-06 Box label")
+    }
+
+    @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())

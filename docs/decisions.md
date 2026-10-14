@@ -270,7 +270,7 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 
 *Affects:* 04 §5.
 
-**D41 · 2026-10-06 · Accepted** — **Home currency, for now.** D20 refers to a home currency set in Settings, which doesn't exist yet. Until it does (P10, with Reports), the home currency is the region's (`Locale.current.currency`). New items start in it; the editor's currency menu offers every ISO currency. Home's total adds only items in the home currency and says "Mixed currencies" when others exist. Nothing is converted.
+**D41 · 2026-10-06 · Accepted** — **Home currency, for now.** D20 refers to a home currency set in Settings, which doesn't exist yet. Until it does (no longer planned for P10, D56), the home currency is the region's (`Locale.current.currency`). New items start in it; the editor's currency menu offers every ISO currency. Home's total adds only items in the home currency and says "Mixed currencies" when others exist. Nothing is converted.
 
 *Affects:* H-01, I-02, P10.
 
@@ -465,3 +465,30 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Very long receipts** send the model their first and last 50 lines. The middle line items go, and the store, date and total stay.
 
 *Affects:* 01 C-06, C-08, F-03, F-04, I-01, I-02; 04 §2, §6; 05 §4; `NookAI` (router, `AIEngine`, `LookUp`, `NearWords`, types), `NookKit` (`FindQuestion`, `FindService`, `SearchIndex`, `ItemDraft`), `FindScreen`, `AnswerCards`, `ReceiptScanScreen`, `SerialScanScreen`, `ItemEditor`, `ItemDetailScreen`, `Fixtures/eval/where-is.json`, `Fixtures/receipts/hard/us-long-warranty`.
+
+### P10 (2026-10-13)
+
+**D56 · 2026-10-13 · Accepted (product owner, the four choices marked)** — **Reports, exports, backup and QR labels (P10).**
+- **Everyone is Pro until P11** *(product owner)*. `EntitlementStore` exists with `isPro = true`, `canExport` and `canBackUp`. The free states are built: a watermarked first page with Unlock Pro to Export on R-02, and Unlock Pro on R-03 and S-04. Only UI tests reach them, through `-uiTestingFree YES`. P11 flips the default and wires the buttons to P-01. This follows D39 and D50: no Unlock Pro appears to users without a paywall behind it. Restoring a backup is never gated.
+- **Room summaries are built** *(product owner)*. `CapabilityEngine.summarizeRoom(_:)` returns nil on Classic, so the toggle shows only when Apple Intelligence is Ready or Downloading. The router keeps a paragraph only when it's grounded: it names at least one of the room's items, every number in it is a count, quantity or total from the facts, and it's at most 400 characters (`RoomSummary.grounded`). Each summary is an editable field tinted Suggested, and a blank field leaves the room without one.
+- **No home-currency setting** *(product owner)*. D41's "until P10" is dropped. Totals stay in the region's currency, and the report and R-01 list one total per currency (D20).
+- **Proof pack** *(product owner)*. D4's "Export proof pack" is I-01's More → Export Proof Pack: R-02 scoped to the item, with its receipts, titled "<item> · Proof of ownership".
+- **The report.** SwiftUI pages on paper (light `surfaceRaised`, fixed `.large` text) drawn with `ImageRenderer` into one `CGContext` PDF; text stays searchable. Every block has a fixed height, so the builder knows the page count before rendering. A room that runs onto a new page repeats its header as "Kitchen, continued". The receipt appendix gives an image receipt one page, and a PDF receipt keeps its own pages under a caption. Page size is US Letter where the region measures in inches, A4 elsewhere. On the simulator, 500 items with photos take 0.3 s (51 pages); the iPhone 15 time is an owner check.
+- **Thumbnails load one at a time.** Decoding them all in a task group deadlocked ImageIO's HEIC decoder on the cooperative pool (seen on the simulator).
+- **Create Report opens Quick Look**, which pages through the PDF and offers Share and Print, as D42 does for receipts. There's no custom PDF view, and no separate share step.
+- **The cover** carries a home name, beside the insurer and policy number that D28 named. All three are kept in the App Group's defaults for the next report. The builder's section is "On the cover".
+- **Private items are in the report, the CSV and the backup.** They are the owner's own documents. P12 may ask for Face ID before an export.
+- **CSV:** 24 columns, RFC 4180 quoting, a UTF-8 BOM, CRLF, ISO dates and plain decimal prices with a Currency column. Column titles and conditions are in English, like the file format.
+- **The backup zip is Nook's own.** The iOS 27 SDK can't read a zip: `NSFileCoordinator`'s `.forUploading` only writes one, and Apple Archive isn't zip. `ZipArchive` writes stored entries (zip64 past 4 GB) and reads stored or deflated ones (`Compression`), with CRC from `zlib` (`import zlib` resolves in the iOS 27 SDK). It refuses entry paths that would leave their folder.
+- **Merge and Replace follow the S-04 board**, which overrides 04 §5's "Merge upserts".
+  - *Merge* ("Keep what's here and add what's missing") adds only rows whose id is new, linked to existing rows by id.
+  - *Replace* ("Move what's here to Recently Deleted first") deletes rooms and spots the backup lacks through `RoomService.delete(_:rehoming: .recentlyDeleted)`, soft-deletes items it lacks, then writes the backup's rows over the store's. Restoring this device's own backup therefore brings its own items back.
+  - A restore puts saved places back as data, with no new history, so it doesn't go through `LocationService.move`.
+  - Files are copied before any row changes, so a failed restore changes nothing. There's no Undo: the dialog confirms first, and Recently Deleted keeps what Replace moved.
+  - A backup from a newer schema is refused ("This backup is from a newer Nook.").
+  - The confirmation dialog can't put a subtitle under each button, so the two explanations go in its message.
+- **`.nookbackup` conforms only to `public.data`**, so Files keeps it whole instead of offering to unzip it. Nook is its Owner handler, and opening one shows the restore question.
+- **QR labels.** `nook://spot/<qrID>` uses CoreImage's QR generator at medium error correction. Sizes: 2 × 4 in, 1 × 2⅝ in, and a 3 × 4 in plain card. Print draws the label at its real size at the top left of the paper the printer picks (`UIPrintPaper.bestPaper`). Save Image needs add-only Photos access (`NSPhotoLibraryAddUsageDescription`), asked the first time, which updates D15 and 01 §13.
+- **Deep links.** `DeepLink` parses only `nook://spot/<qrID>` in P10. The container opens in a sheet, like a notification's item (D50). An unknown id shows "That box isn't in Nook anymore." The in-app barcode scanner also reads Nook's QR labels, which is D19's fallback. Whether the system Camera opens custom-scheme QR codes is still `[Verify in SDK]` on a real device (the simulator has no Camera app). It's an owner check.
+
+*Affects:* 00 §5 F9 (unchanged), 01 R-01, R-02, R-03, S-04, H-03, H-06, I-01, §13; 04 §3, §5, §8; 05 §1; `NookKit` (`Reports/`, `Backup/`, `Entitlements/`, `PreviewStore`), `NookAI` (`summarizeRoom`, `RoomSummary`, `BarcodeScanner`), `Nook/App` (`DeepLink`, `RootView`, `AppRouter`, `AppDelegate`, `Info.plist`), `Features/Reports`, `Features/Settings/BackupScreen`, `Features/Room/QRLabelSheet`.

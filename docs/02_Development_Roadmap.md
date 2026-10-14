@@ -174,7 +174,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — question-to-search parsing tests; evaluation set for answers; confirmation-required UI test. Smoke — S1–S9.
 
 ### P10 · Reports, exports, backup & QR labels
-**Status:** Not started
+**Status:** In progress (branch `p10/reports-exports`, D56).
 **Scope:** insurance report builder and preview (R-02) rendered with SwiftUI `ImageRenderer` (PRD §8), grouped by room with photos, values, serials, receipt appendix and totals, optional AI room summaries; watermarked free preview; CSV export (R-03); .nookbackup create and restore (S-04); QR box labels (H-06) and deep links from the system Camera app (F8).
 **PRD acceptance:** a 500-item PDF generates on-device in under 20 seconds (F9); QR opens the correct container from the Camera app (F8).
 **QA:** cancelling mid-report, low memory, printing, restoring onto a device with existing data, CSV opening in Numbers and Excel.

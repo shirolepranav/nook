@@ -39,6 +39,7 @@ struct QRLabelSheet: View {
     @State private var listsItems = true
     @State private var toast: ToastMessage?
     @State private var printer = LabelPrinter()
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     private var label: BoxLabel {
         let names = ItemService(context: context).items(in: spot).map(\.name).sorted()
@@ -93,8 +94,11 @@ struct QRLabelSheet: View {
         .warmShadow(.lifted)
         .frame(maxWidth: .infinity)
         .padding(.vertical, NookSpace.s2)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook"))
+        // A picture of the label: one image element, not its paper-sized text.
+        .accessibilityRepresentation {
+            Color.clear.accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook"))
+                .accessibilityAddTraits(.isImage)
+        }
     }
 
     private var actions: some View {
@@ -103,24 +107,24 @@ struct QRLabelSheet: View {
                 Label("Print", systemImage: "printer").frame(maxWidth: .infinity)
             }
             .buttonStyle(.nookPrimary)
-            ViewThatFits {
-                HStack(spacing: NookSpace.s1) { share; save }
-                VStack(spacing: NookSpace.s1) { share; save }
-            }
+            // Side by side, as on the board; stacked at accessibility sizes so the words fit.
+            let layout = typeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: NookSpace.s1)) : AnyLayout(HStackLayout(spacing: NookSpace.s1))
+            layout { share; save }
         }
     }
 
     private var share: some View {
         let image = Image(uiImage: label.image())
         return ShareLink(item: image, preview: SharePreview(Text(spot.name), image: image)) {
-            Label("Share", systemImage: "square.and.arrow.up").lineLimit(1).frame(maxWidth: .infinity)
+            Label("Share", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity)
         }
         .buttonStyle(.nookSecondary)
     }
 
     private var save: some View {
         Button(action: saveImage) {
-            Label("Save Image", systemImage: "photo.badge.arrow.down").lineLimit(1).frame(maxWidth: .infinity)
+            Label("Save Image", systemImage: "photo.badge.arrow.down").frame(maxWidth: .infinity)
         }
         .buttonStyle(.nookSecondary)
     }

@@ -60,8 +60,10 @@ struct ReportPreviewScreen: View {
             .clipShape(.rect(cornerRadius: NookRadius.small))
             .warmShadow(.lifted)
             .blur(radius: hideValues ? NookSpace.s1 : 0)   // Hide values covers the page too (F11)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text("Report page 1 of \(renderer.pageCount)"))
+            // One element: the page's own text is paper at a fixed size, not app UI.
+            .accessibilityRepresentation {
+                Color.clear.accessibilityLabel(Text("Report page 1 of \(renderer.pageCount)")).accessibilityAddTraits(.isImage)
+            }
     }
 
     /// "18 pages · 126 items · $24,380".

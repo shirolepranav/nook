@@ -211,6 +211,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Label preview: QR code, container name, room, and optionally the top items listed.
 - Sizes for common label sheets plus a plain card. [Inferred]
 - Actions: Print (AirPrint), Share, Save Image. Scanning the code with the system Camera app opens that container in Nook.
+- **As built (P10, D56):** from a container's More menu, **Print or Share Label**. Sizes 2 × 4 in, 1 × 2⅝ in (no item list) and a 3 × 4 in plain card. The label is paper in both modes. Print keeps the label's real size. The link opens the container in a sheet; a deleted one says "That box isn't in Nook anymore." Capture → Scan barcode also reads Nook labels (D19).
 
 ### H-07 Arrange rooms
 - Edit mode with drag handles to reorder rooms. Done saves the order (`order` field, PRD §8).
@@ -378,7 +379,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 
 ### R-01 Reports
 - Cards: **Insurance report** (with item count and total value), **Export CSV**, **Warranties** (count ending soon), **Lent out** (count), and **Declutter** (items not seen in 2 years) [PRD §2].
-- **As built (P7):** Warranties and Lent out, always shown. The insurance report and CSV arrive in P10.
+- **As built (P7, P10):** Insurance report ("126 items · $24,380", in the home currency, hidden with Hide values), Export CSV, Warranties and Lent out. Declutter waits for a later version (roadmap risks). The Pro badge shows only to Free users, which until P11 means UI tests only (D56).
 - Pro badge on gated features.
 
 ### R-02 Insurance report (Pro) [PRD §5 F9]
@@ -386,9 +387,11 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Preview:** page-by-page PDF grouped by room, with photos, values, serials, totals and receipts appended.
 - **Free:** preview of a watermarked first page, with Unlock Pro → P-01 (PRD §7).
 - **Generate:** progress ("Rendering 120 of 500 items"), under 20 s for 500 items on-device (PRD §9). Then the share sheet opens.
+- **As built (P10, D56):** the builder's sections are Rooms, Include, Room summaries (one editable field per room, tinted Suggested, shown when the toggle is on) and On the cover (home name, insurer, policy number, kept for next time). Preview Report pushes the preview: page 1 at half size and "3 pages · 14 items · $4,036". Pro's Create Report shows the generating card with Cancel, then opens the PDF in Quick Look, which pages through it and offers Share and Print. A room that runs onto a new page repeats its header as "Kitchen, continued". From I-01's More menu, **Export Proof Pack** opens the same builder for one item (D4).
 
 ### R-03 CSV export (Pro)
 - All fields, all items. Preview row count, then share or save to Files.
+- **As built (P10, D56):** a sheet: "126 items · 24 columns · all fields", the first 3 rows (name, room, price), the note, then **Share** and **Save to Files**. Rows follow Home's room order, then name.
 
 ### R-04 Warranties [PRD §5 F4]
 - Groups: Ending in 30 days, Active, Expired. Rows show photo, name, end date and days left.
@@ -408,7 +411,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | S-01 | Settings root | Pro status card (or Unlock), sync, backup, lock, appearance, notifications, Recently Deleted, tags, Apple Intelligence, privacy, help |
 | S-02 | Nook Pro | What's included, Restore Purchases, Family Sharing note (PRD §7) |
 | S-03 | iCloud sync (Pro) | Toggle, last synced, status (signed out, storage full), "Sync now" [Inferred] |
-| S-04 | Backup & restore | Create a .nookbackup file (zip of JSON and photos, PRD §5 F9); restore by replacing or merging, with confirmation [Inferred] |
+| S-04 | Backup & restore | Create a .nookbackup file (zip of JSON and photos, PRD §5 F9); restore by replacing or merging, with confirmation [Inferred]. **As built (P10, D56):** Create Backup shows progress and Cancel, then **Share Backup** and **Save to Files**; "About 1.2 GB · Last backup Oct 1, 2026". Restore from a Backup (or opening a .nookbackup from Files) asks Merge or Replace in a confirmation dialog whose message explains both, then a toast: "Restored 126 items." |
 | S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it |
 | S-06 | Appearance | System / Light / Dark; **accent color, 6 options** (PRD §3); Hide values by default [Inferred] |
 | S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook only sends reminders you asked for.", and the denied card with Open Settings |
@@ -451,6 +454,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 |---|---|---|
 | Camera | First tap on Scan or Add item photo (PRD §3) | Choose from Photos, plus "Turn on camera in Settings" |
 | Photos | Never: the system photo picker needs no permission | n/a |
+| Photos (add only) | First Save Image on a box label (H-06, D56) | "Nook can't save to Photos. You can turn it on in Settings." Share still works |
 | Notifications | First time the user saves a warranty or a loan reminder [Inferred] | Inline "Reminders are off" row → Settings |
 | Contacts | Never: the system contact picker shares only the chosen contact [Inferred] | n/a |
 | Face ID | Turning on the lock, or first opening a Private item | Device passcode |
