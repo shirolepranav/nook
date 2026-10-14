@@ -23,6 +23,7 @@ private struct ItemSelection: ViewModifier {
     @State private var tag = ""
     @Environment(\.modelContext) private var context
     @Environment(\.undoManager) private var undoManager
+    @Environment(AppLock.self) private var lock
 
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
     private var selected: [Item] { items.filter { selection?.contains($0.id) == true } }
@@ -61,7 +62,9 @@ private struct ItemSelection: ViewModifier {
                     }
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { moving = true }
+                    Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") {
+                        whenUnlocked { moving = true }
+                    }
                         .disabled(none)
                     Spacer()
                     Button("Tag", systemImage: "tag") { tag = ""; tagging = true }
@@ -69,7 +72,7 @@ private struct ItemSelection: ViewModifier {
                     Spacer()
                     let allPrivate = !none && selected.allSatisfy(\.isPrivate)
                     Button(allPrivate ? "Not Private" : "Private", systemImage: allPrivate ? "lock.open" : "lock") {
-                        toast = actions.setPrivate(selected, !allPrivate)
+                        whenUnlocked { toast = actions.setPrivate(selected, !allPrivate) }
                     }
                     .disabled(none)
                     Spacer()
@@ -109,5 +112,11 @@ private struct ItemSelection: ViewModifier {
             .onChange(of: items.map(\.id)) { _, ids in
                 selection = selection?.intersection(ids)   // items deleted elsewhere drop out
             }
+    }
+
+    /// Moving a Private item, or making it not Private, shows it: Face ID first (PRD §9).
+    private func whenUnlocked(_ action: @escaping () -> Void) {
+        guard selected.contains(where: \.isPrivate) else { return action() }
+        Task { if await lock.unlockPrivate() { action() } }
     }
 }

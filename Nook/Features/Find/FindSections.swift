@@ -123,7 +123,7 @@ struct FindStartSections: View {
 // MARK: Results (F-02)
 
 /// The answer card, active filters, then Items, Rooms and spots, and Containers. Private
-/// items are listed but masked (PRD §9); opening one needs Face ID from P12 (D46).
+/// items are listed but masked until Face ID (PRD §9, D46, D61).
 struct FindResultsSections: View {
     let query: String
     let found: Found
@@ -219,6 +219,9 @@ private struct ResultRow: View {
     @Binding var selection: Set<UUID>?
     let open: (any Hashable) -> Void
     let move: (Item) -> Void
+    @Environment(AppLock.self) private var lock
+
+    private var masked: Bool { item.isPrivate && !lock.privateUnlocked }
 
     var body: some View {
         let isSelected = selection.map { $0.contains(item.id) }
@@ -227,11 +230,14 @@ private struct ResultRow: View {
                 if var chosen = selection {
                     if chosen.remove(item.id) == nil { chosen.insert(item.id) }
                     selection = chosen
+                } else if masked {
+                    // Face ID first, then the item (PRD §9).
+                    Task { if await lock.unlockPrivate() { open(item) } }
                 } else {
                     open(item)
                 }
             } label: {
-                if item.isPrivate {
+                if masked {
                     ItemRow(name: String(localized: "Private item"), detail: Text("Unlock to see it"), isSelected: isSelected)
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text("Private item. Unlock to see it"))
@@ -245,7 +251,7 @@ private struct ResultRow: View {
             }
             .buttonStyle(.plain)
             .accessibilityAddTraits(isSelected == true ? .isSelected : [])
-            if selection == nil && !item.isPrivate {
+            if selection == nil && !masked {
                 Button { move(item) } label: {
                     Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
                 }
@@ -253,7 +259,7 @@ private struct ResultRow: View {
                 .accessibilityLabel(Text("Move \(item.name)"))
             }
         }
-        .accessibilityAction(named: Text("Move")) { if !item.isPrivate { move(item) } }
+        .accessibilityAction(named: Text("Move")) { if !masked { move(item) } }
     }
 
     private var detail: Text {

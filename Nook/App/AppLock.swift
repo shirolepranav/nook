@@ -175,6 +175,10 @@ final class AppLock {
     }
 
     #if DEBUG
+    /// Previews: unlocked by a stand-in Face ID.
+    static let preview = AppLock(defaults: UserDefaults(suiteName: "preview") ?? .standard,
+                                 method: { .faceID }, authenticate: { _ in true })
+
     /// UI tests: `-uiTestingBiometrics success|failure|unavailable` stands in for Face ID.
     static func forTesting(_ arguments: [String]) -> AppLock? {
         guard let flag = arguments.firstIndex(of: "-uiTestingBiometrics"), flag + 1 < arguments.count else { return nil }

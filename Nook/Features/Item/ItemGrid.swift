@@ -17,6 +17,7 @@ struct ItemGrid: View {
     @State private var moving: Item?
     @State private var lending: Item?
     @State private var paywall: PaywallRequest?
+    @Environment(AppLock.self) private var lock
 
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
 
@@ -54,6 +55,22 @@ struct ItemGrid: View {
             .buttonStyle(.nookCard)
             .itemZoomSource(item)
             .contextMenu {
+                if item.isPrivate && !lock.privateUnlocked {
+                    // Nothing that would show it, or stop it being Private, before Face ID (PRD §9).
+                    Button("Unlock with \(lock.method.name)", systemImage: lock.method.symbol) {
+                        Task { await lock.unlockPrivate() }
+                    }
+                    Divider()
+                    Button("Delete", systemImage: "trash", role: .destructive) { toast = actions.delete([item]) }
+                } else {
+                    menu(item)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func menu(_ item: Item) -> some View {
                 Button("Edit", systemImage: "pencil") { editing = item }
                 Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { moving = item }
                 Button(item.activeLoan == nil ? "Lend" : "Edit Loan", systemImage: "person.badge.plus") { lending = item }
@@ -64,8 +81,6 @@ struct ItemGrid: View {
                 Button("Duplicate", systemImage: "plus.square.on.square") { duplicate(item) }
                 Divider()
                 Button("Delete", systemImage: "trash", role: .destructive) { toast = actions.delete([item]) }
-            }
-        }
     }
 
     /// At the Free tier's 25 items, P-01 opens and the copy is made after the unlock (D58).
@@ -74,13 +89,37 @@ struct ItemGrid: View {
     }
 }
 
-/// One item: a photo card, or a row once text is at an accessibility size.
+/// One item: a photo card, or a row once text is at an accessibility size. A Private item is
+/// "Private item" with no photo or value until Face ID (D46, D61).
 struct ItemCell: View {
     let item: Item
     let isSelected: Bool?
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(AppLock.self) private var lock
 
     var body: some View {
+        if item.isPrivate && !lock.privateUnlocked {
+            masked
+        } else {
+            shown
+        }
+    }
+
+    @ViewBuilder
+    private var masked: some View {
+        let name = String(localized: "Private item")
+        if typeSize.isAccessibilitySize {
+            ItemRow(name: name, detail: Text("Unlock to see it"), isSelected: isSelected)
+                .padding(.horizontal, NookSpace.s2)
+                .nookCard(elevation: .flat)
+                .accessibilityElement(children: .combine)
+        } else {
+            PhotoCard(name: name, location: String(localized: "Unlock to see it"), photo: nil,
+                      badges: [.privateItem], value: nil, isSelected: isSelected)
+        }
+    }
+
+    private var shown: some View {
         StoredImage(fileName: item.cover?.fileName) { image in
             if typeSize.isAccessibilitySize {
                 ItemRow(name: item.name, detail: item.placeText, photo: image, isSelected: isSelected) {

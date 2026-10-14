@@ -153,5 +153,5 @@ enum SettingsRoute: Hashable { case sync }
         .environment(EntitlementStore(forcedPro: false))
         .environment(AppRouter())
         .environment(SyncStatus())
-        .environment(AppLock(defaults: UserDefaults(suiteName: "preview")!, method: { .faceID }, authenticate: { _ in true }))
+        .environment(AppLock.preview)
 }

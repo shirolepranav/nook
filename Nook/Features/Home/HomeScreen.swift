@@ -237,5 +237,5 @@ struct HomeScreen: View {
     }
 }
 
-#Preview("Rooms") { HomeScreen().modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta) }
-#Preview("Empty") { HomeScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta) }
+#Preview("Rooms") { HomeScreen().modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta).environment(AppLock.preview) }
+#Preview("Empty") { HomeScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta).environment(AppLock.preview) }

@@ -56,6 +56,7 @@ struct ItemEditor: View {
     @FocusState private var focus: Field?
 
     @Environment(\.modelContext) private var context
+    @Environment(AppLock.self) private var lock
     @Environment(\.dismiss) private var dismiss
     @Environment(\.reminders) private var reminders
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -704,8 +705,7 @@ struct ItemEditor: View {
         Toggle(isOn: $draft.isPrivate) {
             VStack(alignment: .leading, spacing: NookSpace.half) {
                 Text("Private").font(.nookBody).foregroundStyle(NookColor.textPrimary)
-                // The lock itself arrives in P12; the flag is stored now.
-                Text("Hidden from Spotlight, Siri and widgets. Needs Face ID to open.")
+                Text("Hidden from Spotlight, Siri and widgets. Needs \(lock.method.name) to open.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
             }

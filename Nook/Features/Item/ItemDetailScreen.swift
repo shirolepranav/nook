@@ -6,27 +6,37 @@ import NookUI
 
 /// I-01 Item detail: the photos, then where it is, then the facts. Content is paper; glass
 /// stays on the toolbar (03 §1.6). On a wide window the items around it sit in a column
-/// beside it (iPadItem board). Lent and warranty cards arrive with P7 (F4, F7); the
-/// Private lock in P12.
+/// beside it (iPadItem board). A Private item shows its locked state until Face ID
+/// (PRD §9, D61); every way in (Find, grids, notifications, links, Siri) lands here.
 struct ItemDetailScreen: View {
     let item: Item
     @State private var shown: Item?
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.modelContext) private var context
+    @Environment(AppLock.self) private var lock
 
     var body: some View {
         let current = shown ?? item
         let siblings = siblingItems
         if sizeClass == .regular, siblings.count > 1 {
             HStack(alignment: .top, spacing: 0) {
-                SiblingColumn(items: siblings, selected: current) { shown = $0 }
+                SiblingColumn(items: siblings, selected: current, masksPrivate: !lock.privateUnlocked) { shown = $0 }
                     .frame(width: NookLayout.itemColumnWidth)
                 Divider()
-                ItemDetail(item: current).id(current.id)
+                detail(current).id(current.id)
             }
             .background(NookColor.canvas)
         } else {
-            ItemDetail(item: current)
+            detail(current)
+        }
+    }
+
+    @ViewBuilder
+    private func detail(_ item: Item) -> some View {
+        if item.isPrivate && !lock.privateUnlocked {
+            LockedItem()
+        } else {
+            ItemDetail(item: item)
         }
     }
 
@@ -42,15 +52,18 @@ struct ItemDetailScreen: View {
 private struct SiblingColumn: View {
     let items: [Item]
     let selected: Item
+    let masksPrivate: Bool
     let select: (Item) -> Void
 
     var body: some View {
         ScrollView {
             LazyVStack(spacing: NookSpace.s1) {
                 ForEach(items) { item in
+                    let masked = masksPrivate && item.isPrivate
                     Button { select(item) } label: {
-                        StoredImage(fileName: item.cover?.fileName) { image in
-                            ItemRow(name: item.name, detail: item.placeText, photo: image)
+                        StoredImage(fileName: masked ? nil : item.cover?.fileName) { image in
+                            ItemRow(name: masked ? String(localized: "Private item") : item.name,
+                                    detail: masked ? Text("Unlock to see it") : item.placeText, photo: image)
                                 .padding(.horizontal, NookSpace.s1)
                                 .background(item.id == selected.id ? NookColor.surfaceSunken : .clear,
                                             in: RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
@@ -62,6 +75,45 @@ private struct SiblingColumn: View {
             }
             .padding(NookSpace.s2)
         }
+    }
+}
+
+/// I-01 for a Private item before Face ID (ItemDetail board, locked state): nothing about it
+/// shows, not even its name.
+private struct LockedItem: View {
+    @Environment(AppLock.self) private var lock
+
+    var body: some View {
+        VStack(spacing: NookSpace.s2) {
+            Image(systemName: "lock.fill")
+                .font(.nookTitle)
+                .foregroundStyle(NookColor.textSecondary)
+                .frame(width: NookLayout.lockMarkSize, height: NookLayout.lockMarkSize)
+                .background(NookColor.surfaceSunken, in: Circle())
+                .accessibilityHidden(true)
+            Text("This item is private")
+                .font(.nookSection)
+                .foregroundStyle(NookColor.textPrimary)
+                .accessibilityAddTraits(.isHeader)
+            Text("Unlock to see where it is and what it’s worth.")
+                .font(.nookMeta)
+                .foregroundStyle(NookColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button {
+                Task { await lock.unlockPrivate() }
+            } label: {
+                Label("Unlock with \(lock.method.name)", systemImage: lock.method.symbol).frame(maxWidth: .infinity)
+            }
+            .buttonStyle(NookButtonStyle(.primary))
+        }
+        .multilineTextAlignment(.center)
+        .padding(NookSpace.s4)
+        .frame(maxWidth: NookLayout.readableWidth)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(NookColor.canvas)
+        .captureButton()
+        .navigationTitle(Text("Private item"))
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 

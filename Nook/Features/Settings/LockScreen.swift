@@ -83,5 +83,5 @@ struct LockScreen: View {
 
 #Preview {
     NavigationStack { LockScreen() }
-        .environment(AppLock(defaults: UserDefaults(suiteName: "preview")!, method: { .faceID }, authenticate: { _ in true }))
+        .environment(AppLock.preview)
 }

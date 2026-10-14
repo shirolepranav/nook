@@ -304,6 +304,7 @@ private struct FindPreview: View {
     var body: some View {
         FindScreen()
             .modelContainer(container)
+            .environment(AppLock.preview)
             .environment(\.searchLibrary, library)
             .task {
                 let library = SearchLibrary(container: container)
@@ -318,6 +319,6 @@ private struct FindPreview: View {
 #Preview("Dark") { FindPreview().preferredColorScheme(.dark) }
 #Preview("AX5") { FindPreview().dynamicTypeSize(.accessibility5) }
 #Preview("Empty") {
-    FindScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta)
+    FindScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta).environment(AppLock.preview)
 }
 #endif
