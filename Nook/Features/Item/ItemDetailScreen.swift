@@ -93,6 +93,20 @@ private struct LockedItem: View {
     @Environment(AppLock.self) private var lock
 
     var body: some View {
+        // Centered, and scrolls once large text no longer fits (03 §11).
+        GeometryReader { proxy in
+            ScrollView {
+                content.frame(maxWidth: .infinity, minHeight: proxy.size.height)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+        .background(NookColor.canvas)
+        .captureButton()
+        .navigationTitle(Text("Private item"))
+        .toolbarTitleDisplayMode(.inline)
+    }
+
+    private var content: some View {
         VStack(spacing: NookSpace.s2) {
             Image(systemName: "lock.fill")
                 .font(.nookTitle)
@@ -102,6 +116,7 @@ private struct LockedItem: View {
                 .accessibilityHidden(true)
             Text("This item is private")
                 .font(.nookSection)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(NookColor.textPrimary)
                 .accessibilityAddTraits(.isHeader)
             Text("Unlock to see where it is and what it’s worth.")
@@ -111,18 +126,15 @@ private struct LockedItem: View {
             Button {
                 Task { await lock.unlockPrivate() }
             } label: {
-                Label("Unlock with \(lock.method.name)", systemImage: lock.method.symbol).frame(maxWidth: .infinity)
+                Label("Unlock with \(lock.method.name)", systemImage: lock.method.symbol)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(NookButtonStyle(.primary))
         }
         .multilineTextAlignment(.center)
         .padding(NookSpace.s4)
         .frame(maxWidth: NookLayout.readableWidth)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(NookColor.canvas)
-        .captureButton()
-        .navigationTitle(Text("Private item"))
-        .toolbarTitleDisplayMode(.inline)
     }
 }
 

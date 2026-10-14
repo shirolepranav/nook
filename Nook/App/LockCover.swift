@@ -14,6 +14,28 @@ struct LockCover: View {
         ZStack {
             NookColor.canvas
             if pulses { NookColor.danger.opacity(0.08) }
+            // Centered, and scrolls once large text no longer fits (03 §11).
+            GeometryReader { proxy in
+                ScrollView {
+                    content.frame(maxWidth: .infinity, minHeight: proxy.size.height)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+            }
+        }
+        .ignoresSafeArea(edges: .horizontal)
+        .background(NookColor.canvas.ignoresSafeArea())
+        .nookHaptic(.failed, trigger: lock.failures)
+        .onChange(of: lock.failures) { _, failures in
+            guard failures > 0, !reduceMotion else { return }
+            withNookAnimation(.fade, reduceMotion: reduceMotion) { pulses = true }
+            Task {
+                try? await Task.sleep(for: .seconds(NookMotion.fadeSeconds))
+                withNookAnimation(.fade, reduceMotion: reduceMotion) { pulses = false }
+            }
+        }
+    }
+
+    private var content: some View {
             VStack(spacing: NookSpace.s3) {
                 Image("LaunchMark")
                     .resizable()
@@ -23,6 +45,7 @@ struct LockCover: View {
                 if lock.isLocked {
                     Text("Nook is locked")
                         .font(.nookTitle)
+                        .fixedSize(horizontal: false, vertical: true)
                         .foregroundStyle(NookColor.textPrimary)
                         .accessibilityAddTraits(.isHeader)
                     if lock.failures > 0 {
@@ -35,6 +58,7 @@ struct LockCover: View {
                         Task { await lock.unlock() }
                     } label: {
                         Label("Unlock with \(lock.method.name)", systemImage: lock.method.symbol)
+                            .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(NookButtonStyle(.primary))
@@ -42,18 +66,7 @@ struct LockCover: View {
                 }
             }
             .multilineTextAlignment(.center)
-            .padding(.horizontal, NookSpace.s3)
-        }
-        .ignoresSafeArea()
-        .nookHaptic(.failed, trigger: lock.failures)
-        .onChange(of: lock.failures) { _, failures in
-            guard failures > 0, !reduceMotion else { return }
-            withNookAnimation(.fade, reduceMotion: reduceMotion) { pulses = true }
-            Task {
-                try? await Task.sleep(for: .seconds(NookMotion.fadeSeconds))
-                withNookAnimation(.fade, reduceMotion: reduceMotion) { pulses = false }
-            }
-        }
+            .padding(NookSpace.s3)
     }
 }
 
