@@ -1,4 +1,5 @@
 import Foundation
+import Synchronization
 import ImageIO
 import CoreGraphics
 import UniformTypeIdentifiers
@@ -34,8 +35,28 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
 
     public static let shared = BlobStore(root: defaultRoot())
 
+    /// A photo or receipt file written or removed, for `FileSync` (D58). Thumbnails aren't
+    /// reported: each device makes its own.
+    public struct Change: Hashable, Sendable {
+        public enum Kind: Sendable { case saved, removed }
+        public let kind: Kind
+        public let folder: Folder
+        public let fileName: String
+    }
+
     public let root: URL
     private let cache = NSCache<NSString, CGImage>()
+    private let observer = Mutex<(@Sendable (Change) -> Void)?>(nil)
+
+    /// FileSync listens only while iCloud sync is on; `nil` stops it.
+    public func observe(_ handler: (@Sendable (Change) -> Void)?) {
+        observer.withLock { $0 = handler }
+    }
+
+    private func report(_ kind: Change.Kind, _ fileName: String, in folder: Folder) {
+        guard folder != .thumbs, let handler = observer.withLock({ $0 }) else { return }
+        handler(Change(kind: kind, folder: folder, fileName: fileName))
+    }
 
     public init(root: URL) {
         self.root = root
@@ -80,6 +101,7 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
             if let page = Self.firstPage(of: target), let data = Self.heic(page) {
                 try write(data, to: thumbnailURL(for: fileName))
             }
+            report(.saved, fileName, in: .receipts)
             return (fileName, true)
         }
         guard type?.conforms(to: .image) ?? true else { throw Failure.unsupportedFile }
@@ -102,15 +124,36 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
                 try FileManager.default.copyItem(at: thumbnailURL(for: fileName), to: thumbnailURL(for: copy))
             }
         } catch { throw Failure.writeFailed }
+        report(.saved, copy, in: folder)
         return copy
     }
 
-    public func remove(_ fileNames: [String], in folder: Folder) {
+    /// `reports` is false for a removal that came from iCloud, so it isn't sent back.
+    public func remove(_ fileNames: [String], in folder: Folder, reports: Bool = true) {
         for name in fileNames {
             try? FileManager.default.removeItem(at: url(for: name, in: folder))
             try? FileManager.default.removeItem(at: thumbnailURL(for: name))
             cache.removeObject(forKey: Self.thumbName(name) as NSString)
+            if reports { report(.removed, name, in: folder) }
         }
+    }
+
+    /// A file that arrived from iCloud (D58): copied into place, protected, with its
+    /// thumbnail made here. It isn't reported back.
+    public func adopt(_ source: URL, as fileName: String, in folder: Folder) throws {
+        let target = url(for: fileName, in: folder)
+        try? FileManager.default.removeItem(at: target)
+        do { try FileManager.default.copyItem(at: source, to: target) } catch { throw Failure.writeFailed }
+        protect(target)
+        let thumb: CGImage? = fileName.lowercased().hasSuffix(".pdf")
+            ? Self.firstPage(of: target)
+            : CGImageSourceCreateWithURL(target as CFURL, nil).flatMap { Self.downsampled($0, maxPixels: Self.thumbnailPixels) }
+        if let thumb, let data = Self.heic(thumb) { try write(data, to: thumbnailURL(for: fileName)) }
+        cache.removeObject(forKey: Self.thumbName(fileName) as NSString)
+    }
+
+    public func exists(_ fileName: String, in folder: Folder) -> Bool {
+        FileManager.default.fileExists(atPath: url(for: fileName, in: folder).path)
     }
 
     /// Removes files that no row references (D40). Files younger than `grace` are kept: an
@@ -160,6 +203,7 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
         let fileName = UUID().uuidString + ".heic"
         try write(fullData, to: url(for: fileName, in: folder))
         try write(thumbData, to: thumbnailURL(for: fileName))
+        report(.saved, fileName, in: folder)
         return Saved(fileName: fileName, width: full.width, height: full.height)
     }
 

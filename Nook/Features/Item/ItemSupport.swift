@@ -153,10 +153,12 @@ struct StoredImage<Content: View>: View {
     var maxPixels: Int?
     @ViewBuilder let content: (Image?) -> Content
     @State private var image: Image?
+    /// Files from iCloud arrive after their rows; each arrival retries a missing image (D58).
+    @Environment(SyncStatus.self) private var sync: SyncStatus?
 
     var body: some View {
         content(image)
-            .task(id: fileName) {
+            .task(id: LoadKey(fileName: fileName, arrivals: image == nil ? sync?.arrivals ?? 0 : 0)) {
                 guard let fileName else { image = nil; return }
                 let blobs = BlobStore.shared
                 let cgImage = if let maxPixels {
@@ -166,6 +168,11 @@ struct StoredImage<Content: View>: View {
                 }
                 image = cgImage.map { Image(decorative: $0, scale: 1) }
             }
+    }
+
+    private struct LoadKey: Equatable {
+        let fileName: String?
+        let arrivals: Int
     }
 }
 
