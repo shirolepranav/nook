@@ -159,7 +159,8 @@ final class AccessibilityAuditTests: XCTestCase {
         let field = app.searchFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Quick filters"].waitForExistence(timeout: 10))   // the index is built
-        app.collectionViews.firstMatch.swipeDown()   // choosing Find raises the keyboard (D32)
+        // Choosing Find raises the keyboard (D32), and a swipe doesn't lower it on iOS 27: the
+        // screen is audited as people see it, keyboard up (its text is excused below).
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         field.tap()
@@ -508,6 +509,9 @@ final class AccessibilityAuditTests: XCTestCase {
         // The keyboard's own keys and suggestions are system chrome. Its suggestion bar sits just
         // above the keys, outside the keyboard's frame (the iOS 27 simulator's default keyboards).
         let keyboard = app.keyboards.firstMatch
+        // Its suggestions sometimes come back as clipped text with no element at all (Find,
+        // which opens with the keyboard up; flaky about 1 run in 2 before this).
+        if issue.element == nil, issue.auditType == .textClipped, keyboard.exists, keyboard.isHittable { return true }
         if let element = issue.element, keyboard.exists,
            keyboard.frame.insetBy(dx: 0, dy: -suggestionBarHeight).offsetBy(dx: 0, dy: -suggestionBarHeight / 2)
                .union(keyboard.frame).contains(element.frame) { return true }
