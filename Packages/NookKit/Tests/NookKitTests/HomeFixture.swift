@@ -40,7 +40,7 @@ final class HomeFixture {
         espresso.receipts = [.init(fileName: receiptFile, kind: .image, extractedText: "Harbor Home Goods 649.00")]
         espresso.warranty = .init(endDate: Self.now.addingTimeInterval(165 * day))
         espresso.condition = .likeNew
-        let machine = try items.create(espresso)
+        try items.create(espresso)
 
         var mug = ItemDraft(currencyCode: "EUR", location: Location(room: kitchen, spot: bin))
         (mug.name, mug.price, mug.quantity) = ("Mug, \"Best Dad\"", 12.5, 2)
@@ -55,7 +55,8 @@ final class HomeFixture {
 
         var ring = ItemDraft(currencyCode: "USD", location: Location(room: garage))
         (ring.name, ring.price, ring.isPrivate) = ("Grandma’s ring", 1_800, true)
-        try items.create(ring)
+        let precious = try items.create(ring)
+        LocationService(context: context, now: { Self.now }).move([precious], to: Location(room: garage, spot: shelf))
 
         var guitar = ItemDraft(currencyCode: "USD")
         guitar.name = "🎸 גיטרה"
@@ -67,7 +68,6 @@ final class HomeFixture {
 
         let search = SavedSearch(name: "Coffee things", query: "coffee", filter: SearchFilter(), order: 0)
         context.insert(search)
-        LocationService(context: context, now: { Self.now }).move([machine], to: Location(room: kitchen, spot: counter), source: .manual)
         try context.save()
     }
 }
