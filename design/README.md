@@ -56,7 +56,7 @@ Open the canvas, find **Prototype · start here** (top left), and press **Play**
 | S-02 Nook Pro | `S02Pro` | ✓ | ✓ | free, Pro | SE | ✓ |
 | S-03 iCloud Sync | `S03Sync` | ✓ | ✓ | free (Pro needed), on, signed out, storage full | SE | ✓ |
 | S-04 Backup & Restore | `S04Backup` | ✓ | ✓ | default, restore (Merge or Replace) | SE | ✓ |
-| S-05 Face ID Lock | `S05Lock` | ✓ | ✓ | — | SE | ✓ |
+| S-05 Face ID Lock | `S05Lock` | ✓ | ✓ | Face ID, Touch ID, no passcode (P12) | SE | ✓ |
 | S-06 Appearance | `S06Appearance` | ✓ | ✓ | — | SE | ✓ |
 | S-07 Notifications | `S07Notifications` | ✓ | ✓ | on, denied | SE | ✓ |
 | S-08 Recently Deleted | `S08Deleted` | ✓ | ✓ | 3 items, empty | SE | ✓ |
@@ -65,6 +65,8 @@ Open the canvas, find **Prototype · start here** (top left), and press **Play**
 | S-11 Apple Intelligence | `S11AI` | ✓ | ✓ | ready, downloading, not available, turned off | SE | ✓ |
 | S-12 Help & About | `S12Help` | ✓ | ✓ | — | SE | ✓ |
 | L-02 App lock | `L02Lock` | ✓ | ✓ | Face ID, Touch ID, not recognized | SE | ✓ |
+| Widgets (P12, F10) | `W01Widgets` | ✓ | ✓ | Warranties small, medium, large; Total value small, medium; Quick find small. Default, tinted, clear; no warranties; Hide values. Private items never appear | SE Home Screen grid | — |
+| Controls (P12, F10) | `CTL01Controls` | ✓ | ✓ | Scan Room and Find in Control Center, on the Lock Screen and for the Action button | SE | — |
 
 ### Coverage (P0b, iPad, D29)
 iPad component boards (`iPad<Screen>`) are drawn at the 13-inch iPad in landscape, 1376×1032. The `size` tweak switches them to `13p` (13-inch portrait, 1032×1376) or `mini` (iPad mini portrait, 744×1133). Landscape shows the sidebar. Portrait collapses it to a floating tab bar at the top. Grids follow `cardMinWidth`/`maxGridColumns`, and text columns follow `readableWidth` (03 §4).
