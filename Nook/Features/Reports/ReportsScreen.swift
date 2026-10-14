@@ -3,14 +3,26 @@ import SwiftData
 import NookKit
 import NookUI
 
-/// R-01. Warranties and Lent out (P7); the insurance report and CSV arrive in P10.
+/// R-01: the insurance report and CSV (P10), Warranties and Lent out (P7). Declutter waits
+/// for a later version (roadmap risks).
 struct ReportsScreen: View {
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
+    @Environment(EntitlementStore.self) private var entitlements
+    @State private var exportsCSV = false
+    @AppStorage(MoneyText.hideValuesKey) private var hideValues = false
 
     var body: some View {
         TabRoot("Reports") {
             // Destinations come from `itemNavigation()`, so Home's See All can push R-04 too.
             Group {
+                NavigationLink(value: ReportsRoute.insuranceReport) {
+                    ReportCard(symbol: "doc.text", color: .accentColor, title: Text("Insurance report"),
+                               detail: reportDetail, isPro: !entitlements.canExport)
+                }
+                Button { exportsCSV = true } label: {
+                    ReportCard(symbol: "tablecells", color: NookColor.success, title: Text("Export CSV"),
+                               detail: Text("Every item and field, for Numbers or Excel"), isPro: !entitlements.canExport)
+                }
                 NavigationLink(value: ReportsRoute.warranties) {
                     ReportCard(symbol: "checkmark.shield", color: NookColor.warning, title: Text("Warranties"),
                                detail: warrantiesDetail)
@@ -21,6 +33,15 @@ struct ReportsScreen: View {
             }
             .buttonStyle(.nookCard)
         }
+        .sheet(isPresented: $exportsCSV) { CSVExportSheet() }
+    }
+
+    /// "126 items · $24,380", in the home currency (D20, D41); values hide with Hide values.
+    private var reportDetail: Text {
+        let code = HomeCurrency.code
+        let total = items.compactMap(\.value).filter { $0.currencyCode == code }.reduce(Decimal(0)) { $0 + $1.amount }
+        let value = hideValues ? Text(verbatim: "••••") : Text(total, format: .currency(code: code))
+        return Text("\(items.count) items · \(value)")
     }
 
     /// "2 ending in the next 30 days" (R-01 board).
@@ -47,6 +68,8 @@ private struct ReportCard: View {
     let color: Color
     let title: Text
     let detail: Text
+    /// The Pro badge on gated reports (R-01 board, Free only).
+    var isPro = false
 
     var body: some View {
         HStack(spacing: NookSpace.s2) {
@@ -58,7 +81,14 @@ private struct ReportCard: View {
                 .dynamicTypeSize(...DynamicTypeSize.large)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
-                title.font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                HStack(spacing: NookSpace.s1) {
+                    title.font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                    if isPro {
+                        Label("Pro", systemImage: "lock.fill")
+                            .font(.nookCaption)
+                            .foregroundStyle(NookColor.textSecondary)
+                    }
+                }
                 detail.font(.nookMeta).foregroundStyle(NookColor.textSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

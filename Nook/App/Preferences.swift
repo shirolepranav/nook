@@ -16,6 +16,12 @@ enum PreferenceKey {
     static let warrantyReminders = "warrantyReminders"
     static let loanReminders = "loanReminders"
     static let reminderMinutes = "reminderMinutes"
+    /// R-02's cover (D28): kept for the next report.
+    static let reportHomeName = "reportHomeName"
+    static let reportInsurer = "reportInsurer"
+    static let reportPolicyNumber = "reportPolicyNumber"
+    /// S-04's "Last backup Oct 1, 2026".
+    static let lastBackup = "lastBackup"
 }
 
 extension UserDefaults {

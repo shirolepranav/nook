@@ -68,6 +68,7 @@ private struct SiblingColumn: View {
 private struct ItemDetail: View {
     let item: Item
     @State private var editing = false
+    @State private var exportsProof = false
     @State private var viewingPhoto: Int?
     @State private var receiptURL: URL?
     @State private var confirmsDelete = false
@@ -134,6 +135,10 @@ private struct ItemDetail: View {
                 }
             }
             ToolbarItem(placement: .secondaryAction) {
+                // D4: this item's report with its receipts, for a warranty or insurance claim.
+                Button("Export Proof Pack", systemImage: "doc.richtext") { exportsProof = true }
+            }
+            ToolbarItem(placement: .secondaryAction) {
                 Button("Duplicate", systemImage: "plus.square.on.square") { toast = actions.duplicate(item) }
             }
             ToolbarItem(placement: .secondaryAction) {
@@ -148,6 +153,7 @@ private struct ItemDetail: View {
             Text("You can restore it from Recently Deleted for 30 days.")
         }
         .sheet(isPresented: $editing) { ItemEditor(item: item) }
+        .sheet(isPresented: $exportsProof) { ProofPackSheet(item: item) }
         .fullScreenCover(item: Binding { viewingPhoto.map(PhotoIndex.init) } set: { viewingPhoto = $0?.index }) {
             PhotoViewer(item: item, start: $0.index)
         }

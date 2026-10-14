@@ -195,6 +195,7 @@ private struct ItemNavigation: ViewModifier {
                 switch route {
                 case .warranties: WarrantiesScreen()
                 case .lentOut: LentOutScreen()
+                case .insuranceReport: InsuranceReportScreen()
                 }
             }
     }

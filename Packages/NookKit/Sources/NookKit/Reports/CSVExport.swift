@@ -34,7 +34,7 @@ public enum CSVExport {
     }
 
     /// "649.00": always a period and no grouping, whatever the region, so spreadsheets read a number.
-    static func plain(_ value: Decimal) -> String {
+    public static func plain(_ value: Decimal) -> String {
         value.formatted(.number.precision(.fractionLength(2)).grouping(.never).locale(Locale(identifier: "en_US_POSIX")))
     }
 

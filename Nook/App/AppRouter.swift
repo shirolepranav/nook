@@ -15,5 +15,5 @@ final class AppRouter {
 
 /// Screens pushed from Reports, and from Home's See All (R-04, R-05).
 enum ReportsRoute: Hashable {
-    case warranties, lentOut
+    case warranties, lentOut, insuranceReport
 }

@@ -35,6 +35,7 @@ struct NookApp: App {
                     RootView()
                         .modelContainer(container)
                         .environment(app.router)
+                        .environment(app.entitlements)
                         .environment(\.reminders, app.reminders)
                 } else {
                     StoreErrorView { app.openStore() }
