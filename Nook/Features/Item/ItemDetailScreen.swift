@@ -16,6 +16,15 @@ struct ItemDetailScreen: View {
     @Environment(AppLock.self) private var lock
 
     var body: some View {
+        content
+            .onChange(of: (shown ?? item).isPrivate) { _, isPrivate in
+                // Marked Private while on screen: it doesn't lock in the user's face (D61).
+                if isPrivate { lock.keepPrivateOpen() }
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
         let current = shown ?? item
         let siblings = siblingItems
         if sizeClass == .regular, siblings.count > 1 {

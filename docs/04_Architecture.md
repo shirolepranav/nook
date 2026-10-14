@@ -200,7 +200,7 @@ final class Item {
 - **Container:** the store sits in the App Group container, `ModelConfiguration(groupContainer: .identifier(...))`. CloudKit is `.private("iCloud.pranav.nook")` only while S-03's switch is on and Pro is unlocked (`SyncSettings.isActive`), `.none` otherwise (P11, D58). SwiftData can't toggle mirroring on an open store, so `AppDelegate.setSync` closes the store (the views go with it), reopens it, and Settings comes back on S-03. Opening `.private` without the iCloud entitlement traps, so tests and previews never do (D59). `SyncStatus` reads `NSPersistentCloudKitContainer.eventChangedNotification` and the account for S-03.
 - **Soft delete:** `ItemService.delete` sets `deletedAt` (a property change, so the window's Undo works), and queries filter out deleted rows. `purgeExpired()` hard-deletes rows older than 30 days, and their files, after the first frame at launch. Delete Now and Delete All Now are final and confirm first (D40).
 - **`ItemService` (P3):** create and update from an `ItemDraft` (only the name is required, F2), duplicate, cover and photo removal (snapshot undo, D35), Private, tags, soft delete, restore, purge, and the queries screens use. Location changes go on to `LocationService`.
-- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent`, sets `lastConfirmedAt`, updates Spotlight, and posts a widget reload (Spotlight and widget reloads join in P12). `LocationService` also moves a container with everything in it (`move(_:to:)`, one event per item inside; `RoomService.place` goes through it), lists the Move picker's recents (`recents(limit:excluding:)`: the last 5 live places moved to, from the newest 50 events) and an item's history (`history(of:)`). Moves undo through SwiftData's own undo, which keeps a saved move's undo, event included (D45).
+- **Location invariant:** an item has a `room` and, optionally, a `spot`. If `spot` is set, `room == spot.room` (or `spot.parent.room`). **All location writes go through `LocationService.move(items:to:source:)`.** It updates both fields, appends a `LocationEvent` and sets `lastConfirmedAt`. Spotlight and the widgets follow from `SystemSurfaces`, which watches every save (P12, D61). `LocationService` also moves a container with everything in it (`move(_:to:)`, one event per item inside; `RoomService.place` goes through it), lists the Move picker's recents (`recents(limit:excluding:)`: the last 5 live places moved to, from the newest 50 events) and an item's history (`history(of:)`). Moves undo through SwiftData's own undo, which keeps a saved move's undo, event included (D45).
 - **Container depth:** a container sits on its room or inside a spot, never inside another container; spots are always top-level (D3, D34). `RoomService` enforces this.
 - **Free limits (P11, D58):** `ItemService` reads the cached entitlement (`EntitlementCache`, kept by `EntitlementStore`) and throws `.itemLimit` past 25 non-deleted items (`checkCanAdd(_:)`, which Save All calls for its whole batch first) or `.reminderLimit` for a 4th active warranty reminder. Views catch them and open P-01, then run the action again after the unlock. Restore, edits and existing reminders are never gated.
 
@@ -212,7 +212,7 @@ final class Item {
 - **Receipts:** stored in `AppGroup/Receipts/<uuid>.(heic|pdf)`, each with a thumbnail (a PDF's first page).
 - **File lifecycle (D40):** files are written when picked, before Save. Soft-deleted items keep theirs; the purge removes them. At launch, `BlobStore.sweepOrphans` removes files no row references that are over an hour old (cancelled or killed edits).
 - **iCloud sync (Pro, P11, D58):** `FileSync` (an actor, the `CKSyncEngineDelegate`) sends each photo and receipt as a `NookFile` record with one `CKAsset` (`asset`) in the `NookFiles` zone; record names are `<Folder>.<fileName>`. `BlobStore` reports saves and removals to it (`observe`); files from iCloud come in through `BlobStore.adopt`, which makes the thumbnail here (thumbnails never sync), and `SyncStatus.arrivals` makes photo placeholders retry. Only final deletes and discarded edits send removals; `sweepOrphans` sends nothing and, while syncing, keeps orphans 30 days. Engine state is saved beside the folders (`FileSync.state`).
-- **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9).
+- **Data Protection:** `completeUntilFirstUserAuthentication` on the store and files, so widgets work after the first unlock (PRD §9). Files set it explicitly; the SwiftData store has it as the system default (D62).
 - **Backup (`.nookbackup`, D12, D56):** a zip containing `manifest.json` (`schemaVersion`, `appVersion`, `createdAt`, `itemCount`, `homeName`), `data.json` (every row, relationships as UUIDs) and `files/{Photos,Thumbs,Receipts}/`. `BackupService` writes and reads it; `ZipArchive` is Nook's own, because the SDK can't read zips. Restore offers **Merge** (adds only rows whose id is new) or **Replace** (what the backup lacks goes to Recently Deleted, then the backup's rows are written over the store's). Files are copied before any row changes. A newer `schemaVersion` is refused. `BackupTests` fails if a model field isn't carried by its backup record.
 - **No network calls** except StoreKit and CloudKit. The CI grep fails on `URLSession` usage outside an allowlist.
 
@@ -230,7 +230,7 @@ final class Item {
 - **Ranking:** exact name > name prefix > tag > synonym > room/spot > brand, model, serial, notes > receipt text. Boost recently confirmed items.
 - **Filters (F-05):** `SearchFilter` (Codable, saved with a search): rooms, category, tags, value range in the home currency, warranty status, lent out, last seen (`lastConfirmedAt`).
 - **Questions and answers:** `FindQuestion` reads the Classic intents (where, who has, what's in, do I have). On Search, the router's AI reading returns the same type, adding `.move` and `placeTerms` (P9, D55). `FindService.answer` builds a `FindAnswer` (NookKit, D46) from records only: location, lent, packed, quantity, contents, or `.choose` when several items match about equally. `FindService.proposedMove` gives F-04's proposal. The AI's only tool reads `SearchIndex.records(matching:)`, which leaves out Private items; there's no `FindQuerying` protocol (D55).
-- **Spotlight:** Core Spotlight indexes items, rooms and spots, **excluding `isPrivate`**. Changes are pushed from `LocationService` and `ItemService`.
+- **Spotlight:** Core Spotlight indexes items, rooms and spots, **excluding `isPrivate`**. **As built (P12, D61):** they're the App Intents entities (`ItemEntity`, `PlaceEntity`, as `IndexedEntity`), reindexed by `SystemSurfaces` 300 ms after each run of saves.
 
 ---
 
@@ -257,21 +257,22 @@ func desiredReminders(warranties: [WarrantySnapshot], loans: [LoanSnapshot],
 
 ## 8. App surfaces
 
-- **Deep links (D19):** P10 handles `nook://spot/<qrID>` (box labels, F8) in `DeepLink`; the rest arrive with widgets and intents in P12.
-  - `nook://item/<uuid>`, `nook://room/<uuid>`, `nook://spot/<qrID>`, `nook://find?q=…`, `nook://scan`
-  - One `DeepLinkRouter` in the app builds the navigation path, so the back stack is intact.
-  - Private targets require authentication.
+- **Deep links (D19, D61):** `DeepLink` in NookKit, so the widgets share it.
+  - `nook://item/<uuid>`, `nook://room/<uuid>` (also a spot or container), `nook://spot/<qrID>`, `nook://find?q=…`, `nook://scan`, `nook://warranties`
+  - The shell opens them in sheets over the current tab (`AppRouter`), as a notification's item does; tab stacks aren't bound to shared state (D50).
+  - Private targets land on I-01's locked state.
 - **App Intents:**
   - `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`.
-  - `ItemEntity` and `RoomEntity` use `EntityQuery` backed by the search index and `FindService` (D55).
-  - App Shortcuts phrases are included.
-  - `MoveItemIntent` asks for confirmation (`requestConfirmation`) before writing.
-  - Private items are excluded from entity queries unless the app is unlocked.
+  - `ItemEntity` and `PlaceEntity` (rooms, spots, containers; D61) use `EntityStringQuery` backed by the search index and `FindService` (D55). They read the app's store through `IntentStore`, since the intents run in the app's process.
+  - App Shortcuts phrases are included (`NookShortcuts`).
+  - `MoveItemIntent` asks for confirmation (`requestConfirmation`) before writing, then moves through `LocationService` with source `.siri`.
+  - Private items are never entities, even while the app is unlocked (D61).
 - **Widgets:**
-  - A read-only `ModelContainer` on the same App Group store.
-  - The Total value widget honors Hide values, and every widget excludes Private items.
-  - Reloads are triggered with `WidgetCenter.shared.reloadAllTimelines()` from services after writes.
-- **Controls:** a Control Center control and an Action button option for room scan (`ScanRoomIntent`), and a Lock Screen control for Move.
+  - A read-only `ModelContainer` on the same App Group store (`NookStore.makeContainer(readOnly: true)`), read into `WidgetSnapshot` (NookKit). The views are NookUI's `WidgetViews`.
+  - The Total value widget honors Hide values, and every widget excludes Private items, from the total too.
+  - `SystemSurfaces` reloads them after saves and when Nook goes to the background (D61).
+- **Controls (D61):** Scan Room and Find in Nook, each an `OpenURLIntent` to `nook://scan` or `nook://find`, for Control Center, the Lock Screen and the Action button.
+- **App lock:** `AppLock` (the only `LocalAuthentication` caller) and `LockCover` (L-02 in its own window at alert level, which covers sheets and the app switcher).
 
 ---
 

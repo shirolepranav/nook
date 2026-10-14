@@ -1,18 +1,19 @@
 import SwiftUI
 import NookUI
 
-/// S-09 Privacy (PRD §9), in plain words. P-01's Privacy link opens it too (D58). The Private
-/// items section joins with Face ID and Spotlight in P12.
+/// S-09 Privacy (PRD §9), in plain words. P-01's Privacy link opens it too (D58).
 struct PrivacyScreen: View {
     /// Opened as a sheet from P-01: give it a way out.
     var showsDone = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppLock.self) private var lock
 
     var body: some View {
         List {
             section("On this iPhone", "Your items, photos, receipts and answers live on this iPhone. Photos and text are read on this iPhone too.")
-            section("With iCloud sync (Pro)", "Items, photos and moves sync through your private iCloud database. Apple encrypts it, and we can’t see it.")
+            section("With iCloud sync (Pro)", "Items sync through your private iCloud database. Apple encrypts it, and we can’t see it.")
             section("What we collect", "Nothing. No account, no analytics, no ads. The App Store label says “Data Not Collected.”")
+            section("Private items", "They need \(lock.method.name) to open and never appear in Spotlight, Siri or widgets.")
         }
         .scrollContentBackground(.hidden)
         .background(NookColor.canvas)
@@ -38,4 +39,4 @@ struct PrivacyScreen: View {
     }
 }
 
-#Preview { NavigationStack { PrivacyScreen() } }
+#Preview { NavigationStack { PrivacyScreen() }.environment(AppLock.preview) }

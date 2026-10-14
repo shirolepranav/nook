@@ -152,6 +152,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - **Interactions:** Face ID on Face ID iPhones, Touch ID on iPhone SE and iPhone Duo (PRD §5 F11), invoked automatically on appear. Success cross-fades in with a success haptic; failure gives an error haptic plus a gentle color pulse, and the button stays available. The system falls back to the device passcode after repeated failures.
 - **Always:** the app-switcher snapshot is covered while locked. [Inferred]
 - **Private items** ask for authentication on open even when the app lock is off (PRD §9).
+- **As built (P12, D61):** L-02 sits in its own window above Nook's, so it covers open sheets. Without its button, it's the app-switcher cover whenever the lock is on or a Private item is open. One unlock opens Nook and every Private item until Nook leaves the screen, or until the lock's timer runs out. A failure shows "Face ID didn't recognize you. Try again, or use your passcode." Copy names Touch ID or Optic ID on devices with those.
 
 ---
 
@@ -408,15 +409,15 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ## 10. Settings tab
 | ID | Screen | Contents |
 |---|---|---|
-| S-01 | Settings root | Pro status card (or Unlock), sync, backup, lock, appearance, notifications, Recently Deleted, tags, Apple Intelligence, privacy, help. **As built (P11, D58):** Free: "Unlock Nook Pro · Unlimited items, reports and iCloud sync. Pay once." opens P-01; Pro: "Nook Pro · Thank you for supporting Nook." opens S-02. iCloud Sync (Pro / On / Off) leads Your data; a Privacy section holds S-09 (Face ID Lock joins in P12) |
+| S-01 | Settings root | Pro status card (or Unlock), sync, backup, lock, appearance, notifications, Recently Deleted, tags, Apple Intelligence, privacy, help. **As built (P11, D58):** Free: "Unlock Nook Pro · Unlimited items, reports and iCloud sync. Pay once." opens P-01; Pro: "Nook Pro · Thank you for supporting Nook." opens S-02. iCloud Sync (Pro / On / Off) leads Your data; a Privacy section holds S-09. **As built (P12):** "Face ID Lock" (On / Off) leads the Privacy section |
 | S-02 | Nook Pro | What's included, Restore Purchases, Family Sharing note (PRD §7). **As built (P11, D58):** "Nook Pro is unlocked" with "Bought Oct 4, 2026." or "Shared with you through Family Sharing."; Free shows Unlock Nook Pro; Restore answers with a toast ("Nook Pro is unlocked." / "No purchase found for this Apple Account.") |
 | S-03 | iCloud sync (Pro) | Toggle, last synced, status (signed out, storage full), "Sync now" [Inferred]. **As built (P11, D58):** off until turned on; Free sees "iCloud sync comes with Nook Pro" and the switch opens P-01. On: "Sync with iCloud", Last synced, Sync Now, and a card when signed out (Open Settings) or storage is full (Manage Storage opens Settings). Turning it on or off reopens the store and comes back here |
 | S-04 | Backup & restore | Create a .nookbackup file (zip of JSON and photos, PRD §5 F9); restore by replacing or merging, with confirmation [Inferred]. **As built (P10, D56):** Create Backup shows progress and Cancel, then **Share Backup** and **Save to Files**; "About 1.2 GB · Last backup Oct 1, 2026". Restore from a Backup (or opening a .nookbackup from Files) asks Merge or Replace in a confirmation dialog whose message explains both, then a toast: "Restored 126 items." |
-| S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it |
+| S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it. **As built (P12, D61):** "Lock Nook with Face ID" asks first, then shows Lock after (Right away, 1 min, 5 min; a menu at accessibility sizes). With no passcode on the device: "Set a passcode in Settings to lock Nook.", Open Settings, and the switch off |
 | S-06 | Appearance | System / Light / Dark; **accent color, 6 options** (PRD §3); Hide values by default [Inferred] |
 | S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook only sends reminders you asked for.", and the denied card with Open Settings. **As built (P11, D58):** Free users also see "2 of 3 reminders used. Unlimited with Nook Pro." |
 | S-08 | Recently Deleted | Items with days left out of 30; Restore or Delete Now; Delete All with confirmation |
-| S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected". **As built (P11, D58):** those three sections, also opened from P-01's Privacy link; P12 adds Private items |
+| S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected". **As built (P11, D58):** those three sections, also opened from P-01's Privacy link. **As built (P12):** a fourth, Private items: "They need Face ID to open and never appear in Spotlight, Siri or widgets." |
 | S-10 | Tags | Rename, merge, delete. Categories are a fixed list of 10 (PRD §8 DetectedItem) |
 | S-11 | Apple Intelligence | Status: Ready, Downloading, Not available on this iPhone, or Turned off. App-level "Use Apple Intelligence" toggle [Inferred from PRD §8 "AI turned off"]. **As built (P8, D53):** a status card per state (Turned off has Open Settings); the switch shows only for Ready and Downloading, as on the board; a model that can't see images reads "You tag items in photos yourself."; debug builds add Force classic engine |
 | S-12 | Help & About | How-to tips, contact, version, acknowledgements |
@@ -438,11 +439,11 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ## 12. System surfaces
 | Surface | Behavior | Source |
 |---|---|---|
-| Widgets | "Warranties ending soon", "Total home value" (respects Hide values) [Inferred], "Quick find" (opens Find). Excludes Private items. | [PRD §5 F10, §9] |
-| Control Center control | Opens room scan | [PRD §5 F10] |
-| Action button | Option to launch room scan | [PRD §8] |
-| Lock Screen control | Quick Move / Find | [PRD §6, §10 risks] |
-| Siri & Shortcuts | `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent` | [PRD §8] |
+| Widgets | "Warranties ending soon", "Total home value" (respects Hide values) [Inferred], "Quick find" (opens Find). Excludes Private items. **As built (P12, D61, W01Widgets board):** Warranties small, medium and large (taps open R-04, rows open the item); Total value small and medium, the top 3 rooms beside it, Private items left out of the sum; Quick find small | [PRD §5 F10, §9] |
+| Control Center control | Opens room scan. **As built (P12, D61):** Scan Room and Find in Nook | [PRD §5 F10] |
+| Action button | Option to launch room scan (either control) | [PRD §8] |
+| Lock Screen control | Quick Move / Find. **As built (D61):** Scan Room or Find in Nook; moving is 2 taps from Find's answer card | [PRD §6, §10 risks] |
+| Siri & Shortcuts | `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`. **As built (D61):** items and places (rooms, spots, containers) as entities; Move asks before it writes; Private items never appear | [PRD §8] |
 | Spotlight | Items and rooms indexed, except Private items | [PRD §8, §9] |
 | QR codes | System Camera opens the container | [PRD §5 F8] |
 | Notifications | Warranty: "Your dishwasher warranty ends in 30 days" (View, Snooze 1 Week); loan due, the morning it's due: "Jordan has had your drill since Sep 12. It's due back today." (Mark Returned, Snooze 1 Week). Private items aren't named (D50) | [PRD §5 F4, F7] |

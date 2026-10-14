@@ -26,6 +26,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             // S-05 starts off; an earlier test may have left it on in the App Group.
             UserDefaults.nook.removeObject(forKey: AppLock.enabledKey)
             UserDefaults.nook.removeObject(forKey: AppLock.timingKey)
+            // `-uiTestingLockOn`: launch with S-05 on, so L-02 shows straight away.
+            if arguments.contains("-uiTestingLockOn") { UserDefaults.nook.set(true, forKey: AppLock.enabledKey) }
         }
         if let fake = AppLock.forTesting(arguments) { return fake }
         if arguments.contains("-uiTestingStore") { return AppLock(method: { .faceID }, authenticate: { _ in true }) }

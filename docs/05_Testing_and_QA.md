@@ -11,7 +11,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | Unit | Swift Testing (`@Test`, `#expect`) | Each package's `Tests/` | Models, invariants, services, search ranking, scheduler, router fallback, report/CSV/backup | Every PR (CI) |
 | Snapshot | Image snapshots of NookUI components and key screens (in-house helper, D31) | `NookUI` tests + `NookTests`; references in `Fixtures/snapshots/` | {light, dark} × {Large, AX5}, plus Increase Contrast (light) for components | Every PR |
 | UI flow | XCUITest | `NookUITests` | The 6 user stories plus the smoke suite rows that can be automated | Every PR (SE sim); nightly on the full matrix |
-| App Intents | App Intents testing | `NookTests/Intents` | Find, Move, ListRoom, Add, ScanRoom | Every PR from P12 |
+| App Intents | App Intents Testing (`AppIntentsTesting`, D62) from UI tests, plus direct calls in unit tests | `NookUITests/LockTests`, `NookTests/IntentTests` | Find, Move, ListRoom; Private exclusion | Every PR from P12 |
 | AI quality | Evaluations framework [Verify in SDK] | `NookAI/Evaluations` + `Fixtures/eval` | Room-scan naming accuracy; question→query correctness | Per AI PR, on every iOS beta, before each release |
 | Performance | XCTest metrics + Instruments | `NookTests/Perf` | PRD budgets (04 §12) | Nightly; release blocking in P13 |
 | Manual | Checklists in this doc | Real devices | Device matrix, accessibility, No-AI pass, exploratory | End of phase; every release |

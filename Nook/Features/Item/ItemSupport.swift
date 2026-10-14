@@ -12,12 +12,6 @@ enum CommonItems {
     }()
 }
 
-/// The currency new items start in and Home totals use (D41): the region's, until Settings
-/// has a picker.
-enum HomeCurrency {
-    static var code: String { Locale.current.currency?.identifier ?? "USD" }
-}
-
 extension ItemCondition {
     /// "Like new" (PRD F2, D53).
     var title: LocalizedStringResource {

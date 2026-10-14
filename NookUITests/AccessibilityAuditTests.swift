@@ -399,6 +399,44 @@ final class AccessibilityAuditTests: XCTestCase {
 
     /// P11 screens: the paywall (P-01), S-01's Pro card, S-02 Nook Pro, S-03 iCloud Sync (free
     /// and Pro) and S-09 Privacy.
+    /// P12: L-02 (failed), S-05, S-09 with Private items, and a locked Private item (I-01).
+    @MainActor
+    func testP12ScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let locked = XCUIApplication.nook(store: "lived")
+        locked.launchArguments += ["-uiTestingBiometrics", "failure", "-uiTestingLockOn"]
+        locked.launch()
+        let unlock = locked.buttons["Unlock with Face ID"]
+        XCTAssertTrue(unlock.waitForExistence(timeout: 10))
+        unlock.tap()
+        XCTAssertTrue(locked.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Face ID didn’t'")).firstMatch
+            .waitForExistence(timeout: 5))
+        try locked.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, locked) }
+        locked.terminate()
+
+        let app = XCUIApplication.nook(store: "lived")
+        app.launchArguments += ["-uiTestingBiometrics", "failure"]
+        app.launch()
+        app.tab("Settings").tap()
+        app.settingsRow("Face ID Lock").tap()
+        XCTAssertTrue(app.switches["Lock Nook with Face ID"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.navigationBars.buttons.firstMatch.tap()
+        app.settingsRow("Privacy").tap()
+        XCTAssertTrue(app.staticTexts["Private items"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+
+        // A Private card in Bedroom's grid opens I-01's locked state.
+        app.tab("Home").tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Bedroom'")).firstMatch.tap()
+        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Private item'")).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        XCTAssertTrue(app.staticTexts["This item is private"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Passport"].exists)
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     @MainActor
     func testP11ScreensPassTheAccessibilityAudit() throws {
         XCUIDevice.shared.orientation = .portrait

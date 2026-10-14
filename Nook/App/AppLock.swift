@@ -132,6 +132,12 @@ final class AppLock {
         return true
     }
 
+    /// The user just made the item on screen Private (I-01's menu or editor): it's theirs and
+    /// already showing, so it stays open until Nook leaves the screen, like any unlock.
+    func keepPrivateOpen() {
+        privateUnlocked = true
+    }
+
     /// S-05's switch. Turning it on asks first (D15); if that fails it stays off.
     func setEnabled(_ on: Bool) async {
         if on {

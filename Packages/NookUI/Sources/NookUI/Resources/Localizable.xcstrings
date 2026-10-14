@@ -4,6 +4,9 @@
     "%@, %@" : {
       "comment" : "Joins parts of a card's VoiceOver label: name, location, value."
     },
+    "%lld days" : {
+
+    },
     "%lld items" : {
       "comment" : "Item count on a room card.",
       "localizations" : {
@@ -26,6 +29,12 @@
           }
         }
       }
+    },
+    "+%lld more" : {
+
+    },
+    "Add prices to see your total." : {
+
     },
     "Add spot" : {
 
@@ -58,7 +67,19 @@
     "Empty" : {
       "comment" : "Item count on a room card with no items."
     },
+    "Ends in %lld days" : {
+
+    },
+    "Ends today" : {
+
+    },
     "Fills the selected field" : {
+
+    },
+    "Find anything" : {
+
+    },
+    "Home value" : {
 
     },
     "Lent" : {
@@ -68,6 +89,9 @@
       "comment" : "VoiceOver label for a loading placeholder card."
     },
     "Moved to Kitchen → Pantry." : {
+
+    },
+    "No warranties ending soon." : {
 
     },
     "Private" : {
@@ -88,6 +112,9 @@
     "Take Photo" : {
 
     },
+    "Today" : {
+
+    },
     "Try Again" : {
       "comment" : "Button on an error state."
     },
@@ -100,8 +127,14 @@
     "Value hidden" : {
       "comment" : "VoiceOver label for a price masked by Hide values (F11)."
     },
+    "Warranties" : {
+
+    },
     "Warranty ending soon" : {
       "comment" : "VoiceOver label for the clock badge on an item whose warranty ends within 30 days."
+    },
+    "Where’s my…?" : {
+
     },
     "^[%lld photo](inflect: true) taken" : {
 

@@ -7,6 +7,18 @@
     " From %@." : {
 
     },
+    "%@" : {
+
+    },
+    "%@ Lock" : {
+
+    },
+    "%@ didn’t recognize you. Try again, or use your passcode." : {
+
+    },
+    "%@ doesn’t have a place in Nook yet." : {
+
+    },
     "%@ has had your %@ since %@. It was due back %@." : {
       "localizations" : {
         "en" : {
@@ -37,8 +49,38 @@
         }
       }
     },
+    "%@ is already in %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is already in %2$@."
+          }
+        }
+      }
+    },
     "%@ is back." : {
 
+    },
+    "%@ is in %@, packed %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is in %2$@, packed %3$@."
+          }
+        }
+      }
+    },
+    "%@ is in %@. Last confirmed %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is in %2$@. Last confirmed %3$@."
+          }
+        }
+      }
     },
     "%@ moved to position %lld of %lld" : {
       "localizations" : {
@@ -127,6 +169,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@, packed %2$@."
+          }
+        }
+      }
+    },
+    "%@, plus %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, plus %2$@"
           }
         }
       }
@@ -347,6 +399,9 @@
         }
       }
     },
+    "%lld private items" : {
+
+    },
     "%lld rooms, ready to fill" : {
       "localizations" : {
         "en" : {
@@ -397,6 +452,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld things in %2$@."
+          }
+        }
+      }
+    },
+    "%lld things in %@: %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld things in %2$@: %3$@."
           }
         }
       }
@@ -452,6 +517,9 @@
     "+%lld more" : {
 
     },
+    ", and %lld more" : {
+
+    },
     "0.00" : {
 
     },
@@ -459,6 +527,9 @@
 
     },
     "1 item with %@" : {
+
+    },
+    "1 min" : {
 
     },
     "1 yr" : {
@@ -480,6 +551,9 @@
 
     },
     "30 and 7 days before a warranty ends" : {
+
+    },
+    "5 min" : {
 
     },
     "A backup is one **.nookbackup** file with every item, photo and receipt. Keep it in Files, iCloud Drive or on a computer." : {
@@ -1165,6 +1239,9 @@
     "Export Proof Pack" : {
 
     },
+    "Face ID" : {
+
+    },
     "Fair" : {
 
     },
@@ -1175,6 +1252,9 @@
 
     },
     "Find" : {
+
+    },
+    "Find Item" : {
 
     },
     "Force classic engine" : {
@@ -1213,7 +1293,7 @@
     "Here now" : {
 
     },
-    "Hidden from Spotlight, Siri and widgets. Needs Face ID to open." : {
+    "Hidden from Spotlight, Siri and widgets. Needs %@ to open." : {
 
     },
     "Hide Values" : {
@@ -1267,13 +1347,16 @@
     "It holds containers, so it stays a spot." : {
 
     },
+    "Item" : {
+
+    },
     "Items" : {
 
     },
-    "Items you delete wait here for 30 days, in case you change your mind." : {
+    "Items sync through your private iCloud database. Apple encrypts it, and we can’t see it." : {
 
     },
-    "Items, photos and moves sync through your private iCloud database. Apple encrypts it, and we can’t see it." : {
+    "Items you delete wait here for 30 days, in case you change your mind." : {
 
     },
     "Items, photos and moves sync through your private iCloud. We can’t see them." : {
@@ -1375,6 +1458,9 @@
     "List top items" : {
 
     },
+    "Lists what’s in a room, spot or box." : {
+
+    },
     "Loading price" : {
 
     },
@@ -1382,6 +1468,15 @@
 
     },
     "Location history" : {
+
+    },
+    "Lock Nook" : {
+
+    },
+    "Lock Nook with %@" : {
+
+    },
+    "Lock after" : {
 
     },
     "Looking for items…" : {
@@ -1438,6 +1533,9 @@
     "Move" : {
 
     },
+    "Move ${item} to ${place}" : {
+
+    },
     "Move %@" : {
 
     },
@@ -1451,6 +1549,16 @@
         }
       }
     },
+    "Move %@ to %@?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move %1$@ to %2$@?"
+          }
+        }
+      }
+    },
     "Move %lld Items" : {
 
     },
@@ -1458,6 +1566,9 @@
 
     },
     "Move Down" : {
+
+    },
+    "Move Item" : {
 
     },
     "Move Items to %@" : {
@@ -1505,6 +1616,9 @@
 
     },
     "Moved with Siri" : {
+
+    },
+    "Moves something to another room, spot or box, after you confirm." : {
 
     },
     "Name" : {
@@ -1618,6 +1732,12 @@
     "Nook couldn’t open your items" : {
 
     },
+    "Nook couldn’t open your items. Open Nook and try again." : {
+
+    },
+    "Nook is locked" : {
+
+    },
     "Nook items %@" : {
 
     },
@@ -1689,6 +1809,9 @@
 
     },
     "Nothing here yet." : {
+
+    },
+    "Nothing in %@ yet." : {
 
     },
     "Nothing matches these filters." : {
@@ -1783,13 +1906,28 @@
     "Open %@" : {
 
     },
+    "Open Item" : {
+
+    },
+    "Open Place" : {
+
+    },
     "Open Settings" : {
+
+    },
+    "Opens Nook to add something, with its name filled in." : {
 
     },
     "Opens in Numbers, Excel and Google Sheets. Prices keep each item’s own currency." : {
 
     },
+    "Opens the camera to add a room’s things from one photo." : {
+
+    },
     "Opens the receipt" : {
+
+    },
+    "Optic ID" : {
 
     },
     "Optional" : {
@@ -1825,6 +1963,12 @@
           }
         }
       }
+    },
+    "Passcode" : {
+
+    },
+    "Path" : {
+
     },
     "Pay once. No subscription. Family Sharing included." : {
 
@@ -1899,6 +2043,9 @@
     "Pick photos you already have instead." : {
 
     },
+    "Place" : {
+
+    },
     "Plain card" : {
 
     },
@@ -1948,6 +2095,12 @@
 
     },
     "Private item. Unlock to see it" : {
+
+    },
+    "Private items" : {
+
+    },
+    "Private items always need %@ to open, even with the lock off. The app switcher hides Nook while it’s locked." : {
 
     },
     "Pro" : {
@@ -2104,6 +2257,9 @@
     "Review" : {
 
     },
+    "Right away" : {
+
+    },
     "Room" : {
 
     },
@@ -2176,6 +2332,9 @@
     "Saving to" : {
 
     },
+    "Says where something is, from what you’ve saved in Nook." : {
+
+    },
     "Scan Barcode" : {
 
     },
@@ -2192,6 +2351,9 @@
 
     },
     "Scan This Spot" : {
+
+    },
+    "Scan a Room" : {
 
     },
     "Scan barcode" : {
@@ -2221,6 +2383,9 @@
     "See all warranties" : {
 
     },
+    "See your private items" : {
+
+    },
     "Select" : {
 
     },
@@ -2243,6 +2408,9 @@
 
     },
     "Serial numbers" : {
+
+    },
+    "Set a passcode in Settings to lock Nook." : {
 
     },
     "Set as Cover" : {
@@ -2492,7 +2660,16 @@
     "That file can’t be added as a receipt. Try a photo or a PDF." : {
 
     },
+    "That isn’t in Nook anymore." : {
+
+    },
+    "That item isn’t in Nook anymore." : {
+
+    },
     "That receipt couldn’t be read. You can type the numbers in." : {
+
+    },
+    "That room isn’t in Nook anymore." : {
 
     },
     "The backup couldn’t be made. Your items are safe. Try again in a moment." : {
@@ -2559,6 +2736,9 @@
     "There isn’t enough space to restore it. Free some up and try again." : {
 
     },
+    "They need %@ to open and never appear in Spotlight, Siri or widgets." : {
+
+    },
     "Things you haven’t moved or confirmed in that long." : {
 
     },
@@ -2605,6 +2785,9 @@
     "This is before the purchase date. You can still save." : {
 
     },
+    "This item is private" : {
+
+    },
     "Those numbers don’t add up. Check them against the label." : {
 
     },
@@ -2614,6 +2797,9 @@
     "Tips" : {
 
     },
+    "To" : {
+
+    },
     "Today" : {
 
     },
@@ -2621,6 +2807,9 @@
 
     },
     "Torch" : {
+
+    },
+    "Touch ID" : {
 
     },
     "Try asking" : {
@@ -2668,6 +2857,9 @@
     "Unlimited warranty reminders" : {
 
     },
+    "Unlock Nook" : {
+
+    },
     "Unlock Nook Pro" : {
 
     },
@@ -2678,6 +2870,12 @@
 
     },
     "Unlock to see it" : {
+
+    },
+    "Unlock to see where it is and what it’s worth." : {
+
+    },
+    "Unlock with %@" : {
 
     },
     "Up to %@" : {
@@ -2744,6 +2942,9 @@
 
     },
     "What we collect" : {
+
+    },
+    "What’s in a Place" : {
 
     },
     "What’s included" : {
