@@ -397,6 +397,28 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
+    /// S-12 Help & About (D63): the screen, a tip and the acknowledgements. Also its primary
+    /// flow: S-01 → S-12 shows the build's version.
+    @MainActor
+    func testP13ScreensPassTheAccessibilityAudit() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        app.launch()
+        app.tab("Settings").tap()
+        app.settingsRow("Help & About").tap()
+        let version = app.descendants(matching: .any)["help.version"]
+        XCTAssertTrue(version.waitForExistence(timeout: 5))
+        XCTAssertTrue(version.label.contains("1.0"))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Scan a room'")).firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["Check the names, fix any that are off, and tap Save."].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        app.navigationBars.buttons.firstMatch.tap()
+        app.settingsRow("Acknowledgements").tap()
+        XCTAssertTrue(app.navigationBars["Acknowledgements"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+    }
+
     /// P11 screens: the paywall (P-01), S-01's Pro card, S-02 Nook Pro, S-03 iCloud Sync (free
     /// and Pro) and S-09 Privacy.
     /// P12: L-02 (failed), S-05, S-09 with Private items, and a locked Private item (I-01).

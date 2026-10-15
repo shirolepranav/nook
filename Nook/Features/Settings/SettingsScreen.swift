@@ -47,6 +47,7 @@ struct SettingsScreen: View {
                     row("Appearance", "paintpalette") { AppearanceScreen() }
                     row("Notifications", "bell") { NotificationsScreen() }
                     row("Apple Intelligence", "apple.intelligence", detail: aiDetail) { AppleIntelligenceScreen() }
+                    row("Help & About", "questionmark.circle") { HelpScreen() }   // S-12 (D63)
                 } header: {
                     header("Nook")
                 }
