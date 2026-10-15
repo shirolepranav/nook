@@ -191,7 +191,9 @@ private struct TabShell: View {
         }
         .toast($toast)
         .task {
-            // Spotlight and the widgets follow every save (04 §8, D61).
+            // Spotlight and the widgets follow every save (04 §8, D61). Not while hosting unit
+            // tests: indexing the simulator's real store competed with StoreKitTests on CI.
+            guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
             await SystemSurfaces(container: context.container).keepCurrent()
         }
         .onChange(of: scenePhase) { _, phase in

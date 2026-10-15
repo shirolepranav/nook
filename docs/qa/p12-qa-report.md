@@ -34,6 +34,14 @@ Runs:
 
 **Status:** In QA. Still to do: the **Owner** rows below.
 
+CI on the PR, and reruns afterwards, turned up these problems, all fixed:
+- **CI's release-build perf step couldn't compile** `widgetSnapshotLeavesPrivateItemsOut`: it used the debug-only `PreviewStore`. The test now uses `HomeFixture`.
+- **Unit tests depended on what earlier UI tests left in the simulator's App Group.**
+  - `testTurningTheLockOnShowsLockAfter` left the lock on, so the unit-test host launched under a real Face ID sheet and StoreKitTests stalled. The host now never locks, as it never syncs.
+  - The `-uiTestingFree` UI tests left the Pro cache off, so `ReportRendererTests` hit the 25-item limit. The test now pins Pro.
+  - The host also no longer indexes Spotlight.
+- **`settingsRow(_:)` swiped before S-01's last rows had loaded** (`testAIScreensPassTheAccessibilityAudit` on CI). It now waits for each swipe to land.
+
 ## Acceptance (roadmap P12)
 - [x] **The Face ID / Touch ID app lock (L-02, S-05) with an app-switcher cover:**
   - `testLockedLaunchStaysLockedWhenFaceIDFails`, `testLockedLaunchUnlocksWithFaceID` and `testTurningTheLockOnShowsLockAfter`

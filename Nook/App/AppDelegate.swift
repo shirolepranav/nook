@@ -22,7 +22,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         // UI tests stand in for Face ID; without a flag every ask passes, so a Private item
         // opens as before.
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("-uiTestingStore") {
+        // Unit tests host the app with the real App Group, where LockTests may have left the
+        // lock on: a Face ID sheet over the host stalled StoreKitTests (P12).
+        let hostsUnitTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        if arguments.contains("-uiTestingStore") || hostsUnitTests {
             // S-05 starts off; an earlier test may have left it on in the App Group.
             UserDefaults.nook.removeObject(forKey: AppLock.enabledKey)
             UserDefaults.nook.removeObject(forKey: AppLock.timingKey)
@@ -30,7 +33,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             if arguments.contains("-uiTestingLockOn") { UserDefaults.nook.set(true, forKey: AppLock.enabledKey) }
         }
         if let fake = AppLock.forTesting(arguments) { return fake }
-        if arguments.contains("-uiTestingStore") { return AppLock(method: { .faceID }, authenticate: { _ in true }) }
+        if arguments.contains("-uiTestingStore") || hostsUnitTests { return AppLock(method: { .faceID }, authenticate: { _ in true }) }
         #endif
         return AppLock()
     }()
@@ -38,7 +41,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         #if DEBUG
         // UI tests skip StoreKit: Pro, or Free with `-uiTestingFree YES` (D56, D58).
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("-uiTestingStore") { return EntitlementStore(forcedPro: !arguments.contains("-uiTestingFree")) }
+        // Unit tests host the app with the real App Group, where LockTests may have left the
+        // lock on: a Face ID sheet over the host stalled StoreKitTests (P12).
+        let hostsUnitTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        if arguments.contains("-uiTestingStore") || hostsUnitTests { return EntitlementStore(forcedPro: !arguments.contains("-uiTestingFree")) }
         #endif
         return EntitlementStore()
     }()

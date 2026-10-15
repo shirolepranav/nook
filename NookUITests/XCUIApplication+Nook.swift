@@ -26,7 +26,9 @@ extension XCUIApplication {
     @MainActor
     func settingsRow(_ name: String) -> XCUIElement {
         let row = buttons.matching(NSPredicate(format: "label BEGINSWITH %@", name)).firstMatch
-        for _ in 0..<4 where !row.isHittable { swipeUp() }
+        // Wait for each scroll to land: since P12's Face ID Lock row, the last rows can still
+        // be loading after a quick swipe.
+        for _ in 0..<6 where !(row.waitForExistence(timeout: 1) && row.isHittable) { swipeUp() }
         return row
     }
 }

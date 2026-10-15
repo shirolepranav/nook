@@ -22,7 +22,7 @@ private func home(items count: Int, rooms: Int = 3, blobs: BlobStore) throws -> 
         }
         return try blobs.savePhoto(image.pngData()!)
     }
-    let items = ItemService(context: context, blobs: blobs)
+    let items = ItemService(context: context, blobs: blobs, isPro: { true })   // not the shared Pro cache, which UI tests change
     for number in 1...count {
         var draft = ItemDraft(currencyCode: "USD", location: places[number % rooms])
         (draft.name, draft.price, draft.serial) = ("Thing \(number)", Decimal(number), "SN-\(number)")
