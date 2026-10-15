@@ -39,6 +39,14 @@ xcodebuild build-for-testing -quiet -project Nook.xcodeproj -scheme Nook \
     -resultBundlePath "$OUT/results/build.xcresult" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES > "$OUT/build.log" 2>&1 || true
 scripts/xcresult.py build "$OUT/results/build.xcresult"
 
+step "Release build for devices (D63: what an archive compiles)"
+xcodebuild build -quiet -project Nook.xcodeproj -scheme Nook -configuration Release \
+    -destination 'generic/platform=iOS' -derivedDataPath "$OUT/Release" CODE_SIGNING_ALLOWED=NO \
+    SWIFT_TREAT_WARNINGS_AS_ERRORS=YES > "$OUT/release.log" 2>&1 || { grep -E "error|warning:" "$OUT/release.log" | head -20; exit 1; }
+release_app="$OUT/Release/Build/Products/Release-iphoneos/Nook.app"
+! strings "$release_app/Nook" | grep -q uiTesting || { echo "  ✘ UI-testing switches reached the Release binary"; exit 1; }
+echo "  ✔ Builds, $(du -sh "$release_app" | cut -f1) installed, no UI-testing switches"
+
 step "NookKit tests (swift test)"
 swift test --quiet --package-path Packages/NookKit
 # F5: the search budget is checked on an optimized build (SearchIndexTests).
