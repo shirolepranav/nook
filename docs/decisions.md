@@ -591,6 +591,11 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Crash-free sessions are measured with Xcode Organizer and App Store Connect's TestFlight metrics** *(product owner)*. Nook adds no analytics and no MetricKit (PRD §9). Crash-free = 1 − crashes ÷ sessions, as the Organizer reports them for the beta build. Those reports come only from testers who share diagnostics with developers.
 - **"Data Not Collected"** holds because Nook's data never reaches the developer. It lives on the device and, for Pro, in the user's own CloudKit private database, which the developer can't read. Apple handles purchases.
 - **Release artifacts live in `docs/release/`**: the App Store metadata, the privacy and Accessibility Nutrition Label answers, and the release checklist. App Store screenshots come from `ScreenshotTests` in App Store mode, and the images stay out of the repo.
+- **Privacy manifests** (`Nook/Resources/PrivacyInfo.xcprivacy`, `NookWidgets/PrivacyInfo.xcprivacy`): no tracking, no collected data. The required-reason APIs, found by grepping the code:
+  - UserDefaults: CA92.1 for the app's own settings and 1C8F.1 for the App Group. The widget only reads the App Group.
+  - File timestamps: C617.1, for `BlobStore`'s orphan sweep, which reads creation dates inside the container. The widget declares it too, because NookKit is linked in.
+  - Nook uses no disk-space or boot-time APIs.
+- **Policy grep for motion and haptics:** `withAnimation(`, `.animation()`, `.animation(.…)` and `sensoryFeedback(` fail outside NookUI. Use `withNookAnimation`, `.nookAnimation`, `NookMotion.….animation(reduceMotion:)` and `.nookHaptic`.
 - More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
 
 *Affects:* `CLAUDE.md`, 05 §1 and §6, `Features/Settings`, `docs/release/`.

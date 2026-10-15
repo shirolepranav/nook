@@ -20,6 +20,7 @@ check "Only NookAI imports FoundationModels or Vision" '^import (FoundationModel
 check "No network: URLSession is not allowed" 'URLSession' Nook NookWidgets Packages
 check "Tokens only: no color literals outside NookUI" 'Color\(red:|UIColor\(red:|Color\(#' "${app_code[@]}"
 check "Tokens only: no font size literals outside NookUI" '\.system\(size:' "${app_code[@]}"
+check "Tokens only: no raw motion or haptics outside NookUI (03 §9, §10)" 'withAnimation\(|\.animation\(\)|\.animation\(\.|sensoryFeedback\(' "${app_code[@]}"
 check "CloudKit-safe: no unique attributes" '@Attribute\(\.unique' Packages Nook
 
 [ $status -eq 0 ] && echo "✔ Policy checks passed"
