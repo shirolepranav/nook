@@ -202,7 +202,7 @@ Everything in this stage works with no AI, so Gate 2 can prove the app is comple
 **Regression:** new — App Intents Testing framework (PRD §9); widget snapshots; Private-exclusion tests. Smoke — S1–S12.
 
 ### P13 · Polish, accessibility, performance & v1.0 release
-**Status:** Not started
+**Status:** In progress (Claude, branch `p13/polish-release`)
 **Scope:** motion and haptics polish; full accessibility audit (VoiceOver, Voice Control, largest text, Reduce Motion, Reduce Transparency, Increase Contrast, every Liquid Glass setting; plus a hardware-keyboard pass and real-device cold launch carried over from P1, D33) and an honest App Store Accessibility Nutrition Label (PRD §3); regular-width layout review on Pro Max landscape and every iPad size, since Duo owners will also see these layouts on the inner screen; pointer and keyboard pass on iPad (D29); Instruments passes against every PRD §9 budget; download size under 30 MB; "Data Not Collected" privacy label; TestFlight beta with at least 30 testers, 10 of them on iPhones without Apple Intelligence and at least 5 on iPads (PRD §9); App Store keywords and screenshots, including the 13-inch iPad set; final app name check (PRD §10 open questions).
 **Acceptance:** zero known crash or data-loss bugs; crash-free sessions at 99.8% or higher in beta (PRD §1); all PRD §9 performance budgets met.
 **QA:** exploratory sessions per tab; one full "no AI" release pass (PRD §9).

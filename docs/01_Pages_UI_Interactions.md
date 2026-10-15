@@ -418,7 +418,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook only sends reminders you asked for.", and the denied card with Open Settings. **As built (P11, D58):** Free users also see "2 of 3 reminders used. Unlimited with Nook Pro." |
 | S-08 | Recently Deleted | Items with days left out of 30; Restore or Delete Now; Delete All with confirmation |
 | S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected". **As built (P11, D58):** those three sections, also opened from P-01's Privacy link. **As built (P12):** a fourth, Private items: "They need Face ID to open and never appear in Spotlight, Siri or widgets." |
-| S-10 | Tags | Rename, merge, delete. Categories are a fixed list of 10 (PRD §8 DetectedItem) |
+| S-10 | Tags | Rename, merge, delete. Categories are a fixed list of 19 from `common-items.json` (D53) |
 | S-11 | Apple Intelligence | Status: Ready, Downloading, Not available on this iPhone, or Turned off. App-level "Use Apple Intelligence" toggle [Inferred from PRD §8 "AI turned off"]. **As built (P8, D53):** a status card per state (Turned off has Open Settings); the switch shows only for Ready and Downloading, as on the board; a model that can't see images reads "You tag items in photos yourself."; debug builds add Force classic engine |
 | S-12 | Help & About | How-to tips, contact, version, acknowledgements |
 

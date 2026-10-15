@@ -38,7 +38,7 @@ Earlier drafts of the screens, roadmap and design system were written without ac
 
 **D8 · 2026-09-28 · Accepted** — **iCloud sync is Pro only.** The SwiftData model is **CloudKit-safe from P2 onward**: every attribute is optional or has a default, every relationship is optional with an inverse, there are no unique constraints, and no Deny delete rules. Sync ships in P10. Onboarding has **no** sync step. *Why:* PRD §7. Building the model this way now avoids a migration later.
 
-**D9 · 2026-09-28 · Accepted** — **Monetization:**
+**D9 · 2026-09-28 · Accepted; price superseded by D58** — **Monetization:**
 - The Free tier allows 25 items and 3 active warranty reminders.
 - **Nook Pro** is a one-time non-consumable purchase for $19.99, with a $14.99 introductory price for the first 2 weeks, and Family Sharing on.
 - The paywall appears only at a moment of value: adding a 26th item or tapping Export (the PRD's two triggers), plus the two limits that follow from the tier table, saving a 4th active reminder and turning on iCloud sync. It never appears on launch and never blocks view, search or delete.
@@ -585,3 +585,12 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Data Protection:** files an app creates default to `completeUntilFirstUserAuthentication` (Class C), and `BlobStore` and restores set it explicitly. The SwiftData store relies on that default. The simulator doesn't enforce protection classes, so "widgets after a restart before the first unlock" is an **owner device check**.
 
 *Affects:* `AppLock`, `NookIntents`, `SystemSurfaces`, `NookWidgets`, `LockTests`.
+
+**D63 · 2026-10-15 · In progress (product owner, the choices marked)** — **P13 release choices.**
+- **S-12 Help & About is built in P13** *(product owner)*. Its board was signed off in P0 but the screen was never built. Contact is a `mailto:` link, so Mail sends it and Nook makes no network call.
+- **Crash-free sessions are measured with Xcode Organizer and App Store Connect's TestFlight metrics** *(product owner)*. Nook adds no analytics and no MetricKit (PRD §9). Crash-free = 1 − crashes ÷ sessions, as the Organizer reports them for the beta build. Those reports come only from testers who share diagnostics with developers.
+- **"Data Not Collected"** holds because Nook's data never reaches the developer. It lives on the device and, for Pro, in the user's own CloudKit private database, which the developer can't read. Apple handles purchases.
+- **Release artifacts live in `docs/release/`**: the App Store metadata, the privacy and Accessibility Nutrition Label answers, and the release checklist. App Store screenshots come from `ScreenshotTests` in App Store mode, and the images stay out of the repo.
+- More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
+
+*Affects:* `CLAUDE.md`, 05 §1 and §6, `Features/Settings`, `docs/release/`.

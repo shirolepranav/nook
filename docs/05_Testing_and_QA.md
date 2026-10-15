@@ -13,7 +13,7 @@ How we prove each phase works and keep earlier phases working. The per-phase QA 
 | UI flow | XCUITest | `NookUITests` | The 6 user stories plus the smoke suite rows that can be automated | Every PR (SE sim); nightly on the full matrix |
 | App Intents | App Intents Testing (`AppIntentsTesting`, D62) from UI tests, plus direct calls in unit tests | `NookUITests/LockTests`, `NookTests/IntentTests` | Find, Move, ListRoom; Private exclusion | Every PR from P12 |
 | AI quality | Evaluations framework [Verify in SDK] | `NookAI/Evaluations` + `Fixtures/eval` | Room-scan naming accuracy; question→query correctness | Per AI PR, on every iOS beta, before each release |
-| Performance | XCTest metrics + Instruments | `NookTests/Perf` | PRD budgets (04 §12) | Nightly; release blocking in P13 |
+| Performance | XCTest metrics + Instruments | `NookUITests/Perf`, `NookKit` search test | PRD budgets (04 §12) | Nightly; release blocking in P13 |
 | Manual | Checklists in this doc | Real devices | Device matrix, accessibility, No-AI pass, exploratory | End of phase; every release |
 
 **Rules:**
@@ -105,7 +105,7 @@ In P13 the audit runs on every screen, and the App Store Accessibility Nutrition
 ## 6. "No AI" pass (G2, and every release)
 
 1. Turn off Apple Intelligence on an AI device, and also run on a real non-AI iPhone.
-2. Run US1–US6 and smoke rows S3–S10.
+2. Run US1–US6 and smoke rows S3–S13.
 3. Pass criteria:
    - Every flow completes.
    - **No text anywhere mentions AI**, and no error appears.
