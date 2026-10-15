@@ -56,6 +56,8 @@ private struct CaptureOverlay: ViewModifier {
                 }
             }
         }
+        // Outermost, so this screen's toasts and the capture flows' own toasts clear the button.
+        .environment(\.toastTrailingClearance, isShown ? NookLayout.captureButtonSize + NookSpace.s2 : 0)
     }
 
     private var captureButton: some View {
@@ -139,7 +141,7 @@ private struct NewItemEditor: ViewModifier {
             }
             .sheet(item: $start) { start in
                 ItemEditor(draft: start.draft) { item in
-                    toast = item.room.map { ToastMessage("Saved to \($0.name).") } ?? ToastMessage("Saved.")
+                    toast = item.room.map { ToastMessage("Saved to \($0.name).", haptic: .saved) } ?? ToastMessage("Saved.", haptic: .saved)
                 }
             }
             .toast($toast)

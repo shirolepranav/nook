@@ -77,7 +77,7 @@ struct ItemActions {
         case (_, 1): "Moved to \(location.path)."
         default: "Moved \(moved.count) items to \(location.path)."
         }
-        return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, undo: undo)
+        return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, haptic: .saved, undo: undo)
     }
 
     // MARK: Lending and warranties (F4, F7)

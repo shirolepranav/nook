@@ -148,7 +148,6 @@ private struct ItemDetail: View {
     @State private var toast: ToastMessage?
     @State private var addsReceipt = false
     @State private var moving: LocationEvent.Source?
-    @State private var moves = 0   // plays the success haptic (03 §10)
     @State private var lending = false
     @Environment(\.reminders) private var reminders
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -242,12 +241,10 @@ private struct ItemDetail: View {
                 withNookAnimation(.settle, reduceMotion: reduceMotion) {
                     if let message = actions.move([item], to: place, source: source) {
                         toast = message
-                        moves += 1
                     }
                 }
             }
         }
-        .nookHaptic(.saved, trigger: moves)
         .paywall($paywall)
         .toast($toast)
     }

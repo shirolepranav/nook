@@ -590,6 +590,9 @@
     "A short paragraph per room. You can edit it." : {
 
     },
+    "About" : {
+
+    },
     "About %@" : {
 
     },
@@ -603,6 +606,9 @@
 
     },
     "Accepted" : {
+
+    },
+    "Acknowledgements" : {
 
     },
     "Actions for %lld items" : {
@@ -828,6 +834,12 @@
     "Change Color and Symbol" : {
 
     },
+    "Changed your mind? Tap Undo on the note that appears." : {
+
+    },
+    "Check the names, fix any that are off, and tap Save." : {
+
+    },
     "Check the spelling, or add it now." : {
 
     },
@@ -889,6 +901,9 @@
 
     },
     "Condition" : {
+
+    },
+    "Contact Us" : {
 
     },
     "Contacts" : {
@@ -1257,6 +1272,9 @@
     "Find Item" : {
 
     },
+    "Find the item, then tap Move." : {
+
+    },
     "Force classic engine" : {
 
     },
@@ -1288,6 +1306,9 @@
 
     },
     "Good" : {
+
+    },
+    "Help & About" : {
 
     },
     "Here now" : {
@@ -1387,6 +1408,9 @@
 
     },
     "Know what you own and where it is." : {
+
+    },
+    "Label boxes for a move" : {
 
     },
     "Label preview: %@, with a code that opens it in Nook" : {
@@ -1586,6 +1610,9 @@
     "Move Up" : {
 
     },
+    "Move things in 2 taps" : {
+
+    },
     "Moved %@ to %@." : {
       "localizations" : {
         "en" : {
@@ -1655,6 +1682,9 @@
 
     },
     "No Room Yet" : {
+
+    },
+    "No camera handy? Add an item by name instead." : {
 
     },
     "No camera here" : {
@@ -1733,6 +1763,9 @@
 
     },
     "Nook couldn’t open your items. Open Nook and try again." : {
+
+    },
+    "Nook is built only with Apple’s frameworks. It contains no third-party code, no analytics and no ads." : {
 
     },
     "Nook is locked" : {
@@ -1915,6 +1948,9 @@
     "Open Settings" : {
 
     },
+    "Open a container and tap Print or Share Label." : {
+
+    },
     "Opens Nook to add something, with its name filled in." : {
 
     },
@@ -2043,6 +2079,9 @@
     "Pick photos you already have instead." : {
 
     },
+    "Pick the new place. Your last five places are at the top." : {
+
+    },
     "Place" : {
 
     },
@@ -2050,6 +2089,9 @@
 
     },
     "Plum" : {
+
+    },
+    "Point the Camera app at it later to see what’s inside." : {
 
     },
     "Policy %@" : {
@@ -2119,6 +2161,9 @@
 
     },
     "Quick filters" : {
+
+    },
+    "Rate Nook" : {
 
     },
     "Read from Sticker" : {
@@ -2356,6 +2401,9 @@
     "Scan a Room" : {
 
     },
+    "Scan a room in 30 seconds" : {
+
+    },
     "Scan barcode" : {
 
     },
@@ -2514,7 +2562,13 @@
     "Spots" : {
 
     },
+    "Stand back so one shelf or one corner fills the photo." : {
+
+    },
     "Step back a little so the whole shelf fits. Take a photo of each shelf, then tap Done." : {
+
+    },
+    "Stick the label on the box." : {
 
     },
     "Sticker photo" : {
@@ -2636,6 +2690,9 @@
     "Tap it to fill the Serial field." : {
 
     },
+    "Tap the Capture button, then Scan room." : {
+
+    },
     "Tap the name, or type it" : {
 
     },
@@ -2649,6 +2706,9 @@
 
     },
     "Thank you for supporting Nook." : {
+
+    },
+    "Thank you to everyone who tested Nook before it shipped." : {
 
     },
     "Thank you. Everything is unlocked, for you and your family." : {
@@ -2905,6 +2965,9 @@
     "Value today" : {
 
     },
+    "Version" : {
+
+    },
     "View" : {
 
     },
@@ -2959,6 +3022,9 @@
     "Where are these?" : {
 
     },
+    "Where did I put the %@?" : {
+
+    },
     "Where did you find it?" : {
 
     },
@@ -2966,9 +3032,6 @@
 
     },
     "Where you bought it" : {
-
-    },
-    "Where’s my %@?" : {
 
     },
     "Which line is the serial?" : {

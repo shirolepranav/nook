@@ -596,6 +596,16 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
   - File timestamps: C617.1, for `BlobStore`'s orphan sweep, which reads creation dates inside the container. The widget declares it too, because NookKit is linked in.
   - Nook uses no disk-space or boot-time APIs.
 - **Policy grep for motion and haptics:** `withAnimation(`, `.animation()`, `.animation(.…)` and `sensoryFeedback(` fail outside NookUI. Use `withNookAnimation`, `.nookAnimation`, `NookMotion.….animation(reduceMotion:)` and `.nookHaptic`.
+- **P8-1 isn't a Nook bug.** On the iOS 27.0 simulator, the first tap after an app comes to the front is dropped in every app: Apple's Settings app does it too (checked on a fresh SE simulator). UI tests are unaffected, because XCUITest waits for the app to go idle before it taps. **Owner:** confirm on a device that the first Capture tap after launch opens C-01.
+- **F3's timing test (P7, D52) was a real stall.** In C-04, the spring-animated `scrollTo` that keeps the newest card in view never reported finishing once the cards overflowed. That happens at the third card on the SE, and from then on XCUITest waited 60 s per step for the app to go idle. It now uses `snappy` (ease-out, 0.2 s), and the 8 items take 51 s on the SE, against a 120 s budget.
+- **The success haptic comes from the toast.** `ToastMessage(haptic: .saved)` plays when the toast appears, so every move (grid, multi-select, Find, I-01, Siri confirmation) and every capture save gets its haptic from one place (03 §10). The per-screen `moves` haptics are gone.
+- **The toast clears the Capture button on compact** (P6 bug). The Capture overlay sets `toastTrailingClearance`, and toasts under it leave that room at their trailing edge.
+- **Voice Control:** photo and room cards take their visible name as their input label, so "Tap Drill" works with the long VoiceOver label (03 §11). Rows already lead with the name.
+- **Smart Invert:** every photo surface ignores inverted colors, including C-04's photo and crops, C-06's receipt, C-08's sticker and the capture thumbnails.
+- **Home's summary rows, R-04 and R-05 show Private names once Private items are unlocked**, as Find and the grids do (closes P12's note on D61).
+- **The S-12 contact address** is a placeholder (`HelpScreen.contactAddress`) until the owner gives the support address. It's on the release checklist.
+- **"Rate Nook"** uses SwiftUI's `requestReview`, so it needs no App Store ID and makes no network call of Nook's own.
+- **The Release build didn't compile** before P13, because no step had built the app in Release. `#Preview` bodies are compiled in every configuration, and 24 of them used the debug-only `PreviewStore` and `AppLock.preview`. Every preview block is now inside `#if DEBUG`. `AppLock.preview` always authenticates, so it must never ship. The unsigned Release build (`generic/platform=iOS`) is 25 MB installed and 6.2 MB compressed, against PRD §9's 30 MB. It has no `-uiTesting` strings, and both privacy manifests are bundled. App Store Connect's per-device sizes are the final check (release checklist).
 - More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
 
 *Affects:* `CLAUDE.md`, 05 §1 and §6, `Features/Settings`, `docs/release/`.

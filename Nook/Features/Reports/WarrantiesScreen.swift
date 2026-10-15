@@ -6,6 +6,7 @@ import NookUI
 /// R-04 Warranties (F4): ending in 30 days, active, expired. Swipe to turn an item's
 /// reminders off or on. Each item shows the warranty that ends last (D50).
 struct WarrantiesScreen: View {
+    @Environment(AppLock.self) private var lock   // D61: names show once Private items are unlocked
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
     @State private var toast: ToastMessage?
     @State private var flow: AddFlow?
@@ -102,8 +103,8 @@ struct WarrantiesScreen: View {
         let detail = days < 0 ? Text("Ended \(date)") : Text("Ends \(date)")
         let isExpired = days < 0
         return NavigationLink(value: row.item) {
-            StoredImage(fileName: row.item.isPrivate ? nil : row.item.cover?.fileName) { image in
-                ItemRow(name: row.item.isPrivate ? String(localized: "Private item") : row.item.name,
+            StoredImage(fileName: (row.item.isPrivate && !lock.privateUnlocked) ? nil : row.item.cover?.fileName) { image in
+                ItemRow(name: (row.item.isPrivate && !lock.privateUnlocked) ? String(localized: "Private item") : row.item.name,
                         detail: detail, photo: image) {
                     if isExpired {
                         StatusPill(.expired, Text("Expired"))
@@ -147,5 +148,7 @@ struct WarrantiesScreen: View {
     }
 }
 
-#Preview { NavigationStack { WarrantiesScreen() }.modelContainer(PreviewStore.seeded(.lived)) }
-#Preview("Empty") { NavigationStack { WarrantiesScreen() }.modelContainer(PreviewStore.seeded(.empty)) }
+#if DEBUG
+#Preview { NavigationStack { WarrantiesScreen() }.modelContainer(PreviewStore.seeded(.lived)).environment(AppLock.preview) }
+#Preview("Empty") { NavigationStack { WarrantiesScreen() }.modelContainer(PreviewStore.seeded(.empty)).environment(AppLock.preview) }
+#endif

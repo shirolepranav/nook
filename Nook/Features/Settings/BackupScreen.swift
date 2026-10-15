@@ -217,7 +217,7 @@ private struct RestoreFlow: ViewModifier {
         Task {
             do {
                 let count = try await BackupService(context: context).restore(from: url, mode: mode)
-                toast = ToastMessage("Restored \(count) items.")
+                toast = ToastMessage("Restored \(count) items.", haptic: .saved)
             } catch {
                 fail(error)
             }

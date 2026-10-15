@@ -7,6 +7,7 @@ import NookUI
 /// dashed Add room card at the end, warranties ending in the next 30 days (D4), then
 /// Recently added.
 struct HomeScreen: View {
+    @Environment(AppLock.self) private var lock   // D61: names show once Private items are unlocked
     @Query(sort: [SortDescriptor(\Room.order), SortDescriptor(\Room.createdAt)]) private var rooms: [Room]
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }, sort: \Item.createdAt, order: .reverse)
     private var items: [Item]
@@ -187,11 +188,11 @@ struct HomeScreen: View {
     /// "Dishwasher" over "Ends in 12 days". Private items stay unnamed (D46).
     private func warrantyCard(_ item: Item, end: Date) -> some View {
         let days = Warranties.daysLeft(until: end, now: .now)
-        let name = item.isPrivate ? String(localized: "Private item") : item.name
+        let name = (item.isPrivate && !lock.privateUnlocked) ? String(localized: "Private item") : item.name
         let when = days == 0 ? Text("Ends today") : Text("Ends in \(days) days")
         return NavigationLink(value: item) {
             HStack(spacing: NookSpace.s2) {
-                StoredImage(fileName: item.isPrivate ? nil : item.cover?.fileName) { NookPhotoThumb(image: $0) }
+                StoredImage(fileName: (item.isPrivate && !lock.privateUnlocked) ? nil : item.cover?.fileName) { NookPhotoThumb(image: $0) }
                 VStack(alignment: .leading, spacing: NookSpace.half) {
                     Text(verbatim: name)
                         .font(.nookHeadline)
@@ -237,5 +238,7 @@ struct HomeScreen: View {
     }
 }
 
+#if DEBUG
 #Preview("Rooms") { HomeScreen().modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta).environment(AppLock.preview) }
 #Preview("Empty") { HomeScreen().modelContainer(PreviewStore.seeded(.empty)).nookAccent(.terracotta).environment(AppLock.preview) }
+#endif

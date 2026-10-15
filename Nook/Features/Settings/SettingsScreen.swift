@@ -67,7 +67,12 @@ struct SettingsScreen: View {
             .background(NookColor.canvas)
             .captureButton()
             .navigationTitle("Settings")
-            .navigationDestination(for: SettingsRoute.self) { _ in SyncScreen() }
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .sync: SyncScreen()
+                case .pro: ProScreen()
+                }
+            }
             .paywall($paywall)
             .onAppear {
                 // Back on S-03 after its switch reopened the store (D58).
@@ -81,7 +86,8 @@ struct SettingsScreen: View {
     @ViewBuilder
     private var proCard: some View {
         if entitlements.isPro {
-            NavigationLink { ProScreen() } label: {
+            // A Button, not a NavigationLink: in a List the link adds a second chevron.
+            Button { path.append(.pro) } label: {
                 cardLabel(Text("Nook Pro"), Text("Thank you for supporting Nook."))
             }
             .buttonStyle(.nookCard)
@@ -153,8 +159,9 @@ struct SettingsScreen: View {
 }
 
 /// Screens Settings opens by value, so it can reopen S-03 (D58).
-enum SettingsRoute: Hashable { case sync }
+enum SettingsRoute: Hashable { case sync, pro }
 
+#if DEBUG
 #Preview {
     SettingsScreen().nookAccent(.terracotta)
         .environment(EntitlementStore(forcedPro: false))
@@ -162,3 +169,4 @@ enum SettingsRoute: Hashable { case sync }
         .environment(SyncStatus())
         .environment(AppLock.preview)
 }
+#endif
