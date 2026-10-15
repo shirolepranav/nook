@@ -109,4 +109,6 @@ extension LabelStyle where Self == AdaptiveIconLabelStyle {
     fileprivate static var adaptiveIcon: Self { Self() }
 }
 
+#if DEBUG
 #Preview { ArrangeSheet.rooms.modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta) }
+#endif

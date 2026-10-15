@@ -110,4 +110,6 @@ struct NotificationsScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { NotificationsScreen() }.nookAccent(.terracotta) }
+#endif

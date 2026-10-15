@@ -95,4 +95,6 @@ struct PickRoomsScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { PickRoomsScreen { _ in }.nookAccent(.terracotta) }
+#endif

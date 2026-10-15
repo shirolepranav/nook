@@ -195,6 +195,7 @@ private struct PlaceIcon: View {
     }
 }
 
+#if DEBUG
 #Preview {
     Text(verbatim: "Item")
         .sheet(isPresented: .constant(true)) {
@@ -202,3 +203,4 @@ private struct PlaceIcon: View {
         }
         .modelContainer(PreviewStore.seeded(.lived))
 }
+#endif

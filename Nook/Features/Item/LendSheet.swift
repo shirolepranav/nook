@@ -205,6 +205,7 @@ private struct ContactPicker: UIViewControllerRepresentable {
     }
 }
 
+#if DEBUG
 #Preview {
     let store = PreviewStore.seeded(.lived)
     let item = try! store.mainContext.fetch(.init(predicate: #Predicate<Item> { $0.name == "Cordless drill" })).first!
@@ -212,3 +213,4 @@ private struct ContactPicker: UIViewControllerRepresentable {
         .modelContainer(store)
         .nookAccent(.terracotta)
 }
+#endif

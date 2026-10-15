@@ -18,4 +18,6 @@ struct StoreErrorView: View {
     }
 }
 
+#if DEBUG
 #Preview { StoreErrorView {}.nookAccent(.terracotta) }
+#endif

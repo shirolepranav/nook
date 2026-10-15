@@ -81,7 +81,9 @@ struct LockScreen: View {
     }
 }
 
+#if DEBUG
 #Preview {
     NavigationStack { LockScreen() }
         .environment(AppLock.preview)
 }
+#endif

@@ -156,8 +156,10 @@ struct SyncScreen: View {
     }
 }
 
+#if DEBUG
 #Preview {
     NavigationStack { SyncScreen() }
         .environment(EntitlementStore(forcedPro: false))
         .environment(SyncStatus())
 }
+#endif

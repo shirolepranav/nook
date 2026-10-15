@@ -164,4 +164,6 @@ struct AcknowledgementsScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { HelpScreen() }.nookAccent(.terracotta) }
+#endif

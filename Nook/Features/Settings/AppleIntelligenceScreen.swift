@@ -129,4 +129,6 @@ struct AppleIntelligenceScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { AppleIntelligenceScreen() }.nookAccent(.terracotta) }
+#endif

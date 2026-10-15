@@ -102,6 +102,8 @@ private struct AccentSwatch: View {
     }
 }
 
+#if DEBUG
 #Preview {
     NavigationStack { AppearanceScreen() }.nookAccent(.terracotta)
 }
+#endif

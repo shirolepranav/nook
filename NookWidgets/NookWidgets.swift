@@ -228,6 +228,8 @@ struct FindControl: ControlWidget {
     }
 }
 
+#if DEBUG
 #Preview(as: .systemMedium) { WarrantiesWidget() } timeline: { NookEntry(date: .now, snapshot: .sample) }
 #Preview(as: .systemMedium) { ValueWidget() } timeline: { NookEntry(date: .now, snapshot: .sample) }
 #Preview(as: .systemSmall) { QuickFindWidget() } timeline: { NookEntry(date: .now, snapshot: .empty) }
+#endif

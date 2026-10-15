@@ -208,11 +208,13 @@ struct InsuranceReportScreen: View {
     }
 }
 
+#if DEBUG
 #Preview("Builder") {
     NavigationStack { InsuranceReportScreen() }
         .modelContainer(PreviewStore.seeded(.lived))
         .nookAccent(.terracotta)
 }
+#endif
 
 /// I-01's Export Proof Pack (D4): R-02 for one item, in a sheet.
 struct ProofPackSheet: View {

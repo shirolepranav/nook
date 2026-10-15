@@ -92,4 +92,6 @@ struct RecentlyDeletedScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { RecentlyDeletedScreen() }.modelContainer(PreviewStore.seeded(.small)) }
+#endif
