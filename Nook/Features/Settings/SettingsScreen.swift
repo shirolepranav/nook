@@ -14,6 +14,7 @@ struct SettingsScreen: View {
     @Environment(EntitlementStore.self) private var entitlements
     @Environment(AppRouter.self) private var router
     @Environment(AppLock.self) private var lock
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -117,9 +118,14 @@ struct SettingsScreen: View {
     }
 
     private func rowLabel(_ title: LocalizedStringKey, _ symbol: String, detail: LocalizedStringKey?) -> some View {
-        HStack {
+        // Side by side, stacked at accessibility sizes so a long title ("Face ID Lock") and
+        // its detail never squeeze each other (as in D50's rows).
+        let layout = typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: NookSpace.half))
+            : AnyLayout(HStackLayout())
+        return layout {
             Label(title, systemImage: symbol).font(.nookBody)
-            Spacer(minLength: NookSpace.s1)
+            if !typeSize.isAccessibilitySize { Spacer(minLength: NookSpace.s1) }
             if let detail { Text(detail).font(.nookMeta).foregroundStyle(NookColor.textSecondary) }
         }
         .frame(minHeight: NookLayout.minTapTarget)

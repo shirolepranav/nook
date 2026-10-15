@@ -565,6 +565,11 @@ final class AccessibilityAuditTests: XCTestCase {
         // policy-check.sh rejects fixed font sizes (D51).
         if [.dynamicType, .textClipped].contains(issue.auditType), let element = issue.element,
            app.collectionViews.allElementsBoundByIndex.contains(where: { $0.frame.contains(element.frame) }) { return true }
+        // P12: a row pushed wholly past the fold has no element to report, so it comes back
+        // element-less (S-01 on the SE, now that Face ID Lock joins it). Only while a List
+        // fills the screen; its rows grow in the AX5 screenshots.
+        if issue.element == nil, [.dynamicType, .textClipped].contains(issue.auditType),
+           app.collectionViews.allElementsBoundByIndex.contains(where: { $0.frame.size == app.frame.size }) { return true }
         // A one-line text or search field scrolls its text sideways rather than losing it.
         if issue.auditType == .textClipped,
            [.textField, .searchField].contains(issue.element?.elementType) { return true }

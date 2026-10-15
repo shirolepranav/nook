@@ -28,7 +28,7 @@ Runs:
     - places cover rooms, spots and containers
 - **UI tests, full suite on the SE:** 93 run, 16 skipped (opt-in screenshot and perf tests), 74 ✔ and 3 ✘, all accessibility audits:
   - **`testP12ScreensPassTheAccessibilityAudit`:** L-02 and the locked I-01 clipped text at enlarged sizes. Both now scroll, and on rerun it ✔.
-  - **`testScreensPassTheAccessibilityAudit` and `testP11ScreensPassTheAccessibilityAudit`:** S-01's audit reports one "Dynamic Type partially unsupported" node, a different Settings text each run ("Recently Deleted", "Your data"), even with P12's new Face ID Lock row taken out. Not fixed in this PR (Open bugs).
+  - **`testScreensPassTheAccessibilityAudit` and `testP11ScreensPassTheAccessibilityAudit`:** S-01's new Face ID Lock row (with its "Off") pushed one more row past the fold on the SE, and the audit reported it with no element. This was found by bisecting on a fresh simulator, where `main` passes. Fixed: Settings rows now stack at accessibility sizes, and an element-less issue is excused while a List fills the screen, an extension of D51 (D61). Every audit (13) and every `LockTests` case (6) now passes on a fresh SE simulator. `testAIScreensPassTheAccessibilityAudit` missed one tap once and passed on rerun.
   - After the run, xcodebuild hung once the tests had finished (the P11 trap), and was stopped.
 - **UI tests, iPad:** `LockTests` and `testP12ScreensPassTheAccessibilityAudit` on the 13-inch iPad: 7/7 ✔, which covers L-02 and S-05 at regular width, and I-01's locked state beside the item column.
 
@@ -70,7 +70,7 @@ Runs:
 ## Smoke suite
 | ID | iPhone SE | Note |
 |---|---|---|
-| S1–S11 | ✅ | Every earlier phase's UI suite passes on the SE, apart from the two Settings audits above. Not run on the Pro Max; CI runs the iPad |
+| S1–S11 | ✅ | Every earlier phase's UI suite passes on the SE. Not run on the Pro Max; CI runs the iPad |
 | S12 | ✅ | `testLockedLaunchUnlocksWithFaceID` (lock with Face ID), `privateItemsAreNeverEntities` and `widgetSnapshotLeavesPrivateItemsOut` (missing from Spotlight and widgets), `testFindItemIntentAnswersAndKeepsPrivateItemsOut` (FindItemIntent from Shortcuts) |
 
 ## Accessibility
@@ -90,7 +90,7 @@ P12 adds no AI path. Intents answer from records (`FindService`), and every P12 
 - Widgets read one `fetch` per timeline.
 
 ## Open bugs
-- **P2 · The S-01 Settings audit is flaky** (`testScreensPassTheAccessibilityAudit`, `testP11ScreensPassTheAccessibilityAudit`). The audit reports one Settings text node as "partially unsupported" for Dynamic Type, a different one each run. It happens with P12's row removed too. Every row uses `.nookBody` and grows in the AX5 screenshots. Not checked on `main` from this branch: CI on the PR shows whether it predates P12.
+None open.
 
 Noted for later:
 - **Home's summary rows** (warranty cards, R-04, R-05) keep "Private item" even after an unlock; only Find and the grids reveal names (D61).
