@@ -213,7 +213,7 @@ public struct PhotoCounter: View {
         RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous)
             .fill(NookColor.surfaceSunken)
             .overlay {
-                thumbnail?.resizable().scaledToFill()
+                thumbnail?.resizable().scaledToFill().accessibilityIgnoresInvertColors()
             }
             .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
             .overlay {

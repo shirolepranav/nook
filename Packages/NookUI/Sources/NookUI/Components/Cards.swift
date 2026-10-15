@@ -56,6 +56,8 @@ public struct PhotoCard: View {
         .hoverEffect(.lift)   // D29: pointer
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityText)
+        // Voice Control: "Tap Drill", the visible name, not the full spoken label (03 §11).
+        .accessibilityInputLabels([Text(verbatim: name)])
     }
 
     private var accessibilityText: Text {
@@ -139,6 +141,7 @@ public struct RoomCard: View {
         .hoverEffect(.lift)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(Text(verbatim: name)), \(countText)"))
+        .accessibilityInputLabels([Text(verbatim: name)])   // Voice Control (03 §11)
     }
 }
 
