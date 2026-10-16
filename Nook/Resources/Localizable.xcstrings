@@ -828,6 +828,12 @@
     "Capture" : {
 
     },
+    "Categories" : {
+
+    },
+    "Categories are a fixed list, so reports group the same way on every iPhone." : {
+
+    },
     "Category" : {
 
     },
@@ -1030,6 +1036,9 @@
     "Delete Spot" : {
 
     },
+    "Delete Tag" : {
+
+    },
     "Deleted %@." : {
 
     },
@@ -1040,6 +1049,9 @@
 
     },
     "Deleted items stay here for 30 days, then they’re gone for good." : {
+
+    },
+    "Deleted the %@ tag. Its items are still here." : {
 
     },
     "Deselect All" : {
@@ -1542,6 +1554,19 @@
     "Merge" : {
 
     },
+    "Merge %@ into…" : {
+
+    },
+    "Merged %@ into %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merged %1$@ into %2$@."
+          }
+        }
+      }
+    },
     "Mint" : {
 
     },
@@ -1715,6 +1740,9 @@
 
     },
     "No rooms or spots match “%@”." : {
+
+    },
+    "No tags yet. Add one to an item to group things like “camping” or “wedding gift”." : {
 
     },
     "No text found on this photo." : {
@@ -2247,7 +2275,13 @@
     "Rename" : {
 
     },
+    "Rename Tag" : {
+
+    },
     "Rename search" : {
+
+    },
+    "Renamed to %@." : {
 
     },
     "Rendering %lld of %lld items" : {
@@ -2612,6 +2646,9 @@
       }
     },
     "Summary for %@" : {
+
+    },
+    "Swipe a tag to rename, merge or delete it. Deleting a tag never deletes items." : {
 
     },
     "Symbol" : {
@@ -3170,6 +3207,9 @@
         }
       }
     },
+    "Your tags" : {
+
+    },
     "You’re signed out of iCloud" : {
 
     },
@@ -3177,6 +3217,9 @@
 
     },
     "Zoom" : {
+
+    },
+    "^[%lld item](inflect: true)" : {
 
     },
     "^[%lld item](inflect: true) saved to %@." : {

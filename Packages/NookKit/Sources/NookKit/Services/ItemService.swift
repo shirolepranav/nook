@@ -262,6 +262,49 @@ public struct ItemService {
         }
     }
 
+    // MARK: Tags (S-10)
+
+    /// Each tag on a live item with how many items carry it, A–Z. Tags match without regard to
+    /// case, as `addTag` does; the first spelling met is the one shown.
+    public func tagCounts() throws -> [(name: String, count: Int)] {
+        Self.tagCounts(in: try context.fetch(FetchDescriptor<Item>(predicate: #Predicate { $0.deletedAt == nil })))
+    }
+
+    /// The same count over items a view already has from a `@Query`.
+    public static func tagCounts(in items: [Item]) -> [(name: String, count: Int)] {
+        var counts: [String: (name: String, count: Int)] = [:]
+        for item in items {
+            for tag in Set(item.tags.map { $0.lowercased() }) {
+                let name = item.tags.first { $0.lowercased() == tag } ?? tag
+                counts[tag, default: (name, 0)].count += 1
+            }
+        }
+        return counts.values.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+
+    /// Renames a tag on every item, Recently Deleted included, so a restore doesn't bring the
+    /// old name back. Renaming onto a tag that exists merges the two.
+    public func renameTag(_ old: String, to new: String) throws {
+        let new = new.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !new.isEmpty else { return }
+        for item in try context.fetch(FetchDescriptor<Item>()) where item.tags.contains(where: { Self.same($0, old) }) {
+            var tags = item.tags.filter { !Self.same($0, old) && !Self.same($0, new) }
+            tags.append(new)
+            if tags != item.tags { item.tags = tags }
+        }
+    }
+
+    /// Takes a tag off every item. The items themselves stay.
+    public func deleteTag(_ tag: String) throws {
+        for item in try context.fetch(FetchDescriptor<Item>()) where item.tags.contains(where: { Self.same($0, tag) }) {
+            item.tags.removeAll { Self.same($0, tag) }
+        }
+    }
+
+    private static func same(_ a: String, _ b: String) -> Bool {
+        a.localizedCaseInsensitiveCompare(b.trimmingCharacters(in: .whitespacesAndNewlines)) == .orderedSame
+    }
+
     // MARK: Lending (F7, I-06)
 
     /// Lends an item, or edits the loan that's already out, so an item is never lent twice.

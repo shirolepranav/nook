@@ -397,8 +397,8 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
-    /// S-12 Help & About (D63): the screen, a tip and the acknowledgements. Also its primary
-    /// flow: S-01 → S-12 shows the build's version.
+    /// S-12 Help & About (D63): the screen, a tip and the acknowledgements; then S-10 Tags.
+    /// Also S-12's primary flow: S-01 → S-12 shows the build's version.
     @MainActor
     func testP13ScreensPassTheAccessibilityAudit() throws {
         XCUIDevice.shared.orientation = .portrait
@@ -416,6 +416,12 @@ final class AccessibilityAuditTests: XCTestCase {
         app.navigationBars.buttons.firstMatch.tap()
         app.settingsRow("Acknowledgements").tap()
         XCTAssertTrue(app.navigationBars["Acknowledgements"].waitForExistence(timeout: 5))
+        try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
+        // S-10 Tags.
+        app.navigationBars.buttons.firstMatch.tap()
+        app.navigationBars.buttons.firstMatch.tap()
+        app.settingsRow("Tags").tap()
+        XCTAssertTrue(app.staticTexts["Categories"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
     }
 
