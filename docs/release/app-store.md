@@ -72,7 +72,7 @@ The order: Home (rooms), Room grid, Item detail, Find answer ("Where are the pas
 
 ## 6. Release checklist
 1. Gate 3 has passed (D60), and the P11 App Store Connect setup is done: product `pranav.nook.pro`, agreements, CloudKit schema deployed to Production, and Push (D59).
-2. Confirm `HelpScreen.contactAddress` (S-12) is the real support address.
+2. S-12's Contact Us writes to lightconeapps@gmail.com (`HelpScreen.contactAddress`). Use the same address on the support page.
 3. Bump `CURRENT_PROJECT_VERSION` in `Nook.xcodeproj` for every upload. `MARKETING_VERSION` stays `1.0`.
 4. Archive the Release build with the current release of Xcode (D23): Product → Archive, or
    `xcodebuild -project Nook.xcodeproj -scheme Nook -configuration Release -destination 'generic/platform=iOS' -archivePath build/Nook.xcarchive archive`

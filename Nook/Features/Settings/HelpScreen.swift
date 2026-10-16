@@ -4,8 +4,8 @@ import NookUI
 
 /// S-12 Help & About: tips, contact, version and acknowledgements (D63).
 struct HelpScreen: View {
-    /// D63: the owner's support address. The release checklist confirms it before submission.
-    static let contactAddress = "support@nook.example"
+    /// D63: the owner's support address.
+    static let contactAddress = "lightconeapps@gmail.com"
 
     @Environment(\.requestReview) private var requestReview
     @Environment(\.dynamicTypeSize) private var typeSize

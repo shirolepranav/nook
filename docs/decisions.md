@@ -603,7 +603,7 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - **Voice Control:** photo and room cards list two input labels, the full label and then the visible name, so "Tap Drill" works as well as the long label (03 §11). Rows already lead with the name. **SDK finding:** on iOS 27, XCUITest reports the *first* input label as the element's `label`, so the full label has to come first.
 - **Smart Invert:** every photo surface ignores inverted colors, including C-04's photo and crops, C-06's receipt, C-08's sticker and the capture thumbnails.
 - **Home's summary rows, R-04 and R-05 show Private names once Private items are unlocked**, as Find and the grids do (closes P12's note on D61).
-- **The S-12 contact address** is a placeholder (`HelpScreen.contactAddress`) until the owner gives the support address. It's on the release checklist.
+- **S-12's Contact Us writes to lightconeapps@gmail.com** *(product owner)*.
 - **"Rate Nook"** uses SwiftUI's `requestReview`, so it needs no App Store ID and makes no network call of Nook's own.
 - **The Release build didn't compile** before P13, because no step had built the app in Release. `#Preview` bodies are compiled in every configuration, and 24 of them used the debug-only `PreviewStore` and `AppLock.preview`. Every preview block is now inside `#if DEBUG`. `AppLock.preview` always authenticates, so it must never ship. The unsigned Release build (`generic/platform=iOS`) is 25 MB installed and 6.2 MB compressed, against PRD §9's 30 MB. It has no `-uiTesting` strings, and both privacy manifests are bundled. App Store Connect's per-device sizes are the final check (release checklist).
 - More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
