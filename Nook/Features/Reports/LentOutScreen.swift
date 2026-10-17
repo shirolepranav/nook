@@ -6,6 +6,7 @@ import NookUI
 /// R-05 Lent out (F7): who has what, since when and when it's due, overdue first. Swipe to
 /// Mark Returned, with Undo.
 struct LentOutScreen: View {
+    @Environment(AppLock.self) private var lock   // D61: names show once Private items are unlocked
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
     @State private var toast: ToastMessage?
     @State private var flow: LendFlow?
@@ -81,9 +82,9 @@ struct LentOutScreen: View {
 
     private func loanRow(_ item: Item, _ loan: Loan) -> some View {
         let since = loan.lentAt.formatted(.dateTime.month(.abbreviated).day())
-        let name = item.isPrivate ? String(localized: "Private item") : item.name
+        let name = (item.isPrivate && !lock.privateUnlocked) ? String(localized: "Private item") : item.name
         return NavigationLink(value: item) {
-            StoredImage(fileName: item.isPrivate ? nil : item.cover?.fileName) { image in
+            StoredImage(fileName: (item.isPrivate && !lock.privateUnlocked) ? nil : item.cover?.fileName) { image in
                 ItemRow(name: name, detail: Text("\(loan.personName) · since \(since)"), photo: image) {
                     if let due = loan.dueAt {
                         let late = -Warranties.daysLeft(until: due, now: .now)
@@ -108,5 +109,7 @@ struct LentOutScreen: View {
     }
 }
 
-#Preview { NavigationStack { LentOutScreen() }.modelContainer(PreviewStore.seeded(.lived)) }
-#Preview("Empty") { NavigationStack { LentOutScreen() }.modelContainer(PreviewStore.seeded(.empty)) }
+#if DEBUG
+#Preview { NavigationStack { LentOutScreen() }.modelContainer(PreviewStore.seeded(.lived)).environment(AppLock.preview) }
+#Preview("Empty") { NavigationStack { LentOutScreen() }.modelContainer(PreviewStore.seeded(.empty)).environment(AppLock.preview) }
+#endif

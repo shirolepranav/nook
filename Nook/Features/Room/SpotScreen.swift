@@ -121,7 +121,7 @@ struct SpotScreen: View {
             undoManager?.setActionName(String(localized: "Move"))
             try context.save()
             toast = ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right",
-                                 "Moved \(spot.name) to \(place.path).") { [undoManager, context] in
+                                 "Moved \(spot.name) to \(place.path).", haptic: .saved) { [undoManager, context] in
                 undoManager?.undo()
                 try? context.save()
             }

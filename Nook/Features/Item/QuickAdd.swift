@@ -53,7 +53,7 @@ private struct QuickAdd: ViewModifier {
             .sheet(item: $editor) { start in
                 ItemEditor(draft: start.draft, cameraOff: start.cameraOff,
                            suggestsFromPhoto: !start.draft.photos.isEmpty) { item in
-                    toast = item.room.map { ToastMessage("Saved to \($0.name).") } ?? ToastMessage("Saved.")
+                    toast = item.room.map { ToastMessage("Saved to \($0.name).", haptic: .saved) } ?? ToastMessage("Saved.", haptic: .saved)
                 }
             }
             .toast($toast)

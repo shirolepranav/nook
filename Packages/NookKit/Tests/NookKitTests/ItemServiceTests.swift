@@ -137,6 +137,24 @@ private final class Fixture {
     #expect(a.isPrivate && b.isPrivate)
 }
 
+/// S-10: counts ignore case and deleted items; rename, merge and delete reach every item.
+@MainActor @Test func tagsRenameMergeAndDelete() throws {
+    let f = try Fixture()
+    let a = try f.items.create(f.draft("A")), b = try f.items.create(f.draft("B")), c = try f.items.create(f.draft("C"))
+    f.items.addTag("Camping", to: [a, b])
+    f.items.addTag("Garage", to: [b, c])
+    f.items.delete([c])
+    #expect(try f.items.tagCounts().map(\.name) == ["Camping", "Garage"])
+    #expect(try f.items.tagCounts().map(\.count) == [2, 1])             // C is in Recently Deleted
+    try f.items.renameTag("camping", to: "Outdoors")
+    #expect(a.tags == ["Outdoors"] && b.tags == ["Garage", "Outdoors"])
+    try f.items.renameTag("Garage", to: "outdoors ")                     // a merge: b keeps one
+    #expect(b.tags == ["outdoors"] && c.tags == ["outdoors"])
+    try f.items.deleteTag("OUTDOORS")
+    #expect(a.tags.isEmpty && b.tags.isEmpty && c.tags.isEmpty)
+    #expect(try f.items.tagCounts().isEmpty)
+}
+
 /// D35: a soft delete is a property change, so a saved one undoes and stays undone.
 @MainActor @Test func undoingASavedItemDeleteSurvivesTheNextSave() throws {
     let f = try Fixture()

@@ -97,7 +97,8 @@ struct FindStartSections: View {
 
     /// A question about the user's own latest thing, so trying it always finds an answer.
     private var example: String? {
-        library?.exampleName.map { String(localized: "Where’s my \($0)?") }
+        // Number-neutral, so plural names read well ("Where did I put the AA batteries?", P5 bug).
+        library?.exampleName.map { String(localized: "Where did I put the \($0)?") }
     }
 
     private var quickFilters: [(title: String, filter: SearchFilter)] {

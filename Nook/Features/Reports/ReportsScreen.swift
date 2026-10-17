@@ -104,4 +104,6 @@ private struct ReportCard: View {
     }
 }
 
+#if DEBUG
 #Preview { ReportsScreen().modelContainer(PreviewStore.seeded(.lived)).nookAccent(.terracotta) }
+#endif

@@ -283,4 +283,6 @@ struct RoomEditor: View {
         RoomPreset.all.map { ($0.symbol, $0.name) }, uniquingKeysWith: { first, _ in first })
 }
 
+#if DEBUG
 #Preview("New") { RoomEditor(room: nil).modelContainer(PreviewStore.seeded(.small)).nookAccent(.terracotta) }
+#endif

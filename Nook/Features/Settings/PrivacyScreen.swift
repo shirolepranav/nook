@@ -39,4 +39,6 @@ struct PrivacyScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { PrivacyScreen() }.environment(AppLock.preview) }
+#endif

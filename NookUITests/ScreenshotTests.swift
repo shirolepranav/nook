@@ -515,6 +515,75 @@ final class ScreenshotTests: XCTestCase {
         snap("S-09 Privacy")
     }
 
+    /// App Store screenshots (D63, docs/release/app-store.md §5): the 6.9" iPhone and 13" iPad
+    /// sets, in this order. TEST_RUNNER_SHOWCASE_PHOTOS=<folder> swaps the swatches for real
+    /// photos named after the items ("Espresso machine.jpg"); without it the set is for layout.
+    @MainActor
+    func testAppStoreScreens() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
+                          "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication.nook(store: "lived")
+        // US English and dollars for the en-US listing, whatever the simulator's region.
+        app.launchArguments += ["-uiTestingCameraFixture", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if let photos = ProcessInfo.processInfo.environment["SHOWCASE_PHOTOS"] {
+            app.launchArguments += ["-uiTestingShowcasePhotos", photos]
+        }
+        app.launch()
+        let kitchen = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Kitchen,")).firstMatch
+        XCTAssertTrue(kitchen.waitForExistence(timeout: 10))
+        snap("1 Home")
+
+        kitchen.tap()
+        let espresso = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Espresso machine,")).firstMatch
+        XCTAssertTrue(espresso.waitForExistence(timeout: 5))
+        snap("2 Room")
+        espresso.tap()
+        XCTAssertTrue(app.buttons["Move"].waitForExistence(timeout: 5))
+        snap("3 Item detail")
+
+        app.tab("Find").tap()
+        let field = app.searchFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        field.tap()
+        field.typeText("Where is the espresso machine?\n")   // submitting puts the keyboard away
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Counter'")).firstMatch
+            .waitForExistence(timeout: 10))
+        snap("4 Find answer")
+
+        // On iPad, Find's active search hides the tab bar; ⌘1 works there.
+        if app.tab("Home").exists { app.tab("Home").tap() } else { app.typeKey("1", modifierFlags: .command) }
+        app.buttons["Capture"].tap()
+        XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
+        app.buttons["Scan room"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        app.buttons["Done"].tap()
+        let photo = app.otherElements["Photo 1"]
+        XCTAssertTrue(photo.waitForExistence(timeout: 5))
+        for (index, name) in ["Toaster", "Kettle", "Blender"].enumerated() {
+            photo.coordinate(withNormalizedOffset: CGVector(dx: 0.2 + 0.3 * Double(index), dy: 0.5)).tap()
+            XCTAssertTrue(app.textFields["What is it?"].waitForExistence(timeout: 10))
+            app.textFields["What is it?"].typeText(name + "\n")
+        }
+        snap("5 Scan tagging")
+        app.buttons["Cancel"].tap()
+        if app.buttons["Discard"].waitForExistence(timeout: 3) { app.buttons["Discard"].tap() }
+
+        let report = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Insurance report'")).firstMatch
+        // Right after the scan closes, the first tap can be dropped (D63); try twice.
+        for _ in 0..<2 where !report.waitForExistence(timeout: 3) {
+            if app.tab("Reports").exists { app.tab("Reports").tap() } else { app.typeKey("3", modifierFlags: .command) }
+        }
+        XCTAssertTrue(report.waitForExistence(timeout: 10))
+        report.tap()
+        XCTAssertTrue(app.buttons["Preview Report"].waitForExistence(timeout: 10))
+        app.buttons["Preview Report"].tap()
+        XCTAssertTrue(app.buttons["Create Report"].waitForExistence(timeout: 10))
+        snap("6 Insurance report")
+    }
+
     @MainActor
     private func snap(_ name: String) {
         sleep(1)   // let transitions settle

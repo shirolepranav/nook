@@ -1,6 +1,6 @@
 # CLAUDE.md — Nook
 
-Nook is a native iPhone and iPad app (Swift 6, SwiftUI, iOS/iPadOS 27.0+) that catalogs everything you own **and where it is**. You photograph a room and the app lists the items. It reads receipts and serials, answers "Where is my…?", tracks warranties and loans, and exports an insurance report. **It is private and on-device, with no server and no account.** It is a one-time $19.99 Pro unlock. A small team plus Claude agents build it in phases.
+Nook is a native iPhone and iPad app (Swift 6, SwiftUI, iOS/iPadOS 27.0+) that catalogs everything you own **and where it is**. You photograph a room and the app lists the items. It reads receipts and serials, answers "Where is my…?", tracks warranties and loans, and exports an insurance report. **It is private and on-device, with no server and no account.** It is a one-time $14.99 Pro unlock (D58). A small team plus Claude agents build it in phases.
 
 ## Principles (in priority order: when two conflict, the higher one wins)
 1. **Design and UX first.** It should feel like a first-party Apple app, only warmer. If a feature isn't delightful yet, it waits.

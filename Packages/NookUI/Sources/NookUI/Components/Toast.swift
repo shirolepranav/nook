@@ -7,11 +7,15 @@ public struct ToastMessage: Identifiable {
     let symbol: String
     let text: LocalizedStringResource
     let undo: (() -> Void)?
+    /// Played as the toast appears: `.saved` for saves and moves (03 §10), so every path that
+    /// reports a success gets its haptic from one place.
+    let haptic: NookHaptic?
 
     public init(symbol: String = "checkmark.circle.fill", _ text: LocalizedStringResource,
-                undo: (() -> Void)? = nil) {
+                haptic: NookHaptic? = nil, undo: (() -> Void)? = nil) {
         self.symbol = symbol
         self.text = text
+        self.haptic = haptic
         self.undo = undo
     }
 }
@@ -23,15 +27,24 @@ public extension View {
     }
 }
 
+public extension EnvironmentValues {
+    /// Room a floating control needs at the toast's trailing edge on compact width, so the
+    /// toast never covers the Capture button (P6 bug, fixed in P13).
+    @Entry var toastTrailingClearance: CGFloat = 0
+}
+
 private struct ToastPresenter: ViewModifier {
     @Binding var message: ToastMessage?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.toastTrailingClearance) private var clearance
 
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottom) {
             if let current = message {
                 ToastView(message: current) { message = nil }
                     .padding(NookSpace.s2)
+                    .padding(.trailing, sizeClass == .compact ? clearance : 0)
                     .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
                     .task(id: current.id) {
                         AccessibilityNotification.Announcement(String(localized: current.text)).post()
@@ -41,6 +54,9 @@ private struct ToastPresenter: ViewModifier {
             }
         }
         .nookAnimation(.settle, value: message?.id)
+        .sensoryFeedback(trigger: message?.id) { _, id in
+            id == nil ? nil : message?.haptic?.feedback
+        }
     }
 }
 

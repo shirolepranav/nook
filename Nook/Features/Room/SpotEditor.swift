@@ -10,6 +10,7 @@ struct SpotEditor: View {
     /// nil for a new one.
     let spot: Spot?
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var kind: Spot.Kind
     @State private var name: String
     @State private var insideID: UUID?
@@ -67,7 +68,7 @@ struct SpotEditor: View {
                                 Text(verbatim: "\(room.name) → \(place.name)").tag(Optional(place.id))
                             }
                         }
-                        Toggle("Packed", isOn: $isPacked.animation())
+                        Toggle("Packed", isOn: $isPacked.animation(NookMotion.settle.animation(reduceMotion: reduceMotion)))
                         if isPacked {
                             DatePicker("Packed on", selection: $packedAt, displayedComponents: .date)
                         }

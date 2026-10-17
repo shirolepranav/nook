@@ -65,7 +65,6 @@ private struct LocationAnswer: View {
     let location: Location
     let actions: AnswerActions
     var headline: Text?
-    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         AnswerCard {
@@ -86,15 +85,20 @@ private struct LocationAnswer: View {
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityElement(children: .combine)
             AnswerPhotos(item: item, spot: location.spot, actions: actions)
-            let buttons = typeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(spacing: NookSpace.s1)) : AnyLayout(HStackLayout(spacing: NookSpace.s1))
-            buttons {
-                Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { actions.move(item, .manual) }
-                    .buttonStyle(.nookPrimary)
-                Button("Found It Here Instead") { actions.move(item, .found) }
-                    .buttonStyle(.nookSecondary)
+            // Side by side when both labels fit on one line, stacked otherwise: the SE and
+            // accessibility sizes (P5 bug: "Found It Here Instead" wrapped).
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: NookSpace.s1) { moveButtons }
+                VStack(spacing: NookSpace.s1) { moveButtons }
             }
         }
+    }
+
+    @ViewBuilder private var moveButtons: some View {
+        Button("Move", systemImage: "arrow.up.and.down.and.arrow.left.and.right") { actions.move(item, .manual) }
+            .buttonStyle(.nookPrimary)
+        Button("Found It Here Instead") { actions.move(item, .found) }
+            .buttonStyle(.nookSecondary)
     }
 }
 

@@ -124,4 +124,6 @@ struct SettingsIcon: View {
     }
 }
 
+#if DEBUG
 #Preview { NavigationStack { ProScreen() }.environment(EntitlementStore(forcedPro: false)) }
+#endif

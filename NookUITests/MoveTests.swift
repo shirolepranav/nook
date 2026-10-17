@@ -140,6 +140,25 @@ final class MoveTests: XCTestCase {
         app.typeKey("m", modifierFlags: [.command, .shift])
         XCTAssertTrue(app.navigationBars["Move Espresso machine"].waitForExistence(timeout: 5))
     }
+
+    /// 01 §1.5, D33 (P13): ⌘E edits the item on screen and ⌘F opens Find. iPad only, like the
+    /// test above. ⌘⌫ and ⌘Z stay a hardware-keyboard check: no key XCUITest sends reaches
+    /// the Delete command on the simulator (D63).
+    @MainActor
+    func testItemKeyboardShortcuts() throws {
+        let app = launch()
+        try XCTSkipUnless(app.windows.firstMatch.horizontalSizeClass == .regular,
+                          "hardware-keyboard shortcuts are checked on iPad (D29)")
+        openEspressoMachine(app)
+        app.typeKey("e", modifierFlags: .command)
+        // The first shortcut after opening the item is sometimes dropped by the simulator.
+        if !app.navigationBars["Edit Item"].waitForExistence(timeout: 3) { app.typeKey("e", modifierFlags: .command) }
+        XCTAssertTrue(app.navigationBars["Edit Item"].waitForExistence(timeout: 5), "⌘E")
+        app.navigationBars["Edit Item"].buttons["Cancel"].tap()
+
+        app.typeKey("f", modifierFlags: .command)
+        XCTAssertTrue(app.navigationBars["Find"].waitForExistence(timeout: 5), "⌘F")
+    }
 }
 
 extension XCUIElement {

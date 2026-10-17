@@ -77,7 +77,7 @@ struct ItemActions {
         case (_, 1): "Moved to \(location.path)."
         default: "Moved \(moved.count) items to \(location.path)."
         }
-        return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, undo: undo)
+        return ToastMessage(symbol: "arrow.up.and.down.and.arrow.left.and.right", text, haptic: .saved, undo: undo)
     }
 
     // MARK: Lending and warranties (F4, F7)
@@ -115,6 +115,24 @@ struct ItemActions {
             return ToastMessage(symbol: "arrow.uturn.backward", "Restored to \(room).", undo: undo)
         }
         return ToastMessage(symbol: "arrow.uturn.backward", "Restored.", undo: undo)
+    }
+
+    /// S-10: rename, or merge when `new` is a tag that exists. One Undo step either way.
+    func renameTag(_ old: String, to new: String, merging: Bool) -> ToastMessage? {
+        let new = new.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !new.isEmpty, new != old else { return nil }
+        try? service.renameTag(old, to: new)
+        undoManager?.setActionName(String(localized: merging ? "Merge Tags" : "Rename Tag"))
+        try? context.save()
+        return ToastMessage(symbol: "tag", merging ? "Merged \(old) into \(new)." : "Renamed to \(new).", undo: undo)
+    }
+
+    /// S-10: the tag comes off every item; the items stay.
+    func deleteTag(_ tag: String) -> ToastMessage {
+        try? service.deleteTag(tag)
+        undoManager?.setActionName(String(localized: "Delete Tag"))
+        try? context.save()
+        return ToastMessage(symbol: "trash", "Deleted the \(tag) tag. Its items are still here.", undo: undo)
     }
 
     private func undo() {

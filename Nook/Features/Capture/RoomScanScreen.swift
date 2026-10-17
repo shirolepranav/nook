@@ -82,9 +82,9 @@ private struct RoomScanPresenter: ViewModifier {
             try? context.save()
         }
         if let room = items.first?.room?.name {
-            return ToastMessage("^[\(items.count) item](inflect: true) saved to \(room).", undo: undo)
+            return ToastMessage("^[\(items.count) item](inflect: true) saved to \(room).", haptic: .saved, undo: undo)
         }
-        return ToastMessage("^[\(items.count) item](inflect: true) saved.", undo: undo)
+        return ToastMessage("^[\(items.count) item](inflect: true) saved.", haptic: .saved, undo: undo)
     }
 }
 

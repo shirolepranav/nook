@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import NookKit
 import NookAI
 import NookUI
@@ -9,12 +10,14 @@ struct SettingsScreen: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var aiStatus = NookAI.status
     @State private var paywall: PaywallRequest?
-    @State private var path: [SettingsRoute] = []
+    // Type-erased: S-10 pushes its own routes and items too (P13).
+    @State private var path = NavigationPath()
     @AppStorage(SyncSettings.key) private var syncOn = false
     @Environment(EntitlementStore.self) private var entitlements
     @Environment(AppRouter.self) private var router
     @Environment(AppLock.self) private var lock
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var liveItems: [Item]   // S-10's count
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -46,7 +49,12 @@ struct SettingsScreen: View {
                 Section {
                     row("Appearance", "paintpalette") { AppearanceScreen() }
                     row("Notifications", "bell") { NotificationsScreen() }
+                    // S-10, by value: it pushes values of its own, and a closure link here pushed it twice.
+                    NavigationLink(value: SettingsRoute.tags) {
+                        rowLabel("Tags", "tag", detail: "\(ItemService.tagCounts(in: liveItems).count)")
+                    }
                     row("Apple Intelligence", "apple.intelligence", detail: aiDetail) { AppleIntelligenceScreen() }
+                    row("Help & About", "questionmark.circle") { HelpScreen() }   // S-12 (D63)
                 } header: {
                     header("Nook")
                 }
@@ -66,11 +74,17 @@ struct SettingsScreen: View {
             .background(NookColor.canvas)
             .captureButton()
             .navigationTitle("Settings")
-            .navigationDestination(for: SettingsRoute.self) { _ in SyncScreen() }
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .sync: SyncScreen()
+                case .pro: ProScreen()
+                case .tags: TagsScreen()
+                }
+            }
             .paywall($paywall)
             .onAppear {
                 // Back on S-03 after its switch reopened the store (D58).
-                if router.reopensSync { path = [.sync]; router.reopensSync = false }
+                if router.reopensSync { path = NavigationPath([SettingsRoute.sync]); router.reopensSync = false }
             }
             .onChange(of: scenePhase) { _, phase in if phase == .active { aiStatus = NookAI.status } }
         }
@@ -80,7 +94,8 @@ struct SettingsScreen: View {
     @ViewBuilder
     private var proCard: some View {
         if entitlements.isPro {
-            NavigationLink { ProScreen() } label: {
+            // A Button, not a NavigationLink: in a List the link adds a second chevron.
+            Button { path.append(SettingsRoute.pro) } label: {
                 cardLabel(Text("Nook Pro"), Text("Thank you for supporting Nook."))
             }
             .buttonStyle(.nookCard)
@@ -152,8 +167,9 @@ struct SettingsScreen: View {
 }
 
 /// Screens Settings opens by value, so it can reopen S-03 (D58).
-enum SettingsRoute: Hashable { case sync }
+enum SettingsRoute: Hashable { case sync, pro, tags }
 
+#if DEBUG
 #Preview {
     SettingsScreen().nookAccent(.terracotta)
         .environment(EntitlementStore(forcedPro: false))
@@ -161,3 +177,4 @@ enum SettingsRoute: Hashable { case sync }
         .environment(SyncStatus())
         .environment(AppLock.preview)
 }
+#endif

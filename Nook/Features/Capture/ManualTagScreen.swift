@@ -280,7 +280,9 @@ struct ManualTagScreen: View {
                 .scrollDismissesKeyboard(.interactively)
                 .onChange(of: model.tags.count) { old, new in
                     guard new > old, let last = model.tags.last else { return }
-                    withNookAnimation(.settle, reduceMotion: reduceMotion) { proxy.scrollTo(last.id, anchor: .bottom) }
+                    // Not animated: on iOS 27 an animated scrollTo here (spring or eased) never
+                    // reported finishing, so the app never went idle (F3's timing test, D63).
+                    proxy.scrollTo(last.id, anchor: .bottom)
                 }
         }
     }
@@ -326,6 +328,7 @@ struct ManualTagScreen: View {
                 if let image = model.images[photo.fileName] {
                     Image(decorative: image, scale: 1).resizable()
                         .frame(width: fitted.width, height: fitted.height)
+                        .accessibilityIgnoresInvertColors()   // photos stay true under Smart Invert (03 §11)
                 } else {
                     NookColor.surfaceSunken.frame(width: fitted.width, height: fitted.height)
                 }
@@ -588,7 +591,7 @@ private struct TagCard: View {
 
     private var thumbnail: some View {
         Group {
-            if let crop { Image(decorative: crop, scale: 1).resizable().scaledToFill() } else { NookColor.surfaceSunken }
+            if let crop { Image(decorative: crop, scale: 1).resizable().scaledToFill().accessibilityIgnoresInvertColors() } else { NookColor.surfaceSunken }
         }
         .frame(width: NookLayout.rowThumbnailSize, height: NookLayout.rowThumbnailSize)
         .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))

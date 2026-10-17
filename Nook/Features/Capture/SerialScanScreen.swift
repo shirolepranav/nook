@@ -65,6 +65,7 @@ struct SerialScanScreen: View {
                         .resizable()
                         .scaledToFit()
                         .frame(maxHeight: NookLayout.heroPhotoHeight)
+                        .accessibilityIgnoresInvertColors()   // photos stay true under Smart Invert (03 §11)
                         .clipShape(RoundedRectangle(cornerRadius: NookRadius.medium, style: .continuous))
                         .frame(maxWidth: .infinity)
                         .accessibilityLabel(Text("Sticker photo"))

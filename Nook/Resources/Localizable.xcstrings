@@ -590,6 +590,9 @@
     "A short paragraph per room. You can edit it." : {
 
     },
+    "About" : {
+
+    },
     "About %@" : {
 
     },
@@ -603,6 +606,9 @@
 
     },
     "Accepted" : {
+
+    },
+    "Acknowledgements" : {
 
     },
     "Actions for %lld items" : {
@@ -822,10 +828,22 @@
     "Capture" : {
 
     },
+    "Categories" : {
+
+    },
+    "Categories are a fixed list, so reports group the same way on every iPhone." : {
+
+    },
     "Category" : {
 
     },
     "Change Color and Symbol" : {
+
+    },
+    "Changed your mind? Tap Undo on the note that appears." : {
+
+    },
+    "Check the names, fix any that are off, and tap Save." : {
 
     },
     "Check the spelling, or add it now." : {
@@ -889,6 +907,9 @@
 
     },
     "Condition" : {
+
+    },
+    "Contact Us" : {
 
     },
     "Contacts" : {
@@ -1015,6 +1036,9 @@
     "Delete Spot" : {
 
     },
+    "Delete Tag" : {
+
+    },
     "Deleted %@." : {
 
     },
@@ -1025,6 +1049,9 @@
 
     },
     "Deleted items stay here for 30 days, then they’re gone for good." : {
+
+    },
+    "Deleted the %@ tag. Its items are still here." : {
 
     },
     "Deselect All" : {
@@ -1257,6 +1284,9 @@
     "Find Item" : {
 
     },
+    "Find the item, then tap Move." : {
+
+    },
     "Force classic engine" : {
 
     },
@@ -1288,6 +1318,9 @@
 
     },
     "Good" : {
+
+    },
+    "Help & About" : {
 
     },
     "Here now" : {
@@ -1387,6 +1420,9 @@
 
     },
     "Know what you own and where it is." : {
+
+    },
+    "Label boxes for a move" : {
 
     },
     "Label preview: %@, with a code that opens it in Nook" : {
@@ -1518,6 +1554,19 @@
     "Merge" : {
 
     },
+    "Merge %@ into…" : {
+
+    },
+    "Merged %@ into %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merged %1$@ into %2$@."
+          }
+        }
+      }
+    },
     "Mint" : {
 
     },
@@ -1584,6 +1633,9 @@
 
     },
     "Move Up" : {
+
+    },
+    "Move things in 2 taps" : {
 
     },
     "Moved %@ to %@." : {
@@ -1657,6 +1709,9 @@
     "No Room Yet" : {
 
     },
+    "No camera handy? Add an item by name instead." : {
+
+    },
     "No camera here" : {
 
     },
@@ -1685,6 +1740,9 @@
 
     },
     "No rooms or spots match “%@”." : {
+
+    },
+    "No tags yet. Add one to an item to group things like “camping” or “wedding gift”." : {
 
     },
     "No text found on this photo." : {
@@ -1733,6 +1791,9 @@
 
     },
     "Nook couldn’t open your items. Open Nook and try again." : {
+
+    },
+    "Nook is built only with Apple’s frameworks. It contains no third-party code, no analytics and no ads." : {
 
     },
     "Nook is locked" : {
@@ -1915,6 +1976,9 @@
     "Open Settings" : {
 
     },
+    "Open a container and tap Print or Share Label." : {
+
+    },
     "Opens Nook to add something, with its name filled in." : {
 
     },
@@ -2043,6 +2107,9 @@
     "Pick photos you already have instead." : {
 
     },
+    "Pick the new place. Your last five places are at the top." : {
+
+    },
     "Place" : {
 
     },
@@ -2050,6 +2117,9 @@
 
     },
     "Plum" : {
+
+    },
+    "Point the Camera app at it later to see what’s inside." : {
 
     },
     "Policy %@" : {
@@ -2119,6 +2189,9 @@
 
     },
     "Quick filters" : {
+
+    },
+    "Rate Nook" : {
 
     },
     "Read from Sticker" : {
@@ -2202,7 +2275,13 @@
     "Rename" : {
 
     },
+    "Rename Tag" : {
+
+    },
     "Rename search" : {
+
+    },
+    "Renamed to %@." : {
 
     },
     "Rendering %lld of %lld items" : {
@@ -2354,6 +2433,9 @@
 
     },
     "Scan a Room" : {
+
+    },
+    "Scan a room in 30 seconds" : {
 
     },
     "Scan barcode" : {
@@ -2514,7 +2596,13 @@
     "Spots" : {
 
     },
+    "Stand back so one shelf or one corner fills the photo." : {
+
+    },
     "Step back a little so the whole shelf fits. Take a photo of each shelf, then tap Done." : {
+
+    },
+    "Stick the label on the box." : {
 
     },
     "Sticker photo" : {
@@ -2558,6 +2646,9 @@
       }
     },
     "Summary for %@" : {
+
+    },
+    "Swipe a tag to rename, merge or delete it. Deleting a tag never deletes items." : {
 
     },
     "Symbol" : {
@@ -2636,6 +2727,9 @@
     "Tap it to fill the Serial field." : {
 
     },
+    "Tap the Capture button, then Scan room." : {
+
+    },
     "Tap the name, or type it" : {
 
     },
@@ -2649,6 +2743,9 @@
 
     },
     "Thank you for supporting Nook." : {
+
+    },
+    "Thank you to everyone who tested Nook before it shipped." : {
 
     },
     "Thank you. Everything is unlocked, for you and your family." : {
@@ -2905,6 +3002,9 @@
     "Value today" : {
 
     },
+    "Version" : {
+
+    },
     "View" : {
 
     },
@@ -2959,6 +3059,9 @@
     "Where are these?" : {
 
     },
+    "Where did I put the %@?" : {
+
+    },
     "Where did you find it?" : {
 
     },
@@ -2966,9 +3069,6 @@
 
     },
     "Where you bought it" : {
-
-    },
-    "Where’s my %@?" : {
 
     },
     "Which line is the serial?" : {
@@ -3107,6 +3207,9 @@
         }
       }
     },
+    "Your tags" : {
+
+    },
     "You’re signed out of iCloud" : {
 
     },
@@ -3114,6 +3217,9 @@
 
     },
     "Zoom" : {
+
+    },
+    "^[%lld item](inflect: true)" : {
 
     },
     "^[%lld item](inflect: true) saved to %@." : {

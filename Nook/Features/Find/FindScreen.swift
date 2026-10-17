@@ -33,7 +33,6 @@ struct FindScreen: View {
     @State private var name = ""
     @State private var selection: Set<UUID>?
     @State private var toast: ToastMessage?
-    @State private var moves = 0   // plays the success haptic (03 §10)
 
     private var actions: ItemActions { ItemActions(context: context, undoManager: undoManager) }
     /// F-03 on regular width: results on the left, the answer beside them (D28, iPadFind board).
@@ -95,7 +94,6 @@ struct FindScreen: View {
                 withNookAnimation(.settle, reduceMotion: reduceMotion) {
                     if let message = actions.move([moving.item], to: place, source: moving.source) {
                         toast = message
-                        moves += 1
                     }
                 }
             }
@@ -107,7 +105,6 @@ struct FindScreen: View {
             Button("Cancel", role: .cancel) {}
             Button(naming == .save ? "Save" : "Rename") { finishNaming() }
         }
-        .nookHaptic(.saved, trigger: moves)
         .toast($toast)
     }
 
@@ -183,7 +180,6 @@ struct FindScreen: View {
         withNookAnimation(.settle, reduceMotion: reduceMotion) {
             if let message = actions.move([item], to: proposal.to, source: .ai) {
                 toast = message
-                moves += 1
             }
         }
         understood = nil

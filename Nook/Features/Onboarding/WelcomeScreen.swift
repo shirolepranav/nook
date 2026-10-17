@@ -46,4 +46,6 @@ struct WelcomeScreen: View {
     }
 }
 
+#if DEBUG
 #Preview { WelcomeScreen {}.nookAccent(.terracotta) }
+#endif

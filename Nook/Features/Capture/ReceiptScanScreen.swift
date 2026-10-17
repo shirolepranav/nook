@@ -278,6 +278,7 @@ struct ReceiptScanScreen: View {
             Image(decorative: image, scale: 1)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .accessibilityIgnoresInvertColors()   // photos stay true under Smart Invert (03 §11)
                 .accessibilityHidden(false)
                 .accessibilityLabel(Text("Receipt, page \(page + 1)"))
                 .accessibilityValue(Text(verbatim: reading?.lines.filter { $0.page == page }.map(\.text)
