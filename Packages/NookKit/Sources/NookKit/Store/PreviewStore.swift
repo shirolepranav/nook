@@ -85,7 +85,7 @@ public enum PreviewStore {
         for (index, entry) in entries.enumerated() {
             var draft = ItemDraft(currencyCode: Locale.current.currency?.identifier ?? "USD", location: entry.3)
             (draft.name, draft.category, draft.price, draft.isPrivate) = (entry.0, entry.1, entry.2, entry.4)
-            if let saved = try? BlobStore.shared.savePhoto(swatch(index)) {
+            if let saved = try? BlobStore.shared.savePhoto(showcasePhoto(entry.0) ?? swatch(index)) {
                 draft.photos = [.init(fileName: saved.fileName, width: saved.width, height: saved.height)]
             }
             try items.create(draft)
@@ -175,6 +175,15 @@ public enum PreviewStore {
             }
         }
         try context.save()
+    }
+
+    /// App Store screenshots (D63): `-uiTestingShowcasePhotos <folder>` takes each item's cover
+    /// from `<folder>/<name>.jpg`, real photos in place of the swatches. The simulator reads
+    /// the Mac's folder directly.
+    private static func showcasePhoto(_ name: String) -> Data? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let flag = arguments.firstIndex(of: "-uiTestingShowcasePhotos"), flag + 1 < arguments.count else { return nil }
+        return try? Data(contentsOf: URL(filePath: arguments[flag + 1]).appending(path: "\(name).jpg"))
     }
 
     /// A warm two-tone photo stand-in, different for each index. Pixel data for a fake photo,

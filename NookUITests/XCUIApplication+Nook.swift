@@ -29,6 +29,8 @@ extension XCUIApplication {
         // Wait for each scroll to land: since P12's Face ID Lock row, the last rows can still
         // be loading after a quick swipe.
         for _ in 0..<6 where !(row.waitForExistence(timeout: 1) && row.isHittable) { swipeUp() }
+        // Back from a pushed screen, the list can sit below the row (P13: S-10 made S-01 longer).
+        for _ in 0..<6 where !(row.waitForExistence(timeout: 1) && row.isHittable) { swipeDown() }
         return row
     }
 }
