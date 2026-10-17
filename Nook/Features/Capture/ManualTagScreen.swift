@@ -280,9 +280,9 @@ struct ManualTagScreen: View {
                 .scrollDismissesKeyboard(.interactively)
                 .onChange(of: model.tags.count) { old, new in
                     guard new > old, let last = model.tags.last else { return }
-                    // Eased, not `settle`: a spring scrollTo never reported finishing on iOS 27, so
-                    // the app never went idle (F3's timing test, P13 D63).
-                    withNookAnimation(.snappy, reduceMotion: reduceMotion) { proxy.scrollTo(last.id, anchor: .bottom) }
+                    // Not animated: on iOS 27 an animated scrollTo here (spring or eased) never
+                    // reported finishing, so the app never went idle (F3's timing test, D63).
+                    proxy.scrollTo(last.id, anchor: .bottom)
                 }
         }
     }
