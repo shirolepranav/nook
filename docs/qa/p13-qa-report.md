@@ -31,13 +31,13 @@ Every finding is recorded in D63.
 | Case | Where | Result |
 |---|---|---|
 | Motion and haptics against 03 §9–10 | code walk, UI tests | ✅ Button press 97%; zoom on every grid; `saved` haptic on every save and move through the toast; `tick` on outlines, codes and the shutter; `selected` on chips and pickers; raw motion and haptics fail a new policy grep |
-| Accessibility audit on every screen | `AccessibilityAuditTests` (14 tests) | CI_AUDITS |
+| Accessibility audit on every screen | `AccessibilityAuditTests` (14 tests) | ✅ All 14 audits pass on the SE and the 13-inch iPad, `testP13ScreensPassTheAccessibilityAudit` included |
 | Voice Control, Smart Invert, Bold Text, Differentiate Without Color | code walk | ✅ Input labels on cards; every photo surface ignores invert; status is always icon plus text. **Owner:** Voice Control and the Liquid Glass slider on a device (D33) |
 | Regular width: Pro Max landscape, 13-inch iPad | App Store screenshot run, audits on iPad | ✅ Content stays within `readableWidth`, the item column sits beside the list, and Find's answer shows beside its filters |
 | iPad pointer and keyboard | `ShellTests`, `MoveTests` on iPad | ✅ ⌘1–⌘4, ⌘E, ⇧⌘M, ⌘F. ⌘⌫ and ⌘Z couldn't be sent by XCUITest (D63): **Owner** on a hardware keyboard |
 | Download size | unsigned Release device build | ✅ 25 MB installed, 6.2 MB compressed (budget 30 MB). App Store Connect's sizes are final |
 | "Data Not Collected" privacy label | manifests, policy grep | ✅ Answers in `docs/release/app-store.md` |
-| One full No-AI release pass | CI's UI suite (every test forces Classic) | CI_NOAI |
+| One full No-AI release pass | CI's UI suite (every test forces Classic) | ✅ Passed on the SE (101 of 103 first run; the other 2 are under Open bugs) and on the iPad (108 passed, 0 failed) |
 
 ## Performance (PRD §9)
 | Budget | Measured | Where | Status |
@@ -46,14 +46,14 @@ Every finding is recorded in D63.
 | 1,000-item grid at 120 fps | Completes after the decode fix; the simulator records no scroll metric | Pro Max simulator | **Owner:** Instruments Hitches on ProMotion |
 | Search < 100 ms at 5,000 items | slowest keystroke 7.9 ms | Mac, release build | ✅ |
 | First AI card < 2 s, scan < 8 s | — | — | **Owner** (AI iPhone, P8 signed off) |
-| 500-item PDF < 20 s | `ReportRendererTests` | CI | CI_PDF |
-| Spotlight rebuild at 5,000 items | SPOTLIGHT_MS, off the main thread | SE simulator | CI_SPOT |
+| 500-item PDF < 20 s | `ReportRendererTests` | CI | ✅ `fiveHundredItemsRenderInBudget` asserts under 20 s and passes on the SE and the iPad (no time logged; device time is **Owner**) |
+| Spotlight rebuild at 5,000 items | SPOTLIGHT_MS, off the main thread | SE simulator | ✅ `spotlightEntitiesAt5000ItemsBuildQuickly` passes: 3 s on the SE, 2 s on the iPad (test time) |
 | Download size < 30 MB | 6.2 MB compressed, 25 MB installed | Release device build | ✅ |
 
 ## Smoke suite
 | ID | iPhone SE | 13-inch iPad | Note |
 |---|---|---|---|
-| S1–S12 | CI_SE | CI_IPAD | Every earlier phase's suite, in `scripts/ci.sh` |
+| S1–S12 | ✅ 101 passed, 2 flaky failures (below), 18 skipped; rerun alone 3×, both pass | ✅ 108 passed, 0 failed, 13 skipped | Every earlier phase's suite, in `scripts/ci.sh` |
 | S13 | ✅ partly | — | S3 and S5 flows plus their audits pass. **Owner:** the real VoiceOver-only run on a device |
 
 ## Accessibility (screens touched)
@@ -67,7 +67,11 @@ Every finding is recorded in D63.
 Every UI test launches with Force Classic unless it fakes AI. P13 changed no router code.
 
 ## Open bugs
-None open from P13's runs.
+No crash or data-loss bugs. Two UI tests failed in the SE's full run. Each passed alone 3 times, and both passed in the iPad's full run. They have not been fixed:
+- `CaptureTests.testAIScanFailureFallsBackToTagging`
+- `FindTests.testMoveFromAResultAndUndo`
+
+Treat them as flaky until a second full run on a clean simulator says otherwise.
 
 ## Owner checks (needed for Gate 4)
 1. **Gate 3 (D60):**
