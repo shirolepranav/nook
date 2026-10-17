@@ -522,6 +522,7 @@ final class ScreenshotTests: XCTestCase {
     func testAppStoreScreens() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["RUN_SCREENSHOTS"] == "1",
                           "set TEST_RUNNER_RUN_SCREENSHOTS=1")
+        continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: "lived")
         app.launchArguments += ["-uiTestingCameraFixture"]
@@ -545,12 +546,13 @@ final class ScreenshotTests: XCTestCase {
         let field = app.searchFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         field.tap()
-        field.typeText("Where is the drill?")
-        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Garage'")).firstMatch
+        field.typeText("Where is the espresso machine?")
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Counter'")).firstMatch
             .waitForExistence(timeout: 10))
         snap("4 Find answer")
 
-        app.tab("Home").tap()
+        // On iPad, Find's active search hides the tab bar; ⌘1 works there.
+        if app.tab("Home").exists { app.tab("Home").tap() } else { app.typeKey("1", modifierFlags: .command) }
         app.buttons["Capture"].tap()
         XCTAssertTrue(app.buttons["Scan room"].waitForExistence(timeout: 5))
         app.buttons["Scan room"].tap()
@@ -569,7 +571,7 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Cancel"].tap()
         if app.buttons["Discard"].waitForExistence(timeout: 3) { app.buttons["Discard"].tap() }
 
-        app.tab("Reports").tap()
+        if app.tab("Reports").exists { app.tab("Reports").tap() } else { app.typeKey("3", modifierFlags: .command) }
         let report = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Insurance report'")).firstMatch
         XCTAssertTrue(report.waitForExistence(timeout: 10))
         report.tap()

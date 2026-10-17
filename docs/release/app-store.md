@@ -68,7 +68,7 @@ Produced by `ScreenshotTests` in App Store mode (seeded "showcase" home, Pro, li
 | iPhone 6.9" | iPhone 18 Pro Max |
 | iPad 13" | iPad Pro 13-inch (M5) |
 
-The order: Home (rooms), Room grid, Item detail, Find answer ("Where are the passports?"), Classic scan tagging, Insurance report. Captions are added in App Store Connect, not baked into the images.
+The order: Home (rooms), Room grid, Item detail, Find answer ("Where is the espresso machine?"), Classic scan tagging, Insurance report. Captions are added in App Store Connect, not baked into the images.
 
 ## 6. Release checklist
 1. Gate 3 has passed (D60), and the P11 App Store Connect setup is done: product `pranav.nook.pro`, agreements, CloudKit schema deployed to Production, and Push (D59).
