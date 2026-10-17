@@ -611,6 +611,8 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
   - ⌘1–⌘4, ⌘E, ⇧⌘M and ⌘F are tested (`ShellTests`, `MoveTests`).
   - **⌘⌫ couldn't be triggered.** `typeKey` with backspace, forward delete or U+007F never opened I-01's delete confirmation, even as the first shortcut. Either XCUITest can't send ⌘⌫ to a menu command, or iPadOS's Edit menu claims it. `onDeleteCommand` is unavailable on iOS.
   - **Owner:** on a hardware keyboard, check that ⌘⌫ opens "Delete …?" and ⌘Z undoes it (D33). If ⌘⌫ doesn't, the command needs another key, and 01 §1.5 changes.
+- **Fast-scrolling the 1,000-card grid deadlocked thumbnail loading** (found by the grid perf test, which had been timing out). Every visible card's `StoredImage` decoded its HEIC thumbnail in parallel, and ImageIO's `cacheImmediately` → `dispatch_sync` deadlocked the cooperative pool. It's the same trap as P10's report, but P10 fixed only the report. `BlobStore.thumbnail` and `image(_:in:maxPixels:)` now decode one at a time on their own serial queue, off the pool; cache hits stay immediate. The grid test now finishes on the Pro Max simulator, but the simulator records no scroll metric, so 120 fps stays an Instruments check on a ProMotion iPhone (owner).
+- **Simulator launch, a trend only:** 3.0 s average on the Pro Max simulator, in a Debug build with the debug dylib and the simulator's process spawn. That can't be compared with the 400 ms budget on an iPhone 15 (owner, D33).
 - More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
 
 *Affects:* `CLAUDE.md`, 05 §1 and §6, `Features/Settings`, `docs/release/`.

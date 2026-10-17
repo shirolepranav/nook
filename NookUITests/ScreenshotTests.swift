@@ -525,7 +525,8 @@ final class ScreenshotTests: XCTestCase {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: "lived")
-        app.launchArguments += ["-uiTestingCameraFixture"]
+        // US English and dollars for the en-US listing, whatever the simulator's region.
+        app.launchArguments += ["-uiTestingCameraFixture", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         if let photos = ProcessInfo.processInfo.environment["SHOWCASE_PHOTOS"] {
             app.launchArguments += ["-uiTestingShowcasePhotos", photos]
         }
@@ -546,7 +547,7 @@ final class ScreenshotTests: XCTestCase {
         let field = app.searchFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         field.tap()
-        field.typeText("Where is the espresso machine?")
+        field.typeText("Where is the espresso machine?\n")   // submitting puts the keyboard away
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Counter'")).firstMatch
             .waitForExistence(timeout: 10))
         snap("4 Find answer")
@@ -566,13 +567,15 @@ final class ScreenshotTests: XCTestCase {
             XCTAssertTrue(app.textFields["What is it?"].waitForExistence(timeout: 10))
             app.textFields["What is it?"].typeText(name + "\n")
         }
-        app.swipeDown(velocity: .slow)   // the keyboard away, so the photo and cards show
         snap("5 Scan tagging")
         app.buttons["Cancel"].tap()
         if app.buttons["Discard"].waitForExistence(timeout: 3) { app.buttons["Discard"].tap() }
 
-        if app.tab("Reports").exists { app.tab("Reports").tap() } else { app.typeKey("3", modifierFlags: .command) }
         let report = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Insurance report'")).firstMatch
+        // Right after the scan closes, the first tap can be dropped (D63); try twice.
+        for _ in 0..<2 where !report.waitForExistence(timeout: 3) {
+            if app.tab("Reports").exists { app.tab("Reports").tap() } else { app.typeKey("3", modifierFlags: .command) }
+        }
         XCTAssertTrue(report.waitForExistence(timeout: 10))
         report.tap()
         XCTAssertTrue(app.buttons["Preview Report"].waitForExistence(timeout: 10))

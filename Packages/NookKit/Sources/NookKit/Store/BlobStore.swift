@@ -46,6 +46,11 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
 
     public let root: URL
     private let cache = NSCache<NSString, CGImage>()
+    /// One decode at a time, off the cooperative pool: parallel HEIC decodes deadlock ImageIO
+    /// (`cacheImmediately` → `dispatch_sync`), first in P10's report and then in a fast-scrolled
+    /// 1,000-card grid (P13, D63).
+    // ponytail: serial; a small concurrency limit if large grids ever load visibly slowly.
+    private let decoder = DispatchQueue(label: "pranav.nook.blobs.decode", qos: .userInitiated)
     private let observer = Mutex<(@Sendable (Change) -> Void)?>(nil)
 
     /// FileSync listens only while iCloud sync is on; `nil` stops it.
@@ -174,22 +179,34 @@ public final class BlobStore: @unchecked Sendable {   // immutable, and NSCache 
     // MARK: Reading
 
     /// The 400-px thumbnail, decoded off the main thread and cached.
-    @concurrent
     public func thumbnail(_ fileName: String) async -> CGImage? {
-        let key = Self.thumbName(fileName) as NSString
-        if let hit = cache.object(forKey: key) { return hit }
-        let options = [kCGImageSourceShouldCacheImmediately: true] as CFDictionary
-        guard let source = CGImageSourceCreateWithURL(thumbnailURL(for: fileName) as CFURL, nil),
-              let image = CGImageSourceCreateImageAtIndex(source, 0, options) else { return nil }
-        cache.setObject(image, forKey: key)
-        return image
+        let name = Self.thumbName(fileName)
+        if let hit = cache.object(forKey: name as NSString) { return hit }
+        let url = thumbnailURL(for: fileName)
+        return await decode {
+            let key = name as NSString
+            if let hit = self.cache.object(forKey: key) { return hit }   // decoded while queued
+            let options = [kCGImageSourceShouldCacheImmediately: true] as CFDictionary
+            guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+                  let image = CGImageSourceCreateImageAtIndex(source, 0, options) else { return nil }
+            self.cache.setObject(image, forKey: key)
+            return image
+        }
     }
 
     /// A photo downsampled to fit `maxPixels`, for the viewer (I-03).
-    @concurrent
     public func image(_ fileName: String, in folder: Folder = .photos, maxPixels: Int) async -> CGImage? {
-        guard let source = CGImageSourceCreateWithURL(url(for: fileName, in: folder) as CFURL, nil) else { return nil }
-        return Self.downsampled(source, maxPixels: maxPixels)
+        let url = url(for: fileName, in: folder)
+        return await decode {
+            guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+            return Self.downsampled(source, maxPixels: maxPixels)
+        }
+    }
+
+    private func decode(_ work: @escaping @Sendable () -> CGImage?) async -> CGImage? {
+        await withCheckedContinuation { continuation in
+            decoder.async { continuation.resume(returning: work()) }
+        }
     }
 
     // MARK: Private

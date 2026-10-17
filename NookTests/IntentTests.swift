@@ -26,6 +26,16 @@ struct IntentTests {
         #expect(answer.hasPrefix("Espresso machine is in Kitchen → Counter. Last confirmed"))
     }
 
+    /// P13 (PRD §9, the P12 note): rebuilding Spotlight's entities at 5,000 items. It runs off
+    /// the main thread after a run of saves; this keeps the cost of one rebuild in view.
+    @Test func spotlightEntitiesAt5000ItemsBuildQuickly() {
+        let big = PreviewStore.seeded(.items5k)
+        let clock = ContinuousClock()
+        let elapsed = clock.measure { _ = SystemSurfaces.entities(in: ModelContext(big)) }
+        print("Spotlight entities at 5,000 items: \(elapsed)")
+        #expect(elapsed < .seconds(2))
+    }
+
     @Test func privateItemsAreNeverEntities() async throws {
         let ring = try item("Grandma’s ring")
         #expect(try await ItemQuery().entities(matching: "ring").isEmpty)
