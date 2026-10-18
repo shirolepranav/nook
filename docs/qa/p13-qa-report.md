@@ -73,6 +73,8 @@ No crash or data-loss bugs. Two UI tests failed in the SE's full run. Each passe
 
 On PR #43's CI run (SE) both of these passed and a different test failed: `testAIScreensPassTheAccessibilityAudit` tapped the Settings tab while the capture sheet was still dismissing, so the tap was lost and the app stayed on Home. All Settings tab taps in the audit tests now go through `openSettings()`, which retries until Settings is up. It passes on the SE and the 13-inch iPad.
 
+On the next CI run (SE) a third test, `CaptureTests.testClassicScanTagsThreeItemsAndSaves`, failed on a message-less `XCTAssertTrue`. Its "3 items tagged" check had no wait, so it now waits up to 5 s. The failing line couldn't be confirmed from the result bundle. It passes locally (3 iterations, and next to the 8-item test). One local run, on a simulator left running too long, lost the 5-second toast and failed; a restarted simulator passed.
+
 Treat the two above as flaky until a second full run on a clean simulator says otherwise.
 
 ## Owner checks (needed for Gate 4)

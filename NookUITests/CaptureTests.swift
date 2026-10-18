@@ -138,7 +138,7 @@ final class CaptureTests: XCTestCase {
     func testClassicScanTagsThreeItemsAndSaves() {
         let app = launch()
         scanAndTag(app, ["Toaster", "Blender", "Kettle"])
-        XCTAssertTrue(app.staticTexts["3 items tagged"].exists)
+        XCTAssertTrue(app.staticTexts["3 items tagged"].waitForExistence(timeout: 5))
         app.buttons["Save 3 Items"].tap()
         XCTAssertTrue(app.staticTexts["3 items saved."].waitForExistence(timeout: 10))
         for name in ["Toaster", "Blender", "Kettle"] {
