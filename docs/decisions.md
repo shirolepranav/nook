@@ -616,3 +616,7 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 - More choices and the iOS 27 SDK findings (D23) are added here as P13 goes on.
 
 *Affects:* `CLAUDE.md`, 05 §1 and §6, `Features/Settings`, `docs/release/`.
+
+**D64 · 2026-10-18 · Accepted (product owner)** — **Gate 4 is marked done, and P13 is merged to `main`, with one item open.** The product owner's call. The final app name and trademark check (PRD §10) is still open, and the owner will return to it. "Nook" stays a placeholder until then. Claude did not run the owner checks listed in `docs/qa/p13-qa-report.md` (device budgets, TestFlight, Gate 3's App Store Connect setup), so this records the owner's sign-off and is not test evidence. `main` was pushed while PR #43's CI re-run was still pending; the SE UI suite had shown three different flaky failures that each passed when rerun alone.
+
+*Affects:* `docs/02_Development_Roadmap.md`.
