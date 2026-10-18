@@ -27,7 +27,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.tab("Reports").tap()
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
-        app.tab("Settings").tap()
+        app.openSettings()
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
         app.settingsRow("Appearance").tap()
@@ -108,7 +108,7 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.buttons["Cancel"].tap()
 
-        app.tab("Settings").tap()
+        app.openSettings()
         app.settingsRow("Recently Deleted").tap()
         XCTAssertTrue(app.staticTexts["Nothing deleted."].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
@@ -286,7 +286,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.buttons["Cancel"].tap()
         app.buttons["Discard Changes"].tap()
 
-        app.tab("Settings").tap()
+        app.openSettings()
         app.settingsRow("Apple Intelligence").tap()
         XCTAssertTrue(app.staticTexts["Ready"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
@@ -383,7 +383,7 @@ final class AccessibilityAuditTests: XCTestCase {
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.buttons["Cancel"].tap()
 
-        app.tab("Settings").tap()
+        app.openSettings()
         app.buttons["Backup & Restore"].tap()
         XCTAssertTrue(app.buttons["Create Backup"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
@@ -404,7 +404,7 @@ final class AccessibilityAuditTests: XCTestCase {
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: "lived")
         app.launch()
-        app.tab("Settings").tap()
+        app.openSettings()
         app.settingsRow("Help & About").tap()
         let version = app.descendants(matching: .any)["help.version"]
         XCTAssertTrue(version.waitForExistence(timeout: 5))
@@ -445,7 +445,7 @@ final class AccessibilityAuditTests: XCTestCase {
         let app = XCUIApplication.nook(store: "lived")
         app.launchArguments += ["-uiTestingBiometrics", "failure"]
         app.launch()
-        app.tab("Settings").tap()
+        app.openSettings()
         app.settingsRow("Face ID Lock").tap()
         XCTAssertTrue(app.switches["Lock Nook with Face ID"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
@@ -471,7 +471,7 @@ final class AccessibilityAuditTests: XCTestCase {
         let free = XCUIApplication.nook(store: "atLimit")
         free.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "pending"]
         free.launch()
-        free.tab("Settings").tap()
+        free.openSettings()
         let card = free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 10))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
@@ -494,7 +494,7 @@ final class AccessibilityAuditTests: XCTestCase {
 
         let pro = XCUIApplication.nook(store: "small")
         pro.launch()
-        pro.tab("Settings").tap()
+        pro.openSettings()
         let thanks = pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro'")).firstMatch
         XCTAssertTrue(thanks.waitForExistence(timeout: 10))
         thanks.tap()
@@ -556,7 +556,7 @@ final class AccessibilityAuditTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Lent out"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
 
-        app.tab("Settings").tap()
+        app.openSettings()
         app.settingsRow("Notifications").tap()
         XCTAssertTrue(app.navigationBars["Notifications"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }

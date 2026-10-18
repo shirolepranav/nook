@@ -21,6 +21,17 @@ extension XCUIApplication {
             .firstMatch
     }
 
+    /// Opens Settings and waits for it. A tab tap that lands while a sheet is still dismissing is
+    /// dropped (CI, P13), so tap again until the screen is there.
+    @MainActor
+    func openSettings() {
+        let bar = navigationBars["Settings"]
+        for _ in 0..<3 where !bar.exists {
+            tab("Settings").tap()
+            _ = bar.waitForExistence(timeout: 3)
+        }
+    }
+
     /// A Settings row (its label starts with `name`; some carry a detail), scrolled into view first: since P11 the Pro card and Privacy push the
     /// lower rows off the iPhone SE's screen (D58).
     @MainActor

@@ -71,7 +71,9 @@ No crash or data-loss bugs. Two UI tests failed in the SE's full run. Each passe
 - `CaptureTests.testAIScanFailureFallsBackToTagging`
 - `FindTests.testMoveFromAResultAndUndo`
 
-Treat them as flaky until a second full run on a clean simulator says otherwise.
+On PR #43's CI run (SE) both of these passed and a different test failed: `testAIScreensPassTheAccessibilityAudit` tapped the Settings tab while the capture sheet was still dismissing, so the tap was lost and the app stayed on Home. All Settings tab taps in the audit tests now go through `openSettings()`, which retries until Settings is up. It passes on the SE and the 13-inch iPad.
+
+Treat the two above as flaky until a second full run on a clean simulator says otherwise.
 
 ## Owner checks (needed for Gate 4)
 1. **Gate 3 (D60):**
