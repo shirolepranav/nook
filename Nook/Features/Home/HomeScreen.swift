@@ -48,6 +48,7 @@ struct HomeScreen: View {
                 } else {
                     totalValue
                 }
+                DataSafetyCard(items: items)   // D65
                 roomsSection
                 warrantiesSection
                 ItemSection(items: Array(items.prefix(Self.recentCount)), toast: $toast) {

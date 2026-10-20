@@ -25,6 +25,9 @@ struct NookApp: App {
             // S-11's switch starts on for every UI test; one test turns it off (D53).
             defaults.removeObject(forKey: CapabilityRouter.useAppleIntelligenceKey)
             SyncSettings.isOn = false   // S-03 starts off (D58)
+            // Home's data-safety card starts fresh (D65).
+            for key in [PreferenceKey.lastBackup, PreferenceKey.dataNudgeDismissals,
+                        PreferenceKey.dataNudgeDismissedAt, PreferenceKey.syncOffer] { defaults.removeObject(forKey: key) }
         }
         #endif
     }

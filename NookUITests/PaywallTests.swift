@@ -10,12 +10,14 @@ final class PaywallTests: XCTestCase {
 
     /// The Free tier full (`atLimit`: 25 items, 3 reminders on).
     @MainActor
-    private func launch(free: Bool = true, purchase: String = "success", store: String = "atLimit") -> XCUIApplication {
+    private func launch(free: Bool = true, purchase: String = "success", store: String = "atLimit",
+                        nudge: Bool = false) -> XCUIApplication {
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication.nook(store: store)
         app.launchArguments += ["-uiTestingCameraFixture", "-uiTestingNotifications", "granted",
                                 "-uiTestingPurchase", purchase]
         if free { app.launchArguments += ["-uiTestingFree", "YES"] }
+        if nudge { app.launchArguments += ["-uiTestingDataNudge"] }
         app.launch()
         return app
     }
@@ -124,6 +126,70 @@ final class PaywallTests: XCTestCase {
         app.buttons["Turn On iCloud Sync"].tap()
         XCTAssertTrue(app.staticTexts["Last synced"].waitForExistence(timeout: 5))
         XCTAssertEqual(toggle.value as? String, "1")
+    }
+
+    /// D65: Home's card says where things live; Not Now hides it. Free can back up, and
+    /// S-01's status line then says so.
+    @MainActor
+    func testDataSafetyCardAndFreeBackup() {
+        let app = launch(nudge: true)
+        let nudge = app.staticTexts["Your 25 things live only on this iPhone."]
+        XCTAssertTrue(nudge.waitForExistence(timeout: 10))
+        app.buttons["Not Now"].tap()
+        XCTAssertTrue(nudge.waitForNonExistence(timeout: 5))
+
+        app.tab("Settings").tap()
+        XCTAssertTrue(text(app, containing: "Only on this iPhone").waitForExistence(timeout: 5))
+        app.buttons["Backup & Restore"].tap()
+        XCTAssertFalse(app.buttons["Unlock Pro to Back Up"].exists)
+        app.buttons["Create Backup"].tap()
+        XCTAssertTrue(app.buttons["Share Backup"].waitForExistence(timeout: 20))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(text(app, containing: "Backed up").waitForExistence(timeout: 5))
+    }
+
+    /// D65: Pro bought mid-flow (the 26th item) offers sync on Home; Turn On iCloud starts it.
+    @MainActor
+    func testBuyingProMidFlowOffersSyncOnHome() {
+        let app = launch(nudge: true)
+        XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 10))
+        app.buttons["Not Now"].tap()   // dismissed before; the purchase offers it once more
+        app.buttons["Capture"].tap()
+        app.buttons["Add item"].tap()
+        XCTAssertTrue(app.buttons["Take Photo"].waitForExistence(timeout: 5))
+        app.buttons["Take Photo"].tap()
+        let name = app.textFields["Name"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
+        name.typeText("Lamp")
+        app.buttons["Save"].tap()
+        let unlock = app.buttons["Unlock Nook Pro"]
+        XCTAssertTrue(unlock.waitForExistence(timeout: 10))
+        unlock.tap()
+        app.buttons["Save Your Item"].tap()
+
+        let nudge = app.staticTexts["Your 26 things live only on this iPhone."]
+        XCTAssertTrue(nudge.waitForExistence(timeout: 10))
+        app.buttons["Turn On iCloud Sync"].firstMatch.tap()
+        XCTAssertTrue(nudge.waitForNonExistence(timeout: 5))
+        app.tab("Settings").tap()
+        XCTAssertTrue(text(app, containing: "Safe in iCloud").waitForExistence(timeout: 5))
+    }
+
+    /// D65: bought from Settings, P-01's success offers sync right there.
+    @MainActor
+    func testBuyingProFromSettingsOffersSync() {
+        let app = launch()
+        app.tab("Settings").tap()
+        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro'")).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        let unlock = app.scrollViews.buttons["Unlock Nook Pro"]
+        XCTAssertTrue(unlock.waitForExistence(timeout: 5))
+        unlock.tap()
+        XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 5))
+        app.buttons["Turn On iCloud Sync"].tap()
+        XCTAssertTrue(text(app, containing: "Safe in iCloud").waitForExistence(timeout: 5))
     }
 
     /// PRD §7: nothing entered is locked away. With the tier full, Find and delete still work.

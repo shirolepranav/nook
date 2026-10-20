@@ -469,8 +469,11 @@ final class AccessibilityAuditTests: XCTestCase {
     func testP11ScreensPassTheAccessibilityAudit() throws {
         XCUIDevice.shared.orientation = .portrait
         let free = XCUIApplication.nook(store: "atLimit")
-        free.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "pending"]
+        free.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "pending", "-uiTestingDataNudge"]
         free.launch()
+        // D65: Home's data-safety card, then S-01's status line below.
+        XCTAssertTrue(free.staticTexts["Your 25 things live only on this iPhone."].waitForExistence(timeout: 10))
+        try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
         free.openSettings()
         let card = free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 10))

@@ -22,6 +22,11 @@ enum PreferenceKey {
     static let reportPolicyNumber = "reportPolicyNumber"
     /// S-04's "Last backup Oct 1, 2026".
     static let lastBackup = "lastBackup"
+    /// Home's data-safety card (D65): how often Not Now was tapped, and when last.
+    static let dataNudgeDismissals = "dataNudgeDismissals"
+    static let dataNudgeDismissedAt = "dataNudgeDismissedAt"
+    /// Set when Pro was bought outside S-03, so Home offers sync once (D65).
+    static let syncOffer = "syncOffer"
 }
 
 extension UserDefaults {

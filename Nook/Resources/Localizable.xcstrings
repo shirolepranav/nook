@@ -777,13 +777,13 @@
     "Arrange Spots" : {
 
     },
-    "Back Up Now" : {
-
-    },
     "Back by" : {
 
     },
     "Back to Your Report" : {
+
+    },
+    "Backed up %@" : {
 
     },
     "Backup & Restore" : {
@@ -1964,6 +1964,28 @@
     "Only items priced in %@." : {
 
     },
+    "Only on this iPhone. Turn on iCloud Sync or make a backup to keep it safe." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Only on this iPad. Turn on iCloud Sync or make a backup to keep it safe."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Only on this iPhone. Turn on iCloud Sync or make a backup to keep it safe."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Open %@" : {
 
     },
@@ -1995,6 +2017,9 @@
 
     },
     "Optional" : {
+
+    },
+    "Or make a backup file" : {
 
     },
     "Other" : {
@@ -2355,6 +2380,12 @@
 
     },
     "Rose" : {
+
+    },
+    "Safe in iCloud" : {
+
+    },
+    "Safe in iCloud · Synced %@" : {
 
     },
     "Sage" : {
@@ -2915,6 +2946,9 @@
     "Try removing one." : {
 
     },
+    "Turn On" : {
+
+    },
     "Turn On iCloud Sync" : {
 
     },
@@ -2929,6 +2963,31 @@
     },
     "Turn off to always tag and fill details yourself." : {
 
+    },
+    "Turn on iCloud sync and they’ll follow you to any new device." : {
+
+    },
+    "Turn on iCloud sync to keep everything safe if you change phones." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Turn on iCloud sync to keep everything safe if you change devices."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Turn on iCloud sync to keep everything safe if you change phones."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Turn on notifications in the Settings app so warranty and loan reminders can reach you." : {
 
@@ -2958,9 +3017,6 @@
 
     },
     "Unlock Nook Pro" : {
-
-    },
-    "Unlock Pro to Back Up" : {
 
     },
     "Unlock Pro to Export" : {
@@ -3135,6 +3191,28 @@
     "Your %@ warranty ends today." : {
 
     },
+    "Your %lld things live only on this iPhone." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your %lld things live only on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your %lld things live only on this iPhone."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Your data" : {
 
     },
@@ -3247,10 +3325,16 @@
     "iCloud Sync" : {
 
     },
-    "iCloud sync and backup" : {
+    "iCloud sync" : {
+
+    },
+    "iCloud sync across your devices" : {
 
     },
     "iCloud sync comes with Nook Pro" : {
+
+    },
+    "iCloud sync is paused. Open iCloud Sync to see why." : {
 
     },
     "to" : {

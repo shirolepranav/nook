@@ -263,7 +263,8 @@ Free download, then a one-time $14.99 "Nook Pro" unlock. No subscription and no 
 | "Where is…?" and search | Yes | Yes |
 | Warranty reminders | Up to 3 | Unlimited |
 | Insurance PDF, CSV export | Preview only (watermarked first page) | Yes |
-| iCloud sync and backup | No | Yes |
+| `.nookbackup` backup and restore | Yes (D65) | Yes |
+| iCloud sync | No | Yes |
 | Widgets, box QR labels, lending | Yes | Yes |
 
 ### Paywall design rules

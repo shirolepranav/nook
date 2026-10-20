@@ -95,8 +95,6 @@ public final class EntitlementStore {
     /// The insurance report, the proof pack and CSV (F9). Free users get a watermarked first
     /// page (PRD §7).
     public var canExport: Bool { isPro }
-    /// `.nookbackup` (F9, PRD §7). Restoring is never gated: it's the user's own data.
-    public var canBackUp: Bool { isPro }
     /// iCloud sync (S-03).
     public var canSync: Bool { isPro }
 

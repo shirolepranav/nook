@@ -14,8 +14,6 @@ extension UTType {
 /// restoring one by Merge or Replace (D56).
 struct BackupScreen: View {
     @Environment(\.modelContext) private var context
-    @Environment(EntitlementStore.self) private var entitlements
-    @State private var paywall: PaywallRequest?
     @AppStorage(PreferenceKey.reportHomeName) private var homeName = ""
     @AppStorage(PreferenceKey.lastBackup) private var lastBackup: Double = 0
     @State private var size: Int64?
@@ -65,7 +63,6 @@ struct BackupScreen: View {
             if case .success(let url) = result { restoring = url }
         }
         .restoreBackup($restoring, toast: $toast)
-        .paywall($paywall)
         .toast($toast)
         .task { size = try? BackupService(context: context).estimatedSize() }
         .onDisappear { work?.cancel() }
@@ -99,16 +96,12 @@ struct BackupScreen: View {
                         toast = ToastMessage(symbol: "folder", "Saved to Files.")
                     }
                 }
-            } else if entitlements.canBackUp {
+            } else {
+                // Free too (D65): a backup is the user's own data leaving with them.
                 Button(action: create) {
                     Label("Create Backup", systemImage: "externaldrive.badge.plus").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.nookPrimary)
-            } else {
-                Button { paywall = PaywallRequest(reason: .backup) { create() } } label: {
-                    Label("Unlock Pro to Back Up", systemImage: "lock.open").frame(maxWidth: .infinity)
-                }
-                    .buttonStyle(.nookPrimary)
             }
             if let detail { detail.font(.nookFootnote).foregroundStyle(NookColor.textSecondary) }
         }

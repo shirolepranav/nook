@@ -109,3 +109,39 @@ import Testing
     #expect(SyncStatus.kind(of: NSError(domain: NSCocoaErrorDomain, code: 134400)) == .signedOut)
     #expect(SyncStatus.kind(of: CKError(.networkUnavailable)) == .failed)
 }
+
+// MARK: DataSafety (D65)
+
+@Test func dataSafetyReadsSyncThenBackup() {
+    let now = Date(timeIntervalSince1970: 1_000_000_000)
+    let synced = now.addingTimeInterval(-120)
+    #expect(DataSafety.state(syncs: true, syncState: .upToDate, lastSynced: synced, lastBackup: nil, now: now)
+            == .inICloud(lastSynced: synced))
+    #expect(DataSafety.state(syncs: true, syncState: .storageFull, lastSynced: synced, lastBackup: now, now: now) == .syncPaused)
+    let recent = now.addingTimeInterval(-86_400)
+    #expect(DataSafety.state(syncs: false, syncState: .upToDate, lastSynced: nil, lastBackup: recent, now: now) == .backedUp(recent))
+    let old = now.addingTimeInterval(-DataSafety.recentBackup - 1)
+    #expect(DataSafety.state(syncs: false, syncState: .upToDate, lastSynced: nil, lastBackup: old, now: now) == .onlyHere)
+}
+
+@Test func nudgeWaitsForAHomeWorthKeepingAndBacksOff() {
+    let now = Date(timeIntervalSince1970: 1_000_000_000)
+    func due(_ safety: DataSafety = .onlyHere, items: Int = 20, room: Int = 0, offered: Bool = false,
+             dismissals: Int = 0, last: Date? = nil) -> Bool {
+        DataSafetyNudge.isDue(safety: safety, itemCount: items, fullestRoom: room, offered: offered,
+                              dismissals: dismissals, lastDismissed: last, now: now)
+    }
+    #expect(due())
+    #expect(!due(items: 19))
+    #expect(due(items: 10, room: 10))   // the first finished room
+    #expect(!due(.inICloud(lastSynced: nil)))
+    #expect(!due(.syncPaused))
+    #expect(!due(.backedUp(now)))
+    #expect(!due(dismissals: 1, last: now.addingTimeInterval(-86_400)))
+    #expect(due(dismissals: 1, last: now.addingTimeInterval(-DataSafetyNudge.snooze)))
+    #expect(!due(dismissals: 2, last: now.addingTimeInterval(-DataSafetyNudge.snooze)))
+    // Just bought Pro: offered once, even with few items or a recent backup.
+    #expect(due(.backedUp(now), items: 3, offered: true, dismissals: 2))
+    #expect(!due(.inICloud(lastSynced: nil), offered: true))
+    #expect(!due(items: 0, offered: true))
+}

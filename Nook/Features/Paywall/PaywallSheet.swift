@@ -7,7 +7,7 @@ import NookUI
 /// Why P-01 opened (D9, D58). It picks the success button, and `onUnlock` carries on with
 /// what the user was doing.
 enum PaywallReason {
-    case item, items, reminder, export, backup, sync, settings
+    case item, items, reminder, export, sync, settings
 
     var continueTitle: LocalizedStringKey {
         switch self {
@@ -15,7 +15,6 @@ enum PaywallReason {
         case .items: "Save Your Items"
         case .reminder: "Save Your Warranty"
         case .export: "Back to Your Report"
-        case .backup: "Back Up Now"
         case .sync: "Turn On iCloud Sync"
         case .settings: "Done"
         }
@@ -51,6 +50,9 @@ struct PaywallSheet: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(filter: #Predicate<Item> { $0.deletedAt == nil }) private var items: [Item]
     @AppStorage(MoneyText.hideValuesKey) private var hideValues = false
+    @AppStorage(SyncSettings.key) private var syncOn = false
+    @AppStorage(PreferenceKey.syncOffer) private var syncOffer = false
+    @Environment(SyncStatus.self) private var syncStatus
     @State private var phase = Phase.shopping
     @State private var restoring = false
     @State private var nothingToRestore = false
@@ -80,6 +82,11 @@ struct PaywallSheet: View {
         .nookHaptic(.failed, trigger: phase == .failed)
         // An Ask to Buy approval or a purchase on another device lands here too.
         .onChange(of: entitlements.isPro) { _, isPro in if isPro { phase = .success } }
+        .onChange(of: phase) { _, phase in
+            // D65: mid-flow, reopening the store for sync would close what the user is doing,
+            // so Home offers it once instead. Settings offers it right here.
+            if phase == .success, !syncOn, request.reason != .sync, request.reason != .settings { syncOffer = true }
+        }
         .sheet(isPresented: $showsPrivacy) { NavigationStack { PrivacyScreen(showsDone: true) } }
     }
 
@@ -95,7 +102,7 @@ struct PaywallSheet: View {
             VStack(alignment: .leading, spacing: NookSpace.s2) {
                 benefit("square.stack.3d.up", "Unlimited items and warranty reminders")
                 benefit("doc.richtext", "Insurance report and CSV export")
-                benefit("icloud", "iCloud sync and backup")
+                benefit("icloud", "iCloud sync across your devices")
             }
             purchase
             switch phase {
@@ -258,14 +265,37 @@ struct PaywallSheet: View {
                 .font(.nookMeta)
                 .foregroundStyle(NookColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Button {
-                dismiss()
-                request.onUnlock()
-            } label: {
-                Text(request.reason.continueTitle).frame(maxWidth: .infinity)
+            if request.reason == .settings, !syncOn {
+                // D65: from Settings nothing is in flight, so sync can start now; S-03 shows it.
+                Text("Turn on iCloud sync to keep everything safe if you change phones.")
+                    .font(.nookMeta)
+                    .foregroundStyle(NookColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    dismiss()
+                    Task { await syncStatus.setSync(true) }
+                } label: {
+                    Text("Turn On iCloud Sync").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.nookPrimary)
+                .padding(.top, NookSpace.s1)
+                Button {
+                    dismiss()
+                    request.onUnlock()
+                } label: {
+                    Text("Not Now").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.nookSecondary)
+            } else {
+                Button {
+                    dismiss()
+                    request.onUnlock()
+                } label: {
+                    Text(request.reason.continueTitle).frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.nookPrimary)
+                .padding(.top, NookSpace.s1)
             }
-            .buttonStyle(.nookPrimary)
-            .padding(.top, NookSpace.s1)
         }
         .multilineTextAlignment(.center)
         .padding(.top, NookSpace.s6)

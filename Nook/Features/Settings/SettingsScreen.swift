@@ -13,7 +13,9 @@ struct SettingsScreen: View {
     // Type-erased: S-10 pushes its own routes and items too (P13).
     @State private var path = NavigationPath()
     @AppStorage(SyncSettings.key) private var syncOn = false
+    @AppStorage(PreferenceKey.lastBackup) private var lastBackup: Double = 0
     @Environment(EntitlementStore.self) private var entitlements
+    @Environment(SyncStatus.self) private var syncStatus
     @Environment(AppRouter.self) private var router
     @Environment(AppLock.self) private var lock
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -34,6 +36,8 @@ struct SettingsScreen: View {
                     row("Recently Deleted", "trash") { RecentlyDeletedScreen() }
                 } header: {
                     header("Your data")
+                } footer: {
+                    if !liveItems.isEmpty { safetyLine }
                 }
                 .listRowBackground(NookColor.surface)
                 Section {
@@ -88,6 +92,34 @@ struct SettingsScreen: View {
             }
             .onChange(of: scenePhase) { _, phase in if phase == .active { aiStatus = NookAI.status } }
         }
+    }
+
+    /// D65: where the user's things live, in plain words. iOS's own iCloud Backup is
+    /// invisible to apps, so only sync and a `.nookbackup` count.
+    private var safetyLine: some View {
+        let safety = DataSafety.state(syncs: entitlements.isPro && syncOn, syncState: syncStatus.state,
+                                      lastSynced: syncStatus.lastSynced,
+                                      lastBackup: lastBackup > 0 ? Date(timeIntervalSince1970: lastBackup) : nil, now: .now)
+        let (symbol, tint, text): (String, Color, Text) = switch safety {
+        case .inICloud(let date?):
+            ("checkmark.icloud", NookColor.success,
+             Text("Safe in iCloud · Synced \(date.formatted(.relative(presentation: .named, unitsStyle: .abbreviated)))"))
+        case .inICloud(nil): ("checkmark.icloud", NookColor.success, Text("Safe in iCloud"))
+        case .syncPaused: ("exclamationmark.icloud", NookColor.warning, Text("iCloud sync is paused. Open iCloud Sync to see why."))
+        case .backedUp(let date):
+            ("checkmark.circle", NookColor.success,
+             Text("Backed up \(date.formatted(date: .abbreviated, time: .omitted))"))
+        case .onlyHere:
+            ("internaldrive", NookColor.textSecondary,
+             Text("Only on this iPhone. Turn on iCloud Sync or make a backup to keep it safe."))
+        }
+        return Label { text.fixedSize(horizontal: false, vertical: true) } icon: {
+            Image(systemName: symbol).foregroundStyle(tint)
+        }
+        .font(.nookFootnote)
+        .foregroundStyle(NookColor.textSecondary)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("dataSafety")
     }
 
     /// Free: "Unlock Nook Pro" opens P-01. Pro: a thank-you that leads to S-02.
