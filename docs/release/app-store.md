@@ -10,8 +10,8 @@ This file holds what goes into App Store Connect by hand, plus the steps to ship
 | Promotional text | 170 | Photograph a room and Nook & Cranny lists what’s in it. Ask “Where are my passports?” and see the exact shelf. Private, on your device. Pay once, no subscription. (162) |
 | Keywords | 100 | `insurance,receipt,scanner,tracker,moving,storage,household,property,organizer,declutter,valuables,qr` (100) |
 | China mainland notes | — | Not applicable. The app contains no news, religious, book or magazine content. (An ICP filing number may also be needed for China mainland; if there isn't one, untick it under Pricing and Availability.) |
-| Support URL | — | *Owner:* the hosted support page |
-| Privacy Policy URL | — | *Owner:* the hosted privacy page (D58) |
+| Support URL | — | https://app.notion.com/p/Nook-Cranny-Support-1633f8dd0255806290d1ffc6c53922d8?source=copy_link (text in `support-page.md`) |
+| Privacy Policy URL | — | https://app.notion.com/p/Nook-Cranny-Privacy-Policy-4033f8dd0255806ea997fb2a9b8cf777?source=copy_link (text in `privacy-policy.md`, D58) |
 | Category | — | Primary: Productivity · Secondary: Lifestyle |
 | Price | — | Free download; Nook & Cranny Pro $14.99 once, Family Sharing on (D58) |
 
