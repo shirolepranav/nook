@@ -24,3 +24,6 @@ Package.resolved.bak
 *.p8
 *.p12
 *.mobileprovision
+
+# Showcase photos for demo mode (D67): Pexels stock, Debug builds only, never committed
+Nook/Resources/Showcase/

@@ -179,11 +179,13 @@ public enum PreviewStore {
 
     /// App Store screenshots (D63): `-uiTestingShowcasePhotos <folder>` takes each item's cover
     /// from `<folder>/<name>.jpg`, real photos in place of the swatches. The simulator reads
-    /// the Mac's folder directly.
+    /// the Mac's folder directly. A device can't, so it falls back to the copies Debug builds
+    /// carry from the gitignored `Nook/Resources/Showcase/` (D67).
     private static func showcasePhoto(_ name: String) -> Data? {
         let arguments = ProcessInfo.processInfo.arguments
         guard let flag = arguments.firstIndex(of: "-uiTestingShowcasePhotos"), flag + 1 < arguments.count else { return nil }
-        return try? Data(contentsOf: URL(filePath: arguments[flag + 1]).appending(path: "\(name).jpg"))
+        if let data = try? Data(contentsOf: URL(filePath: arguments[flag + 1]).appending(path: "\(name).jpg")) { return data }
+        return Bundle.main.url(forResource: name, withExtension: "jpg").flatMap { try? Data(contentsOf: $0) }
     }
 
     /// A warm two-tone photo stand-in, different for each index. Pixel data for a fake photo,
