@@ -292,7 +292,7 @@ final class CaptureTests: XCTestCase {
     func testCameraDeniedOffersPhotos() {
         let app = launch("small", ["-uiTestingCameraDenied"])
         capture(app, "Scan room")
-        XCTAssertTrue(app.staticTexts["Camera is off for Nook"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Camera is off for Nook & Cranny"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Pick from Photos"].exists)
         XCTAssertTrue(app.buttons["Open Settings"].exists)
         app.buttons["Cancel"].tap()

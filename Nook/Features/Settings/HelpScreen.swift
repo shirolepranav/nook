@@ -22,10 +22,10 @@ struct HelpScreen: View {
             .listRowBackground(NookColor.surface)
             Section {
                 // Mail sends it, so Nook itself makes no network call (PRD §9).
-                if let mail = URL(string: "mailto:\(Self.contactAddress)?subject=Nook") {
+                if let mail = URL(string: "mailto:\(Self.contactAddress)?subject=Nook%20%26%20Cranny") {
                     Link(destination: mail) { iconRow("Contact Us", "questionmark.circle") }
                 }
-                Button { requestReview() } label: { iconRow("Rate Nook", "star") }
+                Button { requestReview() } label: { iconRow("Rate Nook & Cranny", "star") }
                 versionRow
                 NavigationLink { AcknowledgementsScreen() } label: {
                     Text("Acknowledgements").font(.nookBody).frame(minHeight: NookLayout.minTapTarget)
@@ -150,8 +150,8 @@ struct AcknowledgementsScreen: View {
     var body: some View {
         List {
             Section {
-                Text("Nook is built only with Apple’s frameworks. It contains no third-party code, no analytics and no ads.")
-                Text("Thank you to everyone who tested Nook before it shipped.")
+                Text("Nook & Cranny is built only with Apple’s frameworks. It contains no third-party code, no analytics and no ads.")
+                Text("Thank you to everyone who tested Nook & Cranny before it shipped.")
             }
             .font(.nookBody)
             .foregroundStyle(NookColor.textPrimary)

@@ -124,7 +124,7 @@ struct BackupScreen: View {
 
     private func create() {
         let date = Date.now.formatted(.iso8601.year().month().day())
-        let url = FileManager.default.temporaryDirectory.appending(path: "Nook \(date).\(BackupService.fileExtension)")
+        let url = FileManager.default.temporaryDirectory.appending(path: "Nook & Cranny \(date).\(BackupService.fileExtension)")
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         progress = 0
         work = Task {
@@ -221,9 +221,9 @@ private struct RestoreFlow: ViewModifier {
 
     private func fail(_ error: Error) {
         let message: LocalizedStringResource = switch error as? BackupService.Failure {
-        case .newerVersion: "This backup is from a newer Nook. Update Nook, then try again."
+        case .newerVersion: "This backup is from a newer version. Update the app, then try again."
         case .notEnoughSpace: "There isn’t enough space to restore it. Free some up and try again."
-        case .notABackup: "This file isn’t a Nook backup."
+        case .notABackup: "This file isn’t a Nook & Cranny backup."
         default: "The backup couldn’t be restored. Nothing on this iPhone changed."
         }
         toast = ToastMessage(symbol: "exclamationmark.triangle", message)

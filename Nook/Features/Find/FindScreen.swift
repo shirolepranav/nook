@@ -115,7 +115,7 @@ struct FindScreen: View {
         if let library, library.isReady, library.itemCount == 0, !found.searched {
             ScrollView {
                 EmptyStateView(.drawerEmpty, title: Text("Nothing to find yet."),
-                               message: Text("Add a few things and Nook will tell you where they are."))
+                               message: Text("Add a few things, and you’ll always know where they are."))
                     .padding(NookSpace.s2)
                     .frame(maxWidth: NookLayout.readableWidth)
                     .frame(maxWidth: .infinity)

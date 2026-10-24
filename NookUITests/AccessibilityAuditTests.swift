@@ -241,7 +241,7 @@ final class AccessibilityAuditTests: XCTestCase {
         off.buttons["Capture"].tap()
         XCTAssertTrue(off.buttons["Scan room"].waitForExistence(timeout: 5))
         off.buttons["Scan room"].tap()
-        XCTAssertTrue(off.staticTexts["Camera is off for Nook"].waitForExistence(timeout: 5))
+        XCTAssertTrue(off.staticTexts["Camera is off for Nook & Cranny"].waitForExistence(timeout: 5))
         try off.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, off) }
         off.buttons["Cancel"].tap()
         XCTAssertTrue(off.buttons["Capture"].waitForExistence(timeout: 5))
@@ -447,7 +447,7 @@ final class AccessibilityAuditTests: XCTestCase {
         app.launch()
         app.openSettings()
         app.settingsRow("Face ID Lock").tap()
-        XCTAssertTrue(app.switches["Lock Nook with Face ID"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.switches["Lock Nook & Cranny with Face ID"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, app) }
         app.navigationBars.buttons.firstMatch.tap()
         app.settingsRow("Privacy").tap()
@@ -475,13 +475,13 @@ final class AccessibilityAuditTests: XCTestCase {
         XCTAssertTrue(free.staticTexts["Your 25 things live only on this iPhone."].waitForExistence(timeout: 10))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
         free.openSettings()
-        let card = free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
+        let card = free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Pro,'")).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 10))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
         card.tap()
-        XCTAssertTrue(free.buttons["Unlock Nook Pro"].waitForExistence(timeout: 5))
+        XCTAssertTrue(free.buttons["Unlock Pro"].waitForExistence(timeout: 5))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
-        free.buttons["Unlock Nook Pro"].tap()   // Ask to Buy: the waiting note
+        free.buttons["Unlock Pro"].tap()   // Ask to Buy: the waiting note
         XCTAssertTrue(free.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS 'Waiting for approval'"))
             .firstMatch.waitForExistence(timeout: 5))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
@@ -491,17 +491,17 @@ final class AccessibilityAuditTests: XCTestCase {
         free.buttons["Done"].tap()
         free.buttons["Close"].tap()
         free.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
-        XCTAssertTrue(free.staticTexts["iCloud sync comes with Nook Pro"].waitForExistence(timeout: 5))
+        XCTAssertTrue(free.staticTexts["iCloud sync comes with Nook & Cranny Pro"].waitForExistence(timeout: 5))
         try free.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, free) }
         free.terminate()
 
         let pro = XCUIApplication.nook(store: "small")
         pro.launch()
         pro.openSettings()
-        let thanks = pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro'")).firstMatch
+        let thanks = pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook & Cranny Pro'")).firstMatch
         XCTAssertTrue(thanks.waitForExistence(timeout: 10))
         thanks.tap()
-        XCTAssertTrue(pro.staticTexts["Nook Pro is unlocked"].waitForExistence(timeout: 5))
+        XCTAssertTrue(pro.staticTexts["Nook & Cranny Pro is unlocked"].waitForExistence(timeout: 5))
         try pro.performAccessibilityAudit(for: audits) { self.isInSystemTabBar($0, pro) }
         pro.navigationBars.buttons.firstMatch.tap()
         pro.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()

@@ -142,14 +142,14 @@ final class WarrantyAndLendTests: XCTestCase {
         XCTAssertTrue(garage.waitForExistence(timeout: 15))
         garage.tap()
         card(app, "Cordless drill").tap()
-        let off = app.staticTexts["Reminders are off for Nook."]
+        let off = app.staticTexts["Reminders are off for Nook & Cranny."]
         for _ in 0..<4 where !off.exists { app.swipeUp() }
         XCTAssertTrue(off.waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Open Settings"].exists)
 
         app.tab("Settings").tap()
         app.settingsRow("Notifications").tap()
-        XCTAssertTrue(app.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Reminders are off for Nook & Cranny"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Warranty reminders'")).firstMatch.exists)
     }
 }

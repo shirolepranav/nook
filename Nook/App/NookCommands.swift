@@ -17,7 +17,7 @@ struct NookCommands: Commands {
             Button("Settings…") { show(.settings) }
                 .keyboardShortcut(",")
         }
-        CommandMenu("Nook") {
+        CommandMenu("Go") {
             Button("Home") { show(.home) }.keyboardShortcut("1")
             Button("Find") { show(.find) }.keyboardShortcut("2")
             Button("Reports") { show(.reports) }.keyboardShortcut("3")

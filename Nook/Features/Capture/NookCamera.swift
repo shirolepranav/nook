@@ -238,7 +238,7 @@ private struct CameraPreview: UIViewRepresentable {
 }
 
 /// A camera screen's stage: the preview with the screen's controls on top, or the soft ask,
-/// "Camera is off for Nook" or "Camera paused" in its place (C-02 boards). Full screen on
+/// "Camera is off for Nook & Cranny" or "Camera paused" in its place (C-02 boards). Full screen on
 /// every width (01 §1.5).
 struct CameraStage<Controls: View>: View {
     let camera: CameraModel
@@ -257,7 +257,7 @@ struct CameraStage<Controls: View>: View {
             switch camera.state {
             case .asking:
                 notice(symbol: "camera", title: Text(askTitle),
-                       message: Text("Nook uses the camera to take photos of your things. They stay on this device.")) {
+                       message: Text("Nook & Cranny uses the camera to take photos of your things. They stay on this device.")) {
                     Button { Task { await camera.askAccess() } } label: {
                         Text("Continue").frame(maxWidth: .infinity)
                     }
@@ -266,7 +266,7 @@ struct CameraStage<Controls: View>: View {
                 }
             case .denied, .missing:
                 notice(symbol: "camera.badge.ellipsis",
-                       title: camera.state == .denied ? Text("Camera is off for Nook") : Text("No camera here"),
+                       title: camera.state == .denied ? Text("Camera is off for Nook & Cranny") : Text("No camera here"),
                        message: camera.state == .denied
                            ? Text("Turn it on in Settings, or pick photos you already have.")
                            : Text("Pick photos you already have instead.")) {

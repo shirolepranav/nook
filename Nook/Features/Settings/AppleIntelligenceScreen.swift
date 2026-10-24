@@ -102,12 +102,12 @@ struct AppleIntelligenceScreen: View {
 
     private var detail: LocalizedStringResource {
         switch status {
-        case .ready(seesImages: true): "Nook can suggest item names from photos, read receipts and answer questions about your home."
+        case .ready(seesImages: true): "Nook & Cranny can suggest item names from photos, read receipts and answer questions about your home."
         // The vision check (PRD §8): this model reads text but not photos.
-        case .ready(seesImages: false): "Nook can read receipts and answer questions about your home. You tag items in photos yourself."
-        case .downloading: "Apple Intelligence is still getting ready. Nook works as usual in the meantime."
-        case .unavailable: "Everything in Nook still works. You tag items yourself, and search finds them just as fast."
-        case .off: "Apple Intelligence is off in the Settings app. Nook works as usual without it."
+        case .ready(seesImages: false): "Nook & Cranny can read receipts and answer questions about your home. You tag items in photos yourself."
+        case .downloading: "Apple Intelligence is still getting ready. Everything works as usual in the meantime."
+        case .unavailable: "Everything still works. You tag items yourself, and search finds them just as fast."
+        case .off: "Apple Intelligence is off in the Settings app. Everything works as usual without it."
         }
     }
 

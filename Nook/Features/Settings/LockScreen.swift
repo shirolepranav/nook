@@ -15,7 +15,7 @@ struct LockScreen: View {
             VStack(alignment: .leading, spacing: NookSpace.s3) {
                 if lock.method == .unavailable { unavailableCard }
                 Toggle(isOn: Binding { lock.isEnabled } set: { on in Task { await lock.setEnabled(on) } }) {
-                    Text("Lock Nook with \(lock.method.name)").font(.nookBody).foregroundStyle(NookColor.textPrimary)
+                    Text("Lock Nook & Cranny with \(lock.method.name)").font(.nookBody).foregroundStyle(NookColor.textPrimary)
                 }
                 .disabled(lock.method == .unavailable)
                 .frame(minHeight: NookLayout.minTapTarget)
@@ -39,7 +39,7 @@ struct LockScreen: View {
                 }
 
                 Label {
-                    Text("Private items always need \(lock.method.name) to open, even with the lock off. The app switcher hides Nook while it’s locked.")
+                    Text("Private items always need \(lock.method.name) to open, even with the lock off. The app switcher hides the app while it’s locked.")
                         .fixedSize(horizontal: false, vertical: true)
                 } icon: {
                     Image(systemName: "lock.fill")
@@ -66,7 +66,7 @@ struct LockScreen: View {
 
     private var unavailableCard: some View {
         VStack(alignment: .leading, spacing: NookSpace.s2) {
-            Text("Set a passcode in Settings to lock Nook.")
+            Text("Set a passcode in Settings to lock the app.")
                 .font(.nookBody)
                 .foregroundStyle(NookColor.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)

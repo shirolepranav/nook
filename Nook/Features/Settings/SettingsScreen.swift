@@ -60,7 +60,7 @@ struct SettingsScreen: View {
                     row("Apple Intelligence", "apple.intelligence", detail: aiDetail) { AppleIntelligenceScreen() }
                     row("Help & About", "questionmark.circle") { HelpScreen() }   // S-12 (D63)
                 } header: {
-                    header("Nook")
+                    header("Nook & Cranny")
                 }
                 .listRowBackground(NookColor.surface)   // paper rows on the canvas (03 §6)
                 #if DEBUG
@@ -128,12 +128,12 @@ struct SettingsScreen: View {
         if entitlements.isPro {
             // A Button, not a NavigationLink: in a List the link adds a second chevron.
             Button { path.append(SettingsRoute.pro) } label: {
-                cardLabel(Text("Nook Pro"), Text("Thank you for supporting Nook."))
+                cardLabel(Text("Nook & Cranny Pro"), Text("Thank you for supporting Nook & Cranny."))
             }
             .buttonStyle(.nookCard)
         } else {
             Button { paywall = PaywallRequest(reason: .settings) } label: {
-                cardLabel(Text("Unlock Nook Pro"), Text("Unlimited items, reports and iCloud sync. Pay once."))
+                cardLabel(Text("Unlock Pro"), Text("Unlimited items, reports and iCloud sync. Pay once."))
             }
             .buttonStyle(.nookCard)
         }

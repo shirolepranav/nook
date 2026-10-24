@@ -97,7 +97,7 @@ private struct LockedWidget: View {
     var body: some View {
         VStack(spacing: NookSpace.s1) {
             Image(systemName: "lock").font(.nookTitle).accessibilityHidden(true)
-            Text("Unlock to see Nook.").font(.nookFootnote).multilineTextAlignment(.center)
+            Text("Unlock to see your things.").font(.nookFootnote).multilineTextAlignment(.center)
         }
         .foregroundStyle(NookColor.textSecondary)
     }
@@ -212,7 +212,7 @@ struct ScanRoomControl: ControlWidget {
             }
         }
         .displayName("Scan Room")
-        .description("Opens room scan in Nook.")
+        .description("Opens room scan in Nook & Cranny.")
     }
 }
 
@@ -220,10 +220,10 @@ struct FindControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(kind: "pranav.nook.find") {
             ControlWidgetButton(action: OpenURLIntent(DeepLink.find(nil).url)) {
-                Label("Find in Nook", systemImage: "magnifyingglass")
+                Label("Find an Item", systemImage: "magnifyingglass")
             }
         }
-        .displayName("Find in Nook")
+        .displayName("Find an Item")
         .description("Opens Find, ready to type.")
     }
 }

@@ -233,7 +233,7 @@ final class ScreenshotTests: XCTestCase {
         off.buttons["Capture"].tap()
         XCTAssertTrue(off.buttons["Scan room"].waitForExistence(timeout: 5))
         off.buttons["Scan room"].tap()
-        XCTAssertTrue(off.staticTexts["Camera is off for Nook"].waitForExistence(timeout: 5))
+        XCTAssertTrue(off.staticTexts["Camera is off for Nook & Cranny"].waitForExistence(timeout: 5))
         snap("C-02 Camera off")
         off.buttons["Cancel"].tap()
         XCTAssertTrue(off.buttons["Capture"].waitForExistence(timeout: 5))
@@ -315,7 +315,7 @@ final class ScreenshotTests: XCTestCase {
         snap("R-05 Empty")
         empty.tab("Settings").tap()
         empty.settingsRow("Notifications").tap()
-        XCTAssertTrue(empty.staticTexts["Reminders are off for Nook"].waitForExistence(timeout: 5))
+        XCTAssertTrue(empty.staticTexts["Reminders are off for Nook & Cranny"].waitForExistence(timeout: 5))
         snap("S-07 Denied")
     }
 
@@ -481,26 +481,26 @@ final class ScreenshotTests: XCTestCase {
         app.launchArguments += ["-uiTestingFree", "YES", "-uiTestingPurchase", "success"]
         app.launch()
         app.tab("Settings").tap()
-        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro,'")).firstMatch
+        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Pro,'")).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 10))
         snap("S-01 Settings, Free")
         app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
-        XCTAssertTrue(app.staticTexts["iCloud sync comes with Nook Pro"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["iCloud sync comes with Nook & Cranny Pro"].waitForExistence(timeout: 5))
         snap("S-03 iCloud Sync, Free")
         app.navigationBars.buttons.firstMatch.tap()
         card.tap()
-        let unlock = app.buttons["Unlock Nook Pro"]
+        let unlock = app.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.waitForExistence(timeout: 5))
         snap("P-01 Paywall")
         unlock.tap()
-        XCTAssertTrue(app.staticTexts["Nook Pro is yours."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny Pro is yours."].waitForExistence(timeout: 5))
         snap("P-01 Paywall, success")
         app.buttons["Done"].tap()
-        let thanks = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro,'")).firstMatch
+        let thanks = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook & Cranny Pro,'")).firstMatch
         XCTAssertTrue(thanks.waitForExistence(timeout: 5))
         snap("S-01 Settings, Pro")
         thanks.tap()
-        XCTAssertTrue(app.staticTexts["Nook Pro is unlocked"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny Pro is unlocked"].waitForExistence(timeout: 5))
         snap("S-02 Nook Pro")
         app.navigationBars.buttons.firstMatch.tap()
         app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()

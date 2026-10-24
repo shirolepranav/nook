@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-**Nook** (working name) is a carefully designed iPhone and iPad app that knows everything you own and where it is. Photograph a room and the app lists the items in it. It reads receipts and serial numbers, remembers where each thing is kept, and produces an insurance-ready report in one tap. The whole app works fully on any iPhone that runs iOS 27 and any iPad that runs iPadOS 27 (D29). AI makes it faster, but AI is never required.
+**Nook & Cranny** (D66; "Nook" in these docs) is a carefully designed iPhone and iPad app that knows everything you own and where it is. Photograph a room and the app lists the items in it. It reads receipts and serial numbers, remembers where each thing is kept, and produces an insurance-ready report in one tap. The whole app works fully on any iPhone that runs iOS 27 and any iPad that runs iPadOS 27 (D29). AI makes it faster, but AI is never required.
 
 **Positioning:** "Everything you own, and exactly where it is. Pay once." Insurance is why people buy it. Finding things and knowing what you own is why they open it every week.
 

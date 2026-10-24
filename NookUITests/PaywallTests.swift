@@ -38,7 +38,7 @@ final class PaywallTests: XCTestCase {
         let app = launch()
         XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 10))
         sleep(2)
-        XCTAssertFalse(app.buttons["Unlock Nook Pro"].exists)
+        XCTAssertFalse(app.buttons["Unlock Pro"].exists)
         XCTAssertFalse(text(app, containing: "You’ve documented").exists)
     }
 
@@ -59,11 +59,11 @@ final class PaywallTests: XCTestCase {
         app.buttons["Save"].tap()
 
         XCTAssertTrue(text(app, containing: "25 items worth").waitForExistence(timeout: 10))
-        let unlock = app.buttons["Unlock Nook Pro"]
+        let unlock = app.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.exists)
         XCTAssertTrue(app.buttons["Restore Purchases"].exists)
         unlock.tap()
-        XCTAssertTrue(app.staticTexts["Nook Pro is yours."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny Pro is yours."].waitForExistence(timeout: 5))
         app.buttons["Save Your Item"].tap()
         XCTAssertTrue(card(app, "Lamp").waitForExistence(timeout: 10))
     }
@@ -82,7 +82,7 @@ final class PaywallTests: XCTestCase {
         oneYear.tap()
         app.buttons["Save"].tap()
 
-        let unlock = app.buttons["Unlock Nook Pro"]
+        let unlock = app.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.waitForExistence(timeout: 10))
         unlock.tap()
         XCTAssertTrue(text(app, containing: "Waiting for approval").waitForExistence(timeout: 5))
@@ -102,7 +102,7 @@ final class PaywallTests: XCTestCase {
         let unlockToExport = app.buttons["Unlock Pro to Export"]
         XCTAssertTrue(unlockToExport.waitForExistence(timeout: 10))
         unlockToExport.tap()
-        let unlock = app.buttons["Unlock Nook Pro"]
+        let unlock = app.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.waitForExistence(timeout: 5))
         unlock.tap()
         XCTAssertTrue(text(app, containing: "you haven’t been charged").waitForExistence(timeout: 5))
@@ -117,10 +117,10 @@ final class PaywallTests: XCTestCase {
         let app = launch()
         app.tab("Settings").tap()
         app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'iCloud Sync'")).firstMatch.tap()
-        XCTAssertTrue(app.staticTexts["iCloud sync comes with Nook Pro"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["iCloud sync comes with Nook & Cranny Pro"].waitForExistence(timeout: 5))
         let toggle = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Sync with iCloud'")).firstMatch
         toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
-        let unlock = app.scrollViews.buttons["Unlock Nook Pro"]   // P-01's, not S-03's card
+        let unlock = app.scrollViews.buttons["Unlock Pro"]   // P-01's, not S-03's card
         XCTAssertTrue(unlock.waitForExistence(timeout: 5))
         unlock.tap()
         app.buttons["Turn On iCloud Sync"].tap()
@@ -163,7 +163,7 @@ final class PaywallTests: XCTestCase {
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 10))
         name.typeText("Lamp")
         app.buttons["Save"].tap()
-        let unlock = app.buttons["Unlock Nook Pro"]
+        let unlock = app.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.waitForExistence(timeout: 10))
         unlock.tap()
         app.buttons["Save Your Item"].tap()
@@ -181,10 +181,10 @@ final class PaywallTests: XCTestCase {
     func testBuyingProFromSettingsOffersSync() {
         let app = launch()
         app.tab("Settings").tap()
-        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Nook Pro'")).firstMatch
+        let card = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Unlock Pro'")).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         card.tap()
-        let unlock = app.scrollViews.buttons["Unlock Nook Pro"]
+        let unlock = app.scrollViews.buttons["Unlock Pro"]
         XCTAssertTrue(unlock.waitForExistence(timeout: 5))
         unlock.tap()
         XCTAssertTrue(app.buttons["Not Now"].waitForExistence(timeout: 5))
@@ -216,11 +216,11 @@ final class PaywallTests: XCTestCase {
     func testProSeesTheThankYouAndRestores() {
         let app = launch(free: false, store: "small")
         app.tab("Settings").tap()
-        let pro = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook Pro'")).firstMatch
+        let pro = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Nook & Cranny Pro'")).firstMatch
         XCTAssertTrue(pro.waitForExistence(timeout: 5))
         pro.tap()
-        XCTAssertTrue(app.staticTexts["Nook Pro is unlocked"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny Pro is unlocked"].waitForExistence(timeout: 5))
         app.buttons["Restore Purchases"].tap()
-        XCTAssertTrue(app.staticTexts["Nook Pro is unlocked."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny Pro is unlocked."].waitForExistence(timeout: 5))
     }
 }

@@ -12,7 +12,7 @@
 - **[PRD]**: stated in the PRD.
 - **[Inferred]**: needed to make a stated feature work, but not spelled out in the PRD. Confirm or cut.
 - **AI** / **Classic**: the two paths the capability router chooses between (PRD §5, §8). Every AI screen has a Classic twin, and the user never sees an error when the AI is unavailable.
-- **Pro**: needs the one-time Nook Pro unlock (PRD §7).
+- **Pro**: needs the one-time Nook & Cranny Pro unlock (PRD §7).
 
 ---
 
@@ -128,7 +128,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | R-04 | Warranties | R-01 | Push |
 | R-05 | Lent out | R-01 | Push |
 | S-01 | Settings | Settings tab root | Tab root |
-| S-02 | Nook Pro | S-01 | Push |
+| S-02 | Pro | S-01 | Push |
 | S-03 | iCloud sync | S-01 | Push |
 | S-04 | Backup & restore | S-01 | Push |
 | S-05 | Face ID / Touch ID lock | S-01 | Push |
@@ -149,7 +149,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Warm canvas color with the Nook mark. Goes to L-02 if the lock is on, otherwise to O-01 on first run or the last-used tab.
 
 ### L-02 App Lock [PRD §5 F11, §9]
-- **Elements:** opaque warm cover, app mark, "Unlock Nook" button.
+- **Elements:** opaque warm cover, app mark, "Unlock Nook & Cranny" button.
 - **Interactions:** Face ID on Face ID iPhones, Touch ID on iPhone SE and iPhone Duo (PRD §5 F11), invoked automatically on appear. Success cross-fades in with a success haptic; failure gives an error haptic plus a gentle color pulse, and the button stays available. The system falls back to the device passcode after repeated failures.
 - **Always:** the app-switcher snapshot is covered while locked. [Inferred]
 - **Private items** ask for authentication on open even when the app lock is off (PRD §9).
@@ -214,7 +214,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Label preview: QR code, container name, room, and optionally the top items listed.
 - Sizes for common label sheets plus a plain card. [Inferred]
 - Actions: Print (AirPrint), Share, Save Image. Scanning the code with the system Camera app opens that container in Nook.
-- **As built (P10, D56):** from a container's More menu, **Print or Share Label**. Sizes 2 × 4 in, 1 × 2⅝ in (no item list) and a 3 × 4 in plain card. The label is paper in both modes. Print keeps the label's real size. The link opens the container in a sheet; a deleted one says "That box isn't in Nook anymore." Capture → Scan barcode also reads Nook labels (D19).
+- **As built (P10, D56):** from a container's More menu, **Print or Share Label**. Sizes 2 × 4 in, 1 × 2⅝ in (no item list) and a 3 × 4 in plain card. The label is paper in both modes. Print keeps the label's real size. The link opens the container in a sheet; a deleted one says "That box isn't here anymore." Capture → Scan barcode also reads Nook labels (D19).
 
 ### H-07 Arrange rooms
 - Edit mode with drag handles to reorder rooms. Done saves the order (`order` field, PRD §8).
@@ -289,7 +289,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ### C-02 Room scan camera [PRD §5 F3, §3]
 - Live camera, coach overlay (first scan and when framing is poor), shutter, multi-photo counter, done button, current destination ("Saving to: Garage → Shelf").
 - **[v1.1 Duo] iPhone Duo half-folded:** live camera on the top half, detected items on the bottom half, nothing over the hinge (PRD §4 rule 3).
-- **First use:** a one-line soft ask, then the system camera prompt (PRD §3 onboarding). **If denied:** "Camera is off for Nook" with Open Settings, and the alternative "Pick from Photos".
+- **First use:** a one-line soft ask, then the system camera prompt (PRD §3 onboarding). **If denied:** "Camera is off for Nook & Cranny" with Open Settings, and the alternative "Pick from Photos".
 - **As built (P6, D48):** Nook's own camera (AVFoundation), full screen on every width. Cancel, the "Saving to" pill (opens the Move picker to change it), Torch and Tips at the top; the counter with the last photo, the shutter and Done at the bottom. Each photo is written to disk at the shutter (D40). The coach hint shows on the first scan, from Tips, and whenever the room is too dark ("It's a little dark…"). A phone call or another app pauses the camera ("Camera paused") and it resumes by itself, keeping the photos. Up to 10 photos per scan. With no camera at all, the photo picker opens straight into C-04.
 
 ### C-03 Scan review, AI path [PRD §5 F3, §3 motion]
@@ -400,7 +400,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Groups: Ending in 30 days, Active, Expired. Rows show photo, name, end date and days left.
 - Tap → I-01. Swipe action: turn reminders on or off for that item.
 - Free users with 3 active reminders see "Unlock Pro for unlimited reminders" when adding a 4th.
-- **As built (P7, D50):** one row per item (its last-ending warranty). Expired rows have no reminder swipe; rows with reminders off show a bell-slash. Empty: "No warranties yet." with **Add a Warranty**, which chooses an item (or New Item) and opens its editor at the warranty. **As built (P11, D58):** Free users see "2 of 3 reminders used. Unlimited with Nook Pro." with **Unlock Nook Pro** under the list; turning on a 4th reminder (swipe or I-01's action) opens P-01 and turns it on after the unlock.
+- **As built (P7, D50):** one row per item (its last-ending warranty). Expired rows have no reminder swipe; rows with reminders off show a bell-slash. Empty: "No warranties yet." with **Add a Warranty**, which chooses an item (or New Item) and opens its editor at the warranty. **As built (P11, D58):** Free users see "2 of 3 reminders used. Unlimited with Pro." with **Unlock Pro** under the list; turning on a 4th reminder (swipe or I-01's action) opens P-01 and turns it on after the unlock.
 
 ### R-05 Lent out [PRD §5 F7]
 - Items, person, date lent, due date (overdue highlighted). Swipe: Mark returned.
@@ -411,13 +411,13 @@ Free users can always view, search and delete everything they entered (PRD §7).
 ## 10. Settings tab
 | ID | Screen | Contents |
 |---|---|---|
-| S-01 | Settings root | Pro status card (or Unlock), sync, backup, lock, appearance, notifications, Recently Deleted, tags, Apple Intelligence, privacy, help. **As built (P11, D58):** Free: "Unlock Nook Pro · Unlimited items, reports and iCloud sync. Pay once." opens P-01; Pro: "Nook Pro · Thank you for supporting Nook." opens S-02. iCloud Sync (Pro / On / Off) leads Your data; a Privacy section holds S-09. **As built (P12):** "Face ID Lock" (On / Off) leads the Privacy section **As built (D65):** under Your data, a status line says where the home lives: "Safe in iCloud · Synced 2 min ago", "iCloud sync is paused. Open iCloud Sync to see why.", "Backed up Oct 12" (a `.nookbackup` within 90 days) or "Only on this iPhone. Turn on iCloud Sync or make a backup to keep it safe." Hidden while there are no items. |
-| S-02 | Nook Pro | What's included, Restore Purchases, Family Sharing note (PRD §7). **As built (P11, D58):** "Nook Pro is unlocked" with "Bought Oct 4, 2026." or "Shared with you through Family Sharing."; Free shows Unlock Nook Pro; Restore answers with a toast ("Nook Pro is unlocked." / "No purchase found for this Apple Account.") |
-| S-03 | iCloud sync (Pro) | Toggle, last synced, status (signed out, storage full), "Sync now" [Inferred]. **As built (P11, D58):** off until turned on; Free sees "iCloud sync comes with Nook Pro" and the switch opens P-01. On: "Sync with iCloud", Last synced, Sync Now, and a card when signed out (Open Settings) or storage is full (Manage Storage opens Settings). Turning it on or off reopens the store and comes back here |
+| S-01 | Settings root | Pro status card (or Unlock), sync, backup, lock, appearance, notifications, Recently Deleted, tags, Apple Intelligence, privacy, help. **As built (P11, D58):** Free: "Unlock Pro · Unlimited items, reports and iCloud sync. Pay once." opens P-01; Pro: "Nook & Cranny Pro · Thank you for supporting Nook & Cranny." opens S-02. iCloud Sync (Pro / On / Off) leads Your data; a Privacy section holds S-09. **As built (P12):** "Face ID Lock" (On / Off) leads the Privacy section **As built (D65):** under Your data, a status line says where the home lives: "Safe in iCloud · Synced 2 min ago", "iCloud sync is paused. Open iCloud Sync to see why.", "Backed up Oct 12" (a `.nookbackup` within 90 days) or "Only on this iPhone. Turn on iCloud Sync or make a backup to keep it safe." Hidden while there are no items. |
+| S-02 | Pro | What's included, Restore Purchases, Family Sharing note (PRD §7). **As built (P11, D58):** "Nook & Cranny Pro is unlocked" with "Bought Oct 4, 2026." or "Shared with you through Family Sharing."; Free shows Unlock Pro; Restore answers with a toast ("Nook & Cranny Pro is unlocked." / "No purchase found for this Apple Account.") |
+| S-03 | iCloud sync (Pro) | Toggle, last synced, status (signed out, storage full), "Sync now" [Inferred]. **As built (P11, D58):** off until turned on; Free sees "iCloud sync comes with Nook & Cranny Pro" and the switch opens P-01. On: "Sync with iCloud", Last synced, Sync Now, and a card when signed out (Open Settings) or storage is full (Manage Storage opens Settings). Turning it on or off reopens the store and comes back here |
 | S-04 | Backup & restore | Create a .nookbackup file (zip of JSON and photos, PRD §5 F9); restore by replacing or merging, with confirmation [Inferred]. **As built (P10, D56):** Create Backup shows progress and Cancel, then **Share Backup** and **Save to Files**; "About 1.2 GB · Last backup Oct 1, 2026". Restore from a Backup (or opening a .nookbackup from Files) asks Merge or Replace in a confirmation dialog whose message explains both, then a toast: "Restored 126 items." **As built (D65):** Create Backup is Free too; "Unlock Pro to Back Up" is gone. |
-| S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it. **As built (P12, D61):** "Lock Nook with Face ID" asks first, then shows Lock after (Right away, 1 min, 5 min; a menu at accessibility sizes). With no passcode on the device: "Set a passcode in Settings to lock Nook.", Open Settings, and the switch off |
+| S-05 | Lock | Face ID / Touch ID toggle, lock timing [Inferred]; note that Private items always require it. **As built (P12, D61):** "Lock Nook & Cranny with Face ID" asks first, then shows Lock after (Right away, 1 min, 5 min; a menu at accessibility sizes). With no passcode on the device: "Set a passcode in Settings to lock the app.", Open Settings, and the switch off |
 | S-06 | Appearance | System / Light / Dark; **accent color, 6 options** (PRD §3); Hide values by default [Inferred] |
-| S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook only sends reminders you asked for.", and the denied card with Open Settings. **As built (P11, D58):** Free users also see "2 of 3 reminders used. Unlimited with Nook Pro." |
+| S-07 | Notifications | Warranty reminders (30 and 7 days, PRD §5 F4), loan reminders; if denied, a "Turn on in Settings" row. **As built (P7, D50):** the two toggles, Time of day (default 9:00 AM), "Nook & Cranny only sends reminders you asked for.", and the denied card with Open Settings. **As built (P11, D58):** Free users also see "2 of 3 reminders used. Unlimited with Pro." |
 | S-08 | Recently Deleted | Items with days left out of 30; Restore or Delete Now; Delete All with confirmation |
 | S-09 | Privacy | Plain-language privacy page (PRD §9): what stays on the device, what iCloud sync does, "Data Not Collected". **As built (P11, D58):** those three sections, also opened from P-01's Privacy link. **As built (P12):** a fourth, Private items: "They need Face ID to open and never appear in Spotlight, Siri or widgets." |
 | S-10 | Tags | Each tag with its item count; swipe or context menu to rename, merge or delete (Undo; items are never deleted); a tag opens its items. Categories are a fixed list of 19 from `common-items.json` (D53). Built in P13 (D63) |
@@ -434,7 +434,7 @@ Free users can always view, search and delete everything they entered (PRD §7).
 - Native StoreKit `ProductView`, Restore Purchases, terms and privacy links, a close button that's always visible.
 - **States:** loading price; purchasing; pending (Ask to Buy); success (confetti-free warm "settle", success haptic, then return to the interrupted action); failed or cancelled (stay on screen, no blame).
 - One price, $14.99, from the App Store (`displayPrice`); no launch price (PRD §7, D58).
-- **As built (P11, D58):** triggers are the 26th item (editor, Duplicate, Save All, which keeps its cards in review), a 4th active reminder, Export (R-02, R-03, proof pack), Back Up, S-03's switch, and S-01/S-02's Unlock. It opens over whatever screen asked, the editor included, and the success button carries on: "Save Your Item", "Save Your Items", "Save Your Warranty", "Back to Your Report", "Back Up Now", "Turn On iCloud Sync" or "Done". **D65:** Back Up isn't a trigger any more. Bought from S-01/S-02's Unlock, success offers "Turn on iCloud sync to keep everything safe if you change phones." with **Turn On iCloud Sync** and **Not Now**. Bought anywhere else, Home's data-safety card offers sync instead, because reopening the store mid-flow would close the user's screen. Ask to Buy shows "Waiting for approval. Pro unlocks as soon as it's approved." with no button; an approval while open turns it into the success state. Terms opens Apple's standard EULA; Privacy opens S-09. If the App Store can't be reached: "Nook Pro isn't available right now. Check your connection and try again."
+- **As built (P11, D58):** triggers are the 26th item (editor, Duplicate, Save All, which keeps its cards in review), a 4th active reminder, Export (R-02, R-03, proof pack), Back Up, S-03's switch, and S-01/S-02's Unlock. It opens over whatever screen asked, the editor included, and the success button carries on: "Save Your Item", "Save Your Items", "Save Your Warranty", "Back to Your Report", "Back Up Now", "Turn On iCloud Sync" or "Done". **D65:** Back Up isn't a trigger any more. Bought from S-01/S-02's Unlock, success offers "Turn on iCloud sync to keep everything safe if you change phones." with **Turn On iCloud Sync** and **Not Now**. Bought anywhere else, Home's data-safety card offers sync instead, because reopening the store mid-flow would close the user's screen. Ask to Buy shows "Waiting for approval. Pro unlocks as soon as it's approved." with no button; an approval while open turns it into the success state. Terms opens Apple's standard EULA; Privacy opens S-09. If the App Store can't be reached: "Pro isn't available right now. Check your connection and try again."
 
 ---
 
@@ -442,9 +442,9 @@ Free users can always view, search and delete everything they entered (PRD §7).
 | Surface | Behavior | Source |
 |---|---|---|
 | Widgets | "Warranties ending soon", "Total home value" (respects Hide values) [Inferred], "Quick find" (opens Find). Excludes Private items. **As built (P12, D61, W01Widgets board):** Warranties small, medium and large (taps open R-04, rows open the item); Total value small and medium, the top 3 rooms beside it, Private items left out of the sum; Quick find small | [PRD §5 F10, §9] |
-| Control Center control | Opens room scan. **As built (P12, D61):** Scan Room and Find in Nook | [PRD §5 F10] |
+| Control Center control | Opens room scan. **As built (P12, D61):** Scan Room and Find an Item | [PRD §5 F10] |
 | Action button | Option to launch room scan (either control) | [PRD §8] |
-| Lock Screen control | Quick Move / Find. **As built (D61):** Scan Room or Find in Nook; moving is 2 taps from Find's answer card | [PRD §6, §10 risks] |
+| Lock Screen control | Quick Move / Find. **As built (D61):** Scan Room or Find an Item; moving is 2 taps from Find's answer card | [PRD §6, §10 risks] |
 | Siri & Shortcuts | `FindItemIntent`, `MoveItemIntent`, `ListRoomIntent`, `AddItemIntent`, `ScanRoomIntent`. **As built (D61):** items and places (rooms, spots, containers) as entities; Move asks before it writes; Private items never appear | [PRD §8] |
 | Spotlight | Items and rooms indexed, except Private items | [PRD §8, §9] |
 | QR codes | System Camera opens the container | [PRD §5 F8] |

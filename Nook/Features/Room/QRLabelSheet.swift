@@ -98,7 +98,7 @@ struct QRLabelSheet: View {
         .accessibilityHidden(true)
         .overlay {
             Color.clear.accessibilityElement()
-                .accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook"))
+                .accessibilityLabel(Text("Label preview: \(spot.name), with a code that opens it in Nook & Cranny"))
                 .accessibilityAddTraits(.isImage)
         }
     }
@@ -139,7 +139,7 @@ struct QRLabelSheet: View {
                 try await PHPhotoLibrary.shared().performChanges { PHAssetChangeRequest.creationRequestForAsset(from: image) }
                 toast = ToastMessage(symbol: "photo", "Saved to Photos.")
             } catch {
-                toast = ToastMessage(symbol: "exclamationmark.triangle", "Nook can’t save to Photos. You can turn it on in Settings.")
+                toast = ToastMessage(symbol: "exclamationmark.triangle", "Nook & Cranny can’t save to Photos. You can turn it on in Settings.")
             }
         }
     }

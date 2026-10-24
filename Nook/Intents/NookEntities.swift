@@ -31,8 +31,8 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
 
     var localizedStringResource: LocalizedStringResource {
         switch self {
-        case .unavailable: "Nook couldn’t open your items. Open Nook and try again."
-        case .notFound: "That isn’t in Nook anymore."
+        case .unavailable: "Nook & Cranny couldn’t open your items. Open the app and try again."
+        case .notFound: "That isn’t in Nook & Cranny anymore."
         }
     }
 }

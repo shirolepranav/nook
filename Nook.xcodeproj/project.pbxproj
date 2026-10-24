@@ -475,7 +475,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Nook/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_CFBundleDisplayName = "Nook&Cranny";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -501,7 +501,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Nook/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_CFBundleDisplayName = "Nook&Cranny";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -573,7 +573,7 @@
 				CODE_SIGN_ENTITLEMENTS = NookWidgets/NookWidgets.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NookWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_CFBundleDisplayName = "Nook&Cranny";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -592,7 +592,7 @@
 				CODE_SIGN_ENTITLEMENTS = NookWidgets/NookWidgets.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NookWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Nook;
+				INFOPLIST_KEY_CFBundleDisplayName = "Nook&Cranny";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

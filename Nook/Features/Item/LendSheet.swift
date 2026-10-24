@@ -154,11 +154,11 @@ struct LendSheet: View {
     }
 }
 
-/// "Reminders are off for Nook." with a way to Settings (01 §13), on I-01, I-06 and S-07.
+/// "Reminders are off for Nook & Cranny." with a way to Settings (01 §13), on I-01, I-06 and S-07.
 struct RemindersOffNote: View {
     var body: some View {
         VStack(alignment: .leading, spacing: NookSpace.half) {
-            Label("Reminders are off for Nook.", systemImage: "bell.slash")
+            Label("Reminders are off for Nook & Cranny.", systemImage: "bell.slash")
                 .font(.nookFootnote)
                 .foregroundStyle(NookColor.warning)
             Button("Open Settings") {

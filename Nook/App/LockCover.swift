@@ -43,7 +43,7 @@ struct LockCover: View {
                     .frame(width: NookLayout.lockMarkSize, height: NookLayout.lockMarkSize)
                     .accessibilityHidden(true)
                 if lock.isLocked {
-                    Text("Nook is locked")
+                    Text("Nook & Cranny is locked")
                         .font(.nookTitle)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundStyle(NookColor.textPrimary)

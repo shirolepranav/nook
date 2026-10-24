@@ -1,36 +1,67 @@
-# Nook v1.0 — App Store listing and release checklist (P13, D63)
+# Nook & Cranny v1.0 — App Store listing and release checklist (P13, D63)
 
 This file holds what goes into App Store Connect by hand, plus the steps to ship. The owner enters everything. Nothing here is uploaded automatically.
 
 ## 1. Listing (en-US)
 | Field | Limit | Draft |
 |---|---|---|
-| Name | 30 | Nook: Home Inventory *(placeholder: final name and trademark check open, PRD §10)* |
-| Subtitle | 30 | Everything you own, and where |
-| Promotional text | 170 | Photograph a room and Nook lists what’s in it. Find anything in seconds, track warranties, and make an insurance report. Private, on your iPhone. Pay once. |
-| Keywords | 100 | `inventory,home,belongings,warranty,receipt,insurance,storage,moving,boxes,organizer,find,catalog` (99) |
+| Name | 30 | Nook & Cranny: Home Inventory (29, D66) |
+| Subtitle | 30 | Track belongings & warranties (29) |
+| Promotional text | 170 | Photograph a room and Nook & Cranny lists what’s in it. Ask “Where are my passports?” and see the exact shelf. Private, on your device. Pay once, no subscription. (162) |
+| Keywords | 100 | `insurance,receipt,scanner,tracker,moving,storage,household,property,organizer,declutter,valuables,qr` (100) |
+| China mainland notes | — | Not applicable. The app contains no news, religious, book or magazine content. (An ICP filing number may also be needed for China mainland; if there isn't one, untick it under Pricing and Availability.) |
 | Support URL | — | *Owner:* the hosted support page |
 | Privacy Policy URL | — | *Owner:* the hosted privacy page (D58) |
 | Category | — | Primary: Productivity · Secondary: Lifestyle |
-| Price | — | Free download; Nook Pro $14.99 once, Family Sharing on (D58) |
+| Price | — | Free download; Nook & Cranny Pro $14.99 once, Family Sharing on (D58) |
 
 **Description**
 
-> Nook knows everything you own and exactly where it is.
+> Know what you own, and exactly where it is.
 >
-> Photograph a shelf and Nook lists the things on it. Or type a name and add a photo in two taps. Every item lives in a room, a spot and, if you like, a box, so "Where are the passports?" has an answer.
+> Nook & Cranny is a home inventory that remembers where everything lives: the passports in the desk drawer, the drill you lent to a neighbor, the winter coats in the blue bin. Photograph a room, and it helps you list what's on the shelf. Ask "Where are my passports?" and see the exact spot.
 >
-> • Find anything as you type, even with a typo
-> • Move things in two taps, and see where they’ve been
-> • Scan receipts and serial numbers, and get reminders before warranties end
-> • Keep track of what you lent, and to whom
-> • Print QR labels for boxes, then point the Camera at one to see what’s inside
-> • Make an insurance report with photos, values and receipts
-> • Lock Nook with Face ID, and keep Private items hidden from Spotlight, Siri and widgets
+> FIND ANYTHING, FAST
+> • Search as you type. It still finds things when you misspell them.
+> • Ask "Where is the spare car key?" and see the room, the spot and when you last put it there.
+> • Every item remembers where it has been, so you can see where the drill used to be.
+> • Move something in two taps. Nothing ever moves without your tap.
+> • Find or move things with Siri and Shortcuts, from Home Screen widgets, or from Control Center.
 >
-> Private by design. Your things stay on your iPhone and iPad. There’s no account, no tracking and no ads. Apple Intelligence helps where your device supports it, and every feature works without it.
+> BUILD YOUR INVENTORY WITHOUT THE TYPING
+> • Photograph a shelf or a room, review what's there, and save it. Tap to name each item, or let Apple Intelligence suggest names on devices that support it.
+> • Add one item in two taps with a photo and a name. Add up to 10 photos, plus brand, model, serial number, price, tags and notes.
+> • Scan barcodes, serial numbers and model numbers.
+> • Attach receipts as photos or PDFs.
 >
-> Nook is free for up to 25 items. Nook Pro unlocks unlimited items, reports, exports and iCloud sync with one purchase. No subscription.
+> WARRANTIES AND RECEIPTS
+> • Set the warranty length and get a reminder 30 days and 7 days before it ends. Reminders work offline.
+> • See what's ending soon on Home and in a widget.
+>
+> MOVING OR STORING THINGS
+> • Organize by room, spot and box.
+> • Print or share a QR label for any box. Point the Camera at it to see what's inside.
+>
+> LENDING
+> • Mark an item as lent, with who has it and when it's due.
+> • See everything that's out in one filter.
+>
+> INSURANCE-READY REPORT
+> • Make a PDF grouped by room, with photos, values, serial numbers, receipts and totals.
+> • Export everything as CSV, or save a full backup file.
+>
+> PRIVATE BY DESIGN
+> • No account, no tracking, no ads. Your things stay on your iPhone and iPad.
+> • Lock the app with Face ID or Touch ID, and hide values with a tap.
+> • Mark items Private to keep them out of Spotlight, Siri and widgets.
+> • Apple Intelligence runs on your device. Every feature works without it.
+>
+> MADE TO FEEL AT HOME
+> • VoiceOver, Larger Text, Dark Mode and six accent colors.
+> • A sidebar, keyboard shortcuts and pointer support on iPad.
+>
+> FREE, THEN PAY ONCE
+> Free includes unlimited rooms, search, backups and up to 25 items with 3 warranty reminders. Nook & Cranny Pro is a single purchase that unlocks unlimited items and reminders, insurance PDF and CSV export, and iCloud sync. It works with Family Sharing. No subscription.
 
 The rules for this copy: no claim the app can't back up, AI never presented as required, and "subscription" never used except in "No subscription".
 
@@ -71,7 +102,7 @@ Produced by `ScreenshotTests` in App Store mode (seeded "showcase" home, Pro, li
 The order: Home (rooms), Room grid, Item detail, Find answer ("Where is the espresso machine?"), Classic scan tagging, Insurance report. Captions are added in App Store Connect, not baked into the images.
 
 ## 6. Release checklist
-1. Gate 3 has passed (D60), and the P11 App Store Connect setup is done: product `pranav.nook.pro`, agreements, CloudKit schema deployed to Production, and Push (D59).
+1. Gate 3 has passed (D60), and the P11 App Store Connect setup is done: product `pranav.nook.pro` (display name "Nook & Cranny Pro", D66), agreements, CloudKit schema deployed to Production, and Push (D59).
 2. S-12's Contact Us writes to lightconeapps@gmail.com (`HelpScreen.contactAddress`). Use the same address on the support page.
 3. Bump `CURRENT_PROJECT_VERSION` in `Nook.xcodeproj` for every upload. `MARKETING_VERSION` stays `1.0`.
 4. Archive the Release build with the current release of Xcode (D23): Product → Archive, or

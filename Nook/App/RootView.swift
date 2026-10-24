@@ -225,19 +225,19 @@ private struct TabShell: View {
         case .spot(let qrID):
             let spot = try? context.fetch(FetchDescriptor<Spot>(predicate: #Predicate { $0.qrID == qrID })).first
             if let spot { router.openedSpot = spot } else {
-                toast = ToastMessage(symbol: "shippingbox", "That box isn’t in Nook anymore.")
+                toast = ToastMessage(symbol: "shippingbox", "That box isn’t here anymore.")
             }
         case .item(let id):
             let item = try? context.fetch(FetchDescriptor<Item>(predicate: #Predicate { $0.id == id && $0.deletedAt == nil })).first
             if let item { router.openedItem = item } else {
-                toast = ToastMessage(symbol: "questionmark.circle", "That item isn’t in Nook anymore.")
+                toast = ToastMessage(symbol: "questionmark.circle", "That item isn’t here anymore.")
             }
         case .room(let id):
             // A spot or container from Spotlight or Shortcuts comes this way too (PlaceEntity).
             let room = try? context.fetch(FetchDescriptor<Room>(predicate: #Predicate { $0.id == id })).first
             let spot = try? context.fetch(FetchDescriptor<Spot>(predicate: #Predicate { $0.id == id })).first
             if let room { router.openedRoom = room } else if let spot { router.openedSpot = spot } else {
-                toast = ToastMessage(symbol: "questionmark.circle", "That room isn’t in Nook anymore.")
+                toast = ToastMessage(symbol: "questionmark.circle", "That room isn’t here anymore.")
             }
         case .find(let query):
             router.findQuery = query

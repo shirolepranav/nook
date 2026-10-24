@@ -8,8 +8,8 @@ struct StoreErrorView: View {
 
     var body: some View {
         ErrorStateView(symbol: "externaldrive.badge.exclamationmark",
-                       title: Text("Nook couldn’t open your items"),
-                       message: Text("Nothing has been deleted. Free up some storage or update Nook, then try again."),
+                       title: Text("Nook & Cranny couldn’t open your items"),
+                       message: Text("Nothing has been deleted. Free up some storage or update the app, then try again."),
                        retry: retry)
         .padding(NookSpace.s2)
         .frame(maxWidth: NookLayout.readableWidth)

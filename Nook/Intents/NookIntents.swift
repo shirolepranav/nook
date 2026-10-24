@@ -6,7 +6,7 @@ import NookKit
 /// as Find's answer card does (CLAUDE.md: AI never invents).
 struct FindItemIntent: AppIntent {
     static let title: LocalizedStringResource = "Find Item"
-    static let description = IntentDescription("Says where something is, from what you’ve saved in Nook.")
+    static let description = IntentDescription("Says where something is, from what you’ve saved in Nook & Cranny.")
     static let supportedModes: IntentModes = .background
 
     @Parameter(title: "Item") var item: ItemEntity
@@ -30,7 +30,7 @@ struct FindItemIntent: AppIntent {
             return String(localized: "\(loan.personName) has your \(item.name).")
         }
         guard let place = Location(of: item) else {
-            return String(localized: "\(item.name) doesn’t have a place in Nook yet.")
+            return String(localized: "\(item.name) doesn’t have a place yet.")
         }
         if let box = place.spot, box.isContainer, let packedAt = box.packedAt {
             let packed = packedAt.formatted(.dateTime.month(.abbreviated).day())
@@ -117,7 +117,7 @@ struct ListRoomIntent: AppIntent {
 /// The Free tier's limit is checked on Save, as anywhere else (D58).
 struct AddItemIntent: AppIntent {
     static let title: LocalizedStringResource = "Add Item"
-    static let description = IntentDescription("Opens Nook to add something, with its name filled in.")
+    static let description = IntentDescription("Opens Nook & Cranny to add something, with its name filled in.")
     static let supportedModes: IntentModes = .foreground
 
     @Parameter(title: "Name") var name: String?

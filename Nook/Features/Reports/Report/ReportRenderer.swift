@@ -35,7 +35,7 @@ struct ReportRenderer {
         let count = pageCount
         var box = CGRect(origin: .zero, size: size)
         guard let context = CGContext(url as CFURL, mediaBox: &box,
-                                      [kCGPDFContextTitle: cover.title, kCGPDFContextCreator: "Nook"] as CFDictionary)
+                                      [kCGPDFContextTitle: cover.title, kCGPDFContextCreator: "Nook & Cranny"] as CFDictionary)
         else { throw CocoaError(.fileWriteUnknown) }
         var closed = false
         defer { if !closed { context.closePDF(); try? FileManager.default.removeItem(at: url) } }

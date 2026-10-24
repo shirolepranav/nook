@@ -225,7 +225,7 @@ struct PaywallSheet: View {
         .alert("No purchase found", isPresented: $nothingToRestore) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("Nook Pro isn’t on this Apple Account. If you bought it with another one, sign in with it in the App Store.")
+            Text("Nook & Cranny Pro isn’t on this Apple Account. If you bought it with another one, sign in with it in the App Store.")
         }
     }
 
@@ -258,7 +258,7 @@ struct PaywallSheet: View {
                 .frame(width: NookLayout.stateIconSize, height: NookLayout.stateIconSize)
                 .background(NookColor.success.opacity(0.14), in: .circle)
                 .accessibilityHidden(true)
-            Text("Nook Pro is yours.")
+            Text("Nook & Cranny Pro is yours.")
                 .font(.nookDisplay)
                 .foregroundStyle(NookColor.textPrimary)
             Text("Thank you. Everything is unlocked, for you and your family.")
@@ -301,7 +301,7 @@ struct PaywallSheet: View {
         .padding(.top, NookSpace.s6)
         .transition(.opacity)
         .accessibilityElement(children: .contain)
-        .onAppear { AccessibilityNotification.Announcement(String(localized: "Nook Pro is yours.")).post() }
+        .onAppear { AccessibilityNotification.Announcement(String(localized: "Nook & Cranny Pro is yours.")).post() }
     }
 }
 
@@ -334,7 +334,7 @@ private struct NookProductViewStyle: ProductViewStyle {
             // No App Store connection: say so calmly; nothing is lost (01 §1.3).
             VStack(alignment: .leading, spacing: NookSpace.s1) {
                 PurchaseCard(price: nil, phase: phase, available: false) {}
-                Text("Nook Pro isn’t available right now. Check your connection and try again.")
+                Text("Pro isn’t available right now. Check your connection and try again.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -362,7 +362,7 @@ private struct PurchaseCard: View {
                     .background(accent.color, in: .capsule)
                     .accessibilityLabel(Text("Purchasing"))
             } else if phase != .pending {
-                Button(action: buy) { Text("Unlock Nook Pro").frame(maxWidth: .infinity) }
+                Button(action: buy) { Text("Unlock Pro").frame(maxWidth: .infinity) }
                     .buttonStyle(.nookPrimary)
                     .disabled(price == nil || !available)
             }
@@ -381,7 +381,7 @@ private struct PurchaseCard: View {
                 .background(accent.color, in: .rect(cornerRadius: NookRadius.medium))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: "Nook Pro").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                Text(verbatim: "Nook & Cranny Pro").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
                 Text("One-time purchase").font(.nookMeta).foregroundStyle(NookColor.textSecondary)
             }
             if !typeSize.isAccessibilitySize { Spacer(minLength: 0) }

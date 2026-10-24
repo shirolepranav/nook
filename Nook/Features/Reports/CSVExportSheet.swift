@@ -115,7 +115,7 @@ struct CSVExportSheet: View {
 
     /// "Nook items Oct 13, 2026.csv" in the temporary folder.
     private func write() -> URL? {
-        let name = String(localized: "Nook items \(Date.now.formatted(date: .abbreviated, time: .omitted))")
+        let name = String(localized: "Nook & Cranny items \(Date.now.formatted(date: .abbreviated, time: .omitted))")
             .replacingOccurrences(of: "/", with: "-")
         let url = FileManager.default.temporaryDirectory.appending(path: "\(name).csv")
         let csv = CSVExport.csv(ordered, homeCurrency: HomeCurrency.code)

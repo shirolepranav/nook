@@ -112,7 +112,7 @@ struct SyncScreen: View {
     private var freeCard: some View {
         VStack(alignment: .leading, spacing: NookSpace.s2) {
             Label {
-                Text("iCloud sync comes with Nook Pro").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                Text("iCloud sync comes with Nook & Cranny Pro").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
             } icon: {
                 Image(systemName: "icloud").foregroundStyle(NookColor.info)
             }
@@ -121,7 +121,7 @@ struct SyncScreen: View {
                 .foregroundStyle(NookColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
             Button { paywall = PaywallRequest(reason: .sync) { change(to: true) } } label: {
-                Text("Unlock Nook Pro").frame(maxWidth: .infinity)
+                Text("Unlock Pro").frame(maxWidth: .infinity)
             }
             .buttonStyle(.nookPrimary)
         }

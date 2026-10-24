@@ -41,7 +41,7 @@ struct NotificationsScreen: View {
             }
             .listRowBackground(NookColor.surface)
             Section {
-                Text("Nook only sends reminders you asked for.")
+                Text("Nook & Cranny only sends reminders you asked for.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -78,7 +78,7 @@ struct NotificationsScreen: View {
                     .background(NookColor.warning.opacity(0.14), in: Circle())
                     .dynamicTypeSize(...DynamicTypeSize.large)
                     .accessibilityHidden(true)
-                Text("Reminders are off for Nook").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                Text("Reminders are off for Nook & Cranny").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
             }
             Text("Turn on notifications in the Settings app so warranty and loan reminders can reach you.")
                 .font(.nookMeta)

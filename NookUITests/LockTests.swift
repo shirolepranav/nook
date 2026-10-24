@@ -34,7 +34,7 @@ final class LockTests: XCTestCase {
     @MainActor
     func testLockedLaunchStaysLockedWhenFaceIDFails() {
         let app = launch(biometrics: "failure", ["-uiTestingLockOn"])
-        XCTAssertTrue(app.staticTexts["Nook is locked"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Nook & Cranny is locked"].waitForExistence(timeout: 10))
         let unlock = app.buttons["Unlock with Face ID"]
         XCTAssertTrue(unlock.exists)
         unlock.tap()
@@ -48,7 +48,7 @@ final class LockTests: XCTestCase {
     func testLockedLaunchUnlocksWithFaceID() {
         let app = launch(biometrics: "success", ["-uiTestingLockOn"])
         XCTAssertTrue(app.tab("Home").waitForExistence(timeout: 10))
-        let locked = app.staticTexts["Nook is locked"]
+        let locked = app.staticTexts["Nook & Cranny is locked"]
         let gone = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: locked)
         wait(for: [gone], timeout: 5)
         XCTAssertTrue(app.tab("Home").isHittable)
@@ -60,7 +60,7 @@ final class LockTests: XCTestCase {
         let app = launch(biometrics: "success")
         app.tab("Settings").tap()
         app.settingsRow("Face ID Lock").tap()
-        let toggle = app.switches["Lock Nook with Face ID"]
+        let toggle = app.switches["Lock Nook & Cranny with Face ID"]
         XCTAssertTrue(toggle.waitForExistence(timeout: 5))
         toggle.switches.firstMatch.tap()
         XCTAssertTrue(app.staticTexts["Lock after"].waitForExistence(timeout: 5))

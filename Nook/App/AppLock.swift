@@ -117,7 +117,7 @@ final class AppLock {
     /// L-02's button, and its automatic try on appear.
     @discardableResult
     func unlock() async -> Bool {
-        guard await ask(String(localized: "Unlock Nook")) else { return false }
+        guard await ask(String(localized: "Unlock Nook & Cranny")) else { return false }
         isLocked = false
         privateUnlocked = true
         return true
@@ -141,7 +141,7 @@ final class AppLock {
     /// S-05's switch. Turning it on asks first (D15); if that fails it stays off.
     func setEnabled(_ on: Bool) async {
         if on {
-            guard method != .unavailable, await ask(String(localized: "Lock Nook")) else { return }
+            guard method != .unavailable, await ask(String(localized: "Lock Nook & Cranny")) else { return }
             privateUnlocked = true
         }
         isEnabled = on

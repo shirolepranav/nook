@@ -29,7 +29,7 @@
 		<!-- S-04 (D12, D56): a .nookbackup opened from Files offers Merge or Replace. -->
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Nook Backup</string>
+			<string>Nook &amp; Cranny Backup</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -47,7 +47,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>pranav.nook.backup</string>
 			<key>UTTypeDescription</key>
-			<string>Nook Backup</string>
+			<string>Nook &amp; Cranny Backup</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -61,6 +61,9 @@
 			</dict>
 		</dict>
 	</array>
+	<!-- D66: Siri hears the "&" as "and". -->
+	<key>CFBundleSpokenName</key>
+	<string>Nook and Cranny</string>
 	<!-- D19, F8: box labels' QR codes open nook://spot/<qrID> from the Camera app. -->
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -77,13 +80,13 @@
 	<false/>
 	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
 	<key>NSCameraUsageDescription</key>
-	<string>Nook uses the camera to photograph your things. Photos stay on this device.</string>
+	<string>Nook &amp; Cranny uses the camera to photograph your things. Photos stay on this device.</string>
 	<!-- L-02, S-05, Private items (PRD F11, §9): asked when the lock is turned on or a Private item first opens (D15). -->
 	<key>NSFaceIDUsageDescription</key>
-	<string>Nook uses Face ID to keep your home and private items to yourself.</string>
+	<string>Nook &amp; Cranny uses Face ID to keep your home and private items to yourself.</string>
 	<!-- H-06 Save Image (D56): add-only, asked the first time a label is saved. -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Nook saves box labels to your photos. It can't see the rest of your library.</string>
+	<string>Nook &amp; Cranny saves box labels to your photos. It can't see the rest of your library.</string>
 	<!-- D13, 04 §7: background refresh tops up the rolling reminder list when the app isn't opened. -->
 	<key>UIBackgroundModes</key>
 	<array>

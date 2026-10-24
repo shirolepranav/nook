@@ -15,11 +15,11 @@ struct ReminderAllowanceNote: View {
             let today = Calendar.current.startOfDay(for: .now)
             let used = min(warranties.count { ItemService.isActiveReminder($0, today: today) }, EntitlementStore.freeReminderLimit)
             VStack(alignment: .leading, spacing: NookSpace.s1) {
-                Text("\(used) of \(EntitlementStore.freeReminderLimit) reminders used. Unlimited with Nook Pro.")
+                Text("\(used) of \(EntitlementStore.freeReminderLimit) reminders used. Unlimited with Pro.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-                Button("Unlock Nook Pro") { paywall = PaywallRequest(reason: .settings) }
+                Button("Unlock Pro") { paywall = PaywallRequest(reason: .settings) }
                     .font(.nookFootnote.weight(.semibold))
                     .frame(minHeight: NookLayout.minTapTarget)
             }

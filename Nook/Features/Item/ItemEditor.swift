@@ -667,7 +667,7 @@ struct ItemEditor: View {
     private func warrantySummary(_ end: Date) -> String {
         let date = end.formatted(date: .abbreviated, time: .omitted)
         if end < .now { return String(localized: "Ended \(date).") }
-        if reminders?.isDenied == true { return String(localized: "Ends \(date). Reminders are off for Nook.") }
+        if reminders?.isDenied == true { return String(localized: "Ends \(date). Reminders are off for Nook & Cranny.") }
         return draft.warranty?.remindersOn == false
             ? String(localized: "Ends \(date). Reminders are off.")
             : String(localized: "Ends \(date). Reminders 30 and 7 days before.")

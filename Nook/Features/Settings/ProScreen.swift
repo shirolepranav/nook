@@ -34,7 +34,7 @@ struct ProScreen: View {
                 }
                 .disabled(restoring)
                 .listRowBackground(NookColor.surface)
-                Text("Bought Nook Pro before, or on another device? Restore it here. Family Sharing is on, so your family gets Pro too.")
+                Text("Bought Pro before, or on another device? Restore it here. Family Sharing is on, so your family gets Pro too.")
                     .font(.nookFootnote)
                     .foregroundStyle(NookColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -44,7 +44,7 @@ struct ProScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(NookColor.canvas)
-        .navigationTitle("Nook Pro")
+        .navigationTitle("Pro")
         .toolbarTitleDisplayMode(.large)
         .paywall($paywall)
         .toast($toast)
@@ -52,7 +52,7 @@ struct ProScreen: View {
 
     private var unlockButton: some View {
         Button { paywall = PaywallRequest(reason: .settings) } label: {
-            Text("Unlock Nook Pro").frame(maxWidth: .infinity)
+            Text("Unlock Pro").frame(maxWidth: .infinity)
         }
         .buttonStyle(.nookPrimary)
     }
@@ -61,7 +61,7 @@ struct ProScreen: View {
     private var unlocked: some View {
         VStack(alignment: .leading, spacing: NookSpace.s1) {
             Label {
-                Text("Nook Pro is unlocked").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
+                Text("Nook & Cranny Pro is unlocked").font(.nookHeadline).foregroundStyle(NookColor.textPrimary)
             } icon: {
                 Image(systemName: "checkmark.seal.fill").foregroundStyle(NookColor.success)
             }
@@ -101,7 +101,7 @@ struct ProScreen: View {
             let found = await entitlements.restore()
             restoring = false
             toast = found
-                ? ToastMessage(symbol: "checkmark.seal.fill", "Nook Pro is unlocked.")
+                ? ToastMessage(symbol: "checkmark.seal.fill", "Nook & Cranny Pro is unlocked.")
                 : ToastMessage(symbol: "info.circle", "No purchase found for this Apple Account.")
         }
     }
