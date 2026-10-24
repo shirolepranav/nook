@@ -7,7 +7,8 @@ An arched nook with a shelf, a small plant and a leaning book. There's no letter
 | `1-background-{light,dark}.svg` | Full-bleed fill: Terracotta (light) or espresso (dark) |
 | `2-arch-{light,dark}.svg` | The arch and its inner alcove |
 | `3-shelf-{light,dark}.svg` | Shelf, pot, leaves and book |
-| `preview-{light,dark}.svg` | All layers flattened, for review only |
+| `preview-{light,dark,tinted}.svg` | All layers flattened. `AppIcon.appiconset` is exported from these (D68) |
+| `*-tinted.svg` | Grayscale layers for the tinted icon; iOS applies the tint |
 
 All colors are tokens from `docs/03_Design_System.md` §2.
 
@@ -26,3 +27,5 @@ Icon Composer is a Mac app with no command-line export, so this step is done by 
 6. Commit `Nook.icon`. In P1, add it to the app target as the AppIcon (Xcode 26 and later read `.icon` directly).
 
 [Verify in SDK] that the 60-pt Home Screen preview still reads with the system's glass treatment applied. If the plant gets lost, scale group 2 up by about 10% and log it in `docs/decisions.md`.
+
+**Re-exporting the PNGs (D68):** run `app_icon.py`, then render each `preview-*.svg` at 1024 px with Quick Look (`qlmanage -t -s 1024 -o <dir> <svg>`) and flatten it: light and dark to RGB with no alpha, tinted to 8-bit gray (`ffmpeg -i in.png -pix_fmt rgb24|gray out.png`). Copy the three PNGs here and into `Nook/Resources/Assets.xcassets/AppIcon.appiconset`.

@@ -637,3 +637,14 @@ New since `01` was written: the room editor lists the room's spots with "Add spo
 
 *Owner checks:* the icon label isn't truncated on a real iPhone; "Find my keys in Nook and Cranny" works with Siri; set the IAP display name in App Store Connect to "Nook & Cranny Pro".
 *Affects:* 00 (name), 01 (quoted copy), `docs/release/app-store.md`; `Info.plist`, `project.pbxproj`, `Nook.storekit`, Swift copy across Features, Intents and widgets; the UI tests that query that copy.
+
+**D67 · 2026-10-24 · Accepted (product owner)** — **Developer demo mode is an Xcode scheme, not an in-app switch.** The shared **Nook Demo** scheme launches the Debug build with the flags the UI tests already use: `-uiTestingStore lived` (the sample home, in memory), `-uiTestingOnboarded YES`, `-uiTestingShowcasePhotos $(HOME)/Pictures/NookShowcase` and `-uiTestingCameraFixture`. `-uiTestingFree` and `-uiTestingFakeAI items` are there but off. The scheme adds no app code, and every flag it uses is already `#if DEBUG`, so the App Store build can't reach it. An in-app switch would ship in Release and could replace a user's home with sample data. The showcase photos are Pexels stock (free license, chosen without visible brands) and live outside the repo, so nothing licensed is committed.
+- *Ceiling:* the demo reads photos from a Mac folder, so only the simulator shows them. A Debug-only asset catalog would be the next step if a device demo needs them.
+- *Side effect:* like the UI tests, a demo launch clears S-05's lock setting in the App Group on that simulator or device.
+
+*Affects:* `Nook.xcodeproj/xcshareddata/xcschemes/Nook Demo.xcscheme`; 05 §1.
+
+**D68 · 2026-10-24 · Accepted (product owner)** — **The app icon's mark is 1.2× larger.** The owner found the icon small, and it was: the arch covered 41% of the tile's width and 56% of its height, where first-party icons fill about half the width and two-thirds of the height. Now it's scaled 1.2× about its own middle and centered (50% × 68%), with equal top and bottom margins. That leaves room for iOS's glass rim, and the plant and book read better at Home Screen size. The drawing and colors haven't changed. `app_icon.py` applies one `MARK` transform to the arch and shelf layers, and now writes the grayscale tinted palette too, so all three PNGs come from one source. Re-export steps are in `design/icon/README.md`. The launch and lock marks are in-app drawings at their own sizes, so they're unchanged.
+
+*Owner check:* look at the icon on a device's Home Screen in light, dark, tinted and clear.
+*Affects:* `design/tools/app_icon.py`, `design/icon/`, `Nook/Resources/Assets.xcassets/AppIcon.appiconset`.
