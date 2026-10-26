@@ -2,15 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- D30: one window in v1.0. The generated manifest turns multiple windows on. Multiple windows are P15. -->
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
-	</dict>
-	<!-- C-06 "Open in Nook" (D48, D49): images and PDFs from the share sheet and Files open the
-	     receipt review. Alternate rank, so Nook never becomes the default viewer; the file is
-	     copied in, not edited in place. -->
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>pranav.nook.reminders</string>
+	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -26,7 +21,6 @@
 				<string>com.adobe.pdf</string>
 			</array>
 		</dict>
-		<!-- S-04 (D12, D56): a .nookbackup opened from Files offers Merge or Replace. -->
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Nook &amp; Cranny Backup</string>
@@ -40,31 +34,8 @@
 			</array>
 		</dict>
 	</array>
-	<!-- D56: conforms only to public.data, so Files keeps a backup whole instead of unzipping it. -->
-	<key>UTExportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>pranav.nook.backup</string>
-			<key>UTTypeDescription</key>
-			<string>Nook &amp; Cranny Backup</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>nookbackup</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
-	<!-- D66: Siri hears the "&" as "and". -->
 	<key>CFBundleSpokenName</key>
 	<string>Nook and Cranny</string>
-	<!-- D19, F8: box labels' QR codes open nook://spot/<qrID> from the Camera app. -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -76,31 +47,16 @@
 			</array>
 		</dict>
 	</array>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<false/>
-	<!-- C-02, C-05, C-08: asked the first time the camera opens (D15, D37). -->
-	<key>NSCameraUsageDescription</key>
-	<string>Nook &amp; Cranny uses the camera to photograph your things. Photos stay on this device.</string>
-	<!-- L-02, S-05, Private items (PRD F11, §9): asked when the lock is turned on or a Private item first opens (D15). -->
-	<key>NSFaceIDUsageDescription</key>
-	<string>Nook &amp; Cranny uses Face ID to keep your home and private items to yourself.</string>
-	<!-- H-06 Save Image (D56): add-only, asked the first time a label is saved. -->
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Nook &amp; Cranny saves box labels to your photos. It can't see the rest of your library.</string>
-	<!-- D13, 04 §7: background refresh tops up the rolling reminder list when the app isn't opened. -->
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>pranav.nook.reminders</string>
-	</array>
-	<!-- Only encryption built into iOS (file protection, CloudKit, StoreKit), so App Store Connect skips export compliance. -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<!-- L-01: warm canvas with the Nook mark. LaunchBackground is generated from 03 (export_colorsets.py). -->
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
@@ -110,5 +66,25 @@
 		<key>UIImageRespectsSafeAreaInsets</key>
 		<true/>
 	</dict>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Nook &amp; Cranny Backup</string>
+			<key>UTTypeIdentifier</key>
+			<string>pranav.nook.backup</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>nookbackup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
